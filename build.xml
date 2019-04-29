@@ -93,7 +93,7 @@
 
 	<!-- Run the JUnit Tests -->
 	<target name="junit" depends="jar">
-		<junit printsummary="on" fork="true" haltonfailure="no">
+		<junit printsummary="on" fork="true" haltonfailure="yes">
 			<classpath>
 				<fileset dir="${dist.dir}">
   				  <include name="*.jar"/>
@@ -106,6 +106,7 @@
 			 <batchtest fork="yes" todir="${test.report.dir}">
 			        <fileset dir="${testsrc.dir}">
           				<include name="**/*Test*.java"/>
+						<exclude name="**/*VerveineJTest_Basic.java"/>
         			</fileset>
       			</batchtest>
 
@@ -118,7 +119,7 @@
 		<junit printsummary="on" fork="true" haltonfailure="no">
 			<classpath>
 				<fileset dir="${dist.dir}">
-  				  <include name="*.jar"/>
+  				  <include name="*.jar"/>	
 				</fileset>
 			</classpath>
 			<formatter type="plain" />
