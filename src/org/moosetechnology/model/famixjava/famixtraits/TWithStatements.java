@@ -21,6 +21,8 @@ public interface TWithStatements {
 
     void setCyclomaticComplexity(Number cyclomaticComplexity);
 
+    void setNumberOfStatements(Number numberOfStatements);
+
 
 }
 

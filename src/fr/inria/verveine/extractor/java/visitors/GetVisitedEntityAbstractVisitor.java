@@ -221,7 +221,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	}
 
 	public void endVisitInitializer(Initializer node) {
-		if ( (context.top() instanceof Method) && ( context.top().getName().equals(JavaDictionary.INIT_BLOCK_NAME)) ) {
+		if ( (context.top() instanceof Method) && ( context.lookUpToInstanceOf(NamedEntity.class).getName().equals(JavaDictionary.INIT_BLOCK_NAME)) ) {
 			this.context.pop();
 		}
 		super.endVisit(node);

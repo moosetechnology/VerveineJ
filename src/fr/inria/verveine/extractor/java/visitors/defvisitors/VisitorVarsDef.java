@@ -207,7 +207,7 @@ public class VisitorVarsDef extends SummarizingClassesAbstractVisitor {
 
 		// creating the attribute(s)
 		for (VariableDeclaration vardecl : (List<VariableDeclaration>)node.fragments() ) {
-			createStructuralEntity( structuralType, vardecl, context.top());
+			createStructuralEntity( structuralType, vardecl, context.lookUpToInstanceOf(NamedEntity.class));
 		}
 
 		// Possible local variables in optional initializer
@@ -251,7 +251,7 @@ public class VisitorVarsDef extends SummarizingClassesAbstractVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		createStructuralEntity( structuralType, node, context.top());
+		createStructuralEntity( structuralType, node, context.lookUpToInstanceOf(NamedEntity.class));
 
 		return true;  // e.g. with an initialization containing an anonymous class definition
 	}
@@ -259,7 +259,7 @@ public class VisitorVarsDef extends SummarizingClassesAbstractVisitor {
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
 		if ( options.withLocals() || (! node.getType().isPrimitiveType()) || (structuralType != StructuralEntityKinds.LOCALVAR) ) {
-			createStructuralEntity( structuralType, node, context.top());
+			createStructuralEntity( structuralType, node, context.lookUpToInstanceOf(NamedEntity.class));
 		}
 		return true;  // e.g. with an initialization containing an anonymous class definition
 	}

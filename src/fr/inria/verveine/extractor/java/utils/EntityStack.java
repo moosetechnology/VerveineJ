@@ -1,10 +1,12 @@
 package fr.inria.verveine.extractor.java.utils;
 
 import org.moosetechnology.model.famixjava.famixjavaentities.Package;
+import org.moosetechnology.model.famixjava.famixtraits.TWithStatements;
 import org.moosetechnology.model.famixjava.famixjavaentities.*;
 
 import java.lang.Class;
 import java.util.Stack;
+import java.util.function.Predicate;
 
 /** A stack of FAMIX Entities so that we know in what container each new Entity is declared
  * @author anquetil
@@ -13,32 +15,7 @@ public class EntityStack {
 	public static final int EMPTY_CYCLO = 0;
 	public static final int EMPTY_NOS = 0;
 
-	private Stack<NamedEntity> stack;
-	
-	private class MetricHolder extends NamedEntity {
-		private int metric_cyclo = EMPTY_CYCLO;  // Cyclomatic Complexity
-		private int metric_nos = EMPTY_NOS;      // Number Of Statements
-		private Method ent;
-
-		protected MetricHolder(Method ent) {
-			this.ent = ent;
-		}
-		protected int getCyclo() {
-			return metric_cyclo;
-		}
-		protected void setCyclo(int metric_cyclo) {
-			this.metric_cyclo = metric_cyclo;
-		}
-		protected int getNos() {
-			return metric_nos;
-		}
-		protected void setNos(int metric_nos) {
-			this.metric_nos = metric_nos;
-		}
-		protected Method getEntity() {
-			return ent;
-		}
-	}
+	private Stack<Entity> stack;
 
 	/**
 	 * last Invocation registered to set the previous/next
@@ -89,7 +66,7 @@ public class EntityStack {
 	 * Pushes an entity on top of the "context stack"
 	 * @param e -- the entity
 	 */
-	public void push(NamedEntity e) {
+	public void push(Entity e) {
 		stack.push(e);
 	}
 
@@ -123,18 +100,16 @@ public class EntityStack {
 	 * @param e -- the Famix method
 	 */
 	public void pushMethod(Method e) {
-		push(e);
-		push( new MetricHolder(e) );
+		pushTWithStatementsEntity(e);
 	}
 
 	/**
-	 * Pushes a Famix BehaviouralEntity on top of the "context stack"
+	 * Pushes a Famix TWithStatements on top of the "context stack"
 	 * Adds also a special entity to hold the metrics for the BehaviouralEntity
 	 * @param e -- the Famix BehaviouralEntity
 	 */
-	public void pushBehaviouralEntity(Method e) {
-		push(e);
-		push( new MetricHolder(e) );
+	public void pushTWithStatementsEntity(TWithStatements e) {
+		push((Entity)e);
 	}
 
 	public void pushAnnotationMember(AnnotationTypeAttribute fmx) {
@@ -145,7 +120,7 @@ public class EntityStack {
 	 * Empties the context stack of package and associated classes
 	 */
 	public void clearPckg() {
-		stack = new Stack<NamedEntity>();
+		stack = new Stack<Entity>();
 	}
 
 	/**
@@ -153,55 +128,51 @@ public class EntityStack {
 	 */
 	public void clearTypes() {
 		while (! (this.top() instanceof Namespace)) {
-			this.popUpto(Type.class);			
+			this.popUpToInstanceOf(Type.class);			
 		}
 	}
 	
 	// READ FROM THE STACK
 
-	@SuppressWarnings("unchecked")
-	private <T extends NamedEntity> T popUpto(Class<T> clazz) {
-		NamedEntity ent = null;
-		while ( (! stack.isEmpty()) && (! clazz.isInstance(ent)) ) {
+	private Entity popUpto(Predicate<Entity> predicate) {
+		Entity ent = null;
+		while ( ! stack.isEmpty() ) {
 			ent = this.pop();
+			if (predicate.test(ent)) {
+				break;
+			}
 		}
 
 		if (stack.isEmpty()) {
 			return null;
 		}
 		else {
-			return (T) ent;
+			return ent;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private <T extends NamedEntity> T lookUpto(Class<T> clazz) {
-		int i=this.stack.size()-1;
-
-		while ( (i >= 0) && (! clazz.isInstance(stack.get(i))) ) {
-			i--;
+	private Entity lookUpto(Predicate<Entity> predicate) {
+		int i;
+		for (i=this.stack.size()-1 ;  i >= 0; i--) {
+			if (predicate.test(stack.get(i))) {
+				break;
+			}
 		}
 
 		if (i < 0) {
 			return null;
 		}
 		else {
-			return (T)stack.get(i);
+			return stack.get(i);
 		}
 	}
 
-	public NamedEntity pop() {
+	public Entity pop() {
 		if (stack.isEmpty()) {
 			return null;
 		}
 		else {
-			NamedEntity e = stack.pop();
-			if (e instanceof MetricHolder) {
-				return stack.pop();
-			}
-			else {
-				return e;
-			}
+			return stack.pop();
 		}
 	}
 
@@ -209,122 +180,124 @@ public class EntityStack {
 	 * Removes and returns the Famix package from the "context stack"
 	 * Also empties the class stack (which was presumably associated to this package)
 	 * Note: does not check that there is such a namespace
-	 * @return the Famix method
 	 */
 	public Package popPckg() {
-		return this.popUpto(Package.class);
+		return this.popUpToInstanceOf( Package.class );
 	}
 
 	/**
 	 * Pops the top Famix type from the "context stack"<BR>
 	 * Note: does not check that there is such a type, so could possibly throw an EmptyStackException
-	 * @return the Famix class
 	 */
 	public Type popType() {
-		return this.popUpto(Type.class);
+		return this.popUpToInstanceOf(Type.class);
 	}
 
 	/**
 	 * Pops the top Famix Namespace from the "context stack"<BR>
 	 * Note: does not check that there is such a namesapce, so could possibly throw an EmptyStackException
-	 * @return the Famix Namespace
 	 */
 	public Namespace popNamespace() {
-		return this.popUpto(Namespace.class);
+		return this.popUpToInstanceOf(Namespace.class);
 	}
 
 	/**
-	 * Pops the top Famix method of the current class on top of the "context stack"
-	 * Note: does not check that there is such a class or method, so could possibly throw an Exception
-	 * @return the Famix method
+	 * Pops the top Famix method on top of the "context stack"
+	 * Note: does not check that there is such a method, so could possibly throw an Exception
 	 */
 	public Method popMethod() {
-		return this.popUpto(Method.class);
-	}
-	
-	public AnnotationTypeAttribute popAnnotationMember() {
-		return this.popUpto(AnnotationTypeAttribute.class);
+		return this.popUpToInstanceOf(Method.class);
 	}
 
+	public AnnotationTypeAttribute popAnnotationMember() {
+		return this.popUpToInstanceOf(AnnotationTypeAttribute.class);
+	}
+
+	/**
+	 * Pops the top entity instanceof clazz from top of the "context stack"
+	 * Note: does not check that there is such an entity, so could possibly throw an Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> T popUpToInstanceOf(Class<T> clazz) {
+		return (T) this.popUpto( e -> clazz.isInstance(e) );
+	}
+	
 	/**
 	 * Returns the Famix entity on top of the "context stack"
 	 * Note: does not check that there is such an entity
-	 * @return the Famix entity
 	 */
-	public NamedEntity top() {
+	public Entity top() {
 		if (stack.isEmpty()) {
 			return null;
 		}
 		else {
-			NamedEntity e = stack.peek();
-			if (e instanceof MetricHolder) {
-				return ((MetricHolder) e).getEntity();
-			}
-			else {
-				return e;
-			}
+			return stack.peek();
 		}
 	}
 
 	/**
 	 * Returns the Famix package on top of the "context stack"
 	 * Note: does not check that there is such a package
-	 * @return the Famix namespace
 	 */
 	public Package topPckg() {
-		return this.lookUpto(Package.class);
+		return this.lookUpToInstanceOf(Package.class);
 	}
 
 	/**
 	 * Returns the Famix type on top of the "context stack"
 	 * Note: does not check that there is such a class, so could possibly throw an EmptyStackException
-	 * @return the Famix class
 	 */
 	public Type topType() {
-		return this.lookUpto(Type.class);
+		return this.lookUpToInstanceOf(Type.class);
 	}
 
 	/**
 	 * Returns the Famix Namespace on top of the "context stack"
 	 * Note: does not check that there is such a Namespace, so could possibly throw an EmptyStackException
-	 * @return the Famix Namespace
 	 */
 	public Namespace topNamespace() {
-		return this.lookUpto(Namespace.class);
+		return this.lookUpToInstanceOf(Namespace.class);
 	}
 
 	/**
-	 * Returns the Famix BehaviouralEntity on top of the "context stack"
-	 * Note: does not check that there is such a BehaviouralEntity, so could possibly throw an EmptyStackException
-	 * @return the Famix BehaviouralEntity
-	 */
-	public Method topBehaviouralEntity() {
-		return this.lookUpto(Method.class);
-	}
-
-	/**
-	 * Returns the Famix method  of the Famix class on top of the "context stack"
+	 * Returns the Famix method on top of the "context stack"
 	 * Note: does not check that there is such a class or method, so could possibly throw an EmptyStackException
-	 * @return the Famix method
 	 */
 	public Method topMethod() {
-		return this.lookUpto(Method.class);
+		return this.lookUpToInstanceOf(Method.class);
 	}
 
 	public AnnotationTypeAttribute topAnnotationMember() {
-		return this.lookUpto(AnnotationTypeAttribute.class);
+		return this.lookUpToInstanceOf(AnnotationTypeAttribute.class);
+	}
+
+	/**
+	 * Returns the top entity instanceof clazz from top of the "context stack"
+	 * Note: does not check that there is such an entity, so could possibly throw an Exception
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Entity> T lookUpToInstanceOf(Class<T> clazz) {
+		return (T) this.lookUpto( e -> clazz.isInstance(e) );
+	}
+	
+	/**
+	 * Returns the Famix TWithStatements on top of the "context stack"
+	 * Note: does not check that there is such an entity, so could possibly throw an EmptyStackException
+	 */
+	public TWithStatements topTWithStatementsEntity() {
+		return (TWithStatements) this.lookUpto( e -> e instanceof TWithStatements);
 	}
 
 	// PROPERTIES OF THE TOP METHOD
 
 	/**
-	 * Returns the Cyclomatic complexity of the Famix Method on top of the context stack
+	 * Returns the Cyclomatic complexity of the TWithStatements entity (presumably a Method or a Lambda) top-most of the context stack
 	 */
-	public int getTopMethodCyclo() {
-		MetricHolder met = this.lookUpto(MetricHolder.class);
+	public int getTopBehaviouralCyclo() {
+		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			return met.getCyclo();
+			return (int) met.getCyclomaticComplexity();
 		}
 		else {
 			return EMPTY_CYCLO;
@@ -332,13 +305,13 @@ public class EntityStack {
 	}
 
 	/**
-	 * Returns the Number of Statements of the Famix Method on top of the context stack
+	 * Returns the Number of Statements of the TWithStatements entity (presumably a Method or a Lambda) top-most of the context stack
 	 */
-	public int getTopMethodNOS() {
-		MetricHolder met = this.lookUpto(MetricHolder.class);
+	public int getTopBehaviouralNOS() {
+		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			return met.getNos();
+			return (int) met.getNumberOfStatements();
 		}
 		else {
 			return EMPTY_NOS;
@@ -346,46 +319,46 @@ public class EntityStack {
 	}
 
 	/**
-	 * Sets the Cyclomatic complexity of the Famix Method on top of the context stack
+	 * Sets the Cyclomatic complexity of the TWithStatements entity (presumably a Method or a Lambda) top-most of the context stack
 	 */
-	public void setTopMethodCyclo(int c) {
-		MetricHolder met = this.lookUpto(MetricHolder.class);
+	public void setTopBehaviouralCyclo(int c) {
+		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			met.setCyclo(c);
+			met.setCyclomaticComplexity(c);
 		}
 	}
 
 	/**
-	 * Sets to the Number of Statements of the Famix Method on top of the context stack
+	 * Sets to the Number of Statements of the TWithStatements entity (presumably a Method or a Lambda) top-most of the context stack
 	 */
-	public void setTopMethodNOS(int n) {
-		MetricHolder met = this.lookUpto(MetricHolder.class);
+	public void setTopBehaviouralNOS(int n) {
+		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			met.setNos(n);
+			met.setNumberOfStatements(n);
 		}
 	}
 	
 	/**
-	 * Adds to the Cyclomatic complexity of the Famix Method on top of the context stack
+	 * Adds to the Cyclomatic complexity of the TWithStatements entity (presumably a Method or a Lambda) top-most of the context stack
 	 */
-	public void addTopMethodCyclo(int c) {
-		MetricHolder met = this.lookUpto(MetricHolder.class);
+	public void addTopBehaviouralCyclo(int c) {
+		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			met.setCyclo( met.getCyclo()+c );
+			met.setCyclomaticComplexity( (int)met.getCyclomaticComplexity() + c );
 		}
 	}
 
 	/**
-	 * Adds to the Number of Statements of the Famix Method on top of the context stack
+	 * Adds to the Number of Statements of the TWithStatements entity (presumably a Method or a Lambda) top-most of the context stack
 	 */
-	public void addTopMethodNOS(int n) {
-		MetricHolder met = this.lookUpto(MetricHolder.class);
+	public void addTopBehaviouralNOS(int n) {
+		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			met.setNos( met.getNos()+n );
+			met.setNumberOfStatements( (int)met.getNumberOfStatements() + n );
 		}
 	}
 

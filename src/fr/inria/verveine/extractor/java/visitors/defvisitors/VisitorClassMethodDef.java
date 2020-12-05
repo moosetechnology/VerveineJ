@@ -263,7 +263,8 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 			}
 
 			if (node.getBody() != null) {
-				context.setTopMethodCyclo(1);
+				context.setTopBehaviouralCyclo(1);
+				context.setTopBehaviouralNOS(0);
 			}
 			return super.visit(node);
 		} else {
@@ -314,7 +315,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 			}
 
 			if (node.getBody() != null) {
-				context.setTopMethodCyclo(1);
+				context.setTopBehaviouralCyclo(1);
 			}
 
 			return super.visit(node);
@@ -395,13 +396,13 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	@Override
 	public boolean visit(ConstructorInvocation node) {
 		//		System.err.println("TRACE, Visiting ConstructorInvocation: ");
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(SuperConstructorInvocation node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
@@ -413,110 +414,110 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 
 	@Override
 	public boolean visit(ThrowStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(CatchClause node) {
-		this.context.addTopMethodCyclo(1);
+		this.context.addTopBehaviouralCyclo(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(AssertStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(Assignment node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(ContinueStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(DoStatement node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(ExpressionStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(EnhancedForStatement node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(ForStatement node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(IfStatement node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(ReturnStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(SwitchCase node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(SwitchStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(SynchronizedStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(TryStatement node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
 	@Override
 	public boolean visit(WhileStatement node) {
-		this.context.addTopMethodCyclo(1);
-		this.context.addTopMethodNOS(1);
+		this.context.addTopBehaviouralCyclo(1);
+		this.context.addTopBehaviouralNOS(1);
 		return super.visit(node);
 	}
 
@@ -565,8 +566,8 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 		int cyclo = (fmx.getCyclomaticComplexity() == null) ? 0 : fmx.getCyclomaticComplexity().intValue();
 		this.context.pushMethod(fmx);
 		if ((nos != 0) || (cyclo != 0)) {
-			context.setTopMethodNOS(nos);
-			context.setTopMethodCyclo(cyclo);
+			context.setTopBehaviouralNOS(nos);
+			context.setTopBehaviouralCyclo(cyclo);
 		}
 	}
 
@@ -582,13 +583,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	 */
 	protected void closeMethodDeclaration() {
 		if (context.topMethod() != null) {
-			int cyclo = context.getTopMethodCyclo();
-			int nos = context.getTopMethodNOS();
-			Method fmx = this.context.popMethod();
-			if (fmx != null) {
-				fmx.setNumberOfStatements(nos);
-				fmx.setCyclomaticComplexity(cyclo);
-			}
+			this.context.popMethod();
 		}
 	}
 

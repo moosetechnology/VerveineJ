@@ -168,9 +168,9 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 
 	@Test
 	public void testAnonymous() {
-		org.moosetechnology.model.famixjava.famixjavaentities.Class clazz = detectFamixElement(org.moosetechnology.model.famixjava.famixjavaentities.Class.class, "_Anonymous(IPrinter)");
+		org.moosetechnology.model.famixjava.famixjavaentities.Class clazz = detectFamixElement(org.moosetechnology.model.famixjava.famixjavaentities.Class.class, "<Anonymous>(IPrinter)");
 		assertNotNull(clazz);
-		assertEquals("_Anonymous(IPrinter)", clazz.getName());
+		assertEquals("<Anonymous>(IPrinter)", clazz.getName());
 		assertEquals(2, clazz.numberOfMethods()); // the method print and the stub constructor
 		assertEquals(0, clazz.numberOfAttributes());
 		assertSame(detectFamixElement(Method.class, "PrintServer"), clazz.getTypeContainer());
