@@ -3,7 +3,6 @@ package fr.inria.verveine.extractor.java.utils;
 import fr.inria.verveine.extractor.java.JavaDictionary;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.jdt.internal.compiler.ast.ConstructorDeclaration;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,30 +39,11 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
      */
     private ITypeBinding[] params = null;
 
-    /**
-     * returns the real binding of the node (a method or type declaration) or creates a stub one
+     /**
+     * Ensures we have a binding for an AbstractTypeDeclaration
+     * First tries to get JDT's binding. If there is none, creates a StubBinding
      */
-    public static  IBinding getDeclarationBinding(AbstractTypeDeclaration node) {
-        IBinding bnd = node.resolveBinding();
-
-        if (bnd == null) {
-            bnd = StubBinding.getBinding(node);
-        }
-
-        return bnd;
-    }
-
-    public static  IBinding getDeclarationBinding(AnonymousClassDeclaration node) {
-        IBinding bnd = node.resolveBinding();
-
-        if (bnd == null) {
-            bnd = StubBinding.getBinding(node);
-        }
-
-        return bnd;
-    }
-
-    public static  IBinding getDeclarationBinding(MethodDeclaration node) {
+    public static  IBinding ensureDeclarationBinding(AbstractTypeDeclaration node) {
         IBinding bnd = node.resolveBinding();
 
         if (bnd == null) {
@@ -74,12 +54,40 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     /**
-     * returns the StubBinding of the node (a method or type declaration)
+     * Ensures we have a binding for an AnonymousClassDeclaration
+     * First tries to get JDT's binding. If there is none, creates a StubBinding
+     */
+    public static  IBinding ensureDeclarationBinding(AnonymousClassDeclaration node) {
+        IBinding bnd = node.resolveBinding();
+
+        if (bnd == null) {
+            bnd = StubBinding.getBinding(node);
+        }
+
+        return bnd;
+    }
+
+    /**
+     * Ensures we have a binding for a MethodDeclaration
+     * First tries to get JDT's binding. If there is none, creates a StubBinding
+     */
+    public static  IBinding ensureDeclarationBinding(MethodDeclaration node) {
+        IBinding bnd = node.resolveBinding();
+
+        if (bnd == null) {
+            bnd = StubBinding.getBinding(node);
+        }
+
+        return bnd;
+    }
+
+    /**
+     * returns a unique StubBinding for the <code>node</code> (a method or type declaration)
+     * either by creating it or by retrieving a previously created one
      */
     public static  StubBinding getBinding(ASTNode node) {
+    	StubBinding inst;
 		String key = bindingKey(node);
-;
-        StubBinding inst;
 
 		inst = instances.get(key);
 		if (inst == null) {
@@ -89,6 +97,9 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
 		return inst;
 	}
 
+    /**
+     * Creates an id String representing the node
+     */
     private static String bindingKey(ASTNode node) {
         String file = (String) ((CompilationUnit)node.getRoot()).getProperty(JavaDictionary.SOURCE_FILENAME_PROPERTY);
         int pos = node.getStartPosition();

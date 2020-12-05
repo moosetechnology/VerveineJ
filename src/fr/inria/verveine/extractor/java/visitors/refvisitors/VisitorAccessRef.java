@@ -399,7 +399,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 				JavaDictionary.SELF_NAME, 
 				this.context.topType(), 
 				context.topMethod(), 
-				/*persistIt*/! summarizeClasses());
+				/*persistIt*/! options.summarizeClasses());
 		if (fmx != null) {
 			Method accessor = this.context.topMethod();
 
@@ -479,11 +479,11 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 
 		// could also test: "owner instanceof Enum" in case bnd == null
 		if (bnd.isEnumConstant()) {
-			accessed = dico.ensureFamixEnumValue(bnd, name, (Enum) owner, /*persistIt*/! summarizeClasses());
+			accessed = dico.ensureFamixEnumValue(bnd, name, (Enum) owner, /*persistIt*/! options.summarizeClasses());
 		} else if (bnd.isField()) {
 			accessed = dico.ensureFamixAttribute(bnd, name, typ, (org.moosetechnology.model.famixjava.famixjavaentities.Type) owner,
-					/*persistIt*/! summarizeClasses());
-			if (summarizeClasses()) {
+					/*persistIt*/! options.summarizeClasses());
+			if (options.summarizeClasses()) {
 				if (!(((Attribute) accessed).getDeclaredType() instanceof PrimitiveType)) {
 					//dico.addFamixReference(findHighestType(accessed.getBelongsTo()),
 					//		findHighestType(accessed.getDeclaredType()), /*lastReference*/null);
@@ -496,8 +496,8 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 				((Attribute) accessed).setParentType(dico.ensureFamixClassArray());
 			}
 		} else if (bnd.isParameter() && (! inLambda)) {
-			if (! summarizeClasses()) {
-				accessed = dico.ensureFamixParameter(bnd, name, typ, (Method) owner, summarizeClasses());
+			if (! options.summarizeClasses()) {
+				accessed = dico.ensureFamixParameter(bnd, name, typ, (Method) owner, options.summarizeClasses());
 			}
 		} else {
 			// it seems it is a variable.
@@ -520,7 +520,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	private void createAccess(Method accessor, TStructuralEntity accessed, boolean isLHS) {
 		// create local accesses?
 		if ((accessed != null) && (accessor != null)) {
-			if (summarizeClasses()) {
+			if (options.summarizeClasses()) {
 				//dico.addFamixReference(findHighestType(accessor), findHighestType(accessed), /*lastReference*/null);
 			} else if (options.withLocals() || (! localVariable(accessed, accessor)) ) {
 				context.setLastAccess(

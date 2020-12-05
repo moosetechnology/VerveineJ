@@ -138,7 +138,7 @@ public class VisitorAnnotationRef extends SummarizingClassesAbstractVisitor {
 		if (bnd != null) {
 			for (IAnnotationBinding annBnd : bnd.getAnnotations()) {
 				// create type of the annotation
-				AnnotationType annType = dico.ensureFamixAnnotationType(annBnd.getAnnotationType(), /*name*/null, /*owner*/null, ! summarizeClasses());
+				AnnotationType annType = dico.ensureFamixAnnotationType(annBnd.getAnnotationType(), /*name*/null, /*owner*/null, ! options.summarizeClasses());
 
 				// create all parameters of the annotation instance
 				Collection<AnnotationInstanceAttribute> annAtts = new ArrayList<AnnotationInstanceAttribute>();
@@ -149,8 +149,8 @@ public class VisitorAnnotationRef extends SummarizingClassesAbstractVisitor {
 				}
 
 				// add the annotation instance to the Famix entity, may be if fmx==null we should not even create the AnnotationInstanceType ?
-				fmx = dico.getEntityByKey(bnd);
-				if ( (fmx != null) && (! summarizeClasses()) ) {
+				fmx = (NamedEntity) dico.getEntityByKey(bnd);
+				if ( (fmx != null) && (! options.summarizeClasses()) ) {
 					dico.addFamixAnnotationInstance(fmx, annType, annAtts);
 				}
 			}
@@ -187,7 +187,7 @@ public class VisitorAnnotationRef extends SummarizingClassesAbstractVisitor {
 				annPV.getMethodBinding(), 
 				/*name*/annPV.getName(), 
 				/*owner*/annType, 
-				/*persistIt*/!summarizeClasses());
+				/*persistIt*/! options.summarizeClasses());
 		return( dico.createFamixAnnotationInstanceAttribute(annoAtt, attFamixVal) );
 	}
 

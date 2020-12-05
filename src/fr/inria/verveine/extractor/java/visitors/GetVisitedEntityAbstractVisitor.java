@@ -98,7 +98,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * Local type: see comment of visit(ClassInstanceCreation node)
 	 */
 	protected org.moosetechnology.model.famixjava.famixjavaentities.Class visitTypeDeclaration(TypeDeclaration node) {
-		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		org.moosetechnology.model.famixjava.famixjavaentities.Class fmx = dico.getFamixClass(bnd, /*name*/node.getName().getIdentifier(), (ContainerEntity) /*owner*/context.top());
 		if (fmx != null) {
@@ -131,7 +131,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	protected org.moosetechnology.model.famixjava.famixjavaentities.Class visitAnonymousClassDeclaration(AnonymousClassDeclaration node) {
 		org.moosetechnology.model.famixjava.famixjavaentities.Class fmx;
 
-		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		fmx = this.dico.getFamixClass(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
 		if (fmx != null) {
@@ -150,7 +150,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	}
 
 	protected org.moosetechnology.model.famixjava.famixjavaentities.Enum visitEnumDeclaration(EnumDeclaration node) {
-		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		org.moosetechnology.model.famixjava.famixjavaentities.Enum fmx = dico.getFamixEnum(bnd, node.getName().getIdentifier(), (ContainerEntity) context.top());
 		if (fmx != null) {
@@ -167,7 +167,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	}
 
 	protected AnnotationType visitAnnotationTypeDeclaration(AnnotationTypeDeclaration node) {
-        ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+        ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		AnnotationType fmx = dico.getFamixAnnotationType(bnd, node.getName().getIdentifier(), (ContainerEntity) context.top());
 		if (fmx != null) {
@@ -189,7 +189,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 */
 	@SuppressWarnings("unchecked")
 	protected Method visitMethodDeclaration(MethodDeclaration node) {
-		IMethodBinding bnd = (IMethodBinding) StubBinding.getDeclarationBinding(node);
+		IMethodBinding bnd = (IMethodBinding) StubBinding.ensureDeclarationBinding(node);
 
 		Collection<String> paramTypes = new ArrayList<>();
 		for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {

@@ -2,9 +2,8 @@ package fr.inria.verveine.extractor.java.visitors;
 
 import fr.inria.verveine.extractor.java.JavaDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
-import fr.inria.verveine.extractor.java.VerveineJParser;
 import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.moosetechnology.model.famixjava.famixjavaentities.NamedEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.Entity;
 import org.moosetechnology.model.famixjava.famixjavaentities.ParameterType;
 
 /**
@@ -30,23 +29,17 @@ public abstract class SummarizingClassesAbstractVisitor extends GetVisitedEntity
 				return persistClass(null);
 			} else {
 				// let see if it is a type parameter
-				NamedEntity t = dico.getEntityByKey(bnd);
+				Entity t = dico.getEntityByKey(bnd);
 				if ((t != null) && (t instanceof ParameterType)) {
 					return false;
 				}
 				// finally, the "normal" case
-				return (! summarizeClasses()) || (bnd.getDeclaringMethod() == null);
+				return (! options.summarizeClasses()) || (bnd.getDeclaringMethod() == null);
 			}
 		} else {
-			return (! summarizeClasses()) || (context.topMethod() == null);
+			return (! options.summarizeClasses()) || (context.topMethod() == null);
 		}
 	
 	}
 
-	/**
-	 * Syntactic sugar: whether to summarize classes or not
-	 */
-	protected boolean summarizeClasses() {
-		return options.summarizeClasses();
-	}
 }

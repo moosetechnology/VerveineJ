@@ -54,7 +54,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		//		System.err.println("TRACE, Visiting TypeDeclaration: "+node.getName().getIdentifier());
-		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		List<TypeParameter> tparams = (List<TypeParameter>) node.typeParameters();
 
@@ -92,7 +92,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 				// if there is a type parameter, then fmx will be a Famix ParameterizableClass
 				// note: owner of the ParameterType is the ParameterizableClass
 				ParameterType fmxParam = dico.ensureFamixParameterType(tp.resolveBinding(),
-						tp.getName().getIdentifier(), (ParameterizableClass) fmx, /*persistIt*/! summarizeClasses());
+						tp.getName().getIdentifier(), (ParameterizableClass) fmx, /*persistIt*/! options.summarizeClasses());
 				if (fmxParam != null) {
 					fmxParam.setIsStub(false);
 				}
@@ -131,7 +131,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	public boolean visit(AnonymousClassDeclaration node) {
 		//		System.err.println("TRACE, Visiting AnonymousClassDeclaration");
 		org.moosetechnology.model.famixjava.famixjavaentities.Class fmx;
-		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		int modifiers = (bnd != null) ? bnd.getModifiers() : JavaDictionary.UNKNOWN_MODIFIERS;
 		fmx = this.dico.ensureFamixClass(
@@ -140,12 +140,12 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 				/*owner*/context.top(), 
 				/*isGeneric*/false, 
 				modifiers, 
-				/*alwaysPersist?*/!summarizeClasses());
+				/*alwaysPersist?*/! options.summarizeClasses());
 
 		if (fmx != null) {
 			Util.recursivelySetIsStub(fmx, false);
 
-			if (! summarizeClasses()) {
+			if (! options.summarizeClasses()) {
 				if (options.withAnchors()) {
 					dico.addSourceAnchor(fmx, node, /*oneLineAnchor*/false);
 				}
@@ -169,7 +169,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	@Override
 	public boolean visit(EnumDeclaration node) {
 //		System.err.println("TRACE, Visiting EnumDeclaration: "+node.getName().getIdentifier());
-		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		ITypeBinding bnd = (ITypeBinding) StubBinding.ensureDeclarationBinding(node);
 
 		org.moosetechnology.model.famixjava.famixjavaentities.Enum fmx = dico.ensureFamixEnum(bnd, node.getName().getIdentifier(), (ContainerEntity) context.top());
 		if (fmx != null) {
@@ -231,7 +231,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	 */
 	@Override
 	public boolean visit(MethodDeclaration node) {
-		IMethodBinding bnd = (IMethodBinding) StubBinding.getDeclarationBinding(node);
+		IMethodBinding bnd = (IMethodBinding) StubBinding.ensureDeclarationBinding(node);
 
         Collection<String> paramTypes = new ArrayList<>();
         for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
@@ -244,7 +244,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 				paramTypes, 
 				/*owner*/context.topType(), 
 				node.getModifiers(), 
-				/*persitIt*/!summarizeClasses());
+				/*persitIt*/! options.summarizeClasses());
 
 		if (fmx != null) {
 			fmx.setIsStub(false);
@@ -256,7 +256,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 				fmx.setKind(JavaDictionary.CONSTRUCTOR_KIND_MARKER);
 			}
 
-			if (!summarizeClasses()) {
+			if (! options.summarizeClasses()) {
 				if (options.withAnchors()) {
 					dico.addSourceAnchor(fmx, node, /*oneLineAnchor*/false);
 				}
@@ -307,7 +307,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 
 		if (fmx != null) {
             dico.setMethodModifiers(fmx, node.getModifiers());
-			if (!summarizeClasses()) {
+			if (! options.summarizeClasses()) {
 				if (options.withAnchors()) {
 					dico.addSourceAnchor(fmx, node, /*oneLineAnchor*/false);
 				}
@@ -545,7 +545,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 		}
 		if (ctxtMeth == null) {
 			ctxtMeth = dico.ensureFamixMethod((IMethodBinding) null, JavaDictionary.INIT_BLOCK_NAME, new ArrayList<String>(), context.topType(),
-					/*modifiers*/JavaDictionary.UNKNOWN_MODIFIERS, /*persistIt*/!summarizeClasses());
+					/*modifiers*/JavaDictionary.UNKNOWN_MODIFIERS, /*persistIt*/! options.summarizeClasses());
 			ctxtMeth.setIsStub(false);
 			// initialization block doesn't have return type so no need to create a reference from its class to the "declared return type" class when classSummary is TRUE
 			pushInitBlockMethod(ctxtMeth);
