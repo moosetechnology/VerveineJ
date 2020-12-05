@@ -6,6 +6,7 @@ package fr.inria.verveine.extractor.java;
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famixjava.famixjavaentities.*;
+import org.moosetechnology.model.famixjava.famixjavaentities.Class;
 import org.moosetechnology.model.famixjava.famixtraits.*;
 
 import java.io.File;
@@ -82,24 +83,31 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 	@Test
 	public void testEntitiesNumber() {
 
-		int nbClasses = 11 + 14 + 1; // 11+ Object,String,StringBuffer,PrintStream,System,AbstractStringBuilder,FilterOutputStream,OutputStream,Comparable,Serializable,Flushable,Appendable,CharSequence,Closeable, +(java7)AutoCloseable} + 1 Anonymous class IPrinter
-		int nbInherit = 9 + 21 + 1;
+		Stream<Class> allClasses = entitiesOfType(Class.class)
+				.stream()
+				.filter(c -> ! c.getIsStub());
+		assertEquals(11, allClasses.count() );
+		// Object,String,StringBuffer,PrintStream,System,AbstractStringBuilder,FilterOutputStream,OutputStream,Comparable,Serializable,Flushable,Appendable,CharSequence,Closeable,AutoCloseable
+		allClasses = entitiesOfType(Class.class)
+				.stream()
+				.filter(c -> c.getIsStub());
+		assertEquals(15, allClasses.count() );
 
-		if (System.getProperty("java.version").startsWith("1.") &&
-				System.getProperty("java.version").charAt(2) >= '7') {
-			// class Autocloseable starting in Java 7
-			nbClasses++;
-			nbInherit++;
-		}
+		Stream<Inheritance> allInheritances = entitiesOfType(Inheritance.class)
+				.stream()
+				.filter(i -> !((Class)i.getSubclass()).getIsStub() );
+		assertEquals(12,   allInheritances.count() );
+		allInheritances = entitiesOfType(Inheritance.class)
+				.stream()
+				.filter(i -> ((Class)i.getSubclass()).getIsStub() );
+		assertEquals(19,   allInheritances.count() );
 
-		assertEquals(nbClasses, entitiesOfType(org.moosetechnology.model.famixjava.famixjavaentities.Class.class).size());
 		assertEquals(3, entitiesOfType(PrimitiveType.class).size());//int,boolean,void
 		assertEquals(40 + 8 + 1, entitiesOfType(Method.class).size());//40+{System.out.println(),System.out.println(...),System.out.print,StringBuffer.append,Object.equals,String.equals,Object.toString,<Initializer>}
 		assertEquals(10 + 1, entitiesOfType(Attribute.class).size());//10+{System.out}
 		assertEquals(2 + 4, entitiesOfType(Namespace.class).size());//2+{moose,java.lang,java.io,java}
 		assertEquals(26, entitiesOfType(Parameter.class).size());
 		assertEquals(55, entitiesOfType(Invocation.class).size());
-		assertEquals(nbInherit, entitiesOfType(Inheritance.class).size());
 		assertEquals(45, entitiesOfType(Access.class).size());// 17 "internal" attributes + 9 System.out + 18 "this" + 1 "super"
 		assertEquals(0, entitiesOfType(LocalVariable.class).size());
 		assertEquals(1, entitiesOfType(AnnotationType.class).size()); //Override

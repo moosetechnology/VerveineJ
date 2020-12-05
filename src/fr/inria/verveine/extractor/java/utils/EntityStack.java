@@ -297,7 +297,7 @@ public class EntityStack {
 		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			return (int) met.getCyclomaticComplexity();
+			return met.getCyclomaticComplexity().intValue();
 		}
 		else {
 			return EMPTY_CYCLO;
@@ -311,7 +311,7 @@ public class EntityStack {
 		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			return (int) met.getNumberOfStatements();
+			return met.getNumberOfStatements().intValue();
 		}
 		else {
 			return EMPTY_NOS;
@@ -347,7 +347,7 @@ public class EntityStack {
 		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			met.setCyclomaticComplexity( (int)met.getCyclomaticComplexity() + c );
+			met.setCyclomaticComplexity( met.getCyclomaticComplexity().intValue() + c );
 		}
 	}
 
@@ -358,7 +358,7 @@ public class EntityStack {
 		TWithStatements met = this.topTWithStatementsEntity();
 
 		if (met != null) {
-			met.setNumberOfStatements( (int)met.getNumberOfStatements() + n );
+			met.setNumberOfStatements( met.getNumberOfStatements().intValue() + n );
 		}
 	}
 

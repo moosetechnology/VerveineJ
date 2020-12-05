@@ -133,9 +133,4 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 		return ((TNamedEntity)access.getVariable()).getName().equals(varName);
 	}
 
-	@Test
-	public void testLambdasDeclarations() {
-		Collection<Lambda> lambdas = entitiesOfType(Lambda.class);
-		assertEquals(2, lambdas.size());
-	}
 }

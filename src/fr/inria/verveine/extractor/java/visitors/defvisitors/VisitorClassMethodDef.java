@@ -524,7 +524,8 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	// UTILITY METHODS
 
     /**
-     * REnsures the creation of the fake method: {@link JavaDictionary#INIT_BLOCK_NAME}
+     * Ensures the creation of the fake method: {@link JavaDictionary#INIT_BLOCK_NAME}
+     * Not that this virtual method can actually be "spread over" various attributes initializations
      *
      * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
@@ -548,27 +549,17 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 			ctxtMeth = dico.ensureFamixMethod((IMethodBinding) null, JavaDictionary.INIT_BLOCK_NAME, new ArrayList<String>(), context.topType(),
 					/*modifiers*/JavaDictionary.UNKNOWN_MODIFIERS, /*persistIt*/! options.summarizeClasses());
 			ctxtMeth.setIsStub(false);
-			// initialization block doesn't have return type so no need to create a reference from its class to the "declared return type" class when classSummary is TRUE
-			pushInitBlockMethod(ctxtMeth);
+
+			if (ctxtMeth.getNumberOfStatements() == null) {
+				ctxtMeth.setNumberOfStatements(0);
+			}
+			if (ctxtMeth.getCyclomaticComplexity() == null) {
+				ctxtMeth.setCyclomaticComplexity(1);
+			}
+			this.context.pushMethod(ctxtMeth);
 		}
 
 		return ctxtMeth;
-	}
-
-	/**
-	 * Special method InitBlock may be "created" in various steps,
-	 * mainly when attributes are declared+initialized with the result of a method call.<br>
-	 * In such a case, we need to recover the previous metric values to add to them
-	 * @param fmx -- the InitBlock FamixMethod
-	 */
-	protected void pushInitBlockMethod(Method fmx) {
-		int nos = (fmx.getNumberOfStatements() == null) ? 0 : fmx.getNumberOfStatements().intValue();
-		int cyclo = (fmx.getCyclomaticComplexity() == null) ? 0 : fmx.getCyclomaticComplexity().intValue();
-		this.context.pushMethod(fmx);
-		if ((nos != 0) || (cyclo != 0)) {
-			context.setTopBehaviouralNOS(nos);
-			context.setTopBehaviouralCyclo(cyclo);
-		}
 	}
 
 	protected void closeOptionalInitBlock() {
