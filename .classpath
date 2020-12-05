@@ -25,7 +25,7 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.core.runtime_3.13.0.v20170207-1030.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.equinox.common_3.9.0.v20170207-1454.jar"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.equinox.preferences_3.7.0.v20170126-2132.jar"/>
-	<classpathentry kind="lib" path="lib/org.eclipse.jdt.core_3.13.50.v20171007-0855.jar" sourcepath="/jdtcore"/>
+	<classpathentry kind="lib" path="lib/org.eclipse.jdt.core_3.13.50.v20171007-0855.jar" sourcepath="/jdtcore/src/org/eclipse/jdt/core/dom"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.12.50.v20170928-1321.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/fame.jar"/>

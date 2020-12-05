@@ -286,19 +286,20 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 
 	@Override
 	public void endVisit(MethodDeclaration node) {
-		closeMethodDeclaration();
+		if (context.topMethod() != null) {
+			this.context.popMethod();
+		}
 		super.endVisit(node);
 	}
-
 
 	@Override
 	public boolean visit(LambdaExpression node) {
 		IMethodBinding bnd = (IMethodBinding)node.resolveMethodBinding();
 
         Collection<String> paramTypes = new ArrayList<>();
-        /*for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
-            paramTypes.add( Util.jdtTypeName(param.getType()));
-        }*/
+        for (VariableDeclaration param : (List<VariableDeclaration>) node.parameters()) {
+            paramTypes.add( param.getName().getIdentifier());
+        }
 
 		Lambda fmx = dico.ensureFamixLambda( bnd, paramTypes);
 
@@ -311,12 +312,21 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 			if (options.withAnchors()) {
 				dico.addSourceAnchor(fmx, node, /*oneLineAnchor*/false);
 			}
-
-			super.visit(node);
-			
-			this.context.popTWithStatementsEntity();
 		}
-		return false;  // either because we already visited the body or because lambda creation failed
+		return true;
+	}
+
+	@Override
+	public void endVisit(LambdaExpression node) {
+		if (context.topTWithStatementsEntity() != null) {
+			Lambda lambda = this.context.popUpToInstanceOf(Lambda.class);
+			if (lambda.getNumberOfStatements().equals(0)) {
+				// hack: if lambda does not have {}, its body will not be a statement
+				// so we manually set NOS to 1
+				lambda.setNumberOfStatements(1);
+			}
+		}
+		super.endVisit(node);
 	}
 
 	/**
@@ -357,7 +367,9 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 
 	@Override
 	public void endVisit(Initializer node) {
-		closeMethodDeclaration();
+		if (context.topMethod() != null) {
+			this.context.popMethod();
+		}
 		super.endVisit(node);
 	}
 
@@ -595,15 +607,6 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	protected void closeOptionalInitBlock() {
 		Method ctxtMeth = this.context.topMethod();
 		if ((ctxtMeth != null) && (ctxtMeth.getName().equals(JavaDictionary.INIT_BLOCK_NAME))) {
-			closeMethodDeclaration();
-		}
-	}
-
-	/**
-	 * When closing a method declaration, we need to take care of some metrics that are also collected
-	 */
-	protected void closeMethodDeclaration() {
-		if (context.topMethod() != null) {
 			this.context.popMethod();
 		}
 	}

@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import static fr.inria.verveine.extractor.java.utils.AccessToVariable.*;
@@ -17,6 +18,7 @@ import org.moosetechnology.model.famixjava.famixjavaentities.Access;
 import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
 import org.moosetechnology.model.famixjava.famixjavaentities.LocalVariable;
 import org.moosetechnology.model.famixjava.famixjavaentities.Method;
+import org.moosetechnology.model.famixjava.famixjavaentities.Parameter;
 import org.moosetechnology.model.famixjava.famixtraits.TLocalVariable;
 
 import java.io.File;
@@ -46,45 +48,54 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 	}
 
     @Test
-    public void testLambdaTypedParametersAreVariablesLocalToParentMethod() {
+    public void testLambdaParameters() {
         parse(new String[] {"-alllocals", "test_src/lambdas"});
 
-        Method meth = detectFamixElement( Method.class, JavaDictionary.INIT_BLOCK_NAME);
-        assertNotNull(meth);
+        Collection<Parameter> params = entitiesOfType( Parameter.class);
 
-        LocalVariable seg1 = null;
-        LocalVariable seg2 = null;
-        assertEquals(2, meth.getLocalVariables().size());
-        for (TLocalVariable tlvar : meth.getLocalVariables()) {
-            LocalVariable lvar = (LocalVariable) tlvar;
-            if (lvar.getName().equals("seg1")) {
-                seg1 = lvar;
+        assertEquals(3, params.size());
+
+        Parameter seg1 = null;
+        Parameter seg2 = null;
+        Parameter t = null;
+
+        for (Parameter pvar : params) {
+            if (pvar.getName().equals("seg1")) {
+                seg1 = pvar;
             }
-            else if (lvar.getName().equals("seg2")) {
-                seg2 = lvar;
+            else if (pvar.getName().equals("seg2")) {
+                seg2 = pvar;
+            }
+            else if (pvar.getName().equals("t")) {
+                t = pvar;
             }
             else {
-                fail("Unknown local variable:" + lvar.getName());
+                fail("Unknown local variable:" + pvar.getName());
             }
         }
         assertNotNull(seg1);
+        //assertNotNull(seg1.getDeclaredType());
+
         assertNotNull(seg2);
+        //assertNotNull(seg2.getDeclaredType());
+        
+        assertNotNull(t);
+        assertNull(t.getDeclaredType());
     }
 
     @Test
     public void testLambdaUntypedParameterIsVariableLocalToParentMethod() {
         parse(new String[] {"-alllocals", "test_src/lambdas"});
 
-        Method meth = detectFamixElement( Method.class, "WithLambda");
-        assertNotNull(meth);
+        Collection<LocalVariable> locals = entitiesOfType( LocalVariable.class);
+
+        assertEquals(3, locals.size());
 
         LocalVariable col = null;
         LocalVariable found = null;
         LocalVariable t = null;
 
-        assertEquals(3, meth.getLocalVariables().size());
-        for (TLocalVariable tlvar : meth.getLocalVariables()) {
-            LocalVariable lvar = (LocalVariable) tlvar;
+        for (LocalVariable lvar : locals) {
             if (lvar.getName().equals("col")) {
                 col = lvar;
             }
@@ -140,8 +151,9 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 		Collection<Lambda> lambdas = entitiesOfType(Lambda.class);
 		assertEquals(2, lambdas.size());
 
-		for (Lambda lbd : lambdas) {
-			assertEquals(1, lbd.getCyclomaticComplexity());
-		}
+		assertTrue( lambdas.stream().anyMatch( l -> l.getCyclomaticComplexity().equals(1) ));
+		assertTrue( lambdas.stream().anyMatch( l -> l.getCyclomaticComplexity().equals(2) ));
+		assertTrue( lambdas.stream().anyMatch( l -> l.getNumberOfStatements().equals(1) )); 
+		assertTrue( lambdas.stream().anyMatch( l -> l.getNumberOfStatements().equals(3) )); 
 	}
 }

@@ -1393,10 +1393,9 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return fmx;
 	}
 
-	public Lambda ensureFamixLambda(IMethodBinding bnd, Collection<String> paramTypes) {
+	public Lambda ensureFamixLambda(IMethodBinding bnd, Collection<String> paramNames) {
 		Lambda fmx = null;
 		String sig;
-		boolean delayedRetTyp;
 
 		// --------------- to avoid useless computations if we can
 		fmx = (Lambda)getEntityByKey(bnd);
@@ -1409,8 +1408,8 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		 if (bnd != null) {
 	            sig += signatureParamsFromBinding(bnd);
 	        }
-        else if (paramTypes != null) {
-			sig += signatureParamsFromStringCollection(paramTypes);
+        else if (paramNames != null) {
+			sig += signatureParamsFromStringCollection(paramNames);
 		}
 		else {
 			sig += "???";
@@ -1997,11 +1996,11 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return sig;
 	}
 
-	private String signatureParamsFromStringCollection(Collection<String> paramTypes) {
+	private String signatureParamsFromStringCollection(Collection<String> names) {
 		boolean first = true;
 		String sig = new String();
 
-		for (String t : paramTypes) {
+		for (String t : names) {
 			if (first) {
 				sig = t;
 				first = false;
