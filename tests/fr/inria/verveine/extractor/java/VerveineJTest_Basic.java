@@ -10,10 +10,10 @@ import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
 
+import fr.inria.verveine.extractor.java.utils.FameRepositoryFilters;
+
 import java.lang.Class;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Vector;
 
 import static org.junit.Assert.*;
 
@@ -54,22 +54,11 @@ public abstract class VerveineJTest_Basic {
 	}
 
     public <T extends Entity> Collection<T> entitiesOfType(Class<T> clazz) {
-        return repo.all(clazz);
+        return FameRepositoryFilters.selectElementsOfType(repo, clazz);
     }
 
     public <T extends NamedEntity> T detectFamixElement(Class<T> clazz, String name) {
-        Iterator<T> iter = entitiesOfType(clazz).iterator();
-
-        T found;
-        do {
-            if (!iter.hasNext()) {
-                return null;
-            }
-
-            found = iter.next();
-        } while(!found.getName().equals(name));
-
-        return found;
+        return FameRepositoryFilters.detectFamixElement(repo, clazz, name);
     }
 
     public Collection<NamedEntity> entitiesNamed( String name) {
@@ -77,17 +66,7 @@ public abstract class VerveineJTest_Basic {
     }
 
     public <T extends NamedEntity> Collection<T> entitiesNamed( Class<T> clazz, String name) {
-        Vector ret = new Vector();
-        Iterator<T> iter = entitiesOfType(clazz).iterator();
-
-        while(iter.hasNext()) {
-            T fmx = iter.next();
-            if (fmx.getName().equals(name)) {
-                ret.add(fmx);
-            }
-        }
-
-        return ret;
+    	return FameRepositoryFilters.listFamixElements(repo, clazz, name);
     }
 
 	// ---------------- generic tests methods ------------------

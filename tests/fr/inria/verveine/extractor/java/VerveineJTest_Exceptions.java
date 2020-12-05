@@ -1,6 +1,6 @@
 package fr.inria.verveine.extractor.java;
 
-import fr.inria.verveine.extractor.java.utils.VerveineUtilsForTests;
+import fr.inria.verveine.extractor.java.utils.FameRepositoryFilters;
 import ch.akuhn.fame.Repository;
 import org.junit.Before;
 import org.junit.Test;

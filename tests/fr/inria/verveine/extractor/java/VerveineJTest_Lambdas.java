@@ -1,18 +1,27 @@
 package fr.inria.verveine.extractor.java;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.hasItem;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
+import static fr.inria.verveine.extractor.java.utils.AccessToVariable.*;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import org.moosetechnology.model.famixjava.famixjavaentities.Access;
 import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
 import org.moosetechnology.model.famixjava.famixjavaentities.LocalVariable;
 import org.moosetechnology.model.famixjava.famixjavaentities.Method;
 import org.moosetechnology.model.famixjava.famixtraits.TLocalVariable;
-import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
 
 import java.io.File;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
 
 public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
@@ -103,11 +112,10 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
     public void testLambdaUntypedParameterNotCreatedWithoutOptionAlllocals() {
         parse(new String[] {"test_src/lambdas"});
 
-        Method meth = detectFamixElement( Method.class, "WithLambda");
-        assertNotNull(meth);
+        Collection<LocalVariable> locals = entitiesOfType( LocalVariable.class);
 
-        assertEquals(1, meth.getLocalVariables().size());
-        LocalVariable col = (LocalVariable) firstElt(meth.getLocalVariables());
+        assertEquals(1, locals.size());
+        LocalVariable col = (LocalVariable) firstElt(locals);
         assertNotNull(col);
         assertEquals("col", col.getName());
     }
@@ -118,19 +126,22 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
         Collection<Access> accesses = entitiesOfType(Access.class);
         assertEquals(6, accesses.size());
 
-        accesses.stream().anyMatch( a -> accessToVariableWriting(a, "segments", /*writeAccess*/true));
-        accesses.stream().anyMatch( a -> accessToVariableWriting(a, "seg1", /*writeAccess*/false));
-        accesses.stream().anyMatch( a -> accessToVariableWriting(a, "seg2", /*writeAccess*/false));
-        accesses.stream().anyMatch( a -> accessToVariableWriting(a, "found", /*writeAccess*/true));
-        accesses.stream().anyMatch( a -> accessToVariableWriting(a, "col", /*writeAccess*/false));
-        accesses.stream().anyMatch( a -> accessToVariableWriting(a, "out", /*writeAccess*/false));
+        assertThat( accesses, hasItem(writeAccessTo( "segments")) );
+        assertThat( accesses, hasItem(readAccessTo( "seg1")) );
+        assertThat( accesses, hasItem(readAccessTo( "seg2")) );
+        assertThat( accesses, hasItem(writeAccessTo( "found")) );
+        assertThat( accesses, hasItem(readAccessTo( "col")) );
+        assertThat( accesses, hasItem(readAccessTo( "out")) );
     }
 
-    /** Checks that Access is on variable names varName and whether it is a writeAccess or not
-     */
-	protected boolean accessToVariableWriting(Access access, String varName, boolean writeAccess) {
-		if (access.getIsWrite() != writeAccess) return false;
-		return ((TNamedEntity)access.getVariable()).getName().equals(varName);
-	}
+	@Test
+	public void testLambdasDeclarations() {
+        parse(new String[] { "test_src/lambdas"});
+		Collection<Lambda> lambdas = entitiesOfType(Lambda.class);
+		assertEquals(2, lambdas.size());
 
+		for (Lambda lbd : lambdas) {
+			assertEquals(1, lbd.getCyclomaticComplexity());
+		}
+	}
 }

@@ -8,6 +8,7 @@ import fr.inria.verveine.extractor.java.visitors.SummarizingClassesAbstractVisit
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizedType;
+import org.moosetechnology.model.famixjava.famixtraits.TWithStatements;
 import org.moosetechnology.model.famixjava.famixjavaentities.*;
 
 import java.security.MessageDigest;
@@ -287,6 +288,35 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	public void endVisit(MethodDeclaration node) {
 		closeMethodDeclaration();
 		super.endVisit(node);
+	}
+
+
+	@Override
+	public boolean visit(LambdaExpression node) {
+		IMethodBinding bnd = (IMethodBinding)node.resolveMethodBinding();
+
+        Collection<String> paramTypes = new ArrayList<>();
+        /*for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
+            paramTypes.add( Util.jdtTypeName(param.getType()));
+        }*/
+
+		Lambda fmx = dico.ensureFamixLambda( bnd, paramTypes);
+
+		if (fmx != null) {
+			// fmx.setBodyHash(this.computeHashForMethodBody(node));
+			fmx.setNumberOfStatements(0);
+			fmx.setCyclomaticComplexity(1);
+			this.context.pushTWithStatementsEntity(fmx);
+			
+			if (options.withAnchors()) {
+				dico.addSourceAnchor(fmx, node, /*oneLineAnchor*/false);
+			}
+
+			super.visit(node);
+			
+			this.context.popTWithStatementsEntity();
+		}
+		return false;  // either because we already visited the body or because lambda creation failed
 	}
 
 	/**

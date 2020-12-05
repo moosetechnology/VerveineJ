@@ -221,7 +221,15 @@ public class EntityStack {
 	public <T extends Entity> T popUpToInstanceOf(Class<T> clazz) {
 		return (T) this.popUpto( e -> clazz.isInstance(e) );
 	}
-	
+
+	/**
+	 * Pops the Famix TWithStatements on top of the "context stack"
+	 * Note: does not check that there is such an entity, so could possibly throw an EmptyStackException
+	 */
+	public TWithStatements popTWithStatementsEntity() {
+		return (TWithStatements) this.popUpto( e -> e instanceof TWithStatements);
+	}
+
 	/**
 	 * Returns the Famix entity on top of the "context stack"
 	 * Note: does not check that there is such an entity
