@@ -32,7 +32,8 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 	public static final String OBJECT_PACKAGE_NAME = "java.lang";
 	public static final String ARRAYS_NAME = "default[]";
 	public static final String INIT_BLOCK_NAME = "<Initializer>";
-	public static final String ANONYMOUS_NAME_PREFIX = "_Anonymous";
+	public static final String ANONYMOUS_NAME_PREFIX = "<Anonymous>";
+	public static final String LAMBDA_PREFIX = "<Lambda>";
 
 	public static final int UNKNOWN_MODIFIERS = 0;
 	public static final String MODIFIER_ABSTRACT = "abstract";
@@ -1263,7 +1264,6 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return ensureFamixMethod(bnd, name, paramTypes, /*returnType*/null, owner,modifiers, persistIt);
 	}
 
-	
 	/**
 	 * Returns a Famix Method associated with the IMethodBinding. The Entity is created if it does not exist.
 	 * The Entity is created if it does not exist.
@@ -1389,6 +1389,35 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 			int retTypModifiers = (retTypBnd != null) ? retTypBnd.getModifiers() : UNKNOWN_MODIFIERS;
 			fmx.setDeclaredType(this.ensureFamixType(retTypBnd, /*name*/null, /*owner*/fmx, /*ctxt*/(ContainerEntity) owner, retTypModifiers, /*alwaysPersist?*/persistIt));
 		}
+
+		return fmx;
+	}
+
+	public Lambda ensureFamixLambda(IMethodBinding bnd, Collection<String> paramTypes) {
+		Lambda fmx = null;
+		String sig;
+		boolean delayedRetTyp;
+
+		// --------------- to avoid useless computations if we can
+		fmx = (Lambda)getEntityByKey(bnd);
+		if (fmx != null) {
+			return fmx;
+		}
+
+		// --------------- signature
+		sig = LAMBDA_PREFIX + "(";
+		 if (bnd != null) {
+	            sig += signatureParamsFromBinding(bnd);
+	        }
+        else if (paramTypes != null) {
+			sig += signatureParamsFromStringCollection(paramTypes);
+		}
+		else {
+			sig += "???";
+		}
+		sig += ")";
+		
+		fmx = super.ensureFamixLambda(bnd, sig);
 
 		return fmx;
 	}

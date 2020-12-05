@@ -3,6 +3,7 @@ package fr.inria.verveine.extractor.java;
 import ch.akuhn.fame.Repository;
 import fr.inria.verveine.extractor.java.utils.Util;
 import org.moosetechnology.model.famixjava.famixjavaentities.Enum;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.moosetechnology.model.famixjava.famixjavaentities.*;
 import org.moosetechnology.model.famixjava.famixtraits.*;
 
@@ -37,11 +38,11 @@ public class AbstractDictionary<B> {
 	/**
 	 * A dictionary to map a key (provided by the user) to FAMIX Entity
 	 */
-	protected Map<B,NamedEntity> keyToEntity;
+	protected Map<B,Entity> keyToEntity;
 	/**
 	 * A reverse dictionary (see {@link AbstractDictionary#keyToEntity}) to find the key of an entity.
 	 */
-	protected Map<NamedEntity,B> entityToKey;
+	protected Map<Entity,B> entityToKey;
 
 	/**
 	 * Another dictionary to map a name to FAMIX Entities with this name
@@ -72,8 +73,8 @@ public class AbstractDictionary<B> {
 	public AbstractDictionary(Repository famixRepo) {
 		this.famixRepo = famixRepo;
 		
-		this.keyToEntity = new Hashtable<B,NamedEntity>();
-		this.entityToKey = new Hashtable<NamedEntity,B>();
+		this.keyToEntity = new Hashtable<B,Entity>();
+		this.entityToKey = new Hashtable<Entity,B>();
 		this.nameToEntity = new Hashtable<String,Collection<NamedEntity>>();
 		this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
 		
@@ -125,10 +126,11 @@ public class AbstractDictionary<B> {
 		famixRepo.getElements().remove(ent);
 	}
 	
-	protected void mapEntityToKey(B key, NamedEntity ent) {
-		NamedEntity old = keyToEntity.get(key);
+	protected void mapEntityToKey(B key, Entity ent) {
+		Entity old = keyToEntity.get(key);
 		if (old != null) {
 			entityToKey.remove(old);
+			// TODO should use removeEntity(old) because here we keep the link entityToKey(old,key) ...
 		}
 		keyToEntity.put(key, ent);
 		entityToKey.put(ent, key);
@@ -164,7 +166,7 @@ public class AbstractDictionary<B> {
 	 * @param key -- the key
 	 * @return the Famix Entity associated to the binding or null if not found
 	 */
-	public NamedEntity getEntityByKey(B key) {
+	public Entity getEntityByKey(B key) {
 		if (key == null) {
 			return null;
 		}
@@ -198,7 +200,7 @@ public class AbstractDictionary<B> {
 		}
 		
 		try {
-			fmx = fmxClass.newInstance();
+			fmx = fmxClass.getDeclaredConstructor().newInstance();
 		} catch (Exception e) {
 			System.err.println("Unexpected error, could not create a FAMIX entity: "+e.getMessage());
 			e.printStackTrace();
@@ -223,16 +225,16 @@ public class AbstractDictionary<B> {
 	 * Returns a FAMIX Entity of the type <b>fmxClass</b> and maps it to its binding <b>bnd</b> (if not null).
 	 * The Entity is created if it did not exist.
 	 * @param fmxClass -- the FAMIX class of the instance to create
-	 * @param bnd -- the binding to map to the new instance
+	 * @param key -- the binding to map to the new instance
 	 * @param name -- the name of the new instance (used if <tt>bnd == null</tt>)
 	 * @param persistIt -- whether the Entity should be persisted in the Famix repository
 	 * @return the FAMIX Entity or null if <b>bnd</b> was null or in case of a FAMIX error
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T extends NamedEntity> T ensureFamixEntity(Class<T> fmxClass, B bnd, String name, boolean persistIt) {
+	protected <T extends NamedEntity> T ensureFamixEntity(Class<T> fmxClass, B key, String name, boolean persistIt) {
 		T fmx = null;
-		if (bnd != null) {
-			fmx = (T) getEntityByKey(bnd);
+		if (key != null) {
+			fmx = (T) getEntityByKey(key);
 			if (fmx != null) {
 				return fmx;
 			}
@@ -243,9 +245,8 @@ public class AbstractDictionary<B> {
 		// so we cannot recover just from the name
 
 		fmx = createFamixEntity(fmxClass, name, persistIt);
-		if ( (bnd != null) && (fmx != null) ) {
-			keyToEntity.put(bnd, fmx);
-			entityToKey.put(fmx, bnd);
+		if ( (key != null) && (fmx != null) ) {
+			mapEntityToKey(key, fmx);
 		}
 		
 		return fmx;
@@ -400,6 +401,27 @@ public class AbstractDictionary<B> {
 		fmx.setSignature(sig);
 		fmx.setDeclaredType(ret);
 		fmx.setParentType(owner);
+		return fmx;
+	}
+
+	/**
+	 * Has to be treated differently because Lambdas don't have name
+	 */
+	public Lambda ensureFamixLambda(B key, String sig) {
+		Lambda fmx;
+
+		if (key != null) {
+			fmx = (Lambda) getEntityByKey(key);
+			if (fmx != null) {
+				return fmx;
+			}
+		}
+
+		fmx = new Lambda();
+		if ( (key != null) && (fmx != null) ) {
+			mapEntityToKey(key, fmx);
+		}
+		
 		return fmx;
 	}
 
