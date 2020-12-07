@@ -515,7 +515,7 @@ public class AbstractDictionary<B> {
 		if ( (sup == null) || (sub == null) ) {
 			return null;
 		}
-			
+
 		for (TInheritance i : (sup).getSubInheritances()) {
 			if (i.getSubclass() == sub) {
 				return (Inheritance) i;
