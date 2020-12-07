@@ -115,8 +115,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 				.stream()
 				.filter(i -> ((NamedEntity)i.getSubclass()).getName().equals("String") )
 				.filter(i -> ((SourcedEntity)i.getSubclass()).getIsStub() );
-		// TODO Bug, should be 4 but Comparable appears twice, see issue #20
-		assertEquals(5,   allInheritances.count() );
+		assertEquals(4,   allInheritances.count() );
 
 		assertEquals(3, entitiesOfType(PrimitiveType.class).size());//int,boolean,void
 		assertEquals(40 + 8 + 1, entitiesOfType(Method.class).size());//40+{System.out.println(),System.out.println(...),System.out.print,StringBuffer.append,Object.equals,String.equals,Object.toString,<Initializer>}
