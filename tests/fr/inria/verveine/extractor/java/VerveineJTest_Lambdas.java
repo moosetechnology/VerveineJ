@@ -17,9 +17,8 @@ import org.junit.Test;
 import org.moosetechnology.model.famixjava.famixjavaentities.Access;
 import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
 import org.moosetechnology.model.famixjava.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famixjava.famixjavaentities.Method;
 import org.moosetechnology.model.famixjava.famixjavaentities.Parameter;
-import org.moosetechnology.model.famixjava.famixtraits.TLocalVariable;
+
 
 import java.io.File;
 import java.util.Collection;
@@ -84,51 +83,19 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
     }
 
     @Test
-    public void testLambdaUntypedParameterIsVariableLocalToParentMethod() {
+    public void testLambdaUntypedParameterExtractedWithOptionAlllocals() {
         parse(new String[] {"-alllocals", "test_src/lambdas"});
 
-        Collection<LocalVariable> locals = entitiesOfType( LocalVariable.class);
+        assertEquals(1, entitiesNamed( LocalVariable.class, "t").size());
 
-        assertEquals(3, locals.size());
-
-        LocalVariable col = null;
-        LocalVariable found = null;
-        LocalVariable t = null;
-
-        for (LocalVariable lvar : locals) {
-            if (lvar.getName().equals("col")) {
-                col = lvar;
-            }
-            else if (lvar.getName().equals("found")) {
-                found = lvar;
-            }
-            else if (lvar.getName().equals("t")) {
-                t = lvar;
-            }
-            else {
-                fail("Unknown local variable:" + lvar.getName());
-            }
-        }
-        assertNotNull(col);
-        assertNotNull(col.getDeclaredType());
-
-        assertNotNull(found);
-        assertNotNull(found.getDeclaredType());
-        
-        assertNotNull(t);
-        assertNull(t.getDeclaredType());
+        assertNull(detectFamixElement(LocalVariable.class, "t").getDeclaredType());
     }
 
     @Test
-    public void testLambdaUntypedParameterNotCreatedWithoutOptionAlllocals() {
+    public void testLambdaUntypedParameterNotExtractedWithoutOptionAlllocals() {
         parse(new String[] {"test_src/lambdas"});
 
-        Collection<LocalVariable> locals = entitiesOfType( LocalVariable.class);
-
-        assertEquals(1, locals.size());
-        LocalVariable col = (LocalVariable) firstElt(locals);
-        assertNotNull(col);
-        assertEquals("col", col.getName());
+        assertEquals(0, entitiesNamed( LocalVariable.class, "t").size());
     }
 
     @Test
