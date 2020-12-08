@@ -82,6 +82,20 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     /**
+     * Ensures we have a binding for a MethodDeclaration
+     * First tries to get JDT's binding. If there is none, creates a StubBinding
+     */
+    public static  IBinding ensureDeclarationBinding(LambdaExpression node) {
+        IBinding bnd = node.resolveMethodBinding();
+
+        if (bnd == null) {
+            bnd = StubBinding.getBinding(node);
+        }
+
+        return bnd;
+    }
+
+    /**
      * returns a unique StubBinding for the <code>node</code> (a method or type declaration)
      * either by creating it or by retrieving a previously created one
      */
@@ -107,6 +121,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     private StubBinding(AbstractTypeDeclaration node, String key) {
+    	System.out.println("StubBinding(AbstractTypeDeclaration");
         this.key = key;
         kind = IBinding.TYPE;
         name = node.getName().getIdentifier();
@@ -114,6 +129,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     private StubBinding(AnonymousClassDeclaration node, String key) {
+    	System.out.println("StubBinding(AbstractTypeDeclaration");
         this.key = key;
         kind = IBinding.TYPE;
         name = "*anonymous*";
@@ -121,9 +137,24 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     private StubBinding(MethodDeclaration node, String key) {
+    	System.out.println("StubBinding(AbstractTypeDeclaration");
         this.key = key;
         kind = IBinding.METHOD;
         name = node.getName().getIdentifier();
+        List<SingleVariableDeclaration> lparams = node.parameters();
+        params = new ITypeBinding[lparams.size()];
+        int i=0;
+        for (SingleVariableDeclaration paramDecl : lparams) {
+        	params[i] = paramDecl.getType().resolveBinding();
+        	i++;
+        }
+    }
+
+    private StubBinding(LambdaExpression node, String key) {
+    	System.out.println("StubBinding(AbstractTypeDeclaration");
+        this.key = key;
+        kind = IBinding.METHOD;
+        name = JavaDictionary.LAMBDA_PREFIX;
         List<SingleVariableDeclaration> lparams = node.parameters();
         params = new ITypeBinding[lparams.size()];
         int i=0;

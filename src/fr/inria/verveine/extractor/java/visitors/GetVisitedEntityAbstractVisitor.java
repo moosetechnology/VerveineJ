@@ -184,7 +184,6 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	}
 
 	/**
-	 * Local type: same as {@link GetVisitedEntityAbstractVisitor#visitClassInstanceCreation(ClassInstanceCreation)}, 
 	 * we create it even if it is a local method because their are too many ways it can access external things
 	 */
 	@SuppressWarnings("unchecked")
@@ -204,6 +203,26 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 	protected void endVisitMethodDeclaration(MethodDeclaration node) {
 		context.popMethod();
+		super.endVisit(node);
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Lambda visitLambdaExpression(LambdaExpression node) {
+		IMethodBinding bnd = (IMethodBinding) StubBinding.ensureDeclarationBinding(node);
+
+		Collection<String> paramTypes = new ArrayList<>();
+		for (VariableDeclaration param : (List<VariableDeclaration>)node.parameters()) {
+			paramTypes.add(param.resolveBinding().getType().getName());
+		}
+
+		Lambda fmx = dico.ensureFamixLambda( bnd, paramTypes);
+
+		this.context.pushTWithStatementsEntity(fmx);
+		return fmx;
+	}
+
+	protected void endVisitLambdaExpression(LambdaExpression node) {
+		context.popTWithStatementsEntity();
 		super.endVisit(node);
 	}
 

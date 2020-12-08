@@ -75,7 +75,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
 	@Test
 	public void testLambdaParameters() {
-		parse(new String[] {"-alllocals", "test_src/lambdas"});
+		parse(new String[] {"test_src/lambdas"});
 
 		Collection<Parameter> params = entitiesOfType( Parameter.class);
 
@@ -96,7 +96,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
                 t = pvar;
             }
             else {
-                fail("Unknown local variable:" + pvar.getName());
+                fail("Unknown parameter:" + pvar.getName());
             }
         }
         assertNotNull(seg1);
@@ -107,15 +107,6 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
         
         assertNotNull(t);
         assertNull(t.getDeclaredType());
-    }
-
-    @Test
-    public void testLambdaUntypedParameterExtractedWithOptionAlllocals() {
-        parse(new String[] {"-alllocals", "test_src/lambdas"});
-
-        assertEquals(1, entitiesNamed( LocalVariable.class, "t").size());
-
-        assertNull(detectFamixElement(LocalVariable.class, "t").getDeclaredType());
     }
 
     @Test

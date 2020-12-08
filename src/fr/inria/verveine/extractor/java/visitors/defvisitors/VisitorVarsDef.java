@@ -156,6 +156,22 @@ public class VisitorVarsDef extends SummarizingClassesAbstractVisitor {
 	}
 
 	@Override
+	public boolean visit(LambdaExpression node) {
+		visitLambdaExpression( node);
+		structuralType = StructuralEntityKinds.PARAMETER;
+		visitNodeList( node.parameters());
+		structuralType = StructuralEntityKinds.LOCALVAR;
+		node.getBody().accept(this);
+		
+		return false;
+	}
+
+	@Override
+	public void endVisit(LambdaExpression node) {
+		endVisitLambdaExpression(node);
+	}
+
+	@Override
 	public boolean visit(Initializer node) {
 		visitInitializer(node);
 		return super.visit(node);
@@ -164,26 +180,6 @@ public class VisitorVarsDef extends SummarizingClassesAbstractVisitor {
 	@Override
 	public void endVisit(Initializer node) {
 		endVisitInitializer(node);
-	}
-
-	/**
-	 * Currently not defining lambdas. Only parse their body and consider their parameters as local variables
-	 * of the parent method
-	 *
-	 *  LambdaExpression:
-	 *     Identifier -> Body
-	 *     ( [ Identifier { , Identifier } ] ) -> Body
-	 *     ( [ FormalParameter { , FormalParameter } ] ) -> Body
-	 */
-	@Override
-	public boolean visit(LambdaExpression node) {
-		structuralType = StructuralEntityKinds.LOCALVAR;  // actually, should already be the case since we must be in a method
-		return super.visit(node);
-	}
-
-	@Override
-	public void endVisit(LambdaExpression node) {
-
 	}
 
 	@Override
