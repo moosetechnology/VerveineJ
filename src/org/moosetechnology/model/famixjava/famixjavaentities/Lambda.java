@@ -15,7 +15,7 @@ import java.util.Collection;
 
 @FamePackage("FamixJavaEntities")
 @FameDescription("Lambda")
-public class Lambda extends Entity implements TWithReferences, TSourceEntity, TWithAccesses, TWithImplicitVariables, TWithCaughtExceptions, TWithParameters, TWithInvocations, TWithLocalVariables, TWithThrownExceptions, TWithSourceLanguage, TWithStatements, TWithComments {
+public class Lambda extends Entity implements TWithReferences, THasSignature, TSourceEntity, TWithAccesses, TWithImplicitVariables, TWithCaughtExceptions, TWithParameters, TWithInvocations, TWithLocalVariables, TWithThrownExceptions, TWithSourceLanguage, TWithStatements, TWithComments {
 
     private Number numberOfConditionals;
 
@@ -683,6 +683,18 @@ public class Lambda extends Entity implements TWithReferences, TSourceEntity, TW
     public void setNumberOfStatements(Number number) {
         numberOfStatements = number;
     }
+
+    protected String signature;
+    
+	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	@Override
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
 
 }
 

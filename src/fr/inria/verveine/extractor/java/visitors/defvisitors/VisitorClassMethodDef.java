@@ -296,9 +296,9 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 	public boolean visit(LambdaExpression node) {
 		IMethodBinding bnd = (IMethodBinding)node.resolveMethodBinding();
 
-        Collection<String> paramTypes = new ArrayList<>();
-        for (VariableDeclaration param : (List<VariableDeclaration>) node.parameters()) {
-            paramTypes.add( param.getName().getIdentifier());
+		Collection<String> paramTypes = new ArrayList<>();
+        for (VariableDeclaration param : (List<VariableDeclaration>)node.parameters()) {
+        	paramTypes.add(param.resolveBinding().getType().getName());
         }
 
 		Lambda fmx = dico.ensureFamixLambda( bnd, paramTypes);

@@ -46,11 +46,38 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 		//parser.emitMSE(VerveineJOptions.OUTPUT_FILE);
 	}
 
-    @Test
-    public void testLambdaParameters() {
-        parse(new String[] {"-alllocals", "test_src/lambdas"});
+	@Test
+	public void testLambdasDeclarations() {
+        parse(new String[] { "test_src/lambdas"});
+		Collection<Lambda> lambdas = entitiesOfType(Lambda.class);
+		assertEquals(2, lambdas.size());
 
-        Collection<Parameter> params = entitiesOfType( Parameter.class);
+		Lambda lbd1 = null;
+		Lambda lbd2 = null;
+		for (Lambda l : lambdas) {
+			if (l.getSignature().contains("String")) {
+				lbd1 = l;
+			}
+			else {
+				lbd2 = l;
+			}
+		}
+		assertNotNull(lbd1);
+
+		assertEquals("<Lambda>(String,String)", lbd1.getSignature());
+		assertEquals( 2, lbd1.getCyclomaticComplexity());
+		assertEquals( 3, lbd1.getNumberOfStatements());
+
+		assertEquals("<Lambda>(Object)", lbd2.getSignature());
+		assertEquals( 1, lbd2.getCyclomaticComplexity());
+		assertEquals( 1, lbd2.getNumberOfStatements());
+	}
+
+	@Test
+	public void testLambdaParameters() {
+		parse(new String[] {"-alllocals", "test_src/lambdas"});
+
+		Collection<Parameter> params = entitiesOfType( Parameter.class);
 
         assertEquals(3, params.size());
 
@@ -112,15 +139,4 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
         assertThat( accesses, hasItem(readAccessTo( "out")) );
     }
 
-	@Test
-	public void testLambdasDeclarations() {
-        parse(new String[] { "test_src/lambdas"});
-		Collection<Lambda> lambdas = entitiesOfType(Lambda.class);
-		assertEquals(2, lambdas.size());
-
-		assertTrue( lambdas.stream().anyMatch( l -> l.getCyclomaticComplexity().equals(1) ));
-		assertTrue( lambdas.stream().anyMatch( l -> l.getCyclomaticComplexity().equals(2) ));
-		assertTrue( lambdas.stream().anyMatch( l -> l.getNumberOfStatements().equals(1) )); 
-		assertTrue( lambdas.stream().anyMatch( l -> l.getNumberOfStatements().equals(3) )); 
-	}
 }

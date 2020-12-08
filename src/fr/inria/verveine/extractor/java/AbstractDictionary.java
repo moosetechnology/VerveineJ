@@ -422,6 +422,8 @@ public class AbstractDictionary<B> {
 			mapEntityToKey(key, fmx);
 		}
 		
+		fmx.setSignature(sig);
+		
 		return fmx;
 	}
 

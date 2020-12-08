@@ -1301,7 +1301,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 	            sig += signatureParamsFromBinding(bnd);
 	        }
         else if (paramTypes != null) {
-			sig += signatureParamsFromStringCollection(paramTypes);
+			sig += tostringSeparatedByComma(paramTypes);
 		}
 		else {
 			sig += "???";
@@ -1404,18 +1404,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		}
 
 		// --------------- signature
-		sig = LAMBDA_PREFIX + "(";
-		 if (bnd != null) {
-	            sig += signatureParamsFromBinding(bnd);
-	        }
-        else if (paramNames != null) {
-			sig += signatureParamsFromStringCollection(paramNames);
-		}
-		else {
-			sig += "???";
-		}
-		sig += ")";
-		
+		sig = LAMBDA_PREFIX + "(" + tostringSeparatedByComma(paramNames) + ")";
 		fmx = super.ensureFamixLambda(bnd, sig);
 
 		return fmx;
@@ -1996,7 +1985,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return sig;
 	}
 
-	private String signatureParamsFromStringCollection(Collection<String> names) {
+	private String tostringSeparatedByComma(Collection<String> names) {
 		boolean first = true;
 		String sig = new String();
 
