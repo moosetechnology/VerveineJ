@@ -120,7 +120,7 @@ public class verveineJTest_Annotations extends VerveineJTest_Basic {
             if (((TNamedEntity)att).getName().equals("time")) {
                 assertEquals(1, ((Attribute)att).getAnnotationInstances().size());
             }
-            else {
+            else {entitiesOfType(Attribute.class);
                 assertEquals(0, ((Attribute)att).getAnnotationInstances().size());
             }
         }
