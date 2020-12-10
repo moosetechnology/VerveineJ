@@ -505,7 +505,7 @@ public class VerveineJOptions {
 		return anchors == anchorOption;
 	}
 
-	public boolean withLocals() {
+	public boolean withAllLocals() {
 		return allLocals;
 	}
 

@@ -522,7 +522,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		if ((accessed != null) && (accessor != null)) {
 			if (options.summarizeClasses()) {
 				//dico.addFamixReference(findHighestType(accessor), findHighestType(accessed), /*lastReference*/null);
-			} else if (options.withLocals() || (! localVariable(accessed, accessor)) ) {
+			} else if (options.withAllLocals() || (! localVariable(accessed, accessor)) ) {
 				context.setLastAccess(
 						dico.addFamixAccess(accessor, (TStructuralEntity) accessed, /*isWrite*/isLHS, context.getLastAccess()));
 			}

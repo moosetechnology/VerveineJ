@@ -1487,7 +1487,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		}
     }
 
-	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, Type owner, boolean persistIt) {
+	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, TWithAttributes owner, boolean persistIt) {
 		return ensureFamixAttribute(bnd, name, /*declared type*/null, owner, persistIt);
 	}
 
@@ -1505,7 +1505,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 	 * @param persistIt -- whether to persist or not the entity eventually created
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
-	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, Type type, Type owner, boolean persistIt) {
+	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, Type type, TWithAttributes owner, boolean persistIt) {
 		Attribute fmx = null;
 
 		// --------------- to avoid useless computations if we can
@@ -1544,9 +1544,9 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 				if (classBnd != null) {
 					Type tmpOwn = ensureFamixType(classBnd, /*alwaysPersist?*/persistIt);
 					if (tmpOwn instanceof ParameterizedType) {
-						owner = (Type) ((ParameterizedType) tmpOwn).getParameterizableClass();
+						owner = (TWithAttributes) ((ParameterizedType) tmpOwn).getParameterizableClass();
 					} else {
-						owner = (Type) tmpOwn;
+						owner = (TWithAttributes) tmpOwn;
 					}
 				} else {
 					return null;  // what would be the interest of creating an attribute for which we ignore the declaring class?
@@ -1578,7 +1578,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return fmx;
 	}
 
-	public Parameter ensureFamixParameter(IVariableBinding bnd, String name, Method owner, boolean persistIt) {
+	public Parameter ensureFamixParameter(IVariableBinding bnd, String name, TWithParameters owner, boolean persistIt) {
 		return ensureFamixParameter(bnd, name, /*declared type*/null, owner, persistIt);
 	}
 
@@ -1595,7 +1595,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 	 * @param persistIt -- whether to persist or not the entity eventually created
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
-	public Parameter ensureFamixParameter(IVariableBinding bnd, String name, Type typ, Method owner, boolean persistIt) {
+	public Parameter ensureFamixParameter(IVariableBinding bnd, String name, Type typ, TWithParameters owner, boolean persistIt) {
 		Parameter fmx = null;
 
 		// --------------- to avoid useless computations if we can
@@ -1636,7 +1636,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 */
 		// --------------- recover from name ?
 		for (Parameter candidate : getEntityByName(Parameter.class, name) ) {
-			if ( matchAndMapVariable(bnd, name, owner, candidate) ) {
+			if ( matchAndMapVariable(bnd, name, (ContainerEntity) owner, candidate) ) {
 				fmx = candidate;
 				break;
 			}
@@ -1654,7 +1654,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return fmx;
 	}
 
-	public LocalVariable ensureFamixLocalVariable(IVariableBinding bnd, String name, Method owner, boolean persistIt) {
+	public LocalVariable ensureFamixLocalVariable(IVariableBinding bnd, String name, TWithLocalVariables owner, boolean persistIt) {
 		return ensureFamixLocalVariable(bnd, name, /*declared type*/null, owner, persistIt);
 	}
 
@@ -1672,7 +1672,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 	 * @param persistIt  -- whether to persist or not the entity eventually created
 	 * @return the Famix Entity found or created. May return null if <b>bnd</b> and <b>name</b> are null, or <b>bnd</b> and <b>owner</b> are null, or in case of a Famix error
 	 */
-	public LocalVariable ensureFamixLocalVariable(IVariableBinding bnd, String name, Type typ, Method owner, boolean persistIt) {
+	public LocalVariable ensureFamixLocalVariable(IVariableBinding bnd, String name, Type typ, TWithLocalVariables owner, boolean persistIt) {
 		LocalVariable fmx = null;
 
 		// --------------- to avoid useless computations if we can
@@ -1713,7 +1713,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 
 		// --------------- recover from name ?
 		for (LocalVariable candidate : getEntityByName(LocalVariable.class, name) ) {
-			if ( matchAndMapVariable(bnd, name, owner, candidate) ) {
+			if ( matchAndMapVariable(bnd, name, (ContainerEntity) owner, candidate) ) {
 				fmx = candidate;
 				break;
 			}

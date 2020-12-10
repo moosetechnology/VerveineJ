@@ -1,9 +1,5 @@
 package fr.inria.verveine.extractor.java;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.moosetechnology.model.famixjava.famixjavaentities.*;
-import org.moosetechnology.model.famixjava.famixtraits.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -12,12 +8,23 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.lang.Exception;
 import java.util.Collection;
 
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationInstance;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationInstanceAttribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationType;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationTypeAttribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.Attribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.IndexedFileAnchor;
+import org.moosetechnology.model.famixjava.famixjavaentities.Method;
+import org.moosetechnology.model.famixjava.famixjavaentities.Parameter;
+import org.moosetechnology.model.famixjava.famixtraits.TAnnotationInstance;
+import org.moosetechnology.model.famixjava.famixtraits.TAnnotationInstanceAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TMethod;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
 
 public class verveineJTest_Annotations extends VerveineJTest_Basic {
 
@@ -43,11 +50,17 @@ public class verveineJTest_Annotations extends VerveineJTest_Basic {
 
     @Test
     public void testAnnotationSubClass() {
-        org.moosetechnology.model.famixjava.famixjavaentities.Class cl = detectFamixElement(org.moosetechnology.model.famixjava.famixjavaentities.Class.class, "SubAnnotation");
-        assertNotNull(cl);
+        org.moosetechnology.model.famixjava.famixjavaentities.Class sub = detectFamixElement(org.moosetechnology.model.famixjava.famixjavaentities.Class.class, "SubAnnotation");
+        assertNotNull(sub);
 
-        AnnotationType getProp = detectFamixElement(AnnotationType.class, "GetProperty");
-        assertEquals(getProp, cl.getTypeContainer());
+        assertEquals("GetProperty", ((TNamedEntity)sub.getTypeContainer()).getName() );
+
+        /* TODO see issue https://github.com/moosetechnology/Famix/issues/187
+        assertEquals(2,  sub.getSuperInheritances().size());
+        assertTrue( sub.getSuperInheritances()
+        		.stream()
+        		.anyMatch( i -> ((TNamedEntity)i.getSuperclass()).getName().equals("GetProperty")) );
+        */	
     }
 
     @Test
@@ -111,7 +124,6 @@ public class verveineJTest_Annotations extends VerveineJTest_Basic {
                 assertEquals(0, ((Attribute)att).getAnnotationInstances().size());
             }
         }
-
     }
 
     @Test

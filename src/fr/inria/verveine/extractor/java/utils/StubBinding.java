@@ -3,6 +3,7 @@ package fr.inria.verveine.extractor.java.utils;
 import fr.inria.verveine.extractor.java.JavaDictionary;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.dom.*;
+import org.moosetechnology.model.famixjava.famixtraits.TWithParameters;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
 	 */
 	protected static Map<String,StubBinding> instances = new HashMap<String, StubBinding>();
 
-    private int kind;
+    private int kind = UNKNOWN_KIND;  // default;
 
     private String key = null;
 
@@ -47,7 +48,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
         IBinding bnd = node.resolveBinding();
 
         if (bnd == null) {
-            bnd = StubBinding.getBinding(node);
+            bnd = StubBinding.getBinding(node, IBinding.TYPE, node.getName().getIdentifier());
         }
 
         return bnd;
@@ -61,7 +62,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
         IBinding bnd = node.resolveBinding();
 
         if (bnd == null) {
-            bnd = StubBinding.getBinding(node);
+            bnd = StubBinding.getBinding(node, IBinding.TYPE, JavaDictionary.ANONYMOUS_NAME_PREFIX);
         }
 
         return bnd;
@@ -75,7 +76,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
         IBinding bnd = node.resolveBinding();
 
         if (bnd == null) {
-            bnd = StubBinding.getBinding(node);
+            bnd = StubBinding.getBinding(node, IBinding.METHOD, node.getName().getIdentifier());
         }
 
         return bnd;
@@ -89,7 +90,7 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
         IBinding bnd = node.resolveMethodBinding();
 
         if (bnd == null) {
-            bnd = StubBinding.getBinding(node);
+            bnd = StubBinding.getBinding(node, IBinding.METHOD, JavaDictionary.LAMBDA_PREFIX);
         }
 
         return bnd;
@@ -98,14 +99,16 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     /**
      * returns a unique StubBinding for the <code>node</code> (a method or type declaration)
      * either by creating it or by retrieving a previously created one
+     * @param name 
+     * @param bindingKind 
      */
-    public static  StubBinding getBinding(ASTNode node) {
+    public static  StubBinding getBinding(ASTNode node, int bindingKind, String name) {
     	StubBinding inst;
 		String key = bindingKey(node);
 
 		inst = instances.get(key);
 		if (inst == null) {
-			inst = new StubBinding(node, key);
+			inst = new StubBinding(node, key, bindingKind, name);
 			instances.put(key, inst);
 		}
 		return inst;
@@ -120,58 +123,11 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
         return file + ":" + pos;
     }
 
-    private StubBinding(AbstractTypeDeclaration node, String key) {
-    	System.out.println("StubBinding(AbstractTypeDeclaration");
+    private StubBinding(ASTNode node, String key, int bindingKind, String name) {
         this.key = key;
-        kind = IBinding.TYPE;
-        name = node.getName().getIdentifier();
-        params = new ITypeBinding[0];
-    }
-
-    private StubBinding(AnonymousClassDeclaration node, String key) {
-    	System.out.println("StubBinding(AbstractTypeDeclaration");
-        this.key = key;
-        kind = IBinding.TYPE;
-        name = "*anonymous*";
-        params = new ITypeBinding[0];
-    }
-
-    private StubBinding(MethodDeclaration node, String key) {
-    	System.out.println("StubBinding(AbstractTypeDeclaration");
-        this.key = key;
-        kind = IBinding.METHOD;
-        name = node.getName().getIdentifier();
-        List<SingleVariableDeclaration> lparams = node.parameters();
-        params = new ITypeBinding[lparams.size()];
-        int i=0;
-        for (SingleVariableDeclaration paramDecl : lparams) {
-        	params[i] = paramDecl.getType().resolveBinding();
-        	i++;
-        }
-    }
-
-    private StubBinding(LambdaExpression node, String key) {
-    	System.out.println("StubBinding(AbstractTypeDeclaration");
-        this.key = key;
-        kind = IBinding.METHOD;
-        name = JavaDictionary.LAMBDA_PREFIX;
-        List<SingleVariableDeclaration> lparams = node.parameters();
-        params = new ITypeBinding[lparams.size()];
-        int i=0;
-        for (SingleVariableDeclaration paramDecl : lparams) {
-        	params[i] = paramDecl.getType().resolveBinding();
-        	i++;
-        }
-    }
-
-    /**
-     * Fallback constructor, should not be needed
-     */
-    private StubBinding(ASTNode node, String key) {
-        this.key = key;
-        kind = UNKNOWN_KIND;
-        name = "*no_name*";
-        params = new ITypeBinding[0];
+        this.kind = bindingKind;
+        this.name = name;
+        this.params = new ITypeBinding[0];
     }
 
     // IBinding methods

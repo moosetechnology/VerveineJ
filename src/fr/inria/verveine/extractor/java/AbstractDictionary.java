@@ -449,7 +449,7 @@ public class AbstractDictionary<B> {
 	 * @param persistIt -- whether the LocalVariable should be persisted in the Famix repository
 	 * @return the FAMIX LocalVariable or null in case of a FAMIX error
 	 */
-	public LocalVariable ensureFamixLocalVariable(B key, String name, Type type, Method owner, boolean persistIt) {
+	public LocalVariable ensureFamixLocalVariable(B key, String name, Type type, TWithLocalVariables owner, boolean persistIt) {
 		LocalVariable fmx = ensureFamixEntity(LocalVariable.class, key, name, persistIt);
 		fmx.setParentBehaviouralEntity(owner);
 		fmx.setDeclaredType(type);
@@ -496,7 +496,7 @@ public class AbstractDictionary<B> {
 	 * @param persistIt -- whether the Parameter should be persisted in the Famix repository
 	 * @return the FAMIX parameter
 	 */
-	public Parameter createFamixParameter(B key, String name, Type type, Method owner, boolean persistIt) {
+	public Parameter createFamixParameter(B key, String name, Type type, TWithParameters owner, boolean persistIt) {
 		Parameter fmx = ensureFamixEntity(Parameter.class, key, name, persistIt);
 		fmx.setParentBehaviouralEntity(owner);
 		fmx.setDeclaredType(type);

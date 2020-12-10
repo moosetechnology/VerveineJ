@@ -100,12 +100,15 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
             }
         }
         assertNotNull(seg1);
+        assertEquals(Lambda.class, seg1.getParentBehaviouralEntity().getClass());
         //assertNotNull(seg1.getDeclaredType());
 
         assertNotNull(seg2);
+        assertEquals(Lambda.class, seg2.getParentBehaviouralEntity().getClass());
         //assertNotNull(seg2.getDeclaredType());
         
         assertNotNull(t);
+        assertEquals(Lambda.class, t.getParentBehaviouralEntity().getClass());
         assertNull(t.getDeclaredType());
     }
 
