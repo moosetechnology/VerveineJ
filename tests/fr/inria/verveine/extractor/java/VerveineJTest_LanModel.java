@@ -81,8 +81,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 	}
 
 	@Test
-	public void testEntitiesNumber() {
-
+	public void testClassNumber() {
 		// non stub classes
 		Stream<Class> allClasses = entitiesOfType(Class.class)
 				.stream()
@@ -95,7 +94,10 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 				.stream()
 				.filter(c -> c.getIsStub());
 		assertEquals(15, allClasses.count() );
+	}
 
+	@Test
+	public void testInheritanceNumber() {
 		// inheritance: non-stub --|> non-stub
 		Stream<Inheritance> allInheritances = entitiesOfType(Inheritance.class)
 				.stream()
@@ -116,11 +118,50 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 				.filter(i -> ((NamedEntity)i.getSubclass()).getName().equals("String") )
 				.filter(i -> ((SourcedEntity)i.getSubclass()).getIsStub() );
 		assertEquals(4,   allInheritances.count() );
+	}
 
+	@Test
+	public void testMethodNumber() {
+		Stream<Method> allMethods = entitiesOfType(Method.class)
+				.stream()
+				.filter(c -> ! c.getIsStub());
+		assertEquals(41, allMethods.count());  // Note: "new IPrint() {...}" creates a _stub_  constructor for the anonymous class
+
+		allMethods = entitiesOfType(Method.class)
+				.stream()
+				.filter(c -> c.getIsStub());
+		assertEquals(8, allMethods.count());  // System.out.println(), System.out.println(...), System.out.print, StringBuffer.append, Object.equals, String.equals, Object.toString, anonymousIPrinter<Initializer>}
+	}
+
+	@Test
+	public void testAttributeNumber() {
+		Stream<Attribute> allAttributes = entitiesOfType(Attribute.class)
+				.stream()
+				.filter(c -> ! c.getIsStub());
+		assertEquals(10, allAttributes.count());
+
+		allAttributes = entitiesOfType(Attribute.class)
+				.stream()
+				.filter(c -> c.getIsStub());
+		assertEquals(1, allAttributes.count());  // **4 out + 1 serverType ***
+	}
+
+	@Test
+	public void testPackageNumber() {
+		Stream<Namespace> allPackages =  entitiesOfType(Namespace.class)
+				.stream()
+				.filter(c -> ! c.getIsStub());
+		assertEquals(3, allPackages.count());  // moose, moose.lan, moose.server
+		
+		allPackages =  entitiesOfType(Namespace.class)
+				.stream()
+				.filter(c -> c.getIsStub());
+		assertEquals(3, allPackages.count());  //  java.lang, java.io, java
+	}
+
+	@Test
+	public void testEntityNumber() {
 		assertEquals(3, entitiesOfType(PrimitiveType.class).size());//int,boolean,void
-		assertEquals(40 + 8 + 1, entitiesOfType(Method.class).size());//40+{System.out.println(),System.out.println(...),System.out.print,StringBuffer.append,Object.equals,String.equals,Object.toString,<Initializer>}
-		assertEquals(10 + 1, entitiesOfType(Attribute.class).size());//10+{System.out}
-		assertEquals(2 + 4, entitiesOfType(Namespace.class).size());//2+{moose,java.lang,java.io,java}
 		assertEquals(26, entitiesOfType(Parameter.class).size());
 		assertEquals(55, entitiesOfType(Invocation.class).size());
 		assertEquals(45, entitiesOfType(Access.class).size());// 17 "internal" attributes + 9 System.out + 18 "this" + 1 "super"
@@ -603,7 +644,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 
 		att = detectFamixElement(Attribute.class, "serverType");
 		assertNotNull(att);
-		assertEquals(2, att.getIncomingAccesses().size());   // OutputServer: "protected String serverType = ..." ; FileServer: "this.serverType = ..."
+		assertEquals(2, att.getIncomingAccesses().size());   // OutputServer protected String serverType = ; **FileServer.setServerType**
 		acces = (Access) firstElt(att.getIncomingAccesses());
 		accessor = (Method) acces.getAccessor();
 

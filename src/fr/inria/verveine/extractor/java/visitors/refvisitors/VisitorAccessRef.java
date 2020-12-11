@@ -4,14 +4,20 @@ import fr.inria.verveine.extractor.java.JavaDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
+import fr.inria.verveine.extractor.java.utils.StructuralEntityKinds;
+
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famixjava.famixjavaentities.Enum;
 import org.moosetechnology.model.famixjava.famixjavaentities.PrimitiveType;
 import org.moosetechnology.model.famixjava.famixjavaentities.*;
+import org.moosetechnology.model.famixjava.famixjavaentities.Class;
 import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
 import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,11 +33,8 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	 */
 	protected boolean inAssignmentLHS = false;
 
-	private boolean inLambda;
-
 	public VisitorAccessRef(JavaDictionary dico, VerveineJOptions options) {
 		super(dico, options);
-		this.inLambda = false;
 	}
 
 	// VISITOR METHODS
@@ -182,21 +185,14 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		return false;  // already visited the interesting children
 	}
 
-	/**
-	 * Currently not defining lambdas. Only parse their body and consider their parameters as local variables
-	 * of the parent method
-	 *
-	 *  LambdaExpression:
-	 *     Identifier -> Body
-	 *     ( [ Identifier { , Identifier } ] ) -> Body
-	 *     ( [ FormalParameter { , FormalParameter } ] ) -> Body
-	 */
 	@Override
 	public boolean visit(LambdaExpression node) {
-		inLambda = true;
+		visitLambdaExpression( node);
+
+		visitNodeList( node.parameters());
 		node.getBody().accept(this);
-		inLambda = false;
-		return false;  // only visit body of lambda
+		
+		return false;
 	}
 
 	/**
@@ -481,8 +477,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		if (bnd.isEnumConstant()) {
 			accessed = dico.ensureFamixEnumValue(bnd, name, (Enum) owner, /*persistIt*/! options.summarizeClasses());
 		} else if (bnd.isField()) {
-			accessed = dico.ensureFamixAttribute(bnd, name, typ, (org.moosetechnology.model.famixjava.famixjavaentities.Type) owner,
-					/*persistIt*/! options.summarizeClasses());
+			accessed = dico.ensureFamixAttribute(bnd, name, typ, (TWithAttributes) owner, /*persistIt*/! options.summarizeClasses());
 			if (options.summarizeClasses()) {
 				if (!(((Attribute) accessed).getDeclaredType() instanceof PrimitiveType)) {
 					//dico.addFamixReference(findHighestType(accessed.getBelongsTo()),
@@ -495,7 +490,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 				// special case: length attribute of arrays in Java
 				((Attribute) accessed).setParentType(dico.ensureFamixClassArray());
 			}
-		} else if (bnd.isParameter() && (! inLambda)) {
+		} else if (bnd.isParameter()) {
 			if (! options.summarizeClasses()) {
 				accessed = dico.ensureFamixParameter(bnd, name, typ, (Method) owner, options.summarizeClasses());
 			}
@@ -529,6 +524,9 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		}
 	}
 
+	/**
+	 * check whether <code>accessed</code> variable is local to <code>accessor</code>
+	 */
 	private boolean localVariable(TStructuralEntity accessed, Method accessor) {
 		// TODO see issue 11 (https://github.com/NicolasAnquetil/VerveineJ/issues/11)
 

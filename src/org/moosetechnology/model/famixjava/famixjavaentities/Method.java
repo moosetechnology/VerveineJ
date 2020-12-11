@@ -68,6 +68,11 @@ public class Method extends ContainerEntity implements TWithReferences, TWithCla
     private Collection<TInvocation> incomingInvocations;
     private Number numberOfStatements;
 
+    @Override
+    public String toString() {
+    	return ((parentType != null) ? ((NamedEntity)parentType).getName() + "." : "") + name;
+    }
+
     @FameProperty(name = "numberOfAccesses", derived = true)
     public Number getNumberOfAccesses() {
         // TODO: this is a derived property, implement this method manually.

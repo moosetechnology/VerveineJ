@@ -239,7 +239,7 @@ public class AbstractDictionary<B> {
 				return fmx;
 			}
 		}
-		// else
+		// else  \\ keyToEntity.get(key) \\ entityToKey.get(getEntityByName(Attribute.class, "out").iterator().next())
 		// Unfortunately different entities with the same name and same type may exist
 		// e.g. 2 parameters of 2 different methods but having the same name
 		// so we cannot recover just from the name
@@ -272,7 +272,9 @@ public class AbstractDictionary<B> {
 	 */
 	public Type ensureFamixType(B key, String name, ContainerEntity owner, boolean persistIt) {
 		Type fmx = ensureFamixEntity(Type.class, key, name, persistIt);
-		fmx.setTypeContainer(owner);
+		if (owner != null) {
+			fmx.setTypeContainer(owner);
+		}
 		return fmx;
 	}
 
@@ -286,7 +288,9 @@ public class AbstractDictionary<B> {
 	 */
 	public org.moosetechnology.model.famixjava.famixjavaentities.Class ensureFamixClass(B key, String name, ContainerEntity owner, boolean persistIt) {
 		org.moosetechnology.model.famixjava.famixjavaentities.Class fmx = ensureFamixEntity(org.moosetechnology.model.famixjava.famixjavaentities.Class.class, key, name, persistIt);
-		fmx.setTypeContainer(owner);
+		if (owner != null) {
+			fmx.setTypeContainer(owner);
+		}
 		return fmx;
 	}
 
@@ -299,7 +303,9 @@ public class AbstractDictionary<B> {
 	 */
 	public ParameterizableClass ensureFamixParameterizableClass(B key, String name, ContainerEntity owner, boolean persistIt) {
 		ParameterizableClass fmx = ensureFamixEntity(ParameterizableClass.class, key, name, persistIt);
-		fmx.setTypeContainer(owner);
+		if (owner != null) {
+			fmx.setTypeContainer(owner);
+		}
 		return fmx;
 	}
 
@@ -311,8 +317,12 @@ public class AbstractDictionary<B> {
 	 */
 	public ParameterizedType ensureFamixParameterizedType(B key, String name, ParameterizableClass generic, ContainerEntity owner, boolean persistIt) {
 		ParameterizedType fmx = ensureFamixEntity(ParameterizedType.class, key, name, persistIt);
-		fmx.setTypeContainer(owner);
-		fmx.setParameterizableClass(generic);
+		if (owner != null) {
+			fmx.setTypeContainer(owner);
+		}
+		if (generic != null) {
+			fmx.setParameterizableClass(generic);
+		}
 		return fmx;
 	}
 
@@ -325,31 +335,41 @@ public class AbstractDictionary<B> {
 	 */
 	public ParameterType ensureFamixParameterType(B key, String name, ContainerEntity owner, boolean persistIt) {
 		ParameterType fmx = ensureFamixEntity(ParameterType.class, key, name, persistIt);
-		fmx.setTypeContainer(owner);
+		if (owner != null) {
+			fmx.setTypeContainer(owner);
+		}
 		return fmx;
 	}
 
 	public Enum ensureFamixEnum(B key, String name,	ContainerEntity owner, boolean persistIt) {
 		Enum fmx = ensureFamixEntity(Enum.class, key, name, persistIt);
-		fmx.setTypeContainer(owner);
+		if (owner != null) {
+			fmx.setTypeContainer(owner);
+		}
 		return fmx;
 	}
 
 	public EnumValue ensureFamixEnumValue(B key, String name, Enum owner, boolean persistIt) {
 		EnumValue fmx = ensureFamixEntity(EnumValue.class, key, name, persistIt);
-		fmx.setParentEnum(owner);
+		if (owner != null) {
+			fmx.setParentEnum(owner);
+		}
 		return fmx;
 	}
 
 	public AnnotationType ensureFamixAnnotationType(B key, String name,	ContainerEntity owner, boolean persistIt) {
 		AnnotationType fmx = ensureFamixEntity(AnnotationType.class, key, name, persistIt);
-		fmx.setAnnotationTypesContainer(owner);
+		if (owner != null) {
+			fmx.setAnnotationTypesContainer(owner);
+		}
 		return fmx;
 	}
 
 	public AnnotationTypeAttribute ensureFamixAnnotationTypeAttribute(B key, String name, AnnotationType owner, boolean persistIt) {
 		AnnotationTypeAttribute fmx = ensureFamixEntity(AnnotationTypeAttribute.class, key, name, persistIt);
-		fmx.setParentType(owner);
+		if (owner != null) {
+			fmx.setParentType(owner);
+		}
 		return fmx;
 	}
 
@@ -398,9 +418,15 @@ public class AbstractDictionary<B> {
 	 */
 	public Method ensureFamixMethod(B key, String name, String sig, Type ret, Type owner, boolean persistIt) {
 		Method fmx = (Method) ensureFamixEntity(Method.class, key, name, persistIt);
-		fmx.setSignature(sig);
-		fmx.setDeclaredType(ret);
-		fmx.setParentType(owner);
+		if (sig != null) {
+			fmx.setSignature(sig);
+		}
+		if (ret != null) {
+			fmx.setDeclaredType(ret);
+		}
+		if (owner != null) {
+			fmx.setParentType(owner);
+		}
 		return fmx;
 	}
 
@@ -422,7 +448,9 @@ public class AbstractDictionary<B> {
 			mapEntityToKey(key, fmx);
 		}
 		
-		fmx.setSignature(sig);
+		if (sig != null) {
+			fmx.setSignature(sig);
+		}
 		
 		return fmx;
 	}
@@ -438,11 +466,16 @@ public class AbstractDictionary<B> {
 	 */
 	public Attribute ensureFamixAttribute(B key, String name, Type type, Type owner, boolean persistIt) {
 		Attribute fmx = ensureFamixEntity(Attribute.class, key, name, persistIt);
-		fmx.setParentType((TWithAttributes) owner);
-		fmx.setDeclaredType(type);
+		if (owner != null) {
+			fmx.setParentType((TWithAttributes) owner);
+		}
+		if (type != null) {
+			fmx.setDeclaredType(type);
+		}
+	
 		return fmx;
 	}
-
+	
 	/**
 	 * Returns a FAMIX LocalVariable with the given <b>name</b>, creating it if it does not exist yet
 	 * @param name -- the name of the FAMIX LocalVariable
@@ -451,8 +484,12 @@ public class AbstractDictionary<B> {
 	 */
 	public LocalVariable ensureFamixLocalVariable(B key, String name, Type type, TWithLocalVariables owner, boolean persistIt) {
 		LocalVariable fmx = ensureFamixEntity(LocalVariable.class, key, name, persistIt);
-		fmx.setParentBehaviouralEntity(owner);
-		fmx.setDeclaredType(type);
+		if (owner != null) {
+			fmx.setParentBehaviouralEntity(owner);
+		}
+		if (type != null) {
+			fmx.setDeclaredType(type);
+		}
 		return fmx;
 	}
 
@@ -716,7 +753,9 @@ public class AbstractDictionary<B> {
 	public ImplicitVariable ensureFamixImplicitVariable(B key, String name, Type type, Method owner, boolean persistIt) {
 		ImplicitVariable fmx;
 		fmx = ensureFamixEntity(ImplicitVariable.class, key, name, persistIt);
-		fmx.setParentBehaviouralEntity(owner);
+		if (owner != null) {
+			fmx.setParentBehaviouralEntity(owner);
+		}
 		return fmx;
 	}
 

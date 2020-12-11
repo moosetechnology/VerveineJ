@@ -1,18 +1,46 @@
 package fr.inria.verveine.extractor.java.visitors;
 
-import fr.inria.verveine.extractor.java.VerveineJOptions;
-import fr.inria.verveine.extractor.java.utils.EntityStack;
-import fr.inria.verveine.extractor.java.JavaDictionary;
-import fr.inria.verveine.extractor.java.utils.StubBinding;
-import fr.inria.verveine.extractor.java.utils.Util;
-import org.eclipse.jdt.core.dom.*;
-import org.moosetechnology.model.famixjava.famixjavaentities.*;
-import org.moosetechnology.model.famixjava.famixtraits.TMethod;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.LambdaExpression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationType;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationTypeAttribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.Attribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
+import org.moosetechnology.model.famixjava.famixjavaentities.Method;
+import org.moosetechnology.model.famixjava.famixjavaentities.NamedEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.Namespace;
+import org.moosetechnology.model.famixjava.famixtraits.TMethod;
+
+import fr.inria.verveine.extractor.java.JavaDictionary;
+import fr.inria.verveine.extractor.java.VerveineJOptions;
+import fr.inria.verveine.extractor.java.utils.EntityStack;
+import fr.inria.verveine.extractor.java.utils.StubBinding;
+import fr.inria.verveine.extractor.java.utils.Util;
 
 /**
  * This visitor offers methods to recover FamixEntities from the main JDT Entities and may put them in the context Stack<br>
