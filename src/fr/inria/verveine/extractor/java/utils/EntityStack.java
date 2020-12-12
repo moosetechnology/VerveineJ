@@ -134,7 +134,7 @@ public class EntityStack {
 	
 	// READ FROM THE STACK
 
-	private Entity popUpto(Predicate<Entity> predicate) {
+	public Entity popUpto(Predicate<Entity> predicate) {
 		Entity ent = null;
 		while ( ! stack.isEmpty() ) {
 			ent = this.pop();
@@ -151,7 +151,7 @@ public class EntityStack {
 		}
 	}
 
-	private Entity lookUpto(Predicate<Entity> predicate) {
+	public Entity lookUpto(Predicate<Entity> predicate) {
 		int i;
 		for (i=this.stack.size()-1 ;  i >= 0; i--) {
 			if (predicate.test(stack.get(i))) {

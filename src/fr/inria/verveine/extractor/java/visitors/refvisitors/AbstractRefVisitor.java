@@ -6,6 +6,7 @@ import fr.inria.verveine.extractor.java.visitors.SummarizingClassesAbstractVisit
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famixjava.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizableClass;
+import org.moosetechnology.model.famixjava.famixtraits.TWithReferences;
 
 /**
  * A collection of useful utility methods that are needed in various ref visitors
@@ -54,15 +55,15 @@ public class AbstractRefVisitor extends SummarizingClassesAbstractVisitor {
 	 * @param isClass we are sure that the type is actually a class
 	 * @return a famix type or null
 	 */
-	protected org.moosetechnology.model.famixjava.famixjavaentities.Type referedType(Type typ, ContainerEntity ctxt, boolean isClass) {
+	protected org.moosetechnology.model.famixjava.famixjavaentities.Type referedType(Type typ, boolean isClass) {
 		if (typ == null) {
 			return null;
 		} else if (typ.resolveBinding() != null) {
-			return this.referedType(typ.resolveBinding(), ctxt, isClass);
+			return this.referedType(typ.resolveBinding(), isClass);
 		}
 		// from here, we assume the owner is the context
 		else if (isClass) {
-			return dico.ensureFamixClass(null, findTypeName(typ), /*owner*/ctxt, /*isGeneric*/false,
+			return dico.ensureFamixClass(null, findTypeName(typ), /*owner*/context.lookUpToInstanceOf(ContainerEntity.class), /*isGeneric*/false,
 					JavaDictionary.UNKNOWN_MODIFIERS, /*alwaysPersist?*/persistClass(typ.resolveBinding()));
 		} else {
 			while (typ.isArrayType()) {
@@ -72,7 +73,7 @@ public class AbstractRefVisitor extends SummarizingClassesAbstractVisitor {
 			if (typ.isPrimitiveType()) {
 				return dico.ensureFamixPrimitiveType(null, findTypeName(typ));
 			} else {
-				return dico.ensureFamixType(null, findTypeName(typ), /*owner*/ctxt, /*container*/ctxt,
+				return dico.ensureFamixType(null, findTypeName(typ), /*owner*/context.lookUpToInstanceOf(ContainerEntity.class), /*container*/context.lookUpToInstanceOf(ContainerEntity.class),
 						JavaDictionary.UNKNOWN_MODIFIERS, /*alwaysPersist?*/persistClass(typ.resolveBinding()));
 			}
 		}
@@ -81,7 +82,7 @@ public class AbstractRefVisitor extends SummarizingClassesAbstractVisitor {
 	/**
 	 * Same as {@link AbstractRefVisitor#referedType(Type, ContainerEntity, boolean)} but with a type binding as first argument instead of a Type
 	 */
-	protected org.moosetechnology.model.famixjava.famixjavaentities.Type referedType(ITypeBinding bnd, ContainerEntity ctxt, boolean isClass) {
+	protected org.moosetechnology.model.famixjava.famixjavaentities.Type referedType(ITypeBinding bnd, boolean isClass) {
 		org.moosetechnology.model.famixjava.famixjavaentities.Type fmxTyp = null;
 
 		if (bnd == null) {
@@ -104,19 +105,19 @@ public class AbstractRefVisitor extends SummarizingClassesAbstractVisitor {
 			ParameterizableClass generic = (ParameterizableClass) dico.ensureFamixClass(parameterizableBnd, name, /*owner*/null, /*isGeneric*/true, modifiers, /*alwaysPersist?*/persistClass(parameterizableBnd));
 			if (bnd == parameterizableBnd) {
 				// JDT bug?
-				fmxTyp = dico.ensureFamixParameterizedType(null, name, generic, /*owner*/ctxt, persistClass(null));
+				fmxTyp = dico.ensureFamixParameterizedType(null, name, generic, /*owner*/context.lookUpToInstanceOf(ContainerEntity.class), persistClass(null));
 			} else {
-				fmxTyp = dico.ensureFamixParameterizedType(bnd, name, generic, /*owner*/ctxt, persistClass(bnd));
+				fmxTyp = dico.ensureFamixParameterizedType(bnd, name, generic, /*owner*/context.lookUpToInstanceOf(ContainerEntity.class), persistClass(bnd));
 			}
 
 			for (ITypeBinding targ : bnd.getTypeArguments()) {
-				org.moosetechnology.model.famixjava.famixjavaentities.Type fmxTArg = this.referedType(targ, ctxt, false);
+				org.moosetechnology.model.famixjava.famixjavaentities.Type fmxTArg = this.referedType(targ, false);
 				if ((fmxTArg != null) && persistClass(targ)) {
 					((org.moosetechnology.model.famixjava.famixjavaentities.ParameterizedType) fmxTyp).addArguments(fmxTArg);
 				}
 			}
 		} else {
-			fmxTyp = dico.ensureFamixType(bnd, name, /*owner*/null, ctxt, bnd.getModifiers(), /*alwaysPersist?*/persistClass(bnd));
+			fmxTyp = dico.ensureFamixType(bnd, name, /*owner*/null, context.lookUpToInstanceOf(ContainerEntity.class), bnd.getModifiers(), /*alwaysPersist?*/persistClass(bnd));
 		}
 
 		return fmxTyp;

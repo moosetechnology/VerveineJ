@@ -89,7 +89,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			} else {
 
 				Type clazz = node.getType();
-				fmx = referedType(clazz, (ContainerEntity) context.top(), true);
+				fmx = referedType(clazz, true);
 
 				// create an invocation to the constructor
 				if (fmx == null) {
@@ -183,6 +183,20 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	@Override
 	public void endVisit(MethodDeclaration node) {
 		endVisitMethodDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(LambdaExpression node) {
+		if (visitLambdaExpression( node) != null) {
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(LambdaExpression node) {
+		endVisitLambdaExpression(node);
 	}
 
 	@Override
@@ -579,7 +593,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		// ((type)expr).msg()
 		if (NodeTypeChecker.isCastExpression(expr)) {
 			Type tcast = ((CastExpression) expr).getType();
-			return referedType(tcast, (ContainerEntity) this.context.top(), true);
+			return referedType(tcast, true);
 		}
 
 		// new Class().msg()
@@ -591,7 +605,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if (NodeTypeChecker.isMethodInvocation(expr)) {
 			IMethodBinding callerBnd = ((MethodInvocation) expr).resolveMethodBinding();
 			if (callerBnd != null) {
-				return referedType(callerBnd.getReturnType(), (ContainerEntity) this.context.top(), true);
+				return referedType(callerBnd.getReturnType(), true);
 			} else {
 				return null;
 			}
@@ -612,7 +626,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if ( NodeTypeChecker.isSuperMethodInvocation(expr)) {
 			IMethodBinding superBnd = ((SuperMethodInvocation) expr).resolveMethodBinding();
 			if (superBnd != null) {
-				return this.referedType(superBnd.getReturnType(), context.topType(), true);
+				return this.referedType(superBnd.getReturnType(), true);
 			} else {
 				return null;
 			}

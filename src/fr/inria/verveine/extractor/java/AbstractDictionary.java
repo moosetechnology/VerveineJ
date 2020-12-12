@@ -1,15 +1,56 @@
 package fr.inria.verveine.extractor.java;
 
-import ch.akuhn.fame.Repository;
-import fr.inria.verveine.extractor.java.utils.Util;
-import org.moosetechnology.model.famixjava.famixjavaentities.Enum;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.moosetechnology.model.famixjava.famixjavaentities.*;
-import org.moosetechnology.model.famixjava.famixtraits.*;
+import java.util.Collection;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Map;
 
-import java.lang.Class;
-import java.lang.Exception;
-import java.util.*;
+import org.moosetechnology.model.famixjava.famixjavaentities.Access;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationInstance;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationInstanceAttribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationType;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationTypeAttribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.Attribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.CaughtException;
+import org.moosetechnology.model.famixjava.famixjavaentities.Comment;
+import org.moosetechnology.model.famixjava.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.DeclaredException;
+import org.moosetechnology.model.famixjava.famixjavaentities.Entity;
+import org.moosetechnology.model.famixjava.famixjavaentities.Enum;
+import org.moosetechnology.model.famixjava.famixjavaentities.EnumValue;
+import org.moosetechnology.model.famixjava.famixjavaentities.ImplicitVariable;
+import org.moosetechnology.model.famixjava.famixjavaentities.Inheritance;
+import org.moosetechnology.model.famixjava.famixjavaentities.Invocation;
+import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
+import org.moosetechnology.model.famixjava.famixjavaentities.LocalVariable;
+import org.moosetechnology.model.famixjava.famixjavaentities.Method;
+import org.moosetechnology.model.famixjava.famixjavaentities.NamedEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.Namespace;
+import org.moosetechnology.model.famixjava.famixjavaentities.Parameter;
+import org.moosetechnology.model.famixjava.famixjavaentities.ParameterType;
+import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizableClass;
+import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizedType;
+import org.moosetechnology.model.famixjava.famixjavaentities.PrimitiveType;
+import org.moosetechnology.model.famixjava.famixjavaentities.Reference;
+import org.moosetechnology.model.famixjava.famixjavaentities.SourcedEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.ThrownException;
+import org.moosetechnology.model.famixjava.famixjavaentities.Type;
+import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TAssociation;
+import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TReference;
+import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TType;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famixjava.famixtraits.TWithLocalVariables;
+import org.moosetechnology.model.famixjava.famixtraits.TWithParameters;
+import org.moosetechnology.model.famixjava.famixtraits.TWithReferences;
+
+import ch.akuhn.fame.Repository;
+import fr.inria.verveine.extractor.java.utils.FameRepositoryFilters;
+import fr.inria.verveine.extractor.java.utils.Util;
 
 /**
  * A dictionnary of Famix entities to help create them and find them back
@@ -136,6 +177,15 @@ public class AbstractDictionary<B> {
 		entityToKey.put(ent, key);
 	}
 	
+	/*
+	 * Utility to help in debugging
+	 * Remove space in next line to use
+	 * /
+	public <T extends Entity> Collection<T> getEntityByType(Class<T> fmxClass) {
+		return FameRepositoryFilters.selectElementsOfType(famixRepo, fmxClass);
+	}
+	// */
+
 	/**
 	 * Returns all the Famix Entity with the given name and class 
 	 * @param fmxClass -- the subtype of Famix Entity we are looking for
@@ -576,7 +626,7 @@ public class AbstractDictionary<B> {
 	 * @param prev -- previous reference relationship in the same context
 	 * @return the FamixReference
 	 */
-	public Reference addFamixReference(Method src, Type tgt, TAssociation prev) {
+	public Reference addFamixReference(TWithReferences src, Type tgt, TAssociation prev) {
 		if ( (src == null) || (tgt == null) ) {
 			return null;
 		}

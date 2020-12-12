@@ -22,6 +22,7 @@ public class VisitorInheritanceRef extends SummarizingClassesAbstractVisitor {
 		super(dico, options);
 	}
 
+	@Override
 	public boolean visit(TypeDeclaration node) {
 		org.moosetechnology.model.famixjava.famixjavaentities.Class fmx = visitTypeDeclaration(node);
 		ITypeBinding bnd = node.resolveBinding();
@@ -34,17 +35,20 @@ public class VisitorInheritanceRef extends SummarizingClassesAbstractVisitor {
 		}
 	}
 
+	@Override
 	public void endVisit(TypeDeclaration node) {
 		endVisitTypeDeclaration(node);
 		super.endVisit(node);
 	}
 
+	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		// used to get the name of the super type of the anonymous class
 		visitClassInstanceCreation(node);
 		return super.visit(node);
 	}
 
+	@Override
 	public boolean visit(AnonymousClassDeclaration node) {
 
 		ITypeBinding bnd = node.resolveBinding();
@@ -60,11 +64,13 @@ public class VisitorInheritanceRef extends SummarizingClassesAbstractVisitor {
 		}
 	}
 
+	@Override
 	public void endVisit(AnonymousClassDeclaration node) {
 		visitAnonymousClassDeclaration(node);
 		super.endVisit(node);
 	}
 
+	@Override
 	public boolean visit(EnumDeclaration node) {
 		ITypeBinding bnd = node.resolveBinding();
 		org.moosetechnology.model.famixjava.famixjavaentities.Enum fmx = dico.getFamixEnum(bnd, node.getName().getIdentifier(), (ContainerEntity) context.top());
@@ -93,11 +99,13 @@ public class VisitorInheritanceRef extends SummarizingClassesAbstractVisitor {
 		}
 	}
 
+	@Override
 	public void endVisit(EnumDeclaration node) {
 		endVisitEnumDeclaration( node);
 		super.endVisit(node);
 	}
 
+	@Override
 	public boolean visit(AnnotationTypeDeclaration node) {
 		if (visitAnnotationTypeDeclaration( node) != null) {
 			return super.visit(node);
@@ -107,11 +115,13 @@ public class VisitorInheritanceRef extends SummarizingClassesAbstractVisitor {
 		}
 	}
 
+	@Override
 	public void endVisit(AnnotationTypeDeclaration node) {
 		endVisitAnnotationTypeDeclaration( node);
 		super.endVisit(node);
 	}
 
+	@Override
 	public boolean visit(MethodDeclaration node) {
 		if (visitMethodDeclaration( node) != null) {
 			return super.visit(node);
@@ -123,6 +133,20 @@ public class VisitorInheritanceRef extends SummarizingClassesAbstractVisitor {
 	@Override
 	public void endVisit(MethodDeclaration node) {
 		endVisitMethodDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(LambdaExpression node) {
+		if (visitLambdaExpression( node) != null) {
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(LambdaExpression node) {
+		endVisitLambdaExpression(node);
 	}
 
 	@Override

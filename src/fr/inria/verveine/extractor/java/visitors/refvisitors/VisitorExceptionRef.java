@@ -58,7 +58,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
 		    for (Type excep : (List<Type>)node.thrownExceptionTypes()) {
-                org.moosetechnology.model.famixjava.famixjavaentities.Type excepFmx = this.referedType(excep.resolveBinding(), context.topType(), true);
+                org.moosetechnology.model.famixjava.famixjavaentities.Type excepFmx = this.referedType(excep.resolveBinding(), true);
                 if (excepFmx != null) {
 					if (! options.summarizeClasses()) {
                         // not instanceof because we test the exact type and not subclasses
@@ -80,6 +80,20 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 		endVisitMethodDeclaration(node);
 	}
 
+	@Override
+	public boolean visit(LambdaExpression node) {
+		if (visitLambdaExpression( node) != null) {
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(LambdaExpression node) {
+		endVisitLambdaExpression(node);
+	}
+
     @Override
     public boolean visit(CatchClause node) {
         Method meth = this.context.topMethod();
@@ -87,7 +101,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         if (meth != null) {
             org.moosetechnology.model.famixjava.famixjavaentities.Class excepFmx = null;
             if ( NodeTypeChecker.isSimpleType(excepClass) || NodeTypeChecker.isQualifiedType(excepClass) ) {
-                excepFmx = (Class) referedType(excepClass, meth, true);
+                excepFmx = (Class) referedType(excepClass, true);
             }
             if (excepFmx != null) {
                 if (! options.summarizeClasses()) {
@@ -103,7 +117,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     public boolean visit(ThrowStatement node) {
         Method meth = this.context.topMethod();
         org.moosetechnology.model.famixjava.famixjavaentities.Class excepFmx = (Class) this
-                .referedType(node.getExpression().resolveTypeBinding(), context.topType(), true);
+                .referedType(node.getExpression().resolveTypeBinding(), true);
         if (excepFmx != null) {
             if (! options.summarizeClasses()) {
                 dico.createFamixThrownException(meth, excepFmx);

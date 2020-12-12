@@ -7,6 +7,8 @@ import org.moosetechnology.model.famixjava.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famixjava.famixjavaentities.Method;
 import org.moosetechnology.model.famixjava.famixjavaentities.Reference;
 import org.moosetechnology.model.famixjava.famixtraits.TTypedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithReferences;
+import org.moosetechnology.model.famixjava.famixtraits.TWithStatements;
 
 import java.util.List;
 
@@ -62,7 +64,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		visitClassInstanceCreation(node);
 		if (node.getAnonymousClassDeclaration() == null) {
 			Type clazz = node.getType();
-			org.moosetechnology.model.famixjava.famixjavaentities.Type fmx = referedType(clazz, (ContainerEntity) context.top(), true);
+			org.moosetechnology.model.famixjava.famixjavaentities.Type fmx = referedType(clazz, true);
 			Reference ref = null;
 			if (! options.summarizeClasses()) {
 				ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
@@ -148,13 +150,13 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
 			if (! node.isConstructor()) {
-				fmx.setDeclaredType(referedType(node.getReturnType2(), fmx, false));
+				fmx.setDeclaredType(referedType(node.getReturnType2(), false));
 			}
 
 			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
 				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
 				if (fmxParam != null) {
-					fmxParam.setDeclaredType(referedType(param.getType(), fmx, false));
+					fmxParam.setDeclaredType(referedType(param.getType(), false));
 				}
 			}
 
@@ -167,6 +169,28 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@Override
 	public void endVisit(MethodDeclaration node) {
 		endVisitMethodDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(LambdaExpression node) {
+		if (visitLambdaExpression( node) != null) {
+			for (VariableDeclaration param : (List<VariableDeclaration>) node.parameters()) {
+				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
+				IVariableBinding paramBnd = param.resolveBinding();
+				if (fmxParam != null) {
+					fmxParam.setDeclaredType(referedType(paramBnd.getType(), false));
+				}
+			}
+
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(LambdaExpression node) {
+		endVisitLambdaExpression(node);
 	}
 
 	/**
@@ -194,7 +218,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public boolean visit(InstanceofExpression node) {
 		org.moosetechnology.model.famixjava.famixjavaentities.Type fmx = null;
 		Type clazz = node.getRightOperand();
-		fmx = referedType(clazz, (ContainerEntity) context.top(), true);
+		fmx = referedType(clazz, true);
 
 		Reference ref = null;
 		if (options.summarizeClasses()) {
@@ -283,8 +307,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	    if (this.searchTypeRef) {
 			IBinding bnd = node.resolveBinding();
 			if ((bnd != null) && (bnd.getKind() == IBinding.TYPE)) {
-				org.moosetechnology.model.famixjava.famixjavaentities.Type referred = referedType((ITypeBinding) bnd, (ContainerEntity) context.top(), !((ITypeBinding) bnd).isEnum());
-				Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference());
+				org.moosetechnology.model.famixjava.famixjavaentities.Type referred = referedType((ITypeBinding) bnd, !((ITypeBinding) bnd).isEnum());
+				Reference ref = dico.addFamixReference((TWithReferences)context.top(), referred, context.getLastReference());
 				context.setLastReference(ref);
 			}
 		}
@@ -299,7 +323,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
      *     SingleVariableDeclaration VariableDeclarationFragment
 	 */
 	private boolean visitVariableDeclaration(List<VariableDeclaration> fragments, Type declType) {
-		setVariablesDeclaredType(fragments, referedType(declType, context.topType(), false));
+		setVariablesDeclaredType(fragments, referedType(declType, false));
 		for (VariableDeclaration varDecl : fragments) {
 			varDecl.accept(this);
 		}

@@ -17,6 +17,7 @@ import org.junit.Test;
 import org.moosetechnology.model.famixjava.famixjavaentities.Access;
 import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
 import org.moosetechnology.model.famixjava.famixjavaentities.LocalVariable;
+import org.moosetechnology.model.famixjava.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famixjava.famixjavaentities.Parameter;
 
 
@@ -101,15 +102,19 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
         }
         assertNotNull(seg1);
         assertEquals(Lambda.class, seg1.getParentBehaviouralEntity().getClass());
-        //assertNotNull(seg1.getDeclaredType());
+        assertNotNull(seg1.getDeclaredType());
+        assertEquals("String", ((NamedEntity)seg1.getDeclaredType()).getName());
 
         assertNotNull(seg2);
         assertEquals(Lambda.class, seg2.getParentBehaviouralEntity().getClass());
-        //assertNotNull(seg2.getDeclaredType());
-        
+        assertNotNull(seg2.getDeclaredType());
+        assertEquals("String", ((NamedEntity)seg2.getDeclaredType()).getName());
+
         assertNotNull(t);
         assertEquals(Lambda.class, t.getParentBehaviouralEntity().getClass());
-        assertNull(t.getDeclaredType());
+        assertNotNull(t.getDeclaredType());
+        // untyped lambdas' parameters are Object
+        assertEquals("Object", ((NamedEntity)t.getDeclaredType()).getName());
     }
 
     @Test
