@@ -1,7 +1,11 @@
 package fr.inria.verveine.extractor.java;
 
-import fr.inria.verveine.extractor.java.utils.FameRepositoryFilters;
-import ch.akuhn.fame.Repository;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+
+import java.io.File;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famixjava.famixjavaentities.CaughtException;
@@ -9,10 +13,6 @@ import org.moosetechnology.model.famixjava.famixjavaentities.DeclaredException;
 import org.moosetechnology.model.famixjava.famixjavaentities.Method;
 import org.moosetechnology.model.famixjava.famixjavaentities.ThrownException;
 import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
-
-import java.io.File;
-
-import static org.junit.Assert.*;
 
 public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
 

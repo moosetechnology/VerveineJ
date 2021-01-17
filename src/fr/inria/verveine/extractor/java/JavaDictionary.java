@@ -323,7 +323,6 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 				Inheritance lastInheritance = null;
 				for (Type sup : sups) {
 					lastInheritance = ensureFamixInheritance((TWithInheritances) sup, fmx, lastInheritance);
-					// TODO create FileAnchor for each inheritance link ???
 				}
 			}
 		}
@@ -331,36 +330,36 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return fmx;
 	}
 
-	public Type asClass(Type excepFmx) {
-		Class tmp = null;
+	public Type convertTypeToClass(Type fmxType) {
+		Class fmxClass = null;
 		try {
-			ContainerEntity owner = Util.belongsToOf(excepFmx);
-			owner.getTypes().remove(excepFmx);
-			super.removeEntity(excepFmx);
+			ContainerEntity owner = Util.belongsToOf(fmxType);
+			owner.getTypes().remove(fmxType);
+			super.removeEntity(fmxType);
 
-			tmp = super.ensureFamixClass(entityToKey.get(excepFmx), excepFmx.getName(), owner, /*alwaysPersist?*/true);
+			fmxClass = super.ensureFamixClass(entityToKey.get(fmxType), fmxType.getName(), owner, /*alwaysPersist?*/true);
 
-			tmp.addMethods(excepFmx.getMethods());
-			if (excepFmx instanceof TWithAttributes) {
-				tmp.addAttributes(((TWithAttributes) excepFmx).getAttributes());
+			fmxClass.addMethods(fmxType.getMethods());
+			if (fmxType instanceof TWithAttributes) {
+				fmxClass.addAttributes(((TWithAttributes) fmxType).getAttributes());
 			}
-			tmp.addModifiers(excepFmx.getModifiers());
-			if (excepFmx instanceof TWithInheritances) {
-				tmp.addSuperInheritances(((TWithInheritances) excepFmx).getSuperInheritances());
-				tmp.addSubInheritances(((TWithInheritances) excepFmx).getSubInheritances());
+			setClassModifiers(fmxClass, entityToKey.get(fmxType).getModifiers());
+			if (fmxType instanceof TWithInheritances) {
+				fmxClass.addSuperInheritances(((TWithInheritances) fmxType).getSuperInheritances());
+				fmxClass.addSubInheritances(((TWithInheritances) fmxType).getSubInheritances());
 			}
-			tmp.setSourceAnchor(excepFmx.getSourceAnchor());
-			tmp.addAnnotationInstances(excepFmx.getAnnotationInstances());
-			tmp.addComments(excepFmx.getComments());
-			tmp.addIncomingReferences(excepFmx.getIncomingReferences());
-			tmp.setIsStub(excepFmx.getIsStub());
-			tmp.addTypes(excepFmx.getTypes());
+			fmxClass.setSourceAnchor(fmxType.getSourceAnchor());
+			fmxClass.addAnnotationInstances(fmxType.getAnnotationInstances());
+			fmxClass.addComments(fmxType.getComments());
+			fmxClass.addIncomingReferences(fmxType.getIncomingReferences());
+			fmxClass.setIsStub(fmxType.getIsStub());
+			fmxClass.addTypes(fmxType.getTypes());
 		}
 		catch( ConcurrentModificationException e) {
 			e.printStackTrace();
 		}
 
-		return tmp;
+		return fmxClass;
 	}
 
 	/**
@@ -527,7 +526,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		}
 
 		if ((fmx != null) && (bnd != null) ) {
-			setNamedEntityModifiers(fmx, bnd.getModifiers());
+			setVisibility(fmx, bnd.getModifiers());
 		}
 
 		return fmx;
@@ -647,7 +646,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		}
 
 		if ( (fmx!=null) && (bnd != null) ) {
-			setNamedEntityModifiers(fmx, bnd.getModifiers());
+			// TODO setVisibility(fmx, bnd.getModifiers());
 		}
 
 		return fmx;
@@ -722,7 +721,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		}
 
 		if ( (fmx!=null) && (bnd != null) ) {
-			setNamedEntityModifiers(fmx, bnd.getModifiers());
+			//TODO setVisibility(fmx, bnd.getModifiers());
 		}
 
 		return fmx;
@@ -1410,41 +1409,45 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		return fmx;
 	}
 
-	/** Sets the modifiers (abstract, public, ...) of a FamixNamedEntity
+	/** Sets the visibility of a FamixNamedEntity
 	 * @param fmx -- the FamixNamedEntity
 	 * @param mod -- a description of the modifiers as understood by org.eclipse.jdt.core.dom.Modifier
 	 */
-	public void setNamedEntityModifiers(NamedEntity fmx, int mod) {
-		if (Modifier.isAbstract(mod)) {
-			fmx.addModifiers(MODIFIER_ABSTRACT);
-			// fmx.setIsAbstract(new Boolean(Modifier.isAbstract(mod)));
-		}
+	public void setVisibility(THasVisibility fmx, int mod) {
 		if (Modifier.isPublic(mod)) {
-			fmx.addModifiers(MODIFIER_PUBLIC);
-			// fmx.setIsPublic(new Boolean(Modifier.isPublic(mod)));
+			fmx.setVisibility(MODIFIER_PUBLIC);
 		}
 		if (Modifier.isPrivate(mod)) {
-			fmx.addModifiers(MODIFIER_PRIVATE);
-			// fmx.setIsPrivate(new Boolean(Modifier.isPrivate(mod)));
+			fmx.setVisibility(MODIFIER_PRIVATE);
 		}
 		if (Modifier.isProtected(mod)) {
-			fmx.addModifiers(MODIFIER_PROTECTED);
-			// fmx.setIsProtected(new Boolean(Modifier.isProtected(mod)));
+			fmx.setVisibility(MODIFIER_PROTECTED);
 		}
+    }
+
+	public void canBeAbstract(TCanBeAbstract fmx, int mod) {
+		if (Modifier.isAbstract(mod)) {
+			fmx.setIsAbstract(true);
+		}
+    }
+
+	public void canBeFinal(TCanBeFinal fmx, int mod) {
 		if (Modifier.isFinal(mod)) {
-			fmx.addModifiers(MODIFIER_FINAL);
-			// fmx.setIsFinal(new Boolean(Modifier.isFinal(mod)));
+			fmx.setIsFinal(true);
 		}
     }
 
     public void setAttributeModifiers(Attribute fmx, int mod) {
-		setNamedEntityModifiers(fmx, mod);
-		fmx.setIsClassSide(Modifier.isStatic(mod));
+		//TODO: setVisibility(fmx, mod);
+		canBeFinal(fmx, mod);
+
+		if (Modifier.isStatic(mod)) {
+			fmx.setIsClassSide(true);
+		}
+
+/*
 		if (Modifier.isTransient(mod)) {
 			fmx.addModifiers(MODIFIER_TRANSIENT);
-		}
-		if (Modifier.isStatic(mod)) {
-			fmx.addModifiers(MODIFIER_STATIC);
 		}
 		if (Modifier.isSynchronized(mod)) {
 			fmx.addModifiers(MODIFIER_SYNCHRONIZED);
@@ -1452,20 +1455,20 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		if (Modifier.isVolatile(mod)){
 			fmx.addModifiers(MODIFIER_VOLATILE);
 		}
+*/
     }
 
     public void setMethodModifiers(Method fmx, int mod) {
-		setNamedEntityModifiers(fmx, mod);
-		if (Modifier.isAbstract(mod)) {
-			// don't know why there must be two different ways to mark abstract classes !!! But this is a pain!
-			fmx.addModifiers(MODIFIER_ABSTRACT);
+		setVisibility(fmx, mod);
+		canBeAbstract(fmx, mod);
+		canBeFinal(fmx, mod);
+
+		if (Modifier.isStatic(mod)) {
+			fmx.setIsClassSide(true);
 		}
-		fmx.setIsClassSide(Modifier.isStatic(mod));
+/*
 		if (Modifier.isTransient(mod)) {
 			fmx.addModifiers(MODIFIER_TRANSIENT);
-		}
-		if (Modifier.isStatic(mod)) {
-			fmx.addModifiers(MODIFIER_STATIC);
 		}
 		if (Modifier.isSynchronized(mod)) {
 			fmx.addModifiers(MODIFIER_SYNCHRONIZED);
@@ -1473,18 +1476,13 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		if (Modifier.isVolatile(mod)){
 			fmx.addModifiers(MODIFIER_VOLATILE);
 		}
-
+*/
     }
 
     public void setClassModifiers(Class fmx, int mod) {
-        setNamedEntityModifiers(fmx, mod);
-        if (Modifier.isAbstract(mod)) {
-            // don't know why there must be two different ways to mark abstract classes !!! But this is a pain!
-            fmx.addModifiers(MODIFIER_ABSTRACT);
-        }
-		if (Modifier.isStatic(mod)) {
-			fmx.addModifiers(MODIFIER_STATIC);
-		}
+		setVisibility(fmx, mod);
+		canBeAbstract(fmx, mod);
+		canBeFinal(fmx, mod);
     }
 
 	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, TWithAttributes owner, boolean persistIt) {
@@ -1939,14 +1937,7 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 		if (fmx != null) {
 			ensureFamixInheritance(ensureFamixClassObject(null), fmx, /*prev*/null);
 			fmx.setContainer(ensureFamixNamespaceDefault());
-
-			// may be not needed anymore now that we use modifiers
-			/*fmx.setIsAbstract(Boolean.FALSE);
-			fmx.setIsFinal(Boolean.FALSE);
-			fmx.setIsInterface(Boolean.FALSE);
-			fmx.setIsPrivate(Boolean.FALSE);
-			fmx.setIsProtected(Boolean.FALSE);*/
-			fmx.addModifiers("public");
+			fmx.setVisibility(MODIFIER_PUBLIC);
 		}
 
 		return fmx;

@@ -766,38 +766,38 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertNotNull(clazz);
 		assertFalse(clazz.getIsInterface());
 		assertTrue(clazz.getIsAbstract());
-		assertTrue(clazz.getModifiers().contains("abstract"));
-		assertTrue(clazz.getModifiers().contains("public"));
-		assertFalse(clazz.getModifiers().contains("private"));
-		assertFalse(clazz.getModifiers().contains("protected"));
-		assertFalse(clazz.getModifiers().contains("final"));
+		assertTrue(clazz.getIsAbstract());
+		assertTrue(clazz.getIsPublic());
+		assertFalse(clazz.getIsPrivate());
+		assertFalse(clazz.getIsProtected());
+		assertFalse(clazz.getIsFinal());
 
 		assertEquals(4, clazz.getMethods().size());
 		for (TMethod tm : clazz.getMethods()) {
 			Method m = (Method) tm;
 			if (m.getName().equals(JavaDictionary.INIT_BLOCK_NAME)) {
-				assertFalse(m.getModifiers().contains("public"));
+				assertFalse(m.getIsPublic());
 			}
 			else {
-				assertTrue(m.getModifiers().contains("public"));
+				assertTrue(m.getIsPublic());
 			}
-			assertFalse(m.getModifiers().contains("private"));
-			assertFalse(m.getModifiers().contains("protected"));
-			assertFalse(m.getModifiers().contains("final"));
+			assertFalse(m.getIsPrivate());
+			assertFalse(m.getIsProtected());
+			assertFalse(m.getIsFinal());
 			if (m.getName().equals("output")) {
-				assertTrue(m.getModifiers().contains("abstract"));
+				assertTrue(m.getIsAbstract());
 			}
 			else {
-				assertFalse(m.getModifiers().contains("abstract"));
+				assertFalse(m.getIsAbstract());
 			}
 		}
 		
 		assertEquals(1, clazz.getAttributes().size());
 		Attribute a = (Attribute) firstElt(clazz.getAttributes());
-		assertFalse(a.getModifiers().contains("public"));
-		assertFalse(a.getModifiers().contains("private"));
-		assertTrue(a.getModifiers().contains("protected"));
-		assertFalse(a.getModifiers().contains("final"));
+		// TODO assertFalse(a.getIsPublic());
+		// TODO assertFalse(a.getIsPrivate());
+		// TODO assertTrue(a.getIsProtected());
+		assertFalse(a.getIsFinal());
 	}
 
 	@Test

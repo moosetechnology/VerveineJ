@@ -58,12 +58,13 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
 		    for (Type excep : (List<Type>)node.thrownExceptionTypes()) {
-                org.moosetechnology.model.famixjava.famixjavaentities.Type excepFmx = this.referedType(excep.resolveBinding(), true);
+                org.moosetechnology.model.famixjava.famixjavaentities.Type excepFmx = this.referedType(excep.resolveBinding(), /*isClass*/true);
                 if (excepFmx != null) {
 					if (! options.summarizeClasses()) {
                         // not instanceof because we test the exact type and not subclasses
-                        if ((excepFmx.getClass() == org.moosetechnology.model.famixjava.famixjavaentities.Type.class) || (excepFmx.getClass() == ParameterType.class)) {
-                            excepFmx = dico.asClass(excepFmx);
+                        if ((excepFmx.getClass() == org.moosetechnology.model.famixjava.famixjavaentities.Type.class) ||
+                        	(excepFmx.getClass() == ParameterType.class)) {
+                            excepFmx = dico.convertTypeToClass(excepFmx);
                         }
                         dico.createFamixDeclaredException(fmx, (Class) excepFmx);
                     }
