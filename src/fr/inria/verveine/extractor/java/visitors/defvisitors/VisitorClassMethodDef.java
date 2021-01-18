@@ -1,21 +1,65 @@
 package fr.inria.verveine.extractor.java.visitors.defvisitors;
 
-import fr.inria.verveine.extractor.java.JavaDictionary;
-import fr.inria.verveine.extractor.java.VerveineJOptions;
-import fr.inria.verveine.extractor.java.utils.StubBinding;
-import fr.inria.verveine.extractor.java.utils.Util;
-import fr.inria.verveine.extractor.java.visitors.SummarizingClassesAbstractVisitor;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.jdt.core.dom.*;
-import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizedType;
-import org.moosetechnology.model.famixjava.famixtraits.TWithStatements;
-import org.moosetechnology.model.famixjava.famixjavaentities.*;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
+import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.AssertStatement;
+import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.Block;
+import org.eclipse.jdt.core.dom.CatchClause;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.ConstructorInvocation;
+import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.DoStatement;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ExpressionStatement;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ForStatement;
+import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.Initializer;
+import org.eclipse.jdt.core.dom.LambdaExpression;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
+import org.eclipse.jdt.core.dom.SwitchCase;
+import org.eclipse.jdt.core.dom.SwitchStatement;
+import org.eclipse.jdt.core.dom.SynchronizedStatement;
+import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.TypeLiteral;
+import org.eclipse.jdt.core.dom.TypeParameter;
+import org.eclipse.jdt.core.dom.VariableDeclaration;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.WhileStatement;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationType;
+import org.moosetechnology.model.famixjava.famixjavaentities.AnnotationTypeAttribute;
+import org.moosetechnology.model.famixjava.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famixjava.famixjavaentities.Lambda;
+import org.moosetechnology.model.famixjava.famixjavaentities.Method;
+import org.moosetechnology.model.famixjava.famixjavaentities.ParameterType;
+import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizableClass;
+import org.moosetechnology.model.famixjava.famixjavaentities.ParameterizedType;
+
+import fr.inria.verveine.extractor.java.JavaDictionary;
+import fr.inria.verveine.extractor.java.VerveineJOptions;
+import fr.inria.verveine.extractor.java.utils.StubBinding;
+import fr.inria.verveine.extractor.java.utils.Util;
+import fr.inria.verveine.extractor.java.visitors.SummarizingClassesAbstractVisitor;
 
 /**
  * AST Visitor that defines all the (Famix) entities of interest

@@ -1,12 +1,17 @@
 package fr.inria.verveine.extractor.java;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import fr.inria.verveine.extractor.java.visitors.refvisitors.*;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.moosetechnology.model.famixjava.famixjavaentities.Method;
 
 import ch.akuhn.fame.Repository;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorClassMethodDef;
@@ -64,7 +69,6 @@ public class FamixRequestor extends FileASTRequestor {
 			ast.accept(new VisitorInvocRef(famixDictionnary, options));
 			ast.accept(new VisitorAnnotationRef(famixDictionnary, options));
 			ast.accept(new VisitorExceptionRef(famixDictionnary, options));
-
 		} catch (Exception err) {
 			System.err.println("*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
 		}

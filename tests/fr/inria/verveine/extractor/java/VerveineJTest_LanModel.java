@@ -854,6 +854,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 	@Test
 	public void testMetric() {
 		Collection<Method> lMeths = entitiesNamed( Method.class, "accept");
+		entitiesOfType(Method.class);
 		assertEquals(3, lMeths.size());
 		for (Method m : lMeths) {
 			assertNotNull(m);

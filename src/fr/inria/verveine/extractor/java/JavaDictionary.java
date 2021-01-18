@@ -332,22 +332,30 @@ public class JavaDictionary extends AbstractDictionary<IBinding> {
 
 	public Type convertTypeToClass(Type fmxType) {
 		Class fmxClass = null;
+		ContainerEntity owner = null;
+		IBinding key = null;
 		try {
-			ContainerEntity owner = Util.belongsToOf(fmxType);
+			owner = Util.belongsToOf(fmxType);
 			owner.getTypes().remove(fmxType);
 			super.removeEntity(fmxType);
 
-			fmxClass = super.ensureFamixClass(entityToKey.get(fmxType), fmxType.getName(), owner, /*alwaysPersist?*/true);
+			key = entityToKey.get(fmxType);
+			fmxClass = super.ensureFamixClass(key, fmxType.getName(), owner, /*alwaysPersist?*/true);
 
 			fmxClass.addMethods(fmxType.getMethods());
 			if (fmxType instanceof TWithAttributes) {
 				fmxClass.addAttributes(((TWithAttributes) fmxType).getAttributes());
 			}
-			setClassModifiers(fmxClass, entityToKey.get(fmxType).getModifiers());
+			
+			if (key != null) {
+				setClassModifiers(fmxClass, key.getModifiers());
+			}
+
 			if (fmxType instanceof TWithInheritances) {
 				fmxClass.addSuperInheritances(((TWithInheritances) fmxType).getSuperInheritances());
 				fmxClass.addSubInheritances(((TWithInheritances) fmxType).getSubInheritances());
 			}
+
 			fmxClass.setSourceAnchor(fmxType.getSourceAnchor());
 			fmxClass.addAnnotationInstances(fmxType.getAnnotationInstances());
 			fmxClass.addComments(fmxType.getComments());
