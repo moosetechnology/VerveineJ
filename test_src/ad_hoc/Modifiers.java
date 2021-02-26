@@ -5,7 +5,7 @@ public class Modifiers {
 
 	public final static transient volatile String attribute;
 
-	public final static transient synchronized volatile void methodModifiers(){
+	public final static synchronized void methodModifiers(){
 		System.out.println("Hello World");
 	}
 

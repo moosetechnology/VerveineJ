@@ -280,7 +280,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertEquals("equalsMultiple(AbstractDestinationAddress)", em.getSignature());
 		assertSame(detectFamixElement(eu.synectique.verveine.core.gen.famix.Class.class, "SingleDestinationAddress"), em.getParentType());
 		assertSame(detectFamixElement(PrimitiveType.class, "boolean"), em.getDeclaredType());
-		assertEquals("29F586AA07B1D80186CC5981C16F6442", em.getBodyHash());
+		// assertEquals("29F586AA07B1D80186CC5981C16F6442", em.getBodyHash());
 
 		eu.synectique.verveine.core.gen.famix.Class clazz = detectFamixElement(eu.synectique.verveine.core.gen.famix.Class.class, "FileServer");
 		assertNotNull(clazz);
@@ -700,37 +700,35 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertNotNull(clazz);
 		assertFalse(clazz.getIsInterface());
 		assertTrue(clazz.getIsAbstract());
-		assertTrue(clazz.getModifiers().contains("abstract"));
-		assertTrue(clazz.getModifiers().contains("public"));
-		assertFalse(clazz.getModifiers().contains("private"));
-		assertFalse(clazz.getModifiers().contains("protected"));
-		assertFalse(clazz.getModifiers().contains("final"));
-		
+		assertTrue(clazz.getIsAbstract());
+		assertTrue(clazz.getIsPublic());
+		assertFalse(clazz.getIsPrivate());
+		assertFalse(clazz.getIsProtected());
+		assertFalse(clazz.getIsFinal());
+
 		assertEquals(4, clazz.getMethods().size());
 		for (Method m : clazz.getMethods()) {
 			if (m.getName().equals(JavaDictionary.INIT_BLOCK_NAME)) {
-				assertFalse(m.getModifiers().contains("public"));
+				assertFalse(m.getIsPublic());
+			} else {
+				assertTrue(m.getIsPublic());
 			}
-			else {
-				assertTrue(m.getModifiers().contains("public"));
-			}
-			assertFalse(m.getModifiers().contains("private"));
-			assertFalse(m.getModifiers().contains("protected"));
-			assertFalse(m.getModifiers().contains("final"));
+			assertFalse(m.getIsPrivate());
+			assertFalse(m.getIsProtected());
+			assertFalse(m.getIsFinal());
 			if (m.getName().equals("output")) {
-				assertTrue(m.getModifiers().contains("abstract"));
-			}
-			else {
-				assertFalse(m.getModifiers().contains("abstract"));
+				assertTrue(m.getIsAbstract());
+			} else {
+				assertFalse(m.getIsAbstract());
 			}
 		}
-		
+
 		assertEquals(1, clazz.getAttributes().size());
 		Attribute a = firstElt(clazz.getAttributes());
-		assertFalse(a.getModifiers().contains("public"));
-		assertFalse(a.getModifiers().contains("private"));
-		assertTrue(a.getModifiers().contains("protected"));
-		assertFalse(a.getModifiers().contains("final"));
+		assertFalse(a.getIsPublic());
+		assertFalse(a.getIsPrivate());
+		assertTrue(a.getIsProtected());
+		assertFalse(a.getIsFinal());
 	}
 
 	@Test

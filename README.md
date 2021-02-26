@@ -2,6 +2,9 @@
 
 [![Use Java 10](https://img.shields.io/badge/Java-10-brightgreen)](https://jdk.java.net/10/) ![Build travis](https://api.travis-ci.com/moosetechnology/VerveineJ.svg?branch=master&status=passed)
 
+![Deprecated](https://img.shields.io/badge/Deprecated-FAMIX%20Compatibility-red)
+
+
 A Java to MSE parser
 
 Based on JDT, it parser java code to export it in the MSE format used by the Moose data analysis platform.

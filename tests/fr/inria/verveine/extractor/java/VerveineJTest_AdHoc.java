@@ -4,35 +4,18 @@
 package fr.inria.verveine.extractor.java;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import eu.synectique.verveine.core.Dictionary;
+import eu.synectique.verveine.core.gen.famix.*;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.*;
 
-import eu.synectique.verveine.core.Dictionary;
-import eu.synectique.verveine.core.gen.famix.Access;
-import eu.synectique.verveine.core.gen.famix.Attribute;
-import eu.synectique.verveine.core.gen.famix.BehaviouralEntity;
-import eu.synectique.verveine.core.gen.famix.ContainerEntity;
-import eu.synectique.verveine.core.gen.famix.EnumValue;
-import eu.synectique.verveine.core.gen.famix.Invocation;
-import eu.synectique.verveine.core.gen.famix.LocalVariable;
-import eu.synectique.verveine.core.gen.famix.Method;
-import eu.synectique.verveine.core.gen.famix.Namespace;
-import eu.synectique.verveine.core.gen.famix.Parameter;
-import eu.synectique.verveine.core.gen.famix.ParameterizableClass;
-import eu.synectique.verveine.core.gen.famix.ParameterizedType;
-import eu.synectique.verveine.core.gen.famix.Reference;
-import eu.synectique.verveine.core.gen.famix.Type;
+import java.lang.Exception;
 
 /**
  * @author Nicolas Anquetil
@@ -516,18 +499,18 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 		assertEquals(detectFamixElement( eu.synectique.verveine.core.gen.famix.Class.class, "SuperWrongOwner"), meth.getParentType());
 	}
-	
+
 	@Test
 	public void testModifiers() {
-		parse(new String[] {"test_src/ad_hoc/Modifiers.java"});
+		parse(new String[]{"test_src/ad_hoc/Modifiers.java"});
 
-		Attribute attribute = detectFamixElement( Attribute.class, "privateFinalAttribute");
+		Attribute attribute = detectFamixElement(Attribute.class, "privateFinalAttribute");
 		assertNotNull(attribute);
 
-		assertEquals(2, attribute.getModifiers().size());
-		assertTrue(attribute.getModifiers().contains(JavaDictionary.MODIFIER_PRIVATE));
-		assertTrue(attribute.getModifiers().contains(JavaDictionary.MODIFIER_FINAL));
+		assertTrue(attribute.getIsPrivate());
+		assertTrue(attribute.getIsFinal());
 	}
+
 
 	@Test
 	public void testMultipleSignatures() {
@@ -592,16 +575,13 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testPublicStaticInnerClass() {
-		parse(new String[] {"test_src/ad_hoc/StaticInnerClass.java"});
+		parse(new String[]{"test_src/ad_hoc/StaticInnerClass.java"});
 
-		eu.synectique.verveine.core.gen.famix.Class clazz = detectFamixElement( eu.synectique.verveine.core.gen.famix.Class.class, "ThisIsTheStaticInnerClass");
+		eu.synectique.verveine.core.gen.famix.Class clazz = detectFamixElement(eu.synectique.verveine.core.gen.famix.Class.class, "ThisIsTheStaticInnerClass");
 		assertNotNull(clazz);
 
-		// assertTrue(clazz.getIsPublic()); --- set as a modifier 
-		assertEquals(2, clazz.getModifiers().size());
-		for (String mod : clazz.getModifiers()) {
-			assertTrue( mod.equals(JavaDictionary.MODIFIER_PUBLIC) || mod.equals(JavaDictionary.MODIFIER_STATIC) );
-		}
+		assertTrue(clazz.getIsPublic());
+		assertTrue(clazz.getIsClassSide());
 	}
 
     @Test
@@ -622,43 +602,40 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				Invocation invok = firstElt(meth.getOutgoingInvocations());
 				BehaviouralEntity invoked = firstElt(invok.getCandidates());
 				assertNotNull(invoked);
-				assertEquals("ArrayList<String>", invoked.getName() );
+				assertEquals("ArrayList<String>", invoked.getName());
 			}
 		}
-    }
+	}
 
-    @Test
-	public void testMethodModifiers(){
-		parse(new String[] {"test_src/ad_hoc/Modifiers.java"});
+	@Test
+	public void testMethodModifiers() {
+		parse(new String[]{"test_src/ad_hoc/Modifiers.java"});
 
-		Collection<Method> meths = entitiesNamed( Method.class, "methodModifiers");
+		Collection<Method> meths = entitiesNamed(Method.class, "methodModifiers");
 
 		assertEquals(1, meths.size());
 		Method method = firstElt(meths);
 
 		assertNotNull(method);
-		assertEquals(6, method.getModifiers().size());
-		assertTrue( method.getModifiers().contains("transient"));
-		assertTrue( method.getModifiers().contains("public"));
-		assertTrue( method.getModifiers().contains("static"));
-		assertTrue( method.getModifiers().contains("final"));
-		assertTrue( method.getModifiers().contains("volatile"));
-		assertTrue( method.getModifiers().contains("synchronized"));
+		assertTrue(method.getIsPublic());
+		assertTrue(method.getIsClassSide());
+		assertTrue(method.getIsFinal());
+		assertTrue(method.getIsSynchronized());
 	}
 
-	@Test
-	public void testAttributeModifiers(){
-		parse(new String[] {"test_src/ad_hoc/Modifiers.java"});
 
-		Attribute attribute = firstElt(entitiesNamed( Attribute.class, "attribute"));
+	@Test
+	public void testAttributeModifiers() {
+		parse(new String[]{"test_src/ad_hoc/Modifiers.java"});
+
+		Attribute attribute = firstElt(entitiesNamed(Attribute.class, "attribute"));
 
 		assertNotNull(attribute);
-		assertEquals(5, attribute.getModifiers().size());
-		assertTrue( attribute.getModifiers().contains("public"));
-		assertTrue( attribute.getModifiers().contains("static"));
-		assertTrue( attribute.getModifiers().contains("transient"));
-		assertTrue( attribute.getModifiers().contains("volatile"));
-		assertTrue( attribute.getModifiers().contains("final"));
+		assertTrue(attribute.getIsTransient());
+		assertTrue(attribute.getIsPublic());
+		assertTrue(attribute.getIsClassSide());
+		assertTrue(attribute.getIsFinal());
+		assertTrue(attribute.getIsVolatile());
 	}
 
 }

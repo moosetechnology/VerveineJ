@@ -1,32 +1,28 @@
 package fr.inria.verveine.extractor.java.visitors.refvisitors;
 
-import java.io.RandomAccessFile;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-
 import eu.synectique.verveine.core.Dictionary;
-
-import eu.synectique.verveine.core.gen.famix.*;
 import eu.synectique.verveine.core.gen.famix.Class;
+import eu.synectique.verveine.core.gen.famix.*;
 import fr.inria.verveine.extractor.java.JavaDictionary;
 import fr.inria.verveine.extractor.java.VerveineJParser.anchorOptions;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
 import fr.inria.verveine.extractor.java.utils.Util;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
-
-import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.internal.compiler.ast.Argument;
+import org.eclipse.jdt.core.dom.*;
+
+import java.io.RandomAccessFile;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class VisitorInvocRef extends AbstractRefVisitor {
 
 	/**
 	 * Useful to keep the FamixType created in the specific case of "new SomeClass().someMethod()"
 	 */
-	private eu.synectique.verveine.core.gen.famix.Type classInstanceCreated = null;
+	private final eu.synectique.verveine.core.gen.famix.Type classInstanceCreated = null;
 
 	/**
 	 * The source code of the visited AST.
@@ -42,7 +38,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	/**
 	 * what sourceAnchors to create
 	 */
-	private anchorOptions anchors;
+	private final anchorOptions anchors;
 
 	public VisitorInvocRef(JavaDictionary dico, boolean classSummary, anchorOptions anchors) {
 		super(dico, classSummary);
@@ -301,7 +297,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		String name = context.topMethod().getName();
 		Method invoked = dico.ensureFamixMethod(node.resolveConstructorBinding(), name,
-				/*paramTypes*/(Collection<String>) null, /*retType*/null, /*owner*/context.topType(), modifiers,
+				/*paramTypes*/null, /*retType*/null, /*owner*/context.topType(), modifiers,
 				/*persistIt*/!classSummary);
 		// constructor don't have return type so no need to create a reference from this class to the "declared return type" class when classSummary is TRUE
 		// also no parameters specified here, so no references to create for them either
@@ -649,10 +645,14 @@ public class VisitorInvocRef extends AbstractRefVisitor {
         eu.synectique.verveine.core.gen.famix.Type clazz = context.topType();
         Class superC = null;
         for (Inheritance inh : clazz.getSuperInheritances()) {
-            if ( (inh.getSuperclass() instanceof Class) && (! ((Class) inh.getSuperclass()).getIsInterface()) ) {
-                superC = (Class) inh.getSuperclass();
-                break;
-            }
+			if (inh.getSuperclass() instanceof Class) {
+				// TODO: Check why we have to check that the superclass is a class (VerveineJTest_AdHoc>>testSuperConstructorInvocation)
+				Class superclass = (Class) inh.getSuperclass();
+				if (superclass.getIsInterface() == null || !superclass.getIsInterface()) {
+					superC = (Class) inh.getSuperclass();
+					break;
+				}
+			}
         }
         return superC;
     }

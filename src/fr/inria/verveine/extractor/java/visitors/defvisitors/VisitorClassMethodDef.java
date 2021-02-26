@@ -1,24 +1,21 @@
 package fr.inria.verveine.extractor.java.visitors.defvisitors;
 
+import eu.synectique.verveine.core.gen.famix.ParameterizedType;
+import eu.synectique.verveine.core.gen.famix.*;
+import fr.inria.verveine.extractor.java.JavaDictionary;
+import fr.inria.verveine.extractor.java.VerveineJParser.anchorOptions;
+import fr.inria.verveine.extractor.java.utils.StubBinding;
+import fr.inria.verveine.extractor.java.utils.Util;
+import fr.inria.verveine.extractor.java.visitors.SummarizingClassesAbstractVisitor;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.*;
+
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import java.security.MessageDigest;
-
-import eu.synectique.verveine.core.gen.famix.*;
-import eu.synectique.verveine.core.gen.famix.ParameterizedType;
-import fr.inria.verveine.extractor.java.utils.StubBinding;
-
-import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.jdt.core.dom.*;
-
-import fr.inria.verveine.extractor.java.JavaDictionary;
-import fr.inria.verveine.extractor.java.visitors.SummarizingClassesAbstractVisitor;
-import fr.inria.verveine.extractor.java.VerveineJParser.anchorOptions;
-import fr.inria.verveine.extractor.java.utils.Util;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 
 /**
  * AST Visitor that defines all the (Famix) entities of interest
@@ -239,7 +236,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 
 		if (fmx != null) {
 			fmx.setIsStub(false);
-			fmx.setBodyHash(this.computeHashForMethodBody(node));
+			// fmx.setBodyHash(this.computeHashForMethodBody(node));
 
 			this.context.pushMethod(fmx);
 
@@ -535,7 +532,7 @@ public class VisitorClassMethodDef extends SummarizingClassesAbstractVisitor {
 			}
 		}
 		if (ctxtMeth == null) {
-			ctxtMeth = dico.ensureFamixMethod((IMethodBinding) null, JavaDictionary.INIT_BLOCK_NAME, new ArrayList<String>(), context.topType(),
+			ctxtMeth = dico.ensureFamixMethod(null, JavaDictionary.INIT_BLOCK_NAME, new ArrayList<String>(), context.topType(),
 					/*modifiers*/JavaDictionary.UNKNOWN_MODIFIERS, /*persistIt*/!classSummary);
 			ctxtMeth.setIsStub(false);
 			// initialization block doesn't have return type so no need to create a reference from its class to the "declared return type" class when classSummary is TRUE

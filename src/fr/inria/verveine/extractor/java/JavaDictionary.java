@@ -1,43 +1,19 @@
 package fr.inria.verveine.extractor.java;
 
-import java.util.*;
-
-import org.eclipse.jdt.core.dom.*;
-
 import ch.akuhn.fame.Repository;
 import eu.synectique.verveine.core.Dictionary;
-import eu.synectique.verveine.core.gen.famix.AbstractFileAnchor;
-import eu.synectique.verveine.core.gen.famix.Access;
-import eu.synectique.verveine.core.gen.famix.AnnotationType;
-import eu.synectique.verveine.core.gen.famix.AnnotationTypeAttribute;
-import eu.synectique.verveine.core.gen.famix.Association;
-import eu.synectique.verveine.core.gen.famix.Attribute;
-import eu.synectique.verveine.core.gen.famix.BehaviouralEntity;
 import eu.synectique.verveine.core.gen.famix.Class;
 import eu.synectique.verveine.core.gen.famix.Comment;
-import eu.synectique.verveine.core.gen.famix.ContainerEntity;
 import eu.synectique.verveine.core.gen.famix.Enum;
-import eu.synectique.verveine.core.gen.famix.EnumValue;
-import eu.synectique.verveine.core.gen.famix.ImplicitVariable;
-import eu.synectique.verveine.core.gen.famix.IndexedFileAnchor;
-import eu.synectique.verveine.core.gen.famix.Inheritance;
-import eu.synectique.verveine.core.gen.famix.Invocation;
-import eu.synectique.verveine.core.gen.famix.LocalVariable;
-import eu.synectique.verveine.core.gen.famix.Method;
-import eu.synectique.verveine.core.gen.famix.NamedEntity;
-import eu.synectique.verveine.core.gen.famix.Namespace;
-import eu.synectique.verveine.core.gen.famix.Parameter;
-import eu.synectique.verveine.core.gen.famix.ParameterType;
-import eu.synectique.verveine.core.gen.famix.ParameterizableClass;
 import eu.synectique.verveine.core.gen.famix.ParameterizedType;
 import eu.synectique.verveine.core.gen.famix.PrimitiveType;
-import eu.synectique.verveine.core.gen.famix.Reference;
-import eu.synectique.verveine.core.gen.famix.SourceAnchor;
-import eu.synectique.verveine.core.gen.famix.SourcedEntity;
-import eu.synectique.verveine.core.gen.famix.StructuralEntity;
 import eu.synectique.verveine.core.gen.famix.Type;
-import eu.synectique.verveine.core.gen.famix.UnknownVariable;
+import eu.synectique.verveine.core.gen.famix.*;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.*;
+
+import java.util.*;
 
 /**
  * A {@link eu.synectique.verveine.core.Dictionary} specialized for Java
@@ -60,14 +36,16 @@ public class JavaDictionary extends Dictionary<IBinding> {
 
 	public static final int UNKNOWN_MODIFIERS = 0;
 	public static final String MODIFIER_ABSTRACT = "abstract";
-	public static final String MODIFIER_PUBLIC   = "public";
-	public static final String MODIFIER_PRIVATE  = "private";
-	public static final String MODIFIER_PROTECTED= "protected";
-	public static final String MODIFIER_FINAL    = "final";
-	public static final String MODIFIER_STATIC    = "static";
+	public static final String MODIFIER_PUBLIC = "public";
+	public static final String MODIFIER_PRIVATE = "private";
+	public static final String MODIFIER_PROTECTED = "protected";
+	public static final String MODIFIER_PACKAGE = "package";
+	public static final String MODIFIER_FINAL = "final";
+	public static final String MODIFIER_STATIC = "static";
 	public static final String MODIFIER_TRANSIENT = "transient";
 	public static final String MODIFIER_VOLATILE = "volatile";
 	public static final String MODIFIER_SYNCHRONIZED = "synchronized";
+
 	/**
 	 * Result of utility methods for checking matching between two entities
 	 */
@@ -376,17 +354,24 @@ public class JavaDictionary extends Dictionary<IBinding> {
 	}
 
 	public Type asClass(Type excepFmx) {
-	    Class tmp = null;
+		Class tmp = null;
+		IBinding key = null;
 		try {
-		ContainerEntity owner = excepFmx.getBelongsTo();
-		owner.getTypes().remove(excepFmx);
-		super.removeEntity(excepFmx);
+			ContainerEntity owner = excepFmx.getBelongsTo();
+			owner.getTypes().remove(excepFmx);
+			super.removeEntity(excepFmx);
 
-		tmp = super.ensureFamixClass(entityToKey.get(excepFmx), excepFmx.getName(), owner, /*alwaysPersist?*/true);
+			key = entityToKey.get(excepFmx);
+
+			tmp = super.ensureFamixClass(entityToKey.get(excepFmx), excepFmx.getName(), owner, /*alwaysPersist?*/true);
 
 			tmp.addMethods(excepFmx.getMethods());
 			tmp.addAttributes(excepFmx.getAttributes());
-			tmp.addModifiers(excepFmx.getModifiers());
+
+			if (key != null) {
+				setClassModifiers(tmp, key.getModifiers());
+			}
+
 			tmp.addSuperInheritances(excepFmx.getSuperInheritances());
 			tmp.addSubInheritances(excepFmx.getSubInheritances());
 			tmp.setSourceAnchor(excepFmx.getSourceAnchor());
@@ -1439,7 +1424,7 @@ public class JavaDictionary extends Dictionary<IBinding> {
 				fmx.setKind(CONSTRUCTOR_KIND_MARKER);
 		}
 
-		if ( (fmx != null) && delayedRetTyp ) {
+		if ((fmx != null) && delayedRetTyp) {
 			int retTypModifiers = (retTypBnd != null) ? retTypBnd.getModifiers() : UNKNOWN_MODIFIERS;
 			fmx.setDeclaredType(this.ensureFamixType(retTypBnd, /*name*/null, /*owner*/fmx, /*ctxt*/owner, retTypModifiers, /*alwaysPersist?*/persistIt));
 		}
@@ -1447,81 +1432,54 @@ public class JavaDictionary extends Dictionary<IBinding> {
 		return fmx;
 	}
 
-	/** Sets the modifiers (abstract, public, ...) of a FamixNamedEntity
+	/**
+	 * Sets the visibility of a FamixNamedEntity
+	 *
+	 * @param fmx -- the FamixNamedEntity
+	 * @param mod -- a description of the modifiers as understood by org.eclipse.jdt.core.dom.Modifier
+	 */
+	public void setVisibility(NamedEntity fmx, int mod) {
+		if (Modifier.isPublic(mod)) {
+			fmx.setVisibility(MODIFIER_PUBLIC);
+		} else if (Modifier.isPrivate(mod)) {
+			fmx.setVisibility(MODIFIER_PRIVATE);
+		} else if (Modifier.isProtected(mod)) {
+			fmx.setVisibility(MODIFIER_PROTECTED);
+		} else {
+			fmx.setVisibility(MODIFIER_PACKAGE);
+		}
+	}
+
+	/**
+	 * Sets the modifiers (abstract, public, ...) of a FamixNamedEntity
+	 *
 	 * @param fmx -- the FamixNamedEntity
 	 * @param mod -- a description of the modifiers as understood by org.eclipse.jdt.core.dom.Modifier
 	 */
 	public void setNamedEntityModifiers(NamedEntity fmx, int mod) {
-		if (Modifier.isAbstract(mod)) {
-			fmx.addModifiers(MODIFIER_ABSTRACT);
-			// fmx.setIsAbstract(new Boolean(Modifier.isAbstract(mod)));
-		}
-		if (Modifier.isPublic(mod)) {
-			fmx.addModifiers(MODIFIER_PUBLIC);
-			// fmx.setIsPublic(new Boolean(Modifier.isPublic(mod)));
-		}
-		if (Modifier.isPrivate(mod)) {
-			fmx.addModifiers(MODIFIER_PRIVATE);
-			// fmx.setIsPrivate(new Boolean(Modifier.isPrivate(mod)));
-		}
-		if (Modifier.isProtected(mod)) {
-			fmx.addModifiers(MODIFIER_PROTECTED);
-			// fmx.setIsProtected(new Boolean(Modifier.isProtected(mod)));
-		}
-		if (Modifier.isFinal(mod)) {
-			fmx.addModifiers(MODIFIER_FINAL);
-			// fmx.setIsFinal(new Boolean(Modifier.isFinal(mod)));
-		}
+		fmx.setIsAbstract(Modifier.isAbstract(mod));
+		fmx.setIsFinal(Modifier.isFinal(mod));
+		fmx.setIsClassSide(Modifier.isStatic(mod));
+		setVisibility(fmx, mod);
     }
 
     public void setAttributeModifiers(Attribute fmx, int mod) {
-        setNamedEntityModifiers(fmx, mod);
-        fmx.setHasClassScope(Modifier.isStatic(mod));
-        if (Modifier.isTransient(mod)) {
-			fmx.addModifiers(MODIFIER_TRANSIENT);
-		}
-		if (Modifier.isStatic(mod)){
-			fmx.addModifiers(MODIFIER_STATIC);
-		}
-		if (Modifier.isSynchronized(mod)){
-			fmx.addModifiers(MODIFIER_SYNCHRONIZED);
-		}
-		if (Modifier.isVolatile(mod)){
-			fmx.addModifiers(MODIFIER_VOLATILE);
-		}
+		setNamedEntityModifiers(fmx, mod);
+		fmx.setHasClassScope(Modifier.isStatic(mod));
+		fmx.setIsVolatile(Modifier.isVolatile(mod));
+		fmx.setIsTransient(Modifier.isTransient(mod));
     }
 
     public void setMethodModifiers(Method fmx, int mod) {
-        setNamedEntityModifiers(fmx, mod);
-        if (fmx.getIsAbstract()) {
-            // don't know why there must be two different ways to mark abstract classes !!! But this is a pain!
-            fmx.addModifiers(MODIFIER_ABSTRACT);
-        }
-        fmx.setHasClassScope(Modifier.isStatic(mod));
-		if (Modifier.isTransient(mod)) {
-			fmx.addModifiers(MODIFIER_TRANSIENT);
-		}
-		if (Modifier.isStatic(mod)){
-			fmx.addModifiers(MODIFIER_STATIC);
-		}
-		if (Modifier.isSynchronized(mod)){
-			fmx.addModifiers(MODIFIER_SYNCHRONIZED);
-		}
-		if (Modifier.isVolatile(mod)){
-			fmx.addModifiers(MODIFIER_VOLATILE);
-		}
-
+		setNamedEntityModifiers(fmx, mod);
+		fmx.setHasClassScope(Modifier.isStatic(mod));
+		fmx.setIsSynchronized(Modifier.isSynchronized(mod));
     }
 
-    public void setClassModifiers(Class fmx, int mod) {
-        setNamedEntityModifiers(fmx, mod);
-        if (fmx.getIsAbstract()) {
-            // don't know why there must be two different ways to mark abstract classes !!! But this is a pain!
-            fmx.addModifiers(MODIFIER_ABSTRACT);
-        }
-		if (Modifier.isStatic(mod)) {
-			fmx.addModifiers(MODIFIER_STATIC);
-		}
+	public void setClassModifiers(Class fmx, int mod) {
+		setNamedEntityModifiers(fmx, mod);
+		// fmx.setHasClassScope(Modifier.isStatic(mod)); Should exist, but not currently in FAMIX Compatibility metamodel
+
     }
 
 	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, Type owner, boolean persistIt) {
@@ -1973,7 +1931,7 @@ public class JavaDictionary extends Dictionary<IBinding> {
 		eu.synectique.verveine.core.gen.famix.Class fmx = ensureFamixUniqEntity(eu.synectique.verveine.core.gen.famix.Class.class, null, ARRAYS_NAME);
 		if (fmx != null) {
 			ensureFamixInheritance(ensureFamixClassObject(null), fmx, /*prev*/null);
-			fmx.setContainer( ensureFamixNamespaceDefault());
+			fmx.setContainer(ensureFamixNamespaceDefault());
 
 			// may be not needed anymore now that we use modifiers
 			/*fmx.setIsAbstract(Boolean.FALSE);
@@ -1981,7 +1939,7 @@ public class JavaDictionary extends Dictionary<IBinding> {
 			fmx.setIsInterface(Boolean.FALSE);
 			fmx.setIsPrivate(Boolean.FALSE);
 			fmx.setIsProtected(Boolean.FALSE);*/
-			fmx.addModifiers("public");
+			fmx.setVisibility(MODIFIER_PUBLIC);
 		}
 
 		return fmx;
