@@ -4,6 +4,7 @@
 
 ![Deprecated](https://img.shields.io/badge/Deprecated-FAMIX%20Compatibility-red)
 
+(Note that this version of VerveineJ is for Moose8 which is deprecated)
 
 A Java to MSE parser
 
