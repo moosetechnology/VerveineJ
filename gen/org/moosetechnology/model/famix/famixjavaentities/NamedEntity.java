@@ -95,6 +95,12 @@ public class NamedEntity extends SourcedEntity implements TEntityMetaLevelDepend
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "name")
     public String getName() {
         return name;

@@ -10,15 +10,15 @@ import ch.akuhn.fame.FameProperty;
 @FameDescription("TRelativeSourceAnchor")
 public interface TRelativeSourceAnchor extends TSourceAnchor {
 
-        @FameProperty(name = "relatedAnchor")
-    public TSourceAnchor getRelatedAnchor();
-
-    public void setRelatedAnchor(TSourceAnchor relatedAnchor);
-
-    @FameProperty(name = "startPos")
+        @FameProperty(name = "startPos")
     public Number getStartPos();
 
     public void setStartPos(Number startPos);
+
+    @FameProperty(name = "relatedAnchor")
+    public TSourceAnchor getRelatedAnchor();
+
+    public void setRelatedAnchor(TSourceAnchor relatedAnchor);
 
     @FameProperty(name = "endPos")
     public Number getEndPos();

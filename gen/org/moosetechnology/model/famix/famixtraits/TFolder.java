@@ -31,11 +31,11 @@ public interface TFolder extends TFileSystemEntity {
 
     public boolean hasChildrenFileSystemEntities();
 
-    @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
-    public Number getTotalNumberOfLinesOfText();
-
     @FameProperty(name = "numberOfFolders", derived = true)
     public Number getNumberOfFolders();
+
+    @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
+    public Number getTotalNumberOfLinesOfText();
 
     @FameProperty(name = "numberOfEmptyLinesOfText", derived = true)
     public Number getNumberOfEmptyLinesOfText();

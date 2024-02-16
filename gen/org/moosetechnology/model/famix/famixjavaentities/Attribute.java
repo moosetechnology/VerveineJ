@@ -38,15 +38,15 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     
     private Collection<TAccess> incomingAccesses; 
 
-    private Boolean isClassSide = false;
+    private Boolean isClassSide;
     
-    private Boolean isFinal = false;
+    private Boolean isFinal;
     
-    private Boolean isStub = false;
+    private Boolean isStub;
     
-    private Boolean isTransient = false;
+    private Boolean isTransient;
     
-    private Boolean isVolatile = false;
+    private Boolean isVolatile;
     
     private String name;
     
@@ -245,24 +245,34 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
         this.isFinal = isFinal;
     }
     
-    @FameProperty(name = "getIsPackageVisibility", derived = true)
+    @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
-        return this.visibility.equals("package");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isPrivate", derived = true)
     public Boolean getIsPrivate() {
-        return this.visibility.equals("private");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
-        return this.visibility.equals("protected");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        return this.visibility.equals("public"); 
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isStub")

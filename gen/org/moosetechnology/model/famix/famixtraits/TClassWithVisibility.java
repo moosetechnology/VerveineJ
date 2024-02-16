@@ -8,7 +8,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TClassWithVisibility")
-public interface TClassWithVisibility extends TEntityMetaLevelDependency, TSourceEntity, TReferenceable, TType, TPackageable, THasVisibility, TNamedEntity, TWithAttributes, TWithMethods, TInvocationsReceiver, TWithInheritances, TClass, TWithComments {
+public interface TClassWithVisibility extends TNamedEntity, TInvocationsReceiver, TWithAttributes, TWithMethods, TSourceEntity, TEntityMetaLevelDependency, TReferenceable, TWithInheritances, TType, THasVisibility, TClass, TWithComments {
 
     
 

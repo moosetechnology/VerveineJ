@@ -11,13 +11,13 @@ import org.moosetechnology.model.famix.famixreplication.Replica;
 @FameDescription("TSourceEntity")
 public interface TSourceEntity  {
 
-        @FameProperty(name = "isStub")
+        @FameProperty(name = "duplicationRate", derived = true)
+    public Number getDuplicationRate();
+
+    @FameProperty(name = "isStub")
     public Boolean getIsStub();
 
     public void setIsStub(Boolean isStub);
-
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate();
 
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)
     public TSourceAnchor getSourceAnchor();

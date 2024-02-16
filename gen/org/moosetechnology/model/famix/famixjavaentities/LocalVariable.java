@@ -220,6 +220,12 @@ public class LocalVariable extends NamedEntity implements TAccessible, TCanBeFin
         this.isFinal = isFinal;
     }
     
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "isStub")
     public Boolean getIsStub() {
         return isStub;

@@ -9,7 +9,7 @@ import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependenc
 
 @FamePackage("Famix-Traits")
 @FameDescription("TInheritance")
-public interface TInheritance extends TAssociationMetaLevelDependency, TAssociation, TSourceEntity {
+public interface TInheritance extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
 
         @FameProperty(name = "superclass", opposite = "subInheritances")
     public TWithInheritances getSuperclass();

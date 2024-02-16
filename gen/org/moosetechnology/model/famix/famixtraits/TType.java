@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TType")
-public interface TType extends TEntityMetaLevelDependency, TNamedEntity, TSourceEntity, TReferenceable {
+public interface TType extends TNamedEntity, TSourceEntity, TEntityMetaLevelDependency, TReferenceable {
 
         @FameProperty(name = "typeContainer", opposite = "types", container = true)
     public TWithTypes getTypeContainer();

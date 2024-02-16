@@ -7,7 +7,7 @@ import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
 import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
-import org.moosetechnology.model.famix.famixtraits.TConcretisation;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 
@@ -18,12 +18,12 @@ public class ParametricClass extends Class implements TParametricEntity {
 
     private Collection<TConcreteParameterType> concreteParameters; 
 
-    private Collection<TConcretisation> concretisations; 
+    private Collection<TConcretization> concretizations; 
 
-    private TConcretisation genericEntity;
-    
     private Collection<TGenericParameterType> genericParameters; 
 
+    private TConcretization genericization;
+    
 
 
     @FameProperty(name = "concreteParameters", opposite = "concreteEntities")
@@ -76,71 +76,57 @@ public class ParametricClass extends Class implements TParametricEntity {
         return !getConcreteParameters().isEmpty();
     }
 
-    @FameProperty(name = "concretisations", opposite = "genericEntity", derived = true)
-    public Collection<TConcretisation> getConcretisations() {
-        if (concretisations == null) {
-            concretisations = new MultivalueSet<TConcretisation>() {
+    @FameProperty(name = "concretizations", opposite = "genericEntity", derived = true)
+    public Collection<TConcretization> getConcretizations() {
+        if (concretizations == null) {
+            concretizations = new MultivalueSet<TConcretization>() {
                 @Override
-                protected void clearOpposite(TConcretisation e) {
+                protected void clearOpposite(TConcretization e) {
                     e.setGenericEntity(null);
                 }
                 @Override
-                protected void setOpposite(TConcretisation e) {
+                protected void setOpposite(TConcretization e) {
                     e.setGenericEntity(ParametricClass.this);
                 }
             };
         }
-        return concretisations;
+        return concretizations;
     }
     
-    public void setConcretisations(Collection<? extends TConcretisation> concretisations) {
-        this.getConcretisations().clear();
-        this.getConcretisations().addAll(concretisations);
+    public void setConcretizations(Collection<? extends TConcretization> concretizations) {
+        this.getConcretizations().clear();
+        this.getConcretizations().addAll(concretizations);
     }                    
     
         
-    public void addConcretisations(TConcretisation one) {
-        this.getConcretisations().add(one);
+    public void addConcretizations(TConcretization one) {
+        this.getConcretizations().add(one);
     }   
     
-    public void addConcretisations(TConcretisation one, TConcretisation... many) {
-        this.getConcretisations().add(one);
-        for (TConcretisation each : many)
-            this.getConcretisations().add(each);
+    public void addConcretizations(TConcretization one, TConcretization... many) {
+        this.getConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getConcretizations().add(each);
     }   
     
-    public void addConcretisations(Iterable<? extends TConcretisation> many) {
-        for (TConcretisation each : many)
-            this.getConcretisations().add(each);
+    public void addConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getConcretizations().add(each);
     }   
                 
-    public void addConcretisations(TConcretisation[] many) {
-        for (TConcretisation each : many)
-            this.getConcretisations().add(each);
+    public void addConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getConcretizations().add(each);
     }
     
-    public int numberOfConcretisations() {
-        return getConcretisations().size();
+    public int numberOfConcretizations() {
+        return getConcretizations().size();
     }
 
-    public boolean hasConcretisations() {
-        return !getConcretisations().isEmpty();
+    public boolean hasConcretizations() {
+        return !getConcretizations().isEmpty();
     }
 
-    @FameProperty(name = "genericEntity", opposite = "concreteEntity", derived = true)
-    public TConcretisation getGenericEntity() {
-        return genericEntity;
-    }
-
-    public void setGenericEntity(TConcretisation genericEntity) {
-        if (this.genericEntity == null ? genericEntity != null : !this.genericEntity.equals(genericEntity)) {
-            TConcretisation old_genericEntity = this.genericEntity;
-            this.genericEntity = genericEntity;
-            if (old_genericEntity != null) old_genericEntity.setConcreteEntity(null);
-            if (genericEntity != null) genericEntity.setConcreteEntity(this);
-        }
-    }
-    
     @FameProperty(name = "genericParameters", opposite = "genericEntities")
     public Collection<TGenericParameterType> getGenericParameters() {
         if (genericParameters == null) {
@@ -191,6 +177,20 @@ public class ParametricClass extends Class implements TParametricEntity {
         return !getGenericParameters().isEmpty();
     }
 
+    @FameProperty(name = "genericization", opposite = "concreteEntity", derived = true)
+    public TConcretization getGenericization() {
+        return genericization;
+    }
+
+    public void setGenericization(TConcretization genericization) {
+        if (this.genericization == null ? genericization != null : !this.genericization.equals(genericization)) {
+            TConcretization old_genericization = this.genericization;
+            this.genericization = genericization;
+            if (old_genericization != null) old_genericization.setConcreteEntity(null);
+            if (genericization != null) genericization.setConcreteEntity(this);
+        }
+    }
+    
 
 
 }

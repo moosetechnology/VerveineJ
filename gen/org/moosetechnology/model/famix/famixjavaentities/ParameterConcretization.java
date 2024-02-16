@@ -4,25 +4,30 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
+import ch.akuhn.fame.internal.MultivalueSet;
+import java.util.*;
 import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
+import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
+import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
-@FameDescription("Access")
-public class Access extends Entity implements TAccess, TAssociation, TAssociationMetaLevelDependency, TSourceEntity {
+@FameDescription("ParameterConcretization")
+public class ParameterConcretization extends Entity implements TAssociation, TAssociationMetaLevelDependency, TParameterConcretization, TSourceEntity {
 
-    private TWithAccesses accessor;
+    private TConcreteParameterType concreteParameter;
+    
+    private Collection<TConcretization> concretizations; 
+
+    private TGenericParameterType genericParameter;
     
     private Boolean isStub;
-    
-    private Boolean isWrite;
     
     private TAssociation next;
     
@@ -32,25 +37,73 @@ public class Access extends Entity implements TAccess, TAssociation, TAssociatio
     
     private TSourceAnchor sourceAnchor;
     
-    private TAccessible variable;
-    
 
 
-    @FameProperty(name = "accessor", opposite = "accesses")
-    public TWithAccesses getAccessor() {
-        return accessor;
+    @FameProperty(name = "concreteParameter", opposite = "generics")
+    public TConcreteParameterType getConcreteParameter() {
+        return concreteParameter;
     }
 
-    public void setAccessor(TWithAccesses accessor) {
-        if (this.accessor != null) {
-            if (this.accessor.equals(accessor)) return;
-            this.accessor.getAccesses().remove(this);
+    public void setConcreteParameter(TConcreteParameterType concreteParameter) {
+        if (this.concreteParameter != null) {
+            if (this.concreteParameter.equals(concreteParameter)) return;
+            this.concreteParameter.getGenerics().remove(this);
         }
-        this.accessor = accessor;
-        if (accessor == null) return;
-        accessor.getAccesses().add(this);
+        this.concreteParameter = concreteParameter;
+        if (concreteParameter == null) return;
+        concreteParameter.getGenerics().add(this);
     }
     
+    @FameProperty(name = "concretizations", opposite = "parameterConcretizations")
+    public Collection<TConcretization> getConcretizations() {
+        if (concretizations == null) {
+            concretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.getParameterConcretizations().remove(ParameterConcretization.this);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.getParameterConcretizations().add(ParameterConcretization.this);
+                }
+            };
+        }
+        return concretizations;
+    }
+    
+    public void setConcretizations(Collection<? extends TConcretization> concretizations) {
+        this.getConcretizations().clear();
+        this.getConcretizations().addAll(concretizations);
+    }
+    
+    public void addConcretizations(TConcretization one) {
+        this.getConcretizations().add(one);
+    }   
+    
+    public void addConcretizations(TConcretization one, TConcretization... many) {
+        this.getConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getConcretizations().add(each);
+    }   
+    
+    public void addConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getConcretizations().add(each);
+    }   
+                
+    public void addConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getConcretizations().add(each);
+    }
+    
+    public int numberOfConcretizations() {
+        return getConcretizations().size();
+    }
+
+    public boolean hasConcretizations() {
+        return !getConcretizations().isEmpty();
+    }
+
     @FameProperty(name = "containsReplicas", derived = true)
     public Boolean getContainsReplicas() {
         // TODO: this is a derived property, implement this method manually.
@@ -63,16 +116,19 @@ public class Access extends Entity implements TAccess, TAssociation, TAssociatio
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "isRead", derived = true)
-    public Boolean getIsRead() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+    @FameProperty(name = "genericParameter", opposite = "concretizations")
+    public TGenericParameterType getGenericParameter() {
+        return genericParameter;
     }
-    
-    @FameProperty(name = "isReadWriteUnknown", derived = true)
-    public Boolean getIsReadWriteUnknown() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+
+    public void setGenericParameter(TGenericParameterType genericParameter) {
+        if (this.genericParameter != null) {
+            if (this.genericParameter.equals(genericParameter)) return;
+            this.genericParameter.getConcretizations().remove(this);
+        }
+        this.genericParameter = genericParameter;
+        if (genericParameter == null) return;
+        genericParameter.getConcretizations().add(this);
     }
     
     @FameProperty(name = "isStub")
@@ -82,15 +138,6 @@ public class Access extends Entity implements TAccess, TAssociation, TAssociatio
 
     public void setIsStub(Boolean isStub) {
         this.isStub = isStub;
-    }
-    
-    @FameProperty(name = "isWrite")
-    public Boolean getIsWrite() {
-        return isWrite;
-    }
-
-    public void setIsWrite(Boolean isWrite) {
-        this.isWrite = isWrite;
     }
     
     @FameProperty(name = "next", opposite = "previous", derived = true)
@@ -160,21 +207,6 @@ public class Access extends Entity implements TAccess, TAssociation, TAssociatio
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "variable", opposite = "incomingAccesses")
-    public TAccessible getVariable() {
-        return variable;
-    }
-
-    public void setVariable(TAccessible variable) {
-        if (this.variable != null) {
-            if (this.variable.equals(variable)) return;
-            this.variable.getIncomingAccesses().remove(this);
-        }
-        this.variable = variable;
-        if (variable == null) return;
-        variable.getIncomingAccesses().add(this);
     }
     
 

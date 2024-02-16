@@ -9,7 +9,7 @@ import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependenc
 
 @FamePackage("Famix-Traits")
 @FameDescription("TImport")
-public interface TImport extends TAssociationMetaLevelDependency, TAssociation, TSourceEntity {
+public interface TImport extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
 
         @FameProperty(name = "importedEntity", opposite = "incomingImports")
     public TImportable getImportedEntity();

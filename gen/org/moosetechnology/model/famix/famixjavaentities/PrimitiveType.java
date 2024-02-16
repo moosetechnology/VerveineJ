@@ -120,6 +120,12 @@ public class PrimitiveType extends Type implements TEntityMetaLevelDependency, T
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "isStub")
     public Boolean getIsStub() {
         return isStub;

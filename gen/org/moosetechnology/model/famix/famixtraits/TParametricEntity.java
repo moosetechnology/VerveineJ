@@ -11,27 +11,22 @@ import java.util.*;
 @FameDescription("TParametricEntity")
 public interface TParametricEntity  {
 
-        @FameProperty(name = "concretisations", opposite = "genericEntity", derived = true)
-    public Collection<TConcretisation> getConcretisations();
+        @FameProperty(name = "concretizations", opposite = "genericEntity", derived = true)
+    public Collection<TConcretization> getConcretizations();
 
-    public void setConcretisations(Collection<? extends TConcretisation> concretisations);
+    public void setConcretizations(Collection<? extends TConcretization> concretizations);
 
-    public void addConcretisations(TConcretisation one);
+    public void addConcretizations(TConcretization one);
 
-    public void addConcretisations(TConcretisation one, TConcretisation... many);
+    public void addConcretizations(TConcretization one, TConcretization... many);
 
-    public void addConcretisations(Iterable<? extends TConcretisation> many);
+    public void addConcretizations(Iterable<? extends TConcretization> many);
 
-    public void addConcretisations(TConcretisation[] many);
+    public void addConcretizations(TConcretization[] many);
 
-    public int numberOfConcretisations();
+    public int numberOfConcretizations();
 
-    public boolean hasConcretisations();
-
-    @FameProperty(name = "genericEntity", opposite = "concreteEntity", derived = true)
-    public TConcretisation getGenericEntity();
-
-    public void setGenericEntity(TConcretisation genericEntity);
+    public boolean hasConcretizations();
 
     @FameProperty(name = "genericParameters", opposite = "genericEntities")
     public Collection<TGenericParameterType> getGenericParameters();
@@ -66,6 +61,11 @@ public interface TParametricEntity  {
     public int numberOfConcreteParameters();
 
     public boolean hasConcreteParameters();
+
+    @FameProperty(name = "genericization", opposite = "concreteEntity", derived = true)
+    public TConcretization getGenericization();
+
+    public void setGenericization(TConcretization genericization);
 
 
 
