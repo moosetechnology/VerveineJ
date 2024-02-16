@@ -38,15 +38,15 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     
     private Collection<TAccess> incomingAccesses; 
 
-    private Boolean isClassSide;
+    private Boolean isClassSide = false;
     
-    private Boolean isFinal;
+    private Boolean isFinal = false;
     
-    private Boolean isStub;
-    
-    private Boolean isTransient;
-    
-    private Boolean isVolatile;
+    private Boolean isStub = false;
+
+    private Boolean isTransient = false;
+
+    private Boolean isVolatile = false;
     
     private String name;
     
@@ -247,26 +247,22 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     
     @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("package");
     }
     
     @FameProperty(name = "isPrivate", derived = true)
     public Boolean getIsPrivate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("private");
     }
-    
+
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("protected");
     }
-    
+
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("public");
     }
     
     @FameProperty(name = "isRoot", derived = true)

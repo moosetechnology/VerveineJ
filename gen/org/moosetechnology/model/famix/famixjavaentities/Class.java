@@ -415,26 +415,22 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
     
     @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("package");
     }
-    
+
     @FameProperty(name = "isPrivate", derived = true)
     public Boolean getIsPrivate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("private");
     }
-    
+
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("protected");
     }
-    
+
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("public");
     }
     
     @FameProperty(name = "isRoot", derived = true)

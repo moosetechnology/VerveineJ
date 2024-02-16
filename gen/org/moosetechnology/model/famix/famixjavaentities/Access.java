@@ -65,8 +65,7 @@ public class Access extends Entity implements TAccess, TAssociation, TAssociatio
     
     @FameProperty(name = "isRead", derived = true)
     public Boolean getIsRead() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return !this.isWrite;
     }
     
     @FameProperty(name = "isReadWriteUnknown", derived = true)
