@@ -131,7 +131,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		ArrayList<Interface> withoutConcret = new ArrayList<Interface>();
 		for(Interface inter: entitiesOfType(Interface.class)) {
 			if(inter instanceof ParametricInterface) {
-				if(((ParametricInterface)inter).getGenericEntity() == null) {
+				if(((ParametricInterface)inter).getGenericization() == null) {
 					genericInters.add(inter);
 					withoutConcret.add(inter);
 				}
