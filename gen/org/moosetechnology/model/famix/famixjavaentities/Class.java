@@ -45,7 +45,9 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 @FameDescription("Class")
 public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCanBeFinal, TCanImplement, TClass, TClassMetrics, TEntityMetaLevelDependency, THasVisibility, TImportable, TInvocationsReceiver, TLCOMMetrics, TNamedEntity, TPackageable, TReferenceable, TSourceEntity, TType, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
 
-    private Collection<TAttribute> attributes; 
+	private Boolean isInterface;
+	
+	private Collection<TAttribute> attributes; 
 
     private Collection<TComment> comments; 
 
@@ -409,6 +411,15 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         return isFinal;
     }
 
+    @FameProperty(name = "isInterface")
+    public Boolean getIsInterface() {
+        return isInterface;
+    }
+
+    public void setIsInterface(Boolean isInterface) {
+        this.isInterface = isInterface;
+    }
+    
     public void setIsFinal(Boolean isFinal) {
         this.isFinal = isFinal;
     }
