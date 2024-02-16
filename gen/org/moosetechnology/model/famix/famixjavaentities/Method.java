@@ -845,7 +845,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "numberOfStatements", derived = true)
+    @FameProperty(name = "numberOfStatements")
     public Number getNumberOfStatements() {
         return this.numberOfStatements;
     }
