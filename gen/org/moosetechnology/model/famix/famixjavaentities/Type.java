@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretisation;
+import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TReferenceable;
@@ -29,7 +29,7 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
 
     private Collection<TParametricEntity> concreteEntities; 
 
-    private Collection<TParameterConcretisation> generics; 
+    private Collection<TParameterConcretization> generics; 
 
     private Collection<TReference> incomingReferences; 
 
@@ -146,15 +146,15 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
     }
     
     @FameProperty(name = "generics", opposite = "concreteParameter", derived = true)
-    public Collection<TParameterConcretisation> getGenerics() {
+    public Collection<TParameterConcretization> getGenerics() {
         if (generics == null) {
-            generics = new MultivalueSet<TParameterConcretisation>() {
+            generics = new MultivalueSet<TParameterConcretization>() {
                 @Override
-                protected void clearOpposite(TParameterConcretisation e) {
+                protected void clearOpposite(TParameterConcretization e) {
                     e.setConcreteParameter(null);
                 }
                 @Override
-                protected void setOpposite(TParameterConcretisation e) {
+                protected void setOpposite(TParameterConcretization e) {
                     e.setConcreteParameter(Type.this);
                 }
             };
@@ -162,29 +162,29 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
         return generics;
     }
     
-    public void setGenerics(Collection<? extends TParameterConcretisation> generics) {
+    public void setGenerics(Collection<? extends TParameterConcretization> generics) {
         this.getGenerics().clear();
         this.getGenerics().addAll(generics);
     }                    
     
         
-    public void addGenerics(TParameterConcretisation one) {
+    public void addGenerics(TParameterConcretization one) {
         this.getGenerics().add(one);
     }   
     
-    public void addGenerics(TParameterConcretisation one, TParameterConcretisation... many) {
+    public void addGenerics(TParameterConcretization one, TParameterConcretization... many) {
         this.getGenerics().add(one);
-        for (TParameterConcretisation each : many)
+        for (TParameterConcretization each : many)
             this.getGenerics().add(each);
     }   
     
-    public void addGenerics(Iterable<? extends TParameterConcretisation> many) {
-        for (TParameterConcretisation each : many)
+    public void addGenerics(Iterable<? extends TParameterConcretization> many) {
+        for (TParameterConcretization each : many)
             this.getGenerics().add(each);
     }   
                 
-    public void addGenerics(TParameterConcretisation[] many) {
-        for (TParameterConcretisation each : many)
+    public void addGenerics(TParameterConcretization[] many) {
+        for (TParameterConcretization each : many)
             this.getGenerics().add(each);
     }
     
@@ -249,6 +249,12 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
 
     @FameProperty(name = "isDead", derived = true)
     public Boolean getIsDead() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }

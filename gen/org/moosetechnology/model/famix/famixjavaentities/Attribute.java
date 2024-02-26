@@ -43,9 +43,9 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     private Boolean isFinal = false;
     
     private Boolean isStub = false;
-    
+
     private Boolean isTransient = false;
-    
+
     private Boolean isVolatile = false;
     
     private String name;
@@ -245,7 +245,7 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
         this.isFinal = isFinal;
     }
     
-    @FameProperty(name = "getIsPackageVisibility", derived = true)
+    @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
         return this.visibility.equals("package");
     }
@@ -254,15 +254,21 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     public Boolean getIsPrivate() {
         return this.visibility.equals("private");
     }
-    
+
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
         return this.visibility.equals("protected");
     }
-    
+
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        return this.visibility.equals("public"); 
+        return this.visibility.equals("public");
+    }
+    
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isStub")

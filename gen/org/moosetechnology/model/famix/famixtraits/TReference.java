@@ -9,7 +9,7 @@ import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependenc
 
 @FamePackage("Famix-Traits")
 @FameDescription("TReference")
-public interface TReference extends TAssociationMetaLevelDependency, TAssociation, TSourceEntity {
+public interface TReference extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
 
         @FameProperty(name = "referredType", opposite = "incomingReferences")
     public TReferenceable getReferredType();

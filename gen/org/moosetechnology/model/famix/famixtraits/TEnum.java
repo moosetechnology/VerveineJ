@@ -8,7 +8,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TEnum")
-public interface TEnum extends TNamedEntity, TEntityMetaLevelDependency, TSourceEntity, TReferenceable, TType, TWithEnumValues {
+public interface TEnum extends TNamedEntity, TType, TSourceEntity, TEntityMetaLevelDependency, TReferenceable, TWithEnumValues {
 
     
 

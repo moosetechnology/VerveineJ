@@ -69,9 +69,9 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     private Collection<TInvocation> incomingInvocations; 
 
     private Boolean isAbstract = false;
-    
+
     private Boolean isClassSide = false;
-    
+
     private Boolean isFinal = false;
     
     private Boolean isStub;
@@ -101,9 +101,9 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     private Collection<TThrowable> thrownExceptions; 
 
     private String visibility;
+    
+    private boolean isDead;
 
-	private boolean isDead;
-	
 	private Number numberOfStatements;
     
 
@@ -144,8 +144,8 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "isOverriden", derived = true)
-    public Boolean getIsOverriden() {
+    @FameProperty(name = "isOverridden", derived = true)
+    public Boolean getIsOverridden() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
@@ -635,12 +635,12 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "isDead", derived = true)
     public Boolean getIsDead() {
-       return this.isDead;
-    }
-    
-    public void setIsDead(boolean b) {
-		this.isDead = b;
-	}
+        return this.isDead;
+     }
+
+     public void setIsDead(boolean b) {
+ 		this.isDead = b;
+ 	}
     
     @FameProperty(name = "isFinal")
     public Boolean getIsFinal() {
@@ -657,9 +657,8 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    
     @FameProperty(name = "isPackageVisibility", derived = true)
-    public Boolean getIsPackageVisibility() {
+   public Boolean getIsPackageVisibility() {
         return this.visibility.equals("package");
     }
 
@@ -676,6 +675,12 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
         return this.visibility.equals("public");
+    }
+    
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isSetter", derived = true)
@@ -1110,8 +1115,6 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     public void setVisibility(String visibility) {
         this.visibility = visibility;
     }
-
-	
     
 
 

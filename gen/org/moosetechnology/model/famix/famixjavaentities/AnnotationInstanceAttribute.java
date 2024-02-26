@@ -56,6 +56,12 @@ public class AnnotationInstanceAttribute extends SourcedEntity implements TAnnot
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "numberOfChildren", derived = true)
     public Number getNumberOfChildren() {
         // TODO: this is a derived property, implement this method manually.

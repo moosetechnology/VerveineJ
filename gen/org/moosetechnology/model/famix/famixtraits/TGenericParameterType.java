@@ -10,24 +10,24 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TGenericParameterType")
-public interface TGenericParameterType extends TNamedEntity, TEntityMetaLevelDependency, TSourceEntity, TReferenceable, TType {
+public interface TGenericParameterType extends TNamedEntity, TType, TSourceEntity, TEntityMetaLevelDependency, TReferenceable {
 
-        @FameProperty(name = "concretisations", opposite = "genericParameter", derived = true)
-    public Collection<TParameterConcretisation> getConcretisations();
+        @FameProperty(name = "concretizations", opposite = "genericParameter", derived = true)
+    public Collection<TParameterConcretization> getConcretizations();
 
-    public void setConcretisations(Collection<? extends TParameterConcretisation> concretisations);
+    public void setConcretizations(Collection<? extends TParameterConcretization> concretizations);
 
-    public void addConcretisations(TParameterConcretisation one);
+    public void addConcretizations(TParameterConcretization one);
 
-    public void addConcretisations(TParameterConcretisation one, TParameterConcretisation... many);
+    public void addConcretizations(TParameterConcretization one, TParameterConcretization... many);
 
-    public void addConcretisations(Iterable<? extends TParameterConcretisation> many);
+    public void addConcretizations(Iterable<? extends TParameterConcretization> many);
 
-    public void addConcretisations(TParameterConcretisation[] many);
+    public void addConcretizations(TParameterConcretization[] many);
 
-    public int numberOfConcretisations();
+    public int numberOfConcretizations();
 
-    public boolean hasConcretisations();
+    public boolean hasConcretizations();
 
     @FameProperty(name = "genericEntities", opposite = "genericParameters", derived = true)
     public Collection<TParametricEntity> getGenericEntities();

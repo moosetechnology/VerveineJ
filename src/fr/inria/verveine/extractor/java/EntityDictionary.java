@@ -28,7 +28,7 @@ import org.moosetechnology.model.famix.famixjavaentities.AnnotationTypeAttribute
 import org.moosetechnology.model.famix.famixjavaentities.Attribute;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Comment;
-import org.moosetechnology.model.famix.famixjavaentities.Concretisation;
+import org.moosetechnology.model.famix.famixjavaentities.Concretization;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Entity;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
@@ -45,7 +45,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParameterConcretisation;
+import org.moosetechnology.model.famix.famixjavaentities.ParameterConcretization;
 import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
 //import org.moosetechnology.model.famix.famixjavaentities.ParameterizableClass;
 //import org.moosetechnology.model.famix.famixjavaentities.ParameterizableInterface;
@@ -66,7 +66,7 @@ import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TCanImplement;
 import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
-import org.moosetechnology.model.famix.famixtraits.TConcretisation;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
@@ -75,7 +75,7 @@ import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretisation;
+import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
@@ -483,44 +483,44 @@ public class EntityDictionary {
 	
 	
 	/**
-	 * Returns a Famix Concretisation relationship between two Famix ParametricClass creating it if needed
+	 * Returns a Famix Concretization relationship between two Famix ParametricClass creating it if needed
 	 * @param generic -- the generic class
 	 * @param concrete -- the concrete class
-	 * @return the Concretisation relationship
+	 * @return the Concretization relationship
 	 */
-	public Concretisation ensureFamixConcretisation(TParametricEntity generic, TParametricEntity concrete) {
+	public Concretization ensureFamixConcretization(TParametricEntity generic, TParametricEntity concrete) {
 		if ( (generic == null) || (concrete == null) ) {
 			return null;
 		}
 
-//		for (TConcretisation c : (generic).getConcretisations()) {
+//		for (TConcretization c : (generic).getConcretizations()) {
 //			if (c.getConcreteEntity() == concrete) {
-//				return (Concretisation) c;
+//				return (Concretization) c;
 //			}
 //		}
-		Concretisation concretisation = new Concretisation();
-		concretisation.setGenericEntity(generic);
-		concretisation.setConcreteEntity(concrete);
-		famixRepoAdd(concretisation);
-		return concretisation;
+		Concretization Concretization = new Concretization();
+		Concretization.setGenericEntity(generic);
+		Concretization.setConcreteEntity(concrete);
+		famixRepoAdd(Concretization);
+		return Concretization;
 	}
 	
 	/**
-	 * Returns a Famix Concretisation relationship between two Famix ParametricClass creating it if needed
+	 * Returns a Famix Concretization relationship between two Famix ParametricClass creating it if needed
 	 * @param generic -- the generic class
 	 * @param concrete -- the concrete class
-	 * @return the Concretisation relationship
+	 * @return the Concretization relationship
 	 */
-	public ParameterConcretisation ensureFamixParameterConcretisation(TGenericParameterType generic, TConcreteParameterType concrete) {
+	public ParameterConcretization ensureFamixParameterConcretization(TGenericParameterType generic, TConcreteParameterType concrete) {
 		if ( (generic == null) || (concrete == null) ) {
 			return null;
 		}
 		
-		ParameterConcretisation concretisation = new ParameterConcretisation();
-		concretisation.setGenericParameter(generic);
-		concretisation.setConcreteParameter(concrete);
-		famixRepoAdd(concretisation);
-		return concretisation;
+		ParameterConcretization Concretization = new ParameterConcretization();
+		Concretization.setGenericParameter(generic);
+		Concretization.setConcreteParameter(concrete);
+		famixRepoAdd(Concretization);
+		return Concretization;
 	}
 	
 	
@@ -1506,7 +1506,7 @@ public class EntityDictionary {
 			}else {
 				fmx =(ParametricClass) ensureFamixParametricClass(bnd, name, owner);
 			}
-			TConcretisation concretisation = this.ensureFamixConcretisation(generic, fmx); 
+			TConcretization Concretization = this.ensureFamixConcretization(generic, fmx); 
 			
 			ITypeBinding[] genericTypeArguments = bnd.getTypeDeclaration().getTypeParameters();
 			ITypeBinding[] typeArguments = bnd.getTypeArguments();
@@ -1515,17 +1515,17 @@ public class EntityDictionary {
 				if(tp.isClass() || tp.isInterface() || tp.isWildcardType()) {
 					Type fmxParam = (Type) this.ensureFamixType(tp);
 					ParameterType genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
-					TParameterConcretisation pconcretisation = this.ensureFamixParameterConcretisation(genType, fmxParam);
-					concretisation.addParameterConcretisations(pconcretisation);
-					genType.addConcretisations(pconcretisation);
+					TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
+					Concretization.addParameterConcretizations(pConcretization);
+					genType.addConcretizations(pConcretization);
 					fmxParam.addConcreteEntities(fmx);
 				}else if(tp.isTypeVariable()) {
 					if(tp.getDeclaringMethod() != null || (tp.getDeclaringClass() != null && tp.getDeclaringClass() != bnd.getErasure())){
 						ParameterType fmxParam = this.ensureFamixParameterType(tp, null, null);
 						ParameterType genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
-						TParameterConcretisation pconcretisation = this.ensureFamixParameterConcretisation(genType, fmxParam);
-						concretisation.addParameterConcretisations(pconcretisation);
-						genType.addConcretisations(pconcretisation);
+						TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
+						Concretization.addParameterConcretizations(pConcretization);
+						genType.addConcretizations(pConcretization);
 						fmxParam.addConcreteEntities(fmx);
 					}else {
 						ParameterType fmxParam = this.ensureFamixParameterType(tp, null, null);
@@ -1535,7 +1535,7 @@ public class EntityDictionary {
 				}
 			}
 			
-			fmx.setGenericEntity(concretisation);
+			fmx.setGenericization(Concretization);
 		}
 
 		// --------------- stub: same as ParameterizableClass
@@ -2534,7 +2534,7 @@ public class EntityDictionary {
 			}else if(bnd != null && bnd.isParameterizedMethod()) {
 				fmx = ensureFamixEntity(ParametricMethod.class, bnd, name);
 				ParametricMethod generic = (ParametricMethod)this.ensureFamixMethod(bnd.getMethodDeclaration());
-				TConcretisation concretisation = this.ensureFamixConcretisation((TParametricEntity)generic, (TParametricEntity)fmx);
+				TConcretization Concretization = this.ensureFamixConcretization((TParametricEntity)generic, (TParametricEntity)fmx);
 		
 				
 				
@@ -2543,13 +2543,13 @@ public class EntityDictionary {
 				for(int i = 0; i<genericTypeArguments.length; i++) {
 					Type fmxParam = (Type)this.ensureFamixType(fmxTypeParams[i]);
 					ParameterType genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
-					TParameterConcretisation pConcretisation = this.ensureFamixParameterConcretisation(genType, fmxParam);
+					TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
 					
-					concretisation.addParameterConcretisations(pConcretisation);
-					genType.addConcretisations(pConcretisation);
+					Concretization.addParameterConcretizations(pConcretization);
+					genType.addConcretizations(pConcretization);
 					fmxParam.addConcreteEntities((TParametricEntity)fmx);
 				}
-				((ParametricMethod)fmx).setGenericEntity(concretisation);
+				((ParametricMethod)fmx).setGenericization(Concretization);
 			}else{
 				fmx = ensureFamixEntity(Method.class, bnd, name);
 			}
@@ -2667,7 +2667,7 @@ public class EntityDictionary {
 				if (classBnd != null) {
 					TType tmpOwn = ensureFamixType(classBnd);
 					if (tmpOwn instanceof ParametricClass) {
-						owner = (TWithAttributes) ((ParametricClass) tmpOwn).getGenericEntity();
+						owner = (TWithAttributes) ((ParametricClass) tmpOwn).getGenericization();
 					} else {
 						owner = (TWithAttributes) tmpOwn;
 					}

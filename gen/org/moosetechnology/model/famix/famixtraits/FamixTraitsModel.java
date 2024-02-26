@@ -43,7 +43,7 @@ public class FamixTraitsModel {
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TComment.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TCompilationUnit.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TConcreteParameterType.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TConcretisation.class);
+		metamodel.with(org.moosetechnology.model.famix.famixtraits.TConcretization.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TDefinedInModule.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TDereferencedInvocation.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TEnum.class);
@@ -85,7 +85,7 @@ public class FamixTraitsModel {
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TPackage.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TPackageable.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TParameter.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TParameterConcretisation.class);
+		metamodel.with(org.moosetechnology.model.famix.famixtraits.TParameterConcretization.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TParametricEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TPreprocessorDefine.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TPreprocessorIfdef.class);

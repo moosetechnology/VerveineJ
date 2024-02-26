@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
 import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretisation;
+import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TReferenceable;
@@ -31,7 +31,7 @@ public class ParameterType extends Type implements TEntityMetaLevelDependency, T
 
     private Collection<TWithExceptions> catchingEntities; 
 
-    private Collection<TParameterConcretisation> concretisations; 
+    private Collection<TParameterConcretization> concretizations; 
 
     private TType declaredType;
     
@@ -111,55 +111,55 @@ public class ParameterType extends Type implements TEntityMetaLevelDependency, T
         return !getCatchingEntities().isEmpty();
     }
 
-    @FameProperty(name = "concretisations", opposite = "genericParameter", derived = true)
-    public Collection<TParameterConcretisation> getConcretisations() {
-        if (concretisations == null) {
-            concretisations = new MultivalueSet<TParameterConcretisation>() {
+    @FameProperty(name = "concretizations", opposite = "genericParameter", derived = true)
+    public Collection<TParameterConcretization> getConcretizations() {
+        if (concretizations == null) {
+            concretizations = new MultivalueSet<TParameterConcretization>() {
                 @Override
-                protected void clearOpposite(TParameterConcretisation e) {
+                protected void clearOpposite(TParameterConcretization e) {
                     e.setGenericParameter(null);
                 }
                 @Override
-                protected void setOpposite(TParameterConcretisation e) {
+                protected void setOpposite(TParameterConcretization e) {
                     e.setGenericParameter(ParameterType.this);
                 }
             };
         }
-        return concretisations;
+        return concretizations;
     }
     
-    public void setConcretisations(Collection<? extends TParameterConcretisation> concretisations) {
-        this.getConcretisations().clear();
-        this.getConcretisations().addAll(concretisations);
+    public void setConcretizations(Collection<? extends TParameterConcretization> concretizations) {
+        this.getConcretizations().clear();
+        this.getConcretizations().addAll(concretizations);
     }                    
     
         
-    public void addConcretisations(TParameterConcretisation one) {
-        this.getConcretisations().add(one);
+    public void addConcretizations(TParameterConcretization one) {
+        this.getConcretizations().add(one);
     }   
     
-    public void addConcretisations(TParameterConcretisation one, TParameterConcretisation... many) {
-        this.getConcretisations().add(one);
-        for (TParameterConcretisation each : many)
-            this.getConcretisations().add(each);
+    public void addConcretizations(TParameterConcretization one, TParameterConcretization... many) {
+        this.getConcretizations().add(one);
+        for (TParameterConcretization each : many)
+            this.getConcretizations().add(each);
     }   
     
-    public void addConcretisations(Iterable<? extends TParameterConcretisation> many) {
-        for (TParameterConcretisation each : many)
-            this.getConcretisations().add(each);
+    public void addConcretizations(Iterable<? extends TParameterConcretization> many) {
+        for (TParameterConcretization each : many)
+            this.getConcretizations().add(each);
     }   
                 
-    public void addConcretisations(TParameterConcretisation[] many) {
-        for (TParameterConcretisation each : many)
-            this.getConcretisations().add(each);
+    public void addConcretizations(TParameterConcretization[] many) {
+        for (TParameterConcretization each : many)
+            this.getConcretizations().add(each);
     }
     
-    public int numberOfConcretisations() {
-        return getConcretisations().size();
+    public int numberOfConcretizations() {
+        return getConcretizations().size();
     }
 
-    public boolean hasConcretisations() {
-        return !getConcretisations().isEmpty();
+    public boolean hasConcretizations() {
+        return !getConcretizations().isEmpty();
     }
 
     @FameProperty(name = "containsReplicas", derived = true)
@@ -360,6 +360,12 @@ public class ParameterType extends Type implements TEntityMetaLevelDependency, T
 
     @FameProperty(name = "isDead", derived = true)
     public Boolean getIsDead() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }

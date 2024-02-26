@@ -8,24 +8,21 @@ import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
 import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
-import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
-import org.moosetechnology.model.famix.famixtraits.TConcretisation;
-import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretisation;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
+import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
-@FameDescription("ParameterConcretisation")
-public class ParameterConcretisation extends Entity implements TAssociation, TAssociationMetaLevelDependency, TParameterConcretisation, TSourceEntity {
+@FameDescription("Concretization")
+public class Concretization extends Entity implements TAssociation, TAssociationMetaLevelDependency, TConcretization, TSourceEntity {
 
-    private TConcreteParameterType concreteParameter;
+    private TParametricEntity concreteEntity;
     
-    private Collection<TConcretisation> concretisations; 
-
-    private TGenericParameterType genericParameter;
+    private TParametricEntity genericEntity;
     
     private Boolean isStub;
     
@@ -33,77 +30,28 @@ public class ParameterConcretisation extends Entity implements TAssociation, TAs
     
     private Number numberOfLinesOfCode;
     
+    private Collection<TParameterConcretization> parameterConcretizations; 
+
     private TAssociation previous;
     
     private TSourceAnchor sourceAnchor;
     
 
 
-    @FameProperty(name = "concreteParameter", opposite = "generics")
-    public TConcreteParameterType getConcreteParameter() {
-        return concreteParameter;
+    @FameProperty(name = "concreteEntity", opposite = "genericization")
+    public TParametricEntity getConcreteEntity() {
+        return concreteEntity;
     }
 
-    public void setConcreteParameter(TConcreteParameterType concreteParameter) {
-        if (this.concreteParameter != null) {
-            if (this.concreteParameter.equals(concreteParameter)) return;
-            this.concreteParameter.getGenerics().remove(this);
+    public void setConcreteEntity(TParametricEntity concreteEntity) {
+        if (this.concreteEntity == null ? concreteEntity != null : !this.concreteEntity.equals(concreteEntity)) {
+            TParametricEntity old_concreteEntity = this.concreteEntity;
+            this.concreteEntity = concreteEntity;
+            if (old_concreteEntity != null) old_concreteEntity.setGenericization(null);
+            if (concreteEntity != null) concreteEntity.setGenericization(this);
         }
-        this.concreteParameter = concreteParameter;
-        if (concreteParameter == null) return;
-        concreteParameter.getGenerics().add(this);
     }
     
-    @FameProperty(name = "concretisations", opposite = "parameterConcretisations")
-    public Collection<TConcretisation> getConcretisations() {
-        if (concretisations == null) {
-            concretisations = new MultivalueSet<TConcretisation>() {
-                @Override
-                protected void clearOpposite(TConcretisation e) {
-                    e.getParameterConcretisations().remove(ParameterConcretisation.this);
-                }
-                @Override
-                protected void setOpposite(TConcretisation e) {
-                    e.getParameterConcretisations().add(ParameterConcretisation.this);
-                }
-            };
-        }
-        return concretisations;
-    }
-    
-    public void setConcretisations(Collection<? extends TConcretisation> concretisations) {
-        this.getConcretisations().clear();
-        this.getConcretisations().addAll(concretisations);
-    }
-    
-    public void addConcretisations(TConcretisation one) {
-        this.getConcretisations().add(one);
-    }   
-    
-    public void addConcretisations(TConcretisation one, TConcretisation... many) {
-        this.getConcretisations().add(one);
-        for (TConcretisation each : many)
-            this.getConcretisations().add(each);
-    }   
-    
-    public void addConcretisations(Iterable<? extends TConcretisation> many) {
-        for (TConcretisation each : many)
-            this.getConcretisations().add(each);
-    }   
-                
-    public void addConcretisations(TConcretisation[] many) {
-        for (TConcretisation each : many)
-            this.getConcretisations().add(each);
-    }
-    
-    public int numberOfConcretisations() {
-        return getConcretisations().size();
-    }
-
-    public boolean hasConcretisations() {
-        return !getConcretisations().isEmpty();
-    }
-
     @FameProperty(name = "containsReplicas", derived = true)
     public Boolean getContainsReplicas() {
         // TODO: this is a derived property, implement this method manually.
@@ -116,19 +64,19 @@ public class ParameterConcretisation extends Entity implements TAssociation, TAs
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "genericParameter", opposite = "concretisations")
-    public TGenericParameterType getGenericParameter() {
-        return genericParameter;
+    @FameProperty(name = "genericEntity", opposite = "concretizations")
+    public TParametricEntity getGenericEntity() {
+        return genericEntity;
     }
 
-    public void setGenericParameter(TGenericParameterType genericParameter) {
-        if (this.genericParameter != null) {
-            if (this.genericParameter.equals(genericParameter)) return;
-            this.genericParameter.getConcretisations().remove(this);
+    public void setGenericEntity(TParametricEntity genericEntity) {
+        if (this.genericEntity != null) {
+            if (this.genericEntity.equals(genericEntity)) return;
+            this.genericEntity.getConcretizations().remove(this);
         }
-        this.genericParameter = genericParameter;
-        if (genericParameter == null) return;
-        genericParameter.getConcretisations().add(this);
+        this.genericEntity = genericEntity;
+        if (genericEntity == null) return;
+        genericEntity.getConcretizations().add(this);
     }
     
     @FameProperty(name = "isStub")
@@ -169,6 +117,56 @@ public class ParameterConcretisation extends Entity implements TAssociation, TAs
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "parameterConcretizations", opposite = "concretizations", derived = true)
+    public Collection<TParameterConcretization> getParameterConcretizations() {
+        if (parameterConcretizations == null) {
+            parameterConcretizations = new MultivalueSet<TParameterConcretization>() {
+                @Override
+                protected void clearOpposite(TParameterConcretization e) {
+                    e.getConcretizations().remove(Concretization.this);
+                }
+                @Override
+                protected void setOpposite(TParameterConcretization e) {
+                    e.getConcretizations().add(Concretization.this);
+                }
+            };
+        }
+        return parameterConcretizations;
+    }
+    
+    public void setParameterConcretizations(Collection<? extends TParameterConcretization> parameterConcretizations) {
+        this.getParameterConcretizations().clear();
+        this.getParameterConcretizations().addAll(parameterConcretizations);
+    }
+    
+    public void addParameterConcretizations(TParameterConcretization one) {
+        this.getParameterConcretizations().add(one);
+    }   
+    
+    public void addParameterConcretizations(TParameterConcretization one, TParameterConcretization... many) {
+        this.getParameterConcretizations().add(one);
+        for (TParameterConcretization each : many)
+            this.getParameterConcretizations().add(each);
+    }   
+    
+    public void addParameterConcretizations(Iterable<? extends TParameterConcretization> many) {
+        for (TParameterConcretization each : many)
+            this.getParameterConcretizations().add(each);
+    }   
+                
+    public void addParameterConcretizations(TParameterConcretization[] many) {
+        for (TParameterConcretization each : many)
+            this.getParameterConcretizations().add(each);
+    }
+    
+    public int numberOfParameterConcretizations() {
+        return getParameterConcretizations().size();
+    }
+
+    public boolean hasParameterConcretizations() {
+        return !getParameterConcretizations().isEmpty();
+    }
+
     @FameProperty(name = "previous", opposite = "next")
     public TAssociation getPrevious() {
         return previous;

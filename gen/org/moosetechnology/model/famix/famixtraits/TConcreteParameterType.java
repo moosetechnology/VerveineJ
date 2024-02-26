@@ -10,20 +10,20 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TConcreteParameterType")
-public interface TConcreteParameterType extends TNamedEntity, TEntityMetaLevelDependency, TSourceEntity, TReferenceable, TType {
+public interface TConcreteParameterType extends TNamedEntity, TType, TSourceEntity, TEntityMetaLevelDependency, TReferenceable {
 
         @FameProperty(name = "generics", opposite = "concreteParameter", derived = true)
-    public Collection<TParameterConcretisation> getGenerics();
+    public Collection<TParameterConcretization> getGenerics();
 
-    public void setGenerics(Collection<? extends TParameterConcretisation> generics);
+    public void setGenerics(Collection<? extends TParameterConcretization> generics);
 
-    public void addGenerics(TParameterConcretisation one);
+    public void addGenerics(TParameterConcretization one);
 
-    public void addGenerics(TParameterConcretisation one, TParameterConcretisation... many);
+    public void addGenerics(TParameterConcretization one, TParameterConcretization... many);
 
-    public void addGenerics(Iterable<? extends TParameterConcretisation> many);
+    public void addGenerics(Iterable<? extends TParameterConcretization> many);
 
-    public void addGenerics(TParameterConcretisation[] many);
+    public void addGenerics(TParameterConcretization[] many);
 
     public int numberOfGenerics();
 

@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependenc
 
 @FamePackage("Famix-Traits")
 @FameDescription("TInvocation")
-public interface TInvocation extends TAssociationMetaLevelDependency, TAssociation, TSourceEntity, THasSignature {
+public interface TInvocation extends THasSignature, TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
 
         @FameProperty(name = "candidates", opposite = "incomingInvocations")
     public Collection<TInvocable> getCandidates();

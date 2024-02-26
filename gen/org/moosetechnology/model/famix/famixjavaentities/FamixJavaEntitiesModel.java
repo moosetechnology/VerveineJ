@@ -20,7 +20,7 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Attribute.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Class.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Comment.class);
-		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Concretisation.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Concretization.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ContainerEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Entity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Enum.class);
@@ -39,7 +39,7 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.NamedEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Package.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Parameter.class);
-		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParameterConcretisation.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParameterConcretization.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParameterType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricClass.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricInterface.class);

@@ -20,8 +20,6 @@ import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TPackage;
-import org.moosetechnology.model.famix.famixtraits.TPackageable;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TReferenceable;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
@@ -41,7 +39,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Exception")
-public class Exception extends Class implements TCanImplement, TClass, TEntityMetaLevelDependency, TException, THasVisibility, TInvocationsReceiver, TNamedEntity, TPackageable, TReferenceable, TSourceEntity, TThrowable, TType, TWithAnnotationInstances, TWithAttributes, TWithComments, TWithInheritances, TWithMethods, TWithTypes {
+public class Exception extends Class implements TCanImplement, TClass, TEntityMetaLevelDependency, TException, THasVisibility, TInvocationsReceiver, TNamedEntity, TReferenceable, TSourceEntity, TThrowable, TType, TWithAnnotationInstances, TWithAttributes, TWithComments, TWithInheritances, TWithMethods, TWithTypes {
 
     private Collection<TAnnotationInstance> annotationInstances; 
 
@@ -64,8 +62,6 @@ public class Exception extends Class implements TCanImplement, TClass, TEntityMe
     private String name;
     
     private Number numberOfLinesOfCode;
-    
-    private TPackage parentPackage;
     
     private Collection<TInvocation> receivingInvocations; 
 
@@ -508,6 +504,12 @@ public class Exception extends Class implements TCanImplement, TClass, TEntityMe
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "isRoot", derived = true)
+    public Boolean getIsRoot() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "isStub")
     public Boolean getIsStub() {
         return isStub;
@@ -674,21 +676,6 @@ public class Exception extends Class implements TCanImplement, TClass, TEntityMe
     public Number getNumberOfSubclasses() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "parentPackage", opposite = "childEntities", container = true)
-    public TPackage getParentPackage() {
-        return parentPackage;
-    }
-
-    public void setParentPackage(TPackage parentPackage) {
-        if (this.parentPackage != null) {
-            if (this.parentPackage.equals(parentPackage)) return;
-            this.parentPackage.getChildEntities().remove(this);
-        }
-        this.parentPackage = parentPackage;
-        if (parentPackage == null) return;
-        parentPackage.getChildEntities().add(this);
     }
     
     @FameProperty(name = "receivingInvocations", opposite = "receiver", derived = true)
