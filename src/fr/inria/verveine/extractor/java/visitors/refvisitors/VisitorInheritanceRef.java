@@ -149,27 +149,22 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 	protected void ensureInheritances(ITypeBinding bnd, TWithInheritances fmx) {
 		TAssociation lastInheritance = null;
 
-		// --------------- superclass
-		if (!bnd.isInterface()) {
-			ITypeBinding supbnd = bnd.getSuperclass();
-			TType t;
-			if (supbnd != null) {
-				t = dico.ensureFamixType(supbnd);
-			} else {
-				t = dico.ensureFamixClassObject(null);
-			}
-			lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance);
-
-			for (ITypeBinding intbnd : bnd.getInterfaces()) {
-				TImplementable interfac = (TImplementable) dico.ensureFamixType(intbnd, /*ctxt*/(TWithTypes) context.top());
-				// If "implementor" is an interface, then relation is an inheritance
-				if(fmx instanceof Interface ) {
-					dico.ensureFamixInheritance((Interface)interfac, fmx, lastInheritance);
-				} else {
-					dico.ensureFamixImplementation(interfac, (TCanImplement)fmx, lastInheritance);
-				}
-			}
+		if (bnd.isInterface()) {
+			return;
 		}
+
+		// --------------- superclass
+		ITypeBinding supbnd = bnd.getSuperclass();
+		TType t;
+		if (supbnd != null) {
+			t = dico.ensureFamixType(supbnd);
+		} else {
+			t = dico.ensureFamixClassObject(null);
+		}
+		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance);
+
+		// --------------- interfaces
+		dico.ensureImplementedInterfaces(bnd, (TType)fmx, null, lastInheritance);
 	}
 
 }

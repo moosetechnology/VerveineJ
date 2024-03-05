@@ -165,8 +165,6 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
     	assertNotNull(Concretization);
     	
     	assertEquals(1, Concretization.getParameterConcretizations().size());
-    	
-    	
     }
     
     @Test
@@ -179,8 +177,6 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
     	
     	ParametricMethod concreteMethod = ((ParametricMethod)firstElt(parametricMethod.getConcretizations()).getConcreteEntity());
     	assertEquals(1, concreteMethod.getIncomingInvocations().size());
-    	
-    	
     }
     
     @Test
@@ -191,21 +187,33 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
     	assertNotNull(classC);
     	ParametricClass classD = (ParametricClass)genericEntityNamed("D");
     	assertNotNull(classD);
+    	ParametricClass conCOfB = (ParametricClass)firstElt(classB.getSuperInheritances()).getSuperclass();
+    	assertNotNull(conCOfB);
+    	ParametricClass conCOfD = (ParametricClass)firstElt(classD.getSuperInheritances()).getSuperclass();
+    	assertNotNull(conCOfD);
+
     	assertEquals(2, classC.getConcretizations().size());
     	
+    	// C<K, String> or C<E, String>
     	for (TConcretization c : classC.getConcretizations()) {
     		int i= 0;
     		ParametricClass pc = (ParametricClass)c.getConcreteEntity();
     		assertEquals(2, pc.getConcreteParameters().size());
+    		// [K, String] or [E, String]
     		for(TConcreteParameterType p : pc.getConcreteParameters()) {
     			ParameterType genParam = (ParameterType) firstElt(p.getGenerics()).getGenericParameter(); 			
     			assertNotNull(genParam);
     			
     			if(i==0) {
-    				assertEquals(firstElt(genParam.getGenericEntities()), classC);
-    				ParametricClass genClass = (ParametricClass)firstElt(((ParameterType)p).getGenericEntities());
     				assertEquals(ParameterType.class, genParam.getClass());
+    				assertEquals(firstElt(genParam.getGenericEntities()), classC);
+    				// p is a concrete parameter of C but also a generic parameter of B or D
+    				ParametricClass genClass = (ParametricClass)firstElt(((ParameterType)p).getGenericEntities());
     				assertTrue(genClass == classB || genClass == classD);
+    				
+    				ParametricClass conClass = (ParametricClass)firstElt(((ParameterType)p).getConcreteEntities());
+    				assertTrue(conClass == conCOfB || conClass == conCOfD);
+    				
     			}else {
     				assertEquals(Class.class, p.getClass());
     			}
