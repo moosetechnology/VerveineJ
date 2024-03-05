@@ -468,6 +468,7 @@ public class EntityDictionary {
 		}
 
 		for (TInheritance i : (sup).getSubInheritances()) {
+			
 			if (i.getSubclass() == sub) {
 				return (Inheritance) i;
 			}
@@ -550,7 +551,7 @@ public class EntityDictionary {
 		return implementation;
 	}
 
-	protected void ensureImplementedInterfaces(ITypeBinding bnd, TType fmx, TWithTypes owner, TAssociation lastAssociation) {
+	public void ensureImplementedInterfaces(ITypeBinding bnd, TType fmx, TWithTypes owner, TAssociation lastAssociation) {
 		for (ITypeBinding intbnd : bnd.getInterfaces()) {
 			TType superTyp;
 			if(intbnd.isClass()){
@@ -1506,25 +1507,37 @@ public class EntityDictionary {
 			}else {
 				fmx =(ParametricClass) ensureFamixParametricClass(bnd, name, owner);
 			}
-			TConcretization Concretization = this.ensureFamixConcretization(generic, fmx); 
+			TConcretization concretization = this.ensureFamixConcretization(generic, fmx); 
 			
 			ITypeBinding[] genericTypeArguments = bnd.getTypeDeclaration().getTypeParameters();
 			ITypeBinding[] typeArguments = bnd.getTypeArguments();
-			for (int i=0; typeArguments.length>i; i++) {
+			
+			
+			for (int i=0; i<typeArguments.length; i++) {
 				ITypeBinding tp = typeArguments[i];
+				ParameterType genType;
+				// Sometimes we don't have genericTypeArguments because the generic is stub 
+				if(genericTypeArguments.length == typeArguments.length) {
+					genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
+				}else {
+					genType = this.ensureFamixParameterType(null, "Stub"+(i+1), generic); 
+					genType.addGenericEntities(generic);
+				}
+				
 				if(tp.isClass() || tp.isInterface() || tp.isWildcardType()) {
 					Type fmxParam = (Type) this.ensureFamixType(tp);
-					ParameterType genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
+					
+					
 					TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
-					Concretization.addParameterConcretizations(pConcretization);
+					concretization.addParameterConcretizations(pConcretization);
 					genType.addConcretizations(pConcretization);
 					fmxParam.addConcreteEntities(fmx);
 				}else if(tp.isTypeVariable()) {
 					if(tp.getDeclaringMethod() != null || (tp.getDeclaringClass() != null && tp.getDeclaringClass() != bnd.getErasure())){
 						ParameterType fmxParam = this.ensureFamixParameterType(tp, null, null);
-						ParameterType genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
+						
 						TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
-						Concretization.addParameterConcretizations(pConcretization);
+						concretization.addParameterConcretizations(pConcretization);
 						genType.addConcretizations(pConcretization);
 						fmxParam.addConcreteEntities(fmx);
 					}else {
@@ -1535,7 +1548,7 @@ public class EntityDictionary {
 				}
 			}
 			
-			fmx.setGenericization(Concretization);
+			fmx.setGenericization(concretization);
 		}
 
 		// --------------- stub: same as ParameterizableClass
@@ -1887,7 +1900,7 @@ public class EntityDictionary {
 		// --------------- create
 		if (fmx == null) {
 			fmx = ensureFamixEntity(ParameterType.class, bnd, name);
-			if(bnd.getSuperclass() != null) {
+			if(bnd != null && bnd.getSuperclass() != null) {
 				Inheritance inh = new Inheritance();
 				ITypeBinding supBnd = bnd.getSuperclass();
 				TWithInheritances superClass = (TWithInheritances)ensureFamixType(supBnd);
@@ -1895,7 +1908,7 @@ public class EntityDictionary {
 				inh.setSubclass(fmx);
 				fmx.addSuperInheritances(inh);
 			}
-			if(bnd.getInterfaces().length > 0) {
+			if(bnd != null && bnd.getInterfaces().length > 0) {
 				for(ITypeBinding intbnd: bnd.getInterfaces()) {
 					Inheritance inh = new Inheritance();
 					TWithInheritances superClass = (TWithInheritances)ensureFamixType(intbnd);
@@ -2722,7 +2735,12 @@ public class EntityDictionary {
 		Parameter fmx = null;
 
 		// --------------- to avoid useless computations if we can
-		fmx = (Parameter)getEntityByKey(bnd);
+		try {
+			fmx = (Parameter)getEntityByKey(bnd);
+
+		}catch(Throwable e) {
+			e.printStackTrace();
+		}
 		if (fmx != null) {
 			return fmx;
 		}
