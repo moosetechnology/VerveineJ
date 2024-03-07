@@ -80,6 +80,7 @@
 	<!-- Run the JUnit Tests -->
 	<target name="junit" depends="jar">
 		<junit fork="false" haltonfailure="true" haltonerror="true">
+			<jvmarg value="-Dfile.encoding=UTF-8"/>
 			<classpath>
 				<fileset dir="${dist.dir}">
   				   <include name="*.jar"/>
@@ -101,6 +102,7 @@
 	<!-- Run the JUnit Tests even in case of errors -->
 	<target name="junit_all" depends="jar">
 		<junit printsummary="on" fork="true"  haltonfailure="off" haltonerror="off">
+			<jvmarg value="-Dfile.encoding=UTF-8"/>
 			<classpath>
 				<fileset dir="${dist.dir}">
   				   <include name="*.jar"/>
