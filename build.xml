@@ -79,7 +79,7 @@
 
 	<!-- Run the JUnit Tests -->
 	<target name="junit" depends="jar">
-		<junit fork="false" haltonfailure="true" haltonerror="true">
+		<junit fork="true" haltonfailure="true" haltonerror="true">
 			<jvmarg value="-Dfile.encoding=UTF-8"/>
 			<classpath>
 				<fileset dir="${dist.dir}">
@@ -90,7 +90,7 @@
 			<formatter type="xml"/>
 			<formatter type="plain" usefile="false" />
 			
-			 <batchtest fork="false" todir="${test.report.dir}">
+			 <batchtest fork="true" todir="${test.report.dir}">
 			     <fileset dir="${testsrc.dir}">
           		 	<include name="**/*.java"/>
 					<exclude name="**/*VerveineJTest_Basic.java"/>
