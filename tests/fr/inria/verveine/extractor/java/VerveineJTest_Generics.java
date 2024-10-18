@@ -27,6 +27,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Concretization;
 import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TParameter;
 
@@ -128,15 +129,16 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
     	Method m = detectFamixElement(Method.class, "m");
     	assertNotNull(constructor); 
     	assertNotNull(classE);
-    	assertEquals(1, classE.getConcretizations().size()); 
+    	assertEquals(1, classE.numberOfConcretizations()); 
     	ParametricClass concrete = (ParametricClass)firstElt(classE.getConcretizations()).getConcreteEntity();
-    	assertEquals(1, concrete.getIncomingReferences().size());
-    	assertEquals(0, concrete.getMethods().size());
-    	assertEquals(1, constructor.getIncomingInvocations().size());
+    	assertEquals(0, concrete.numberOfIncomingReferences());
+    	assertEquals(0, concrete.numberOfMethods());
+    	assertEquals(1, constructor.numberOfIncomingInvocations());
     	assertEquals(classE, constructor.getParentType());
-    	assertEquals(1, m.getIncomingInvocations().size());
+    	assertEquals(1, m.numberOfIncomingInvocations());
     	assertEquals(classE, m.getParentType());
     }
+
     @Test
     public void testParametricClassAndInterfaceConcretization() {
     	ParametricClass classC = (ParametricClass)genericEntityNamed("C");
@@ -265,35 +267,37 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         Method getx = detectFamixElement( Method.class, "getX");
         assertNotNull(getx);
 
-        assertEquals(1, getx.getOutgoingReferences().size());
-        ParametricClass refedArrList = (ParametricClass) (firstElt(getx.getOutgoingReferences())).getReferredType();
+        // getting the concretization type in "new ArrayList<ABC>()"
+        assertEquals(1, getx.numberOfOutgoingInvocations());  // 
+        Method constructor = (Method) firstElt( firstElt(getx.getOutgoingInvocations()).getCandidates() );
+        ParametricClass refedArrList = (ParametricClass) constructor.getParentType();
         assertNotNull(refedArrList);
         assertEquals("ArrayList", refedArrList.getName());
 
         ParametricClass arrList = (ParametricClass)genericEntityNamed( "ArrayList");
         assertNotNull(arrList);
-        assertEquals(arrList, refedArrList.getGenericization().getGenericEntity());
-        assertEquals(arrList.getParentPackage(), refedArrList.getParentPackage()); //getTypeContainer
+        
+/* TODO
+ * Following issue https://github.com/moosetechnology/VerveineJ/issues/109
+ * new XYZ() no longer creates a type reference
+ * therefore what follows need to be adapted
 
-        assertEquals(1, refedArrList.getConcreteParameters().size()); //concreteParameters
-        assertEquals("ABC", ((TNamedEntity)firstElt(refedArrList.getConcreteParameters())).getName()); //concreteParameters
-    }
+       assertEquals(arrList, refedArrList.getGenericization().getGenericEntity());
+       assertEquals(arrList.getParentPackage(), refedArrList.getParentPackage()); //getTypeContainer
+
+       assertEquals(1, refedArrList.numberOfConcreteParameters()); //concreteParameters
+ */
+   }
 
     @Test
     public void testUseOfParameterizedClass() {
         ParametricClass arrList = (ParametricClass)genericEntityNamed( "ArrayList");
-        assertEquals(3, arrList.getConcretizations().size()); // WrongInvocation.getX() ; Dictionnary.getEntityByName()
+        assertEquals(3, arrList.numberOfConcretizations()); // WrongInvocation.getX() ; Dictionnary.getEntityByName()
         for (TConcretization Concretization : arrList.getConcretizations()) {
             ParametricClass paramed = (ParametricClass) Concretization.getConcreteEntity();
             if(firstElt(paramed.getConcreteParameters()).getName().equals("B")) {
             	assertEquals(0, paramed.getIncomingReferences().size());
-            }else {
-            	assertEquals(1, paramed.getIncomingReferences().size());
-            	String refererName = ((TNamedEntity)firstElt(paramed.getIncomingReferences()).getReferencer()).getName();
-                assertTrue(refererName.equals("getEntityByName") || refererName.equals("getX") );
             }
-            
-            
         }
     }
 

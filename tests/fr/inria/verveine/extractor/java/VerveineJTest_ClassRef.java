@@ -36,7 +36,7 @@ public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
     public void testHasRefToExternalClass() {
         parse(new String[] {"-alllocals",  "test_src/class_ref"});;
         Collection<Reference> references = entitiesOfType(Reference.class);
-        assertEquals(references.size(), 2); 
+        assertEquals(references.size(), 1); 
     }
 
 }

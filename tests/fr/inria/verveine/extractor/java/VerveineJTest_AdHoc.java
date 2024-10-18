@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JFrame;
+
 import static org.junit.Assert.*;
 
 /**
@@ -146,6 +148,24 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, methOutgoingInvocations.size());
 		Invocation invok = (Invocation) firstElt(methOutgoingInvocations);
 		assertEquals("Book(\"The Monster Book of Monsters\",\"Hagrid\")", invok.getSignature());
+	}
+
+	@ Test
+	/*
+	 * issue https://github.com/moosetechnology/VerveineJ/issues/109
+	 * "creates two dependencies for one "new" instruction
+	 *   instruction: new XYZ() results in an invocation of the constructor XYZ() + a reference to the type XYZ
+	 *   The second is a mistake
+	 */
+	public void testNoReferenceOnNew() {
+		parse(new String[] {"test_src/ad_hoc/DefaultConstructor.java"});
+
+		Method aMethod = detectFamixElement(Method.class, "methodWithClassScope");
+		assertNotNull(aMethod);
+	
+		assertEquals( 3, aMethod.numberOfOutgoingInvocations());
+		/* new DefaultConstructor(); x.methodWithInstanceScope(); new JFrame("My title"); */
+		assertEquals(0, aMethod.numberOfOutgoingReferences());
 	}
 
 	@ Test

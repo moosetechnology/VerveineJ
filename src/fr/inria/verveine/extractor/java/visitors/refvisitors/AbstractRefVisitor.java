@@ -140,9 +140,9 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 
 			for (ITypeBinding targ : bnd.getTypeArguments()) {
 				TType fmxTArg = this.referedType(targ, ctxt, false);
-				if (fmxTArg != null) {
-					//((org.moosetechnology.model.famix.famixjavaentities.ParametricClass) fmxTyp).addArguments((TParameterizedTypeUser) fmxTArg);
-				}
+				/*if (fmxTArg != null) {
+					((org.moosetechnology.model.famix.famixjavaentities.ParametricClass) fmxTyp).addArguments((TParameterizedTypeUser) fmxTArg);
+				}*/
 			}
 		} else {
 			fmxTyp = dico.ensureFamixType(bnd, name, /*owner*/null, (TWithTypes) ctxt, bnd.getModifiers());
