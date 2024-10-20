@@ -36,8 +36,13 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Build with Ant
-        run: ant -noinput -buildfile build.xml docs
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Execute Gradle build
+        run: ./gradlew app:javadoc
+      
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
