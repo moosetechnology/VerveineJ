@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="order-jws_basic-ejb" default="all" basedir=".">
+
+  <!-- set global properties for this build -->
+
+  <property file="../../examples.properties"/>
+
+  <property name="ejb.jar.name" value="order_jws_basic_ejb" />
+  <property name="ejb.jar.file" value="${ejb.jar.name}.jar" />
+  <property name="ejb.deployed.name" value="orderJWSBasicEjb" />
+  <property name="example.output" value="${basedir}/output" />
+  <property name="temp.dir" value="${example.output}/tempdir" />
+  <property name="clientclasses.dir" value="${example.output}/clientclasses" />
+
+  <path id="client.class.path">
+    <pathelement path="${clientclasses.dir}"/>
+    <pathelement path="${java.class.path}"/>
+  </path>
+
+  <taskdef name="jwsc"
+    classname="weblogic.wsee.tools.anttasks.JwscTask" />
+
+  <taskdef name="clientgen"
+    classname="weblogic.wsee.tools.anttasks.ClientGenTask" />
+
+  <taskdef name="wldeploy"
+    classname="weblogic.ant.taskdefs.management.WLDeploy"/>
+
+  <target name="all" depends="clean,server,deploy,client"/>
+
+  <target name="build" depends="clean,server,client"/>
+
+  <target name="clean">
+    <delete dir="${example.output}" failonerror="false"/>
+  </target>
+
+  <target name="server">
+      <jwsc
+        sourcepath=".."
+        srcdir="."
+        destdir="${example.output}"
+        classpath="${java.class.path};.">
+        <jws file="SimpleBean.java" name="${ejb.jar.name}"/>
+      </jwsc>
+  </target>
+
+  <target name="deploy">
+    <wldeploy
+      action="deploy" name="${ejb.deployed.name}"
+      source="${example.output}/${ejb.jar.file}" user="${wls.username}"
+      password="${wls.password}" verbose="true"
+      adminurl="t3://${wls.hostname}:${wls.port}"
+      targets="${wls.server.name}"/>
+  </target>
+
+  <target name="redeploy">
+    <wldeploy
+      action="redeploy"
+      name="${ejb.deployed.name}" user="${wls.username}"
+      password="${wls.password}" verbose="true"
+      adminurl="t3://${wls.hostname}:${wls.port}"
+      targets="${wls.server.name}"/>
+  </target>
+
+  <target name="undeploy">
+    <wldeploy
+      action="undeploy"
+      name="${ejb.deployed.name}" user="${wls.username}"
+      password="${wls.password}" verbose="true"
+      adminurl="t3://${wls.hostname}:${wls.port}"
+      targets="${wls.server.name}"/>
+  </target>
+
+  <target name="client">
+    <mkdir dir="${clientclasses.dir}"/>
+    <clientgen
+      wsdl="jar:file:${example.output}/${ejb.jar.file}!/META-INF/orderService.wsdl"
+      destDir="${clientclasses.dir}"
+      packagename="store.client"/>
+
+    <echo message=".....doing clientclasses directory"/>
+    <javac
+      srcdir="${clientclasses.dir}" destdir="${clientclasses.dir}"
+      includes="**/*.java"/>
+
+   <echo message=".....doing client directory"/>
+    <javac
+      srcdir="." destdir="${clientclasses.dir}"
+      includes="client/**/*.java"/>
+  </target>
+
+  <target name="run" >
+    <java fork="yes" classname="store.client.Main"
+      failonerror="true" >
+      <classpath refid="client.class.path"/>
+      <arg line="http://${wls.hostname}:${wls.port}/store_basic_ejb/orderSimpleBean Audi opona 555 10 notes AA" />
+    </java>
+  </target>
+
+</project>
