@@ -29,7 +29,7 @@ public class VerveineJTest_ReferenceInstanceOf extends VerveineJTest_Basic {
 
     @Test
     public void testReferenceToString() {
-        parse(new String[]{"-alllocals", "-anchor", "assoc", "test_src/instanceOf"});
+        parse(new String[]{"-alllocals", "-anchor", "assoc", "src/test/resources/instanceOf"});
         Class stringClass = detectFamixElement( Class.class, "String");
         // From Calculated Expression "hello" and from TypeLiteral String.class
         assertEquals (stringClass.getIncomingReferences().size(), 2);
@@ -37,7 +37,7 @@ public class VerveineJTest_ReferenceInstanceOf extends VerveineJTest_Basic {
 
     @Test
     public void testExistingException() {
-        parse(new String[]{"-alllocals", "-anchor", "assoc", "test_src/instanceOf"});
+        parse(new String[]{"-alllocals", "-anchor", "assoc", "src/test/resources/instanceOf"});
         org.moosetechnology.model.famix.famixjavaentities.Exception exception = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class , "SeditException");
         // From Calculated Expression "hello" and from TypeLiteral String.class
         assertNotNull(exception);

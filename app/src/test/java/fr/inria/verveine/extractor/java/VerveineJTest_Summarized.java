@@ -114,7 +114,7 @@ public class VerveineJTest_Summarized extends VerveineJTest_Basic {
 		String[] args = new String[] {
 				"-summary",
 				"-format", "json",
-				"test_src/LANModel"
+				"src/test/resources/LANModel"
 		};
 
 		new File(DEFAULT_OUTPUT_FILE).delete();  // delete old MSE file

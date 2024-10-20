@@ -22,7 +22,7 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
     public void setUp() throws Exception {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
-        parser.configure( new String[] {"test_src/exceptions"});
+        parser.configure( new String[] {"src/test/resources/exceptions"});
         parser.parse();
     }
 

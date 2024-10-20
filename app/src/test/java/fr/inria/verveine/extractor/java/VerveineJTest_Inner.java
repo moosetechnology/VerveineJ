@@ -39,7 +39,7 @@ public class VerveineJTest_Inner extends VerveineJTest_Basic {
 
     @Test
     public void testNumberOfClass() {
-        parse(new String[] {"test_src/inner"});
+        parse(new String[] {"src/test/resources/inner"});
         Collection<Class> classes = entitiesOfType(Class.class);
         assertEquals(12, classes.size());
         assertEquals(5, entitiesOfType(Interface.class).size());
@@ -51,7 +51,7 @@ public class VerveineJTest_Inner extends VerveineJTest_Basic {
 
     @Test
     public void testAnonymousClassArePatateAndCanard() {
-        parse(new String[] {"test_src/inner"});
+        parse(new String[] {"src/test/resources/inner"});
         List<Class> classes = entitiesOfType(Class.class).stream().filter(aClass -> !aClass.getIsStub() && aClass.getName().contains("Anonymous")).sorted(Comparator.comparing(NamedEntity::getName)).collect(Collectors.toList());
         assertEquals("_Anonymous(Canard)", classes.get(0).getName());
         assertEquals("_Anonymous(Patate)", classes.get(1).getName());
@@ -59,7 +59,7 @@ public class VerveineJTest_Inner extends VerveineJTest_Basic {
 
     @Test
     public void testInvocationsOfPatateAndCanardConstructor() {
-        parse(new String[] {"test_src/inner"});
+        parse(new String[] {"src/test/resources/inner"});
         List<Invocation> invocations = entitiesOfType(Invocation.class).stream()
                 .sorted(Comparator.comparing(anInvocation2 -> ((Invocation) anInvocation2).getSignature()))
                 .collect(Collectors.toList());
@@ -70,7 +70,7 @@ public class VerveineJTest_Inner extends VerveineJTest_Basic {
 
     @Test
     public void testMyMethodHasLocalVariableTest() {
-        parse(new String[] {"test_src/inner"});
+        parse(new String[] {"src/test/resources/inner"});
         List<Method> methods = entitiesOfType(Method.class).stream()
             .filter(m -> m.getName().equals("myMethod"))
             .collect(Collectors.toList());

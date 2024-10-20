@@ -62,7 +62,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		File generatedMSE = new File(DEFAULT_OUTPUT_FILE);
 		generatedMSE.deleteOnExit();
 
-		parse(new String[]{"test_src/ad_hoc/Junit5Bug1.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Junit5Bug1.java"});
 
 		assertTrue(generatedMSE.exists());
 		assertTrue(generatedMSE.length() > 0);
@@ -73,7 +73,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		File generatedMSE = new File(DEFAULT_OUTPUT_FILE);
 		generatedMSE.deleteOnExit();
 
-		parse(new String[]{"test_src/ad_hoc/Junit5Bug2.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Junit5Bug2.java"});
 
 		assertTrue(generatedMSE.exists());
 		assertTrue(generatedMSE.length() > 0);
@@ -84,7 +84,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	@Test
 	public void testUnresolvedDeclaration() {
 		 // note: lire() method unresolved because it throws ReadException which is not parsed here
-		parse(new String[]{"test_src/exceptions/ReadClient.java"});
+		parse(new String[]{"src/test/resources/exceptions/ReadClient.java"});
 
 		int nbLire = 0;
 		Method lire = null;
@@ -101,7 +101,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@ Test
 	public void testConstructorInvocations() {
-		parse(new String[] {"test_src/ad_hoc/DefaultConstructor.java", "test_src/ad_hoc/InvokWithFullPath.java", "test_src/ad_hoc/annotations/Book.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/DefaultConstructor.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/annotations/Book.java"});
 
 		Method meth = detectFamixElement( Method.class, "methodWithClassScope");
 		assertNotNull(meth);
@@ -158,7 +158,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	 *   The second is a mistake
 	 */
 	public void testNoReferenceOnNew() {
-		parse(new String[] {"test_src/ad_hoc/DefaultConstructor.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/DefaultConstructor.java"});
 
 		Method aMethod = detectFamixElement(Method.class, "methodWithClassScope");
 		assertNotNull(aMethod);
@@ -170,7 +170,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@ Test
 	public void testDeclaredTypeOfExternalEnum() {
-		parse(new String[] {"test_src/ad_hoc/ExternalEnum.java", "test_src/ad_hoc/AClassThatUseExternalEnum.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/ExternalEnum.java", "src/test/resources/ad_hoc/AClassThatUseExternalEnum.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Class aClass = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "AClassThatUseExternalEnum");
 		assertNotNull(aClass);
@@ -190,7 +190,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@ Test
 	public void testStubConstructor() {
-		parse(new String[]{"test_src/ad_hoc/DefaultConstructor.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/DefaultConstructor.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Class stubClass = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "JFrame");
 		assertNotNull(stubClass);
@@ -207,7 +207,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@ Test
 	public void testStubContainerAreNotEmpty() {
-		parse(new String[]{"test_src/ad_hoc/Card.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java"});
 
 		ParametricClass stubClass = detectFamixElement( ParametricClass.class, "ArrayList");
 		assertNotNull(stubClass);
@@ -221,7 +221,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testDictionary() {
-		parse(new String[] {"test_src/generics/Dictionary.java"});
+		parse(new String[] {"src/test/resources/generics/Dictionary.java"});
 
 		ParametricClass dico = null;
 		 Collection<ParametricClass> dicts = entitiesNamed(ParametricClass.class, "Dictionary");
@@ -246,7 +246,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testStaticMembers() {
-		parse(new String[]{"test_src/ad_hoc/DefaultConstructor.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/DefaultConstructor.java"});
 
 		Method meth = detectFamixElement(Method.class, "methodWithClassScope");
 		assertNotNull(meth);
@@ -267,7 +267,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testUnknownMethod() {
-		parse(new String[] {"test_src/generics/Dictionary.java"});
+		parse(new String[] {"src/test/resources/generics/Dictionary.java"});
 
 		Method meth = detectFamixElement( Method.class, "uniplementedMethod");
 		assertNotNull(meth);
@@ -277,7 +277,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testClassWithNoBindingButCanBeIdentifiedAsException() {
-		parse(new String[]{"test_src/ad_hoc/Example.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Example.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Exception clazz = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "BackingStoreException");
 		assertNotNull(clazz);
@@ -285,7 +285,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testClassVar() {
-		parse(new String[] {"test_src/generics/Dictionary.java"});
+		parse(new String[] {"src/test/resources/generics/Dictionary.java"});
 
 		Method meth = detectFamixElement( Method.class, "ensureFamixEntity");
 		assertNotNull(meth);
@@ -319,7 +319,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testArrayListMatthias() {
-		parse(new String[]{"test_src/ad_hoc/Bla.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
 
 		assertEquals(9, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); // Bla, Object, String, List, ArrayList, Arrays,Comparable,Serializable,CharSequence, AbstractList, AbstractCollection, Collection, Cloneable, RandomAccess, Iterable, ConstantDesc, Constable
 		assertEquals(5, entitiesOfType(ParametricClass.class).size());
@@ -359,7 +359,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testMethodLocalVariableArgumentTypes() {
-		parse(new String[] {"test_src/generics/Dictionary.java"});
+		parse(new String[] {"src/test/resources/generics/Dictionary.java"});
 
 		Method meth = detectFamixElement( Method.class, "getEntityByName");
 		assertNotNull(meth);
@@ -391,7 +391,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testMethodReturnArgumentTypes() {
-		parse(new String[] {"test_src/generics/Dictionary.java"});
+		parse(new String[] {"src/test/resources/generics/Dictionary.java"});
 
 		Method fmxMethod = detectFamixElement( Method.class, "getEntityByName");
 		assertNotNull(fmxMethod);
@@ -399,7 +399,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testEnumDecl() {
-		parse(new String[]{"test_src/ad_hoc/Card.java", "test_src/ad_hoc/Planet.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
 		// java.lang.Enum entity
 		ParametricClass javaLangEnum = (ParametricClass)genericEntityNamed("Enum");
@@ -446,7 +446,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testEnumValues() {
-		parse(new String[]{"test_src/ad_hoc/Card.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Enum rk = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Rank");
 		assertNotNull(rk);
@@ -467,7 +467,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testEnumAsVariableType() {
-		parse(new String[]{"test_src/ad_hoc/Card.java", "test_src/ad_hoc/Planet.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Class card = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Card");
 		assertNotNull(card);
@@ -493,7 +493,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testEnumAccess() {
-		parse(new String[]{"test_src/ad_hoc/Card.java", "test_src/ad_hoc/Planet.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
 		Enum st = detectFamixElement(Enum.class, "Suit");
 		assertNotNull(st);
@@ -561,7 +561,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testReadWriteAccess() {
-		parse(new String[]{"test_src/ad_hoc/Planet.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Planet.java"});
 
 		Attribute i_att = null;
 		Attribute mass_att = null;
@@ -606,7 +606,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testStaticInitializationBlock() {
-		parse(new String[] {"test_src/ad_hoc/Card.java", "test_src/ad_hoc/Planet.java", "test_src/ad_hoc/InvokWithFullPath.java", "test_src/ad_hoc/DefaultConstructor.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/DefaultConstructor.java"});
 
 		Collection<Method> l_meth = entitiesNamed( Method.class, EntityDictionary.INIT_BLOCK_NAME);
 		assertEquals(3, l_meth.size());
@@ -631,7 +631,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testStaticInitializationBlockNewString() {
-		parse(new String[]{"test_src/ad_hoc/EnumConstWithInitNewString.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/EnumConstWithInitNewString.java"});
 
 		Enum fmx = detectFamixElement(Enum.class, "EnumConstWithInitNewString");
 		assertNotNull(fmx);
@@ -644,7 +644,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testWrongMethodOwner() {
-		parse(new String[]{"test_src/ad_hoc/InvokerWrongOwner.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/InvokerWrongOwner.java"});
 
 		Method meth = detectFamixElement(Method.class, "methodWrongOwner");
 		assertNotNull(meth);
@@ -654,7 +654,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	
 	@Test
 	public void testModifiers() {
-		parse(new String[] {"test_src/ad_hoc/Modifiers.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/Modifiers.java"});
 
 		Attribute attribute = detectFamixElement( Attribute.class, "privateFinalAttribute");
 		assertNotNull(attribute);
@@ -668,7 +668,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testMultipleSignatures() {
-		parse(new String[]{"test_src/ad_hoc/MultipleSignatures.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/MultipleSignatures.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Exception throwable = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "Throwable");
 		assertNotNull(throwable);
@@ -686,7 +686,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	@Test
 	public void testInvokSelfNoBinding() {
 		// TODO sould use source within ad_hoc
-		parse(new String[]{"test_src/annotations/Serializer.java"});
+		parse(new String[]{"src/test/resources/annotations/Serializer.java"});
 
 		Method seri = detectFamixElement(Method.class, "serialize");
 		assertNotNull(seri);
@@ -703,7 +703,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testInstanceOf() {
-		parse(new String[] {"test_src/ad_hoc/Planet.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/Planet.java"});
 
 		Method m = detectFamixElement( Method.class, "sillyArrayAssignement");
 		assertNotNull(m);
@@ -729,7 +729,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testPublicStaticInnerClass() {
-		parse(new String[]{"test_src/ad_hoc/StaticInnerClass.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/StaticInnerClass.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Class clazz = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "ThisIsTheStaticInnerClass");
 		assertNotNull(clazz);
@@ -741,7 +741,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
     @Test
     public void testSuperConstructorInvocation() {
- 		parse(new String[] {"test_src/ad_hoc/StubSuperConstructor.java"});
+ 		parse(new String[] {"src/test/resources/ad_hoc/StubSuperConstructor.java"});
 
        Collection<Method> meths = entitiesNamed( Method.class, "StubSuperConstructor");
 
@@ -764,7 +764,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
     @Test
 	public void testMethodModifiers(){
-		parse(new String[] {"test_src/ad_hoc/Modifiers.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/Modifiers.java"});
 
 		Collection<Method> meths = entitiesNamed( Method.class, "methodModifiers");
 
@@ -780,7 +780,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testAttributeModifiers(){
-		parse(new String[] {"test_src/ad_hoc/Modifiers.java"});
+		parse(new String[] {"src/test/resources/ad_hoc/Modifiers.java"});
 
 		Attribute attribute = firstElt(entitiesNamed( Attribute.class, "attribute"));
 
@@ -794,7 +794,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
     @Test
     public void testCreateInheritanceForStubSuperInterface() {
-    	parse(new String[] {"test_src/ad_hoc/Example.java"});
+    	parse(new String[] {"src/test/resources/ad_hoc/Example.java"});
     
     	org.moosetechnology.model.famix.famixjavaentities.Class subClass = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Example");
         assertNotNull(subClass);

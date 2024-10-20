@@ -33,7 +33,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
     @Test
     public void testLambdaTypedParameter() {
-        parse(new String[] {"-alllocals", "test_src/lambdas"});
+        parse(new String[] {"-alllocals", "src/test/resources/lambdas"});
 
         Method meth = detectFamixElement( Method.class, EntityDictionary.INIT_BLOCK_NAME);
         assertNotNull(meth);
@@ -59,7 +59,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
     @Test
     public void testLambdaUnTypedParameter() {
-        parse(new String[] {"-alllocals", "test_src/lambdas"});
+        parse(new String[] {"-alllocals", "src/test/resources/lambdas"});
 
         Method meth = detectFamixElement( Method.class, "WithLambda");
         assertNotNull(meth);
@@ -90,7 +90,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
     @Test
     public void testLambdaNotAllLocals() {
-        parse(new String[] {"test_src/lambdas"});
+        parse(new String[] {"src/test/resources/lambdas"});
 
         Method meth = detectFamixElement( Method.class, "WithLambda");
         assertNotNull(meth);
@@ -105,7 +105,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
     @Test
     public void testAccessInDeclaration(){
-        parse(new String[] {"-alllocals", "-anchor", "assoc", "test_src/lambdas"});
+        parse(new String[] {"-alllocals", "-anchor", "assoc", "src/test/resources/lambdas"});
         Collection<Access> accesses = entitiesOfType(Access.class);
         assertEquals(6, accesses.size());
 

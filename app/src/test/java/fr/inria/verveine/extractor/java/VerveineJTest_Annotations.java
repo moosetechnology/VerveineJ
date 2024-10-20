@@ -23,9 +23,9 @@ public class VerveineJTest_Annotations extends VerveineJTest_Basic {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
         if (isWindows()){
-            parser.configure( new String[] {"-cp" , "test_src/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar;test_src/annotations/lib/stripes-1.5.5.jar", "test_src/annotations"});
+            parser.configure( new String[] {"-cp" , "src/test/resources/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar;test_src/annotations/lib/stripes-1.5.5.jar", "src/test/resources/annotations"});
         } else {
-            parser.configure( new String[] {"-cp" , "test_src/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar:test_src/annotations/lib/stripes-1.5.5.jar", "test_src/annotations"});
+            parser.configure( new String[] {"-cp" , "src/test/resources/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar:test_src/annotations/lib/stripes-1.5.5.jar", "src/test/resources/annotations"});
         }
         parser.parse();
     }
@@ -133,7 +133,7 @@ public class VerveineJTest_Annotations extends VerveineJTest_Basic {
         assertNotNull(xmle);
         assertNotNull(xmle.getSourceAnchor());
         assertEquals(IndexedFileAnchor.class, xmle.getSourceAnchor().getClass());
-        assertEquals("test_src/annotations/XmlElement.java", ((IndexedFileAnchor)xmle.getSourceAnchor()).getFileName());
+        assertEquals("src/test/resources/annotations/XmlElement.java", ((IndexedFileAnchor)xmle.getSourceAnchor()).getFileName());
         if (isWindows()) {
             assertEquals(66, ((IndexedFileAnchor) xmle.getSourceAnchor()).getStartPos());
             assertEquals(188, ((IndexedFileAnchor) xmle.getSourceAnchor()).getEndPos());
@@ -154,7 +154,7 @@ public class VerveineJTest_Annotations extends VerveineJTest_Basic {
         assertNotNull(req);
         assertNotNull(req.getSourceAnchor());
         assertEquals(IndexedFileAnchor.class, req.getSourceAnchor().getClass());
-        assertEquals("test_src/annotations/XmlElement.java", ((IndexedFileAnchor)req.getSourceAnchor()).getFileName());
+        assertEquals("src/test/resources/annotations/XmlElement.java", ((IndexedFileAnchor)req.getSourceAnchor()).getFileName());
         if (isWindows()) {
             assertEquals(128, ((IndexedFileAnchor) req.getSourceAnchor()).getStartPos());
             assertEquals(153, ((IndexedFileAnchor) req.getSourceAnchor()).getEndPos());

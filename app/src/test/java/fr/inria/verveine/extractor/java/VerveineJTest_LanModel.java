@@ -106,8 +106,8 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		String[] args = new String[] {
 				"-i",
 				"-cp",
-				"test_src/LANModel/",
-				"test_src/LANModel/moose/lan/" + file
+				"src/test/resources/LANModel/",
+				"src/test/resources/LANModel/moose/lan/" + file
 		};
 
 		parser = new VerveineJParser();
@@ -750,7 +750,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertNotNull(anc);
 		assertSame(clazz, anc.getElement());
 		assertSame(IndexedFileAnchor.class, anc.getClass());
-		assertEquals("test_src/LANModel/moose/lan/server/PrintServer.java", ((IndexedFileAnchor) anc).getFileName());
+		assertEquals("src/test/resources/LANModel/moose/lan/server/PrintServer.java", ((IndexedFileAnchor) anc).getFileName());
 		if (isWindows()) {
 			assertEquals(251, ((IndexedFileAnchor) anc).getStartPos());
 			assertEquals(558, ((IndexedFileAnchor) anc).getEndPos());
@@ -766,7 +766,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertNotNull(anc);
 		assertSame(clazz, anc.getElement());
 		assertSame(IndexedFileAnchor.class, anc.getClass());
-		assertEquals("Wrong file source for class Node", "test_src/LANModel/moose/lan/Node.java",
+		assertEquals("Wrong file source for class Node", "src/test/resources/LANModel/moose/lan/Node.java",
 				((IndexedFileAnchor) anc).getFileName());
 		if (isWindows()) {
 			assertEquals(69, ((IndexedFileAnchor) anc).getStartPos());
@@ -784,7 +784,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertSame(meth, anc.getElement());
 		assertSame(IndexedFileAnchor.class, anc.getClass());
 		assertEquals("Wrong file source for method SingleDestinationAddress.equalsMultiple()",
-				"test_src/LANModel/moose/lan/SingleDestinationAddress.java", ((IndexedFileAnchor) anc).getFileName());
+				"src/test/resources/LANModel/moose/lan/SingleDestinationAddress.java", ((IndexedFileAnchor) anc).getFileName());
 		if (isWindows()) {
 			assertEquals(733, ((IndexedFileAnchor) anc).getStartPos());
 			assertEquals(822, ((IndexedFileAnchor) anc).getEndPos());
@@ -800,7 +800,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertNotNull(anc);
 		assertSame(att, anc.getElement());
 		assertSame(IndexedFileAnchor.class, anc.getClass());
-		assertEquals("Wrong file source for field Packet.originator", "test_src/LANModel/moose/lan/Packet.java",
+		assertEquals("Wrong file source for field Packet.originator", "src/test/resources/LANModel/moose/lan/Packet.java",
 				((IndexedFileAnchor) anc).getFileName());
 		if (isWindows()) {
 			assertEquals(244, ((IndexedFileAnchor) anc).getStartPos());

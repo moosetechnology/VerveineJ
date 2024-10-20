@@ -54,7 +54,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertFalse(defaultMSE.exists());
 		assertFalse(alternateMSE.exists());
 
-		parse(new String[]{"-o", OTHER_MSE_FILE, "test_src/LANModel/moose/lan/Node.java"});
+		parse(new String[]{"-o", OTHER_MSE_FILE, "src/test/resources/LANModel/moose/lan/Node.java"});
 		parser.exportModel();
 
 		assertFalse(defaultMSE.exists());
@@ -71,7 +71,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		defaultJSON.delete();
 		defaultJSON.deleteOnExit();
 
-		parse(new String[]{"-format", "json", "test_src/LANModel/moose/lan/Node.java"});
+		parse(new String[]{"-format", "json", "src/test/resources/LANModel/moose/lan/Node.java"});
 		parser.exportModel();
 
 		FileReader reader;
@@ -96,7 +96,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertFalse(defaultMSE.exists());
 		assertFalse(defaultJSON.exists());
 
-		parse(new String[]{"-format", "json", "test_src/LANModel/moose/lan/Node.java"});
+		parse(new String[]{"-format", "json", "src/test/resources/LANModel/moose/lan/Node.java"});
 		parser.exportModel();
 
 		assertTrue(defaultJSON.exists());
@@ -106,7 +106,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 	@Test
 	public void testNotAlllocals() {
 		// works in team with testAlllocals
-		parse(new String[]{"test_src/exceptions/ReadClient.java", "test_src/exceptions/ReadException.java"}); // note: ReadException.java needed to resolve lire() method
+		parse(new String[]{"src/test/resources/exceptions/ReadClient.java", "src/test/resources/exceptions/ReadException.java"}); // note: ReadException.java needed to resolve lire() method
 		assertEquals(3, entitiesOfType(LocalVariable.class).size());  // nom, num, e
 		assertEquals(8, entitiesOfType(Access.class).size()); // getNum() -> num, setNum() -> num, getNom() -> nom, setNom() -> nom + 4 "this"
 	}
@@ -114,7 +114,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 	@Test
 	public void testAlllocals() {
 		// works in team with testNotAlllocals
-		parse(new String[]{"-alllocals", "test_src/exceptions/ReadClient.java", "test_src/exceptions/ReadException.java"}); // note: ReadException.java needed to resolve lire() method
+		parse(new String[]{"-alllocals", "src/test/resources/exceptions/ReadClient.java", "src/test/resources/exceptions/ReadException.java"}); // note: ReadException.java needed to resolve lire() method
 		
 		assertEquals(5, entitiesOfType( LocalVariable.class).size());      // lire().nom ; lire().num ; lire().e ; lire().c ; lire().i
 		int accessReadClient = 0;
@@ -144,7 +144,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test
 	public void testEncodingUTF8() {
-		parser.configure(new String[]{"-encoding", "UTF-8", "test_src/comments"});
+		parser.configure(new String[]{"-encoding", "UTF-8", "src/test/resources/comments"});
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -154,12 +154,12 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testEncodingWrong() {
-		parser.configure(new String[]{"-encoding", "BLAH", "test_src/comments"});
+		parser.configure(new String[]{"-encoding", "BLAH", "src/test/resources/comments"});
 	}
 
 	@Test
 	public void testCommentsText() {
-		parse(new String[]{"-commenttext", "test_src/comments"});
+		parse(new String[]{"-commenttext", "src/test/resources/comments"});
 
 		assertEquals(16, entitiesOfType(Comment.class).size());
 		for (Comment cmt : entitiesOfType(Comment.class)) {
@@ -208,7 +208,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test
 	public void testCommentsAnchor() {
-		parse(new String[]{"test_src/comments"});
+		parse(new String[]{"src/test/resources/comments"});
 
 		assertEquals(16, entitiesOfType(Comment.class).size());
 		for (Comment cmt : entitiesOfType(Comment.class)) {
@@ -221,7 +221,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test
 	public void testClassDeclsInExpr() {
-		parse(new String[]{"-alllocals", "test_src/ad_hoc/SpecialLocalVarDecls.java"});
+		parse(new String[]{"-alllocals", "src/test/resources/ad_hoc/SpecialLocalVarDecls.java"});
 
 		Collection<LocalVariable> vars = entitiesOfType( LocalVariable.class);
         LocalVariable var1 = null;
@@ -268,7 +268,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test
 	public void testAlllocalsAndInitializerAndField() {
-		parse(new String[]{"-alllocals", "test_src/ad_hoc/SpecialLocalVarDecls.java"});
+		parse(new String[]{"-alllocals", "src/test/resources/ad_hoc/SpecialLocalVarDecls.java"});
 
 		Collection<Attribute> vars = entitiesOfType( Attribute.class);
 		assertEquals(3, vars.size());  // aField, anonymousListField, System.out
@@ -279,8 +279,8 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
     {
         String[] args = new String[] {
                 "-anchor", "assoc",
-                "-cp", "test_src/LANModel/",
-                "test_src/LANModel/moose/lan/server/PrintServer.java",
+                "-cp", "src/test/resources/LANModel/",
+                "src/test/resources/LANModel/moose/lan/server/PrintServer.java",
         };
 
         // parsing
@@ -339,7 +339,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
         String[] args = new String[] {
                 "-excludepath", "*Address*",
                 "-excludepath", excludeDir,
-                "test_src/LANModel/",
+                "src/test/resources/LANModel/",
         };
 
         // parsing

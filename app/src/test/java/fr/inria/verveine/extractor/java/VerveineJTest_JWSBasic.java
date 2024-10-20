@@ -35,7 +35,7 @@ public class VerveineJTest_JWSBasic extends VerveineJTest_Basic {
 		parser = new VerveineJParser();
 		repo = parser.getFamixRepo();
 		parser.configure(
-				new String[] { "-cp", "test_src/jws_basic/lib/javax.jws-api-1.1.jar", "test_src/jws_basic/src" });
+				new String[] { "-cp", "src/test/resources/jws_basic/lib/javax.jws-api-1.1.jar", "src/test/resources/jws_basic/src" });
 		parser.parse();
 	}
 

@@ -72,7 +72,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
     public void setUp() throws Exception {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
-        parser.configure( new String[] {"test_src/generics/"});
+        parser.configure( new String[] {"src/test/resources/generics/"});
         parser.parse();
     }
     

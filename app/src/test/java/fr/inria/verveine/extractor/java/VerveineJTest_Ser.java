@@ -23,7 +23,7 @@ public class VerveineJTest_Ser extends VerveineJTest_Basic {
     public void setUp() throws Exception {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
-        parser.configure( new String[] {"test_src/ser"});
+        parser.configure( new String[] {"src/test/resources/ser"});
         parser.parse();
     }
 

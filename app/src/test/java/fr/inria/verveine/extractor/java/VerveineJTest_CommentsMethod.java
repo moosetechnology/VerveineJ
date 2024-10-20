@@ -51,7 +51,7 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
     @Test
     public void testStartPosSourceAnchorMethod() {
-        parse(new String[] { "test_src/comments" });
+        parse(new String[] { "src/test/resources/comments" });
 
         List<Method> methods = new ArrayList<>();
         // convert to <code>List</code> to be able to sort them by ascending starting
@@ -94,7 +94,7 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
     @Test
     public void testEndPosSourceAnchorMethod() {
-        parse(new String[] { "test_src/comments" });
+        parse(new String[] { "src/test/resources/comments" });
         List<Method> methods = new ArrayList<>();
         // convert to <code>List</code> to be able to sort them by ascending starting
         // position
@@ -135,7 +135,7 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
     @Test
     public void testSourceAnchorHasFile() {
-        parse(new String[] { "test_src/comments" });
+        parse(new String[] { "src/test/resources/comments" });
         List<Method> methods = new ArrayList<>();
          methods.addAll(entitiesOfType(Method.class));
         assertEquals(12, methods.size());
@@ -143,7 +143,7 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
         List<Method> methodsWithAnchor = methods.stream().filter(m -> m.getSourceAnchor() != null)
                 .collect(Collectors.toList());
         for (Method method : methodsWithAnchor) {
-            assertEquals("test_src/comments/ClassWithComments.java",
+            assertEquals("src/test/resources/comments/ClassWithComments.java",
                     ((IndexedFileAnchor) method.getSourceAnchor()).getFileName());
         }
     }
