@@ -23,9 +23,9 @@ public class VerveineJTest_Annotations extends VerveineJTest_Basic {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
         if (isWindows()){
-            parser.configure( new String[] {"-cp" , "src/test/resources/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar;test_src/annotations/lib/stripes-1.5.5.jar", "src/test/resources/annotations"});
+            parser.configure( new String[] {"-cp" , "src/test/resources/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar;src/test/resources/annotations/lib/stripes-1.5.5.jar", "src/test/resources/annotations"});
         } else {
-            parser.configure( new String[] {"-cp" , "src/test/resources/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar:test_src/annotations/lib/stripes-1.5.5.jar", "src/test/resources/annotations"});
+            parser.configure( new String[] {"-cp" , "src/test/resources/annotations/lib/jboss-interceptors-api_1.1_spec-1.0.1.Final-redhat-2.jar:src/test/resources/annotations/lib/stripes-1.5.5.jar", "src/test/resources/annotations"});
         }
         parser.parse();
     }
