@@ -54,6 +54,13 @@ gpr.user=<USERNAME>
 gpr.token=<TOKEN>
 ```
 
+It is possible to run the tests and generate a jacoco test report with 
+
+```sh
+./gradlew app:jacocoTestReport
+```
+
+
 ### Debug advanced mode
 
 Sometimes, because of the JVM optimization, stacktraces are not fully displayed.
