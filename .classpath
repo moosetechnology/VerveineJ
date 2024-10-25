@@ -26,7 +26,6 @@
 	<classpathentry kind="lib" path="lib/org.eclipse.jdt.core_3.13.50.v20171007-0855.jar" sourcepath="/org.eclipse.jdt.core"/>
 	<classpathentry kind="lib" path="lib/org.eclipse.osgi_3.12.50.v20170928-1321.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.7.jar"/>
-	<classpathentry kind="lib" path="lib/fame.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
 		<attributes>
 			<attribute name="module" value="true"/>
