@@ -9,6 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     jacoco
+    id("com.gradleup.shadow") version "8.3.3"
 }
 
 repositories {
@@ -61,4 +62,10 @@ tasks.jacocoTestReport {
     reports {
         xml.required = true
     }
+}
+
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
+    archiveBaseName.set("VerveineJ")
+    archiveClassifier.set(System.getenv("VERSION") as String? ?: "Snapshot")
+    archiveVersion.set("")
 }
