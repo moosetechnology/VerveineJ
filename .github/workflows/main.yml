@@ -43,4 +43,6 @@ jobs:
         uses: coverallsapp/github-action@v2.3.4
         with:
           format: jacoco
+          parallel: false
+          base-path: app/src/main/java
             
