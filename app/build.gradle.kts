@@ -13,6 +13,13 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/moosetechnology/FameJava")
+        credentials {
+            username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.token") as String? ?: System.getenv("TOKEN")
+        }
+    }
     flatDir {
         dirs("lib")
     }
@@ -24,6 +31,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+    implementation("org.moosetechnology:fame-java:v1.0.3")
 
     implementation(fileTree("lib") { include("*.jar") })
 }

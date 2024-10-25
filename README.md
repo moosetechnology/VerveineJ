@@ -44,13 +44,14 @@ verveinej.sh -h
 
 ## Developers
 
-To test the project, remember that you **must** disable the `assert` by removing (or not using) the -ea parameter.
-You also need to run tests one by one (fork method in IntelliJ).
+We do use gradle to compile and load dependencies.
 
-You can also use Ant or the pre-created IntelliJ build
+Since we load project from github repository.
+Please create a file named `gradle.properties` in the root of this project as follow
 
-```sh
-ant junit
+```gradle
+gpr.user=<USERNAME>
+gpr.token=<TOKEN>
 ```
 
 ### Debug advanced mode

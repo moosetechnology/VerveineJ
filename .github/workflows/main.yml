@@ -33,3 +33,6 @@ jobs:
 
       - name: Execute Gradle build
         run: ./gradlew app:test
+        env:
+          USERNAME: ${{ github.actor }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}

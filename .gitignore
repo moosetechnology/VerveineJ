@@ -14,3 +14,6 @@ out/
 
 # Ignore Gradle build output directory
 build
+
+app/bin
+gradle.properties
