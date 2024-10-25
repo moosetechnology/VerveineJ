@@ -11,36 +11,22 @@ A Java to JSON/MSE importer.
 
 Based on JDT, it parses java code to export it in the MSE or JSON formats used by the [Moose](https://modularmoose.org/) data analysis platform.
 
-## Installation
-
-[Installation page](https://moosetechnology.github.io/moose-wiki/Developers/Parsers/VerveineJ.html)
-
-You only have to clone this project and then run verveineJ
-
-```sh
-# https
-git clone https://github.com/moosetechnology/VerveineJ.git
-
-# ssh
-git clone git@github.com:moosetechnology/VerveineJ.git
-```
-
 ## Running it
 
-There is a docker version at: [https://hub.docker.com/repository/docker/badetitou/verveinej/general](https://hub.docker.com/repository/docker/badetitou/verveinej/general) (thanks to Benoît Verhaeghe for this).
+There is a [docker version](https://github.com/Evref-BL/VerveineJ-Docker).
 
-Otherwise, on the command line, the simplest command is
+Otherwise, on the command line, download the jar of the latest release and the command is
 
 ```sh
-./verveinej.sh <java-source-directory>
+java -jar VerveineJ-v1.0.0.jar -format json -autocp <dependency/folder> <src/folder> 
 ```
 
-It will create an `output.mse` (JSON format also available) file with the model extracted from the \<java-source-directory\>
+It will create an `output.json` (JSON format also available) file with the model extracted from the \<java-source-directory\>
 
 To see what other options are available:
 
 ```sh
-verveinej.sh -h
+java -jar VerveineJ-v1.0.0.jar -h
 ```
 
 ## Developers
@@ -59,6 +45,14 @@ It is possible to run the tests and generate a jacoco test report with
 
 ```sh
 ./gradlew app:jacocoTestReport
+```
+
+### Build a fat jar excecutable
+
+You can build the project and produce a fat jar with
+
+```sh
+./gradlew app:shadowJar
 ```
 
 
