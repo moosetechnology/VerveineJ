@@ -30,11 +30,13 @@ repositories {
 dependencies {
     // Use JUnit test framework.
     testImplementation(libs.junit)
+    testImplementation("org.hamcrest:hamcrest-core:1.3")
+
 
     // This dependency is used by the application.
-    implementation(libs.guava)
-
     implementation("org.moosetechnology:fame-java:v1.0.3")
+    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.13.50")
+    implementation("commons-codec:commons-codec:1.7")
 
     implementation(fileTree("lib") { include("*.jar") })
 }
