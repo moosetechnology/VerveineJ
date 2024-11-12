@@ -10,6 +10,29 @@ A Java to JSON/MSE importer.
 
 Based on JDT, it parses java code to export it in the MSE or JSON formats used by the [Moose](https://modularmoose.org/) data analysis platform.
 
+## Running it
+
+There is a docker version at: [https://github.com/Evref-BL/VerveineJ-Docker](https://github.com/Evref-BL/VerveineJ-Docker)) (thanks to Benoît Verhaeghe for this).
+If you already have docker the summary is:
+```sh
+docker run -v <full/path/toSource>:/src [-v <full/path/toDependency>:/dependency] ghcr.io/evref-bl/verveinej:latest <verveineJOption>
+```
+The resulting model file (.json or .mse) is in \<full/path/toSource\>.
+
+Otherwise, after the installing VerveineJ locally, the simplest command is
+
+```sh
+./verveinej.sh <verveineJOption> <java-source-directory>
+```
+
+It will create an `output.mse` (JSON format also available) file with the model extracted from the \<java-source-directory\>
+
+To see what other options are available:
+
+```sh
+verveinej.sh -h
+```
+
 ## Installation
 
 [Installation page](https://moosetechnology.github.io/moose-wiki/Developers/Parsers/VerveineJ.html)
@@ -23,26 +46,7 @@ git clone https://github.com/moosetechnology/VerveineJ.git
 # ssh
 git clone git@github.com:moosetechnology/VerveineJ.git
 ```
-
-## Running it
-
-There is a docker version at: [https://github.com/Evref-BL/VerveineJ-Docker](https://github.com/Evref-BL/VerveineJ-Docker)) (thanks to Benoît Verhaeghe for this).
-
-Otherwise, on the command line, the simplest command is
-
-```sh
-./verveinej.sh <java-source-directory>
-```
-
-It will create an `output.mse` (JSON format also available) file with the model extracted from the \<java-source-directory\>
-
-To see what other options are available:
-
-```sh
-verveinej.sh -h
-```
-
-## Developers
+## Testing
 
 To test the project, remember that you **must** disable the `assert` by removing (or not using) the -ea parameter.
 You also need to run tests one by one (fork method in IntelliJ).
@@ -61,5 +65,4 @@ To force JVM keep the full stacktrace, you can use the following vm options:
 ```txt
 -XX:-OmitStackTraceInFastThrow -Xint
 ```
-
 > This will make the execution super slow, so keep this option for debug purpose only.
