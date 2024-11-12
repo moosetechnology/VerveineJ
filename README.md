@@ -41,7 +41,7 @@ gpr.user=<USERNAME>
 gpr.token=<TOKEN>
 ```
 
-> we expect here your <username> and <token> from GitHub platform.
+> we expect here your \<username\> and \<token\> from GitHub platform.
 > Please **never** commit them
 
 It is possible to run the tests and generate a jacoco test report with
