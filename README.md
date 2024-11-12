@@ -26,7 +26,7 @@ git clone git@github.com:moosetechnology/VerveineJ.git
 
 ## Running it
 
-There is a docker version at: [https://hub.docker.com/repository/docker/badetitou/verveinej/general](https://hub.docker.com/repository/docker/badetitou/verveinej/general) (thanks to Benoît Verhaeghe for this).
+There is a docker version at: [https://github.com/Evref-BL/VerveineJ-Docker](https://github.com/Evref-BL/VerveineJ-Docker)) (thanks to Benoît Verhaeghe for this).
 
 Otherwise, on the command line, the simplest command is
 
