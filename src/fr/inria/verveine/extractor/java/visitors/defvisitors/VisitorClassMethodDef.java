@@ -168,9 +168,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		//		System.err.println("TRACE, Visiting ClassInstanceCreation: " + node);
-		if (node.getAnonymousClassDeclaration() != null) {
-			anonymousSuperTypeName.push(Util.jdtTypeName(node.getType()));
-		}
+		possiblyAnonymousClassDeclaration(node);
 		return super.visit(node);
 	}
 
