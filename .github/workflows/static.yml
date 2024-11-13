@@ -1,6 +1,11 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+env:
+  USERNAME: ${{ github.actor }}
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  github-token: ${{ secrets.GITHUB_TOKEN }}
+
 on:
   # Runs on pushes targeting the default branch
   push:
