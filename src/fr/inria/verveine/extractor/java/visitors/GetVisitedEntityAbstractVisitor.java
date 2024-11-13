@@ -129,6 +129,8 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	/**
 	 * Creation of an instance of an anonymous class, ie. <code>new AnonymousClassDeclaration</code><br>
 	 * See also field {@link GetVisitedEntityAbstractVisitor#anonymousSuperTypeName}
+	 * 
+	 * The 'push' possibly done here gets undone in {@link GetVisitedEntityAbstractVisitor#endVisitAnonymousClassDeclaration()}
 	 */
 	protected void possiblyAnonymousClassDeclaration(ClassInstanceCreation node) {
 		if (node.getAnonymousClassDeclaration() != null) {

@@ -80,6 +80,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		if (node.getAnonymousClassDeclaration() != null) {
 			node.getAnonymousClassDeclaration().accept(this);
 		}
+
 		return false;
 	}
 
