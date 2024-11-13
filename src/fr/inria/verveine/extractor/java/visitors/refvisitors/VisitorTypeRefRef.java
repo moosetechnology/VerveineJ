@@ -237,6 +237,21 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	/**
+	 * SingleVariableDeclaration ::=
+     *   { ExtendedModifier } Type {Annotation} [ ... ] Identifier { Dimension } [ = Expression ]
+	 */
+	@Override
+	public boolean visit(SingleVariableDeclaration node) {
+		setVariableDeclaredType(
+			node, 
+			referedType(
+				node.getType(), 
+				(org.moosetechnology.model.famix.famixjavaentities.Type) context.topType(),
+				false));
+		return true;
+	}
+
+	/**
 	 * VariableDeclarationExpression ::=
      *     { ExtendedModifier } Type VariableDeclarationFragment
      *          { , VariableDeclarationFragment }
@@ -302,25 +317,20 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
      * VariableDeclaration ::=
      *     SingleVariableDeclaration VariableDeclarationFragment
 	 */
+	@SuppressWarnings("unchecked")
 	private <T extends TWithTypes & TNamedEntity> boolean visitVariableDeclaration(List<VariableDeclaration> fragments, Type declType) {
-		setVariablesDeclaredType(fragments, referedType(declType, (T) context.topType(), false));
 		for (VariableDeclaration varDecl : fragments) {
+			TType declaredType = referedType(declType, (T) context.topType(), false);
+			setVariableDeclaredType( varDecl, declaredType);
 			varDecl.accept(this);
 		}
 		return false;
 	}
 
-//	public boolean visit(SimpleName node) {
-//		IBinding bnd = node.resolveBinding();
-//		if ( (bnd != null) && (bnd instanceof ITypeBinding) ) {
-//			referedType((ITypeBinding) bnd, (ContainerEntity) context.top(), !((ITypeBinding) bnd).isEnum());
-
-	private void setVariablesDeclaredType(List<VariableDeclaration> vars, TType varTyp) {
-		for (VariableDeclaration var : vars) {
-			TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(var.resolveBinding());
-			if (fmx != null) {
-				fmx.setDeclaredType(varTyp);
-			}
+	protected void setVariableDeclaredType(VariableDeclaration var, TType varTyp) {
+		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(var.resolveBinding());
+		if (fmx != null) {
+			fmx.setDeclaredType(varTyp);
 		}
 	}
 
