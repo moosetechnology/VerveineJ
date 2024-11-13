@@ -55,28 +55,31 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		endVisitTypeDeclaration(node);
 	}
 
-	/** creation of an instance of a class (anonymous or not)
-	 * ClassInstanceCreation ::=
+	/** creation of an instance of a class (anonymous or not)<br>
+	 * <pre>ClassInstanceCreation ::=
         [ Expression . ]
-            new [ < Type { , Type } > ]
+            new [ &lt; Type { , Type } &gt; ]
             Type ( [ Expression { , Expression } ] )
-            [ AnonymousClassDeclaration ]
+            [ AnonymousClassDeclaration ]</pre><br>
+	 * we do not want to create a TypeReference (see <a href="https://github.com/moosetechnology/VerveineJ/issues/109">https://github.com/moosetechnology/VerveineJ/issues/109</a>
+	 * so we must prevent the visit to <code>node.getType()</code>
+	 * that's why we manually visit children instead of leaving that to JDT (and we return <code>false</code>) 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
-		visitClassInstanceCreation(node);
-		if (node.getAnonymousClassDeclaration() == null) {
-			Type clazz = node.getType();
-			org.moosetechnology.model.famix.famixtraits.TType fmx = referedType(clazz, (ContainerEntity) context.top(), true);
-			/* correcting issue https://github.com/moosetechnology/VerveineJ/issues/109 */
-			/*Reference ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
-			context.setLastReference(ref);
+		possiblyAnonymousClassDeclaration(node);
 
-			if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
-				dico.addSourceAnchor(ref, node);
-			}*/
-		}
-		return super.visit(node);
+		//if (node.getAnonymousClassDeclaration() == null) {
+			node.getExpression().accept(this);
+			for (Type typeArg : (List<Type>)node.typeArguments()) {
+				typeArg.accept(this);
+			}
+			for (Expression arg : (List<Expression>)node.arguments()) {
+				arg.accept(this);
+			}
+		//}
+		return false;
 	}
 
 	@Override
@@ -219,7 +222,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@Override
 	public boolean visit(FieldDeclaration node) {
 		hasInitBlock(node);  // to recover optional EntityDictionary.INIT_BLOCK_NAME method
-		visitVariableDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());   // to create the TypeRefs
+		visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());   // to create the TypeRefs
 		return true;
 	}
 
@@ -259,7 +262,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(VariableDeclarationExpression node) {
-		return visitVariableDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
+		return visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
 	}
 
 	/**
@@ -270,7 +273,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
-		return visitVariableDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
+		return visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
 	}
 
     @SuppressWarnings("unchecked")
@@ -318,7 +321,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
      *     SingleVariableDeclaration VariableDeclarationFragment
 	 */
 	@SuppressWarnings("unchecked")
-	private <T extends TWithTypes & TNamedEntity> boolean visitVariableDeclaration(List<VariableDeclaration> fragments, Type declType) {
+	private <T extends TWithTypes & TNamedEntity> boolean visitVariablesDeclaration(List<VariableDeclaration> fragments, Type declType) {
 		for (VariableDeclaration varDecl : fragments) {
 			TType declaredType = referedType(declType, (T) context.topType(), false);
 			setVariableDeclaredType( varDecl, declaredType);

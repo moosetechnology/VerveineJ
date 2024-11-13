@@ -78,7 +78,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		String typName;
 		TType fmx;
 		
-		visitClassInstanceCreation(node);
+		possiblyAnonymousClassDeclaration(node);
 
 		if (node.getAnonymousClassDeclaration() != null) {
 			ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node.getAnonymousClassDeclaration());
