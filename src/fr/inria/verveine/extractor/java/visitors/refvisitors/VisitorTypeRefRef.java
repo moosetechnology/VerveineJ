@@ -77,7 +77,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		for (Expression arg : (List<Expression>)node.arguments()) {
 			arg.accept(this);
 		}
-		if (node.getAnonymousClassDeclaration() == null) {
+		if (node.getAnonymousClassDeclaration() != null) {
 			node.getAnonymousClassDeclaration().accept(this);
 		}
 		return false;

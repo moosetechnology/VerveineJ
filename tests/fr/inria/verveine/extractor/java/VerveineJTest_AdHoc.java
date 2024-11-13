@@ -4,17 +4,15 @@
 package fr.inria.verveine.extractor.java;
 
 
-import fr.inria.verveine.extractor.java.utils.Util;
-import org.junit.Before;
-import org.junit.Test;
-import org.moosetechnology.model.famix.famixjavaentities.*;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixjavaentities.Enum;
-import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixtraits.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,9 +21,34 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JFrame;
+import org.junit.Before;
+import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Access;
+import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.Enum;
+import org.moosetechnology.model.famix.famixjavaentities.EnumValue;
+import org.moosetechnology.model.famix.famixjavaentities.Interface;
+import org.moosetechnology.model.famix.famixjavaentities.Invocation;
+import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
+import org.moosetechnology.model.famix.famixjavaentities.Method;
+import org.moosetechnology.model.famix.famixjavaentities.Package;
+import org.moosetechnology.model.famix.famixjavaentities.Parameter;
+import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
+import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
+import org.moosetechnology.model.famix.famixjavaentities.Type;
+import org.moosetechnology.model.famix.famixtraits.TAccess;
+import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TEnumValue;
+import org.moosetechnology.model.famix.famixtraits.TInvocation;
+import org.moosetechnology.model.famix.famixtraits.TLocalVariable;
+import org.moosetechnology.model.famix.famixtraits.TMethod;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famix.famixtraits.TParameter;
+import org.moosetechnology.model.famix.famixtraits.TReference;
+import org.moosetechnology.model.famix.famixtraits.TType;
 
-import static org.junit.Assert.*;
+import fr.inria.verveine.extractor.java.utils.Util;
 
 /**
  * @author Nicolas Anquetil
@@ -151,11 +174,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	}
 
 	@ Test
-	/*
-	 * issue https://github.com/moosetechnology/VerveineJ/issues/109
-	 * "creates two dependencies for one "new" instruction
-	 *   instruction: new XYZ() results in an invocation of the constructor XYZ() + a reference to the type XYZ
-	 *   The second is a mistake
+	/* issue https://github.com/moosetechnology/VerveineJ/issues/109
+	 * no longer create a Reference to the type for "new" instruction
 	 */
 	public void testNoReferenceOnNew() {
 		parse(new String[] {"test_src/ad_hoc/DefaultConstructor.java"});
@@ -164,7 +184,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertNotNull(aMethod);
 	
 		assertEquals( 3, aMethod.numberOfOutgoingInvocations());
-		/* new DefaultConstructor(); x.methodWithInstanceScope(); new JFrame("My title"); */
+		/* new DefaultConstructor(); x.methodWithInstanceScope(); new JFrame(...); */
 		assertEquals(0, aMethod.numberOfOutgoingReferences());
 	}
 
