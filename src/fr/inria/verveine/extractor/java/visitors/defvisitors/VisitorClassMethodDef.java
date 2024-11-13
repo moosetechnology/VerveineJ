@@ -49,13 +49,9 @@ import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationTypeAttribute;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
-//import org.moosetechnology.model.famix.famixjavaentities.ParameterizedType;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
-//import org.moosetechnology.model.famix.famixtraits.TWithParameterizedTypes;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 import fr.inria.verveine.extractor.java.EntityDictionary;
@@ -104,6 +100,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 		//		System.err.println("TRACE, Visiting TypeDeclaration: "+node.getName().getIdentifier());
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
 
+		@SuppressWarnings("unchecked")
 		List<TypeParameter> tparams = (List<TypeParameter>) node.typeParameters();
 
 		// may be could use this.refereredType instead of dico.ensureFamixClass ?
@@ -277,7 +274,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
 	/**
      * MethodDeclaration ::=
-     *     [ Javadoc ] { ExtendedModifier } [ < TypeParameter { , TypeParameter } > ] ( Type | void )
+     *     [ Javadoc ] { ExtendedModifier } [ &lt; TypeParameter { , TypeParameter } &gt; ] ( Type | void )
      *         Identifier (
      *             [ ReceiverParameter , ] [ FormalParameter { , FormalParameter } ]
      *         ) { Dimension }
@@ -288,6 +285,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	 * Local type: same as {@link VisitorClassMethodDef#visit(ClassInstanceCreation)}, 
 	 * we create it even if it is a local method because their are too many ways it can access external things
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		IMethodBinding bnd = (IMethodBinding) StubBinding.getDeclarationBinding(node);

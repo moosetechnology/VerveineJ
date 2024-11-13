@@ -55,28 +55,34 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		endVisitTypeDeclaration(node);
 	}
 
-	/** creation of an instance of a class (anonymous or not)
-	 * ClassInstanceCreation ::=
+	/** creation of an instance of a class (anonymous or not)<br>
+	 * <pre>ClassInstanceCreation ::=
         [ Expression . ]
-            new [ < Type { , Type } > ]
+            new [ &lt; Type { , Type } &gt; ]
             Type ( [ Expression { , Expression } ] )
-            [ AnonymousClassDeclaration ]
+            [ AnonymousClassDeclaration ]</pre><br>
+	 * we do not want to create a TypeReference (see <a href="https://github.com/moosetechnology/VerveineJ/issues/109">https://github.com/moosetechnology/VerveineJ/issues/109</a>
+	 * so we must prevent the visit to <code>node.getType()</code>
+	 * that's why we manually visit children instead of leaving that to JDT (and we return <code>false</code>) 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
-		visitClassInstanceCreation(node);
-		if (node.getAnonymousClassDeclaration() == null) {
-			Type clazz = node.getType();
-			org.moosetechnology.model.famix.famixtraits.TType fmx = referedType(clazz, (ContainerEntity) context.top(), true);
-			/* correcting issue https://github.com/moosetechnology/VerveineJ/issues/109 */
-			/*Reference ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
-			context.setLastReference(ref);
+		possiblyAnonymousClassDeclaration(node);
 
-			if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
-				dico.addSourceAnchor(ref, node);
-			}*/
-		}
-		return super.visit(node);
+		//if (node.getAnonymousClassDeclaration() == null) {
+			Expression expr = node.getExpression();
+			if (expr != null) {
+				expr.accept(this);
+			}
+			for (Type typeArg : (List<Type>)node.typeArguments()) {
+				typeArg.accept(this);
+			}
+			for (Expression arg : (List<Expression>)node.arguments()) {
+				arg.accept(this);
+			}
+		//}
+		return false;
 	}
 
 	@Override

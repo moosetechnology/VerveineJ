@@ -15,6 +15,7 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class VisitorInvocRef extends AbstractRefVisitor {
 
@@ -68,17 +69,18 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	/**
 	 * Creates an invocation to the constructor of the class
 	 *
-	 * ClassInstanceCreation ::=
+	 * <pre>ClassInstanceCreation ::=
 	 *         [ Expression . ]
-	 *             new [ < Type { , Type } > ]
+	 *             new [ &lt; Type { , Type } &gt; ]
 	 *             Type ( [ Expression { , Expression } ] )
-	 *             [ AnonymousClassDeclaration ]
+	 *             [ AnonymousClassDeclaration ]</pre>
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean visit(ClassInstanceCreation node) {
 		String typName;
 		TType fmx;
 		
-		visitClassInstanceCreation(node);
+		possiblyAnonymousClassDeclaration(node);
 
 		if (node.getAnonymousClassDeclaration() != null) {
 			ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node.getAnonymousClassDeclaration());
@@ -96,7 +98,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			}
 		}
 
-		methodInvocation(node.resolveConstructorBinding(), typName, /*receiver*/null, /*methOwner*/fmx, node.arguments());
+		methodInvocation(node.resolveConstructorBinding(), typName, /*receiver*/null, /*methOwner*/fmx, (List<Expression>)node.arguments());
 		Invocation lastInvok = (Invocation) context.getLastInvocation();
 		if ( options.withAnchors(VerveineJOptions.AnchorOptions.assoc)
 				&& (lastInvok != null)
@@ -105,6 +107,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 				&& (lastInvok.getSignature().startsWith(typName))) {
 			dico.addSourceAnchor(lastInvok, node);
 		}
+
 		return super.visit(node);
 	}
 
