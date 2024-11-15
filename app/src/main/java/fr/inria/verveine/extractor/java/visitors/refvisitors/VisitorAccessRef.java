@@ -66,7 +66,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
-		visitClassInstanceCreation( node);
+		possiblyAnonymousClassDeclaration( node);
         visitIfNotNull(node.getExpression());
         for (Object arg : node.arguments()) {
             if (NodeTypeChecker.isSimpleName((ASTNode) arg)) {

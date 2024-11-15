@@ -61,7 +61,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 	 */
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
-		visitClassInstanceCreation( node);
+		possiblyAnonymousClassDeclaration( node);
 		return super.visit(node);
 	}
 

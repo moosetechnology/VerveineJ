@@ -5,8 +5,6 @@ import fr.inria.verveine.extractor.java.VerveineJOptions;
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
 import org.moosetechnology.model.famix.famixjavaentities.Reference;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
@@ -55,28 +53,35 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		endVisitTypeDeclaration(node);
 	}
 
-	/** creation of an instance of a class (anonymous or not)
-	 * ClassInstanceCreation ::=
+	/** creation of an instance of a class (anonymous or not)<br>
+	 * <pre>ClassInstanceCreation ::=
         [ Expression . ]
-            new [ < Type { , Type } > ]
+            new [ &lt; Type { , Type } &gt; ]
             Type ( [ Expression { , Expression } ] )
-            [ AnonymousClassDeclaration ]
+            [ AnonymousClassDeclaration ]</pre><br>
+	 * we do not want to create a TypeReference (see <a href="https://github.com/moosetechnology/VerveineJ/issues/109">https://github.com/moosetechnology/VerveineJ/issues/109</a>
+	 * so we must prevent the visit to <code>node.getType()</code>
+	 * that's why we manually visit children instead of leaving that to JDT (and we return <code>false</code>) 
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
-		visitClassInstanceCreation(node);
-		if (node.getAnonymousClassDeclaration() == null) {
-			Type clazz = node.getType();
-			org.moosetechnology.model.famix.famixtraits.TType fmx = referedType(clazz, (ContainerEntity) context.top(), true);
-			/* correcting issue https://github.com/moosetechnology/VerveineJ/issues/109 */
-			/*Reference ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
-			context.setLastReference(ref);
+		possiblyAnonymousClassDeclaration(node);
 
-			if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
-				dico.addSourceAnchor(ref, node);
-			}*/
+		if (node.getExpression() != null) {
+			node.getExpression().accept(this);
 		}
-		return super.visit(node);
+		for (Type typeArg : (List<Type>)node.typeArguments()) {
+			typeArg.accept(this);
+		}
+		for (Expression arg : (List<Expression>)node.arguments()) {
+			arg.accept(this);
+		}
+		if (node.getAnonymousClassDeclaration() != null) {
+			node.getAnonymousClassDeclaration().accept(this);
+		}
+
+		return false;
 	}
 
 	@Override
@@ -219,7 +224,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@Override
 	public boolean visit(FieldDeclaration node) {
 		hasInitBlock(node);  // to recover optional EntityDictionary.INIT_BLOCK_NAME method
-		visitVariableDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());   // to create the TypeRefs
+		visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());   // to create the TypeRefs
 		return true;
 	}
 
@@ -237,6 +242,21 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	/**
+	 * SingleVariableDeclaration ::=
+     *   { ExtendedModifier } Type {Annotation} [ ... ] Identifier { Dimension } [ = Expression ]
+	 */
+	@Override
+	public boolean visit(SingleVariableDeclaration node) {
+		setVariableDeclaredType(
+			node, 
+			referedType(
+				node.getType(), 
+				(org.moosetechnology.model.famix.famixjavaentities.Type) context.topType(),
+				false));
+		return true;
+	}
+
+	/**
 	 * VariableDeclarationExpression ::=
      *     { ExtendedModifier } Type VariableDeclarationFragment
      *          { , VariableDeclarationFragment }
@@ -244,7 +264,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(VariableDeclarationExpression node) {
-		return visitVariableDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
+		return visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
 	}
 
 	/**
@@ -255,7 +275,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
-		return visitVariableDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
+		return visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
 	}
 
     @SuppressWarnings("unchecked")
@@ -302,25 +322,20 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
      * VariableDeclaration ::=
      *     SingleVariableDeclaration VariableDeclarationFragment
 	 */
-	private <T extends TWithTypes & TNamedEntity> boolean visitVariableDeclaration(List<VariableDeclaration> fragments, Type declType) {
-		setVariablesDeclaredType(fragments, referedType(declType, (T) context.topType(), false));
+	@SuppressWarnings("unchecked")
+	private <T extends TWithTypes & TNamedEntity> boolean visitVariablesDeclaration(List<VariableDeclaration> fragments, Type declType) {
 		for (VariableDeclaration varDecl : fragments) {
+			TType declaredType = referedType(declType, (T) context.topType(), false);
+			setVariableDeclaredType( varDecl, declaredType);
 			varDecl.accept(this);
 		}
 		return false;
 	}
 
-//	public boolean visit(SimpleName node) {
-//		IBinding bnd = node.resolveBinding();
-//		if ( (bnd != null) && (bnd instanceof ITypeBinding) ) {
-//			referedType((ITypeBinding) bnd, (ContainerEntity) context.top(), !((ITypeBinding) bnd).isEnum());
-
-	private void setVariablesDeclaredType(List<VariableDeclaration> vars, TType varTyp) {
-		for (VariableDeclaration var : vars) {
-			TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(var.resolveBinding());
-			if (fmx != null) {
-				fmx.setDeclaredType(varTyp);
-			}
+	protected void setVariableDeclaredType(VariableDeclaration var, TType varTyp) {
+		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(var.resolveBinding());
+		if (fmx != null) {
+			fmx.setDeclaredType(varTyp);
 		}
 	}
 

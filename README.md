@@ -15,13 +15,22 @@ Based on JDT, it parses java code to export it in the MSE or JSON formats used b
 
 There is a [docker version](https://github.com/Evref-BL/VerveineJ-Docker).
 
+It will create an `output.json` (JSON format also available) file with the model extracted from the \<java-source-directory\>
+There is a docker version at: [https://github.com/Evref-BL/VerveineJ-Docker](https://github.com/Evref-BL/VerveineJ-Docker)) (thanks to Benoît Verhaeghe for this).
+If you already have docker the summary is:
+
+```sh
+docker run -v <full/path/toSource>:/src [-v <full/path/toDependency>:/dependency] ghcr.io/evref-bl/verveinej:latest <verveineJOption>
+```
+The resulting model file (.json or .mse) is in \<full/path/toSource\>.
+
 Otherwise, on the command line, download the jar of the latest release and the command is
 
 ```sh
 java -jar VerveineJ-v1.0.0.jar -format json -autocp <dependency/folder> <src/folder> 
 ```
 
-It will create an `output.json` (JSON format also available) file with the model extracted from the \<java-source-directory\>
+It will create an `output.json` file with the model extracted from the \<java-source-directory\>
 
 To see what other options are available:
 
@@ -67,5 +76,4 @@ To force JVM keep the full stacktrace, you can use the following vm options:
 ```txt
 -XX:-OmitStackTraceInFastThrow -Xint
 ```
-
 > This will make the execution super slow, so keep this option for debug purpose only.

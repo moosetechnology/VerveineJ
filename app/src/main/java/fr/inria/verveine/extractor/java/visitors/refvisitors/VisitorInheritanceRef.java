@@ -44,7 +44,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 	public boolean visit(ClassInstanceCreation node) {
 		// used to get the name of the super type of the anonymous class
-		visitClassInstanceCreation(node);
+		possiblyAnonymousClassDeclaration(node);
 		return super.visit(node);
 	}
 
