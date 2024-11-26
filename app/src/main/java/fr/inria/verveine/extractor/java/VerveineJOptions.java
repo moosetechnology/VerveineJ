@@ -98,7 +98,7 @@ public class VerveineJOptions {
 
 	/**
 	 * Name of the file where to put the MSE model.
-	 * Defaults to {@link VerveineParser#OUTPUT_FILE}
+	 * Defaults to {@link #OUTPUT_FILE}
 	 */
 	protected String outputFileName;
 
@@ -179,7 +179,6 @@ public class VerveineJOptions {
 
 	/**
 	 * treats 1 argument or more starting at position <code>i</code> in the array of arguments <code>args</code>
-	 * @param verveineJParser TODO
 	 * @param args TODO
 	 * @param i TODO
 	 * @return The number of argument(s) treated

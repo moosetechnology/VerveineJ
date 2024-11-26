@@ -101,10 +101,7 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 		}
 	}
 
-	/**
-	 * Same as {@link AbstractRefVisitor#referedType(Type, ContainerEntity, boolean)} but with a type binding as first argument instead of a Type
-	 */
-	protected  TType referedType(ITypeBinding bnd, TNamedEntity ctxt, boolean isClass) {
+	protected TType referedType(ITypeBinding bnd, TNamedEntity ctxt, boolean isClass) {
 		org.moosetechnology.model.famix.famixtraits.TType fmxTyp = null;
 
 		if (bnd == null) {

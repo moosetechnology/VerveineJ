@@ -143,6 +143,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	/**
+	 * <pre>
+	 * {@code
 	 * MethodDeclaration ::=
     [ Javadoc ] { ExtendedModifier } [ < TypeParameter { , TypeParameter } > ] ( Type | void )
         Identifier (
@@ -150,7 +152,9 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
         ) { Dimension }
         [ throws Type { , Type } ]
         ( Block | ; )
-	 */
+	 * }
+	 * </pre>
+	 **/
 	@SuppressWarnings("unchecked")
 	public boolean visit(MethodDeclaration node) {
 		Method fmx = visitMethodDeclaration( node);

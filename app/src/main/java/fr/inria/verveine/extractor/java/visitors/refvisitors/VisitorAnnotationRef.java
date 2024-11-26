@@ -15,13 +15,13 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * <p>Recovers annotations from the IBinding of various kind of entities:
+ * Recovers annotations from the IBinding of various kind of entities:
  * <ul>
  * <li>Package bindings - annotations on a package declaration.
  * <li>Type bindings - annotations on a class, interface, enum, or annotation type declaration
  * <li>Method bindings - annotations on a method or constructor declaration
  * <li>Variable bindings - annotations on a field, enum constant, or formal parameter declaration
- * </ul></p>
+ * </ul>
  * <p>This visitor is different from the other in that it works with the binding.
  * So, for example, there is no need to keep the stack of declared entities.
  * Yet it still inherits from GetVisitedEntityAbstractVisitor to know if we should summarize model at the level of classes</p>

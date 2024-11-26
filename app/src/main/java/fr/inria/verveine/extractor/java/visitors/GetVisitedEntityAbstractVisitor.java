@@ -128,9 +128,9 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 	/**
 	 * Creation of an instance of an anonymous class, ie. <code>new AnonymousClassDeclaration</code><br>
-	 * See also field {@link GetVisitedEntityAbstractVisitor#anonymousSuperTypeName}
+	 * See also field {@link #anonymousSuperTypeName}
 	 * 
-	 * The 'push' possibly done here gets undone in {@link GetVisitedEntityAbstractVisitor#endVisitAnonymousClassDeclaration()}
+	 * The 'push' possibly done here gets undone in endVisitAnonymousClassDeclaration()
 	 */
 	protected void possiblyAnonymousClassDeclaration(ClassInstanceCreation node) {
 		if (node.getAnonymousClassDeclaration() != null) {
@@ -197,10 +197,6 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		super.endVisit(node);
 	}
 
-	/**
-	 * Local type: same as {@link TotoVisitor#possiblyAnonymousClassDeclaration(ClassInstanceCreation)}, 
-	 * we create it even if it is a local method because their are too many ways it can access external things
-	 */
 	@SuppressWarnings("unchecked")
 	protected Method visitMethodDeclaration(MethodDeclaration node) {
 		IMethodBinding bnd = (IMethodBinding) StubBinding.getDeclarationBinding(node);

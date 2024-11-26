@@ -171,11 +171,15 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	}
 
     /**
+	 * <pre>
+	 * {@code
      * MethodInvocation ::=
      *      [ Expression . ]
      *          [ < Type { , Type } > ]
      *          Identifier ( [ Expression { , Expression } ] )
-     */
+     * }
+	 * </pre>
+	 **/
 	@Override
 	public boolean visit(MethodInvocation node) {
         visitIfNotNull( node.getExpression());

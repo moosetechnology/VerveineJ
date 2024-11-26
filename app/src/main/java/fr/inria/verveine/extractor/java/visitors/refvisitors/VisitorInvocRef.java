@@ -111,9 +111,6 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		return super.visit(node);
 	}
 
-	/**
-	 * See {@link TotoVisitor#anonymousSuperTypeName}
-	 */
 	public boolean visit(AnonymousClassDeclaration node) {
 		if (visitAnonymousClassDeclaration( node) != null) {
 			return super.visit(node);

@@ -56,18 +56,12 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 		endVisitTypeDeclaration(node);
 	}
 
-	/**
-	 * Sets field {@link TotoVisitor#anonymousSuperTypeName}
-	 */
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		possiblyAnonymousClassDeclaration( node);
 		return super.visit(node);
 	}
 
-	/**
-	 * Uses field {@link  TotoVisitor#anonymousSuperTypeName}
-	 */
 	@Override
 	public boolean visit(AnonymousClassDeclaration node) {
 		if (visitAnonymousClassDeclaration( node) != null) {

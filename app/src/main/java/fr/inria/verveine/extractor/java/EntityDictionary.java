@@ -150,7 +150,7 @@ public class EntityDictionary {
 	 */
 	protected Map<IBinding,TNamedEntity> keyToEntity;
 	/**
-	 * A reverse dictionary (see {@link AbstractDictionary#keyToEntity}) to find the key of an entity.
+	 * A reverse dictionary (see {@link #keyToEntity}) to find the key of an entity.
 	 */
 	protected Map<TNamedEntity,IBinding> entityToKey;
 
@@ -162,7 +162,7 @@ public class EntityDictionary {
 	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
-	 * or may have the same binding than their associated type so they can't be kept easily in {@link AbstractDictionary#keyToEntity}
+	 * or may have the same binding than their associated type so they can't be kept easily in {@link #keyToEntity}
 	 */
 	@Deprecated
 	protected Map<Type,ImplicitVars> typeToImpVar;
@@ -284,7 +284,7 @@ public class EntityDictionary {
 	 * Returns the Famix Entity associated to the given key.
 	 * <b>Note</b>: Be careful than ImplicitVariables share the same binding than their associated Class and cannot be retrieved with this method.
 	 * In such a case, this method will always retrieve the Class associated to the key.
-	 * To get an ImplicitVariable from the key, use {@link AbstractDictionary#getImplicitVariableByBinding(Object, String)}
+	 * To get an ImplicitVariable from the key, use {@link #getImplicitVariableByBinding(IBinding, String)}
 	 * @param key -- the key
 	 * @return the Famix Entity associated to the binding or null if not found
 	 */
@@ -308,7 +308,7 @@ public class EntityDictionary {
 
 	/**
 	 * Creates and returns a FAMIX Entity of the type <b>fmxjava.lang.Class</b>.
-	 * The Entity is always created (see {@link AbstractDictionary#ensureFamixEntity(Class, Object, String)}).
+	 * The Entity is always created.
 	 * @param fmxClass -- the FAMIX class of the instance to create
 	 * @param name -- the name of the new instance must not be null (and this is not tested)
 	 * @return the FAMIX Entity or null in case of a FAMIX error
@@ -345,7 +345,7 @@ public class EntityDictionary {
 	 * The Entity is created if it did not exist.
 	 * @param fmxClass -- the FAMIX class of the instance to create
 	 * @param bnd -- the binding to map to the new instance
-	 * @param name -- the name of the new instance (used if <tt>bnd == null</tt>)
+	 * @param name -- the name of the new instance (used if <pre>{@code bnd == null}</pre>)
 	 * @return the FAMIX Entity or null if <b>bnd</b> was null or in case of a FAMIX error
 	 */
 	@SuppressWarnings("unchecked")
@@ -527,8 +527,8 @@ public class EntityDictionary {
 	
 		/**
 	 * Returns a Famix Implementation relationship between two Famix Classes creating it if needed
-	 * @param sup -- the implemented interface
-	 * @param sub -- the implementing class
+	 * @param myInterface -- the implemented interface
+	 * @param implementingClass -- the implementing class
 	 * @param prev -- previous inheritance relationship in the same context
 	 * @return the Inheritance relationship
 	 */
@@ -712,7 +712,7 @@ public class EntityDictionary {
 
 	/**
 	 * Returns the Famix ImplicitVariable associated to the given binding and name (self or super).
-	 * See also {@link AbstractDictionary#getEntityByKey(Object)}
+	 * See also {@link #getEntityByKey(IBinding)}
 	 * @param bnd -- the binding
 	 * @return the Famix Entity associated to the binding or null if not found
 	 */
@@ -754,7 +754,7 @@ public class EntityDictionary {
 	 * This is the case e.g. for the default package, or the Java class "Object" and its package "java.lang".
 	 * @param fmxClass -- the FAMIX class of the instance to create
 	 * @param key -- a potential binding for the entity
-	 * @param name -- the name of the new instance (used if <tt>bnd == null</tt>)
+	 * @param name -- the name of the new instance (used if <pre>{@code bnd == null}</pre>)
 	 * @return the uniq Famix Entity for this binding and/or name
 	 */
 	@SuppressWarnings("unchecked")
@@ -883,7 +883,7 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Returns the Package with {@link AbstractDictionary#DEFAULT_PCKG_NAME} or <code>null</code> if not found
+	 * Returns the Package with {@link #DEFAULT_PCKG_NAME} or <code>null</code> if not found
 	 */
 	public Package getFamixPackageDefault() {
 		Collection<Package> l = getEntityByName(Package.class, DEFAULT_PCKG_NAME);
@@ -1026,7 +1026,6 @@ public class EntityDictionary {
 	 * The Entity is created if it does not exist.
 	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
 	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
-	 * @param key to which the entity will be mapped (may be null, but then it will be difficult to recover the entity)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	@SuppressWarnings("deprecation")
@@ -1133,7 +1132,6 @@ public class EntityDictionary {
 	 * The Entity is created if it does not exist.
 	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
 	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
-	 * @param key to which the entity will be mapped (may be null, but then it will be difficult to recover the entity)
 	 *
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
@@ -1224,7 +1222,6 @@ public class EntityDictionary {
 	 * Returns a FAMIX Interface with the given <b>name</b>, creating it if it does not exist yet.
 	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
 	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
-	 * @param key to which the entity will be mapped (may be null, but then it will be difficult to recover the entity)
 	 * @return the FAMIX Class or null in case of a FAMIX error
 	 */
 	public <T extends TWithTypes & TNamedEntity> Interface ensureFamixInterface(ITypeBinding bnd, String name, TWithTypes owner, boolean isGeneric, int modifiers) {
@@ -2435,8 +2432,6 @@ public class EntityDictionary {
 	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
 	 * @param ret -- Famix Type returned by the method (ideally should only be null in case of a constructor, but will accept it in any case)
 	 * @param owner -- type defining the method (should not be null, but it will work if it is)
-	 * @param key to which the entity will be mapped (may be null, but then it will be difficult to recover the entity)
-	 * @param sig -- method's signature, including type of parameters and return type (should not be null, but it will work if it is)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, TType ret, TWithMethods owner, int modifiers) {
@@ -2648,7 +2643,6 @@ public class EntityDictionary {
 	 * @param name -- the name of the FAMIX Attribute (MUST NOT be null, but this is not checked)
 	 * @param type -- Famix Type of the Attribute (should not be null, but it will work if it is)
 	 * @param owner -- type defining the Attribute (should not be null, but it will work if it is)
-	 * @param key to which the entity will be mapped (may be null, but then it will be difficult to recover the entity)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, Type type, TWithAttributes owner) {
@@ -2922,7 +2916,6 @@ public class EntityDictionary {
 	 * This method also creates some basic links between the entity and others (e.g. declaring container, return type, ...)
 	 * @param fmx -- Famix Entity to add the anchor to
 	 * @param node -- JDT ASTNode, where the information is extracted
-	 * @param oneLineAnchor -- whether to consider that endLine = beginLine (oneLineAnchor) or not. Created to add anchor to some TAssociation happening within <b>ast</b>
 	 * @return the Famix SourceAnchor added to fmx. May be null in case of incorrect parameter ('fmx' or 'ast' == null)
 	 */
 	public SourceAnchor addSourceAnchor(TSourceEntity fmx, ASTNode node) {
@@ -3019,7 +3012,7 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Ensures the Java meta-class: java.lang.Class<>
+	 * Ensures the Java meta-class: <pre>{@code java.lang.Class<>}</pre>
 	 */
 	public Class ensureFamixMetaClass(ITypeBinding bnd) {
 		Package javaLang = ensureFamixPackageJavaLang((bnd == null) ? null : bnd.getPackage());
@@ -3038,7 +3031,7 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Creates or recovers the Famix Class for all arrays (<some-type> [])
+	 * Creates or recovers the Famix Class for all arrays (<pre>{@code <some-type> []}</pre>)
 	 * In java arrays or objects of special classes (i.e. "I[" for an array of int).
 	 * JDT does not create a binding for these classes, so we create a stub one here.
 	 *
