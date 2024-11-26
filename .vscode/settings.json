@@ -16,5 +16,6 @@
                 "-XX:-OmitStackTraceInFastThrow", "-Xint"
             ]
         }
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

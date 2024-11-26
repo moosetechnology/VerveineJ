@@ -1,0 +1,39 @@
+name: Release
+
+env:
+  USERNAME: ${{ github.actor }}
+  TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  github-token: ${{ secrets.GITHUB_TOKEN }}
+  VERSION: ${{ github.event.release.tag_name }}
+
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: build fat jar
+        run: ./gradlew app:shadowJar
+
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: 'app/build/libs/*.jar'
+      
