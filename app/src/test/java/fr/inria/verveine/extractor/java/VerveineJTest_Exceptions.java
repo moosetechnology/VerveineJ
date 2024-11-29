@@ -122,4 +122,16 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
         assertEquals(aReadWriteException.getTypeContainer(), anException);
     }
 
+    @Test
+    public void testExpressionInThrow() {
+        org.moosetechnology.model.famix.famixjavaentities.Method throwerMethod = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Method.class , "throwerMethod");
+        org.moosetechnology.model.famix.famixjavaentities.Exception declaredException = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "AnnotedException");
+        
+        assertNotNull(throwerMethod);
+        assertNotNull(declaredException);
+
+        assertEquals(1,throwerMethod.getThrownExceptions().size());
+        assertEquals(declaredException, firstElt(throwerMethod.getThrownExceptions()));
+    }
+
 }
