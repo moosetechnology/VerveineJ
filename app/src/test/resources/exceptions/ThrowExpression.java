@@ -6,6 +6,10 @@ public class ThrowExpression {
         return null;
     }
     
+    public void throwerOfStub() throws Exception {
+        throw getStubException();
+    }
+
     public void throwerMethod() throws Exception {
         throw getException();
     }
