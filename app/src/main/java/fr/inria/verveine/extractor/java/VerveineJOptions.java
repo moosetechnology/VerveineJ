@@ -136,7 +136,7 @@ public class VerveineJOptions {
 		this.commentText = false;
 		this.incrementalParsing = false;
 		this.outputFileName = null;
-		this.outputFormat = MSE_OUTPUT_FORMAT;
+		this.outputFormat = JSON_OUTPUT_FORMAT;
 		this.debugging = false;
 	}
 
