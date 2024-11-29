@@ -1125,8 +1125,8 @@ public class EntityDictionary {
 	/**
 	 * Returns a Famix Exception associated with the ITypeBinding.
 	 * The Entity is created if it does not exist.
-	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
-	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
+	 * @param name -- the name of the Famix Exception (MUST NOT be null, but this is not checked)
+	 * @param owner -- type defining the Exception (should not be null, but it will work if it is) 
 	 *
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
