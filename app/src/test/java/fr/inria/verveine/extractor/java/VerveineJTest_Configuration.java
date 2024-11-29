@@ -1,7 +1,6 @@
 package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;

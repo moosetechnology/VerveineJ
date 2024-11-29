@@ -4,7 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixtraits.TImplementable;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 

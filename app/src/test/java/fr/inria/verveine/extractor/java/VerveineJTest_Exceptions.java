@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TThrowable;
 
 import static org.junit.Assert.*;
 
