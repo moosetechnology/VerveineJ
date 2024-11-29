@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.dom.TypeParameter;
 import org.moosetechnology.model.famix.famixjavaentities.Access;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstance;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstanceAttribute;
@@ -56,7 +54,6 @@ import org.moosetechnology.model.famix.famixjavaentities.ParametricMethod;
 import org.moosetechnology.model.famix.famixjavaentities.PrimitiveType;
 import org.moosetechnology.model.famix.famixjavaentities.Reference;
 import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
-import org.moosetechnology.model.famix.famixjavaentities.SourceTextAnchor;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixjavaentities.Wildcard;
 import org.moosetechnology.model.famix.famixtraits.TAccessible;
@@ -64,7 +61,6 @@ import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TCanImplement;
-import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
@@ -93,7 +89,6 @@ import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 import ch.akuhn.fame.Repository;
-import ch.akuhn.foreach.Collect;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 
@@ -1130,8 +1125,8 @@ public class EntityDictionary {
 	/**
 	 * Returns a Famix Exception associated with the ITypeBinding.
 	 * The Entity is created if it does not exist.
-	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
-	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
+	 * @param name -- the name of the Famix Exception (MUST NOT be null, but this is not checked)
+	 * @param owner -- type defining the Exception (should not be null, but it will work if it is) 
 	 *
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */

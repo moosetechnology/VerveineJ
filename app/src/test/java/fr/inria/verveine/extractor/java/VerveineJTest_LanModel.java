@@ -17,16 +17,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Access;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstance;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
 import org.moosetechnology.model.famix.famixjavaentities.Attribute;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Comment;
-import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Implementation;
 import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
 import org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor;

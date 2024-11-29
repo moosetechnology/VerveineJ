@@ -5,13 +5,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Stream;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
@@ -23,14 +21,10 @@ import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricMethod;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixjavaentities.Wildcard;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixjavaentities.Concretization;
 import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TParameter;
-
 import org.moosetechnology.model.famix.famixtraits.TType;
 
 public class VerveineJTest_Generics extends VerveineJTest_Basic {
@@ -445,6 +439,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
 
     	// UTILITIES --------------------------------------------------
 
+/* 
     private Collection<java.lang.Class<?>> allInterfaces() {
 		Set<java.lang.Class<?>> allInterfaces = (Set<java.lang.Class<?>>) allInterfacesFromClasses(JAVA_CLASSES_USED);
 		
@@ -462,5 +457,5 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
 	private Stream<java.lang.Class<?>> allParameterizedClasses() {
 		return allJavaSuperClasses(JAVA_CLASSES_USED).stream().filter( (e) -> e.getTypeParameters().length > 0);
 	}
-
+ */
 }

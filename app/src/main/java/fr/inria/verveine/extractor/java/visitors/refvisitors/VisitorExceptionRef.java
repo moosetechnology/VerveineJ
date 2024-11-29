@@ -8,7 +8,6 @@ import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TThrowable;
 import org.moosetechnology.model.famix.famixtraits.TType;
@@ -96,8 +95,13 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     @Override
     public boolean visit(ThrowStatement node) {
         Method meth = (Method) this.context.topMethod();
-        TThrowable excepFmx = dico.asException(this
-                .referedType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true));
+        TType thrownExceptionType = this.referedType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
+        TThrowable excepFmx;
+        if (thrownExceptionType == null) {
+            excepFmx = dico.ensureFamixException(null, "Throwable", null, false, EntityDictionary.UNKNOWN_MODIFIERS) ;
+        }
+        else {
+        excepFmx = dico.asException( thrownExceptionType);}
         if (excepFmx != null) {
         	dico.createFamixThrownException(meth, excepFmx);
         }

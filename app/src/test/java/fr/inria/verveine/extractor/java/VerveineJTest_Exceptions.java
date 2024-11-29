@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TThrowable;
 
 import static org.junit.Assert.*;
 
@@ -79,13 +78,14 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
     }
 
     @Test
-    public void testExceptionCanHaveInnerEnumerationExceptions() {
+    public void testExceptionCanHaveInnerEnumerationExcept() {
         org.moosetechnology.model.famix.famixjavaentities.Enum typeEnum = detectFamixElement( org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Type");
         assertNotNull(typeEnum);
 
         org.moosetechnology.model.famix.famixjavaentities.Exception localException = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "LocalException");
         assertNotNull(localException);
 
+        assertEquals( localException, typeEnum.getTypeContainer());
     }
 
 
@@ -121,6 +121,30 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
         assertEquals(aReadException.getTypeContainer(), anException);
         assertEquals(aWriteException.getTypeContainer(), anException);
         assertEquals(aReadWriteException.getTypeContainer(), anException);
+    }
+
+    @Test
+    public void testExpressionInThrow() {
+        org.moosetechnology.model.famix.famixjavaentities.Method throwerMethod = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Method.class , "throwerMethod");
+        org.moosetechnology.model.famix.famixjavaentities.Exception declaredException = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "AnnotedException");
+        
+        assertNotNull(throwerMethod);
+        assertNotNull(declaredException);
+
+        assertEquals(1,throwerMethod.getThrownExceptions().size());
+        assertEquals(declaredException, firstElt(throwerMethod.getThrownExceptions()));
+    }
+
+    @Test
+    public void testStubExpressionInThrow() {
+        org.moosetechnology.model.famix.famixjavaentities.Method throwerMethod = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Method.class , "throwerOfStub");
+        org.moosetechnology.model.famix.famixjavaentities.Exception inferredException = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "Throwable");
+        
+        assertNotNull(throwerMethod);
+        assertNotNull(inferredException);
+
+        assertEquals(1,throwerMethod.getThrownExceptions().size());
+        assertEquals(inferredException, firstElt(throwerMethod.getThrownExceptions()));
     }
 
 }
