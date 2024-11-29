@@ -112,7 +112,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		parser.configure(args);
 		parser.parse();
 
-		new File(DEFAULT_OUTPUT_FILE).delete(); // delete old MSE file
+		new File(DEFAULT_OUTPUT_FILE).delete(); // delete old JSON file
 		System.gc(); // In Windows free the link to the file. Must be used for incremental parsing
 						// tests
 		parser.exportModel(); // to create a new one
