@@ -59,6 +59,8 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 
 	private static final String A_CLASS_NAME = "--aClassName--";
 
+	private static final String DEFAULT_MSE_FILE = "output.mse";
+
 	public VerveineJTest_LanModel() throws IllegalAccessException {
 		super(true);
 	}
@@ -68,7 +70,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		new File(DEFAULT_OUTPUT_FILE).delete();
+		new File(DEFAULT_MSE_FILE).delete();
 
 		String[] files = new String[] {
 
@@ -112,7 +114,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		parser.configure(args);
 		parser.parse();
 
-		new File(DEFAULT_OUTPUT_FILE).delete(); // delete old MSE file
+		new File(DEFAULT_OUTPUT_FILE).delete(); // delete old JSON file
 		System.gc(); // In Windows free the link to the file. Must be used for incremental parsing
 						// tests
 		parser.exportModel(); // to create a new one

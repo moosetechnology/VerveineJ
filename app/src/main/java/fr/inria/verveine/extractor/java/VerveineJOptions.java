@@ -136,7 +136,7 @@ public class VerveineJOptions {
 		this.commentText = false;
 		this.incrementalParsing = false;
 		this.outputFileName = null;
-		this.outputFormat = MSE_OUTPUT_FORMAT;
+		this.outputFormat = null; //We need to know if the user sets this option manually. After parsing options, this will be set to the default format if it is still null.
 		this.debugging = false;
 	}
 
@@ -154,6 +154,21 @@ public class VerveineJOptions {
 				System.err.println(e.getMessage());
 				usage();
 				throw e;
+			}
+		}
+
+		if (JSON_OUTPUT_FORMAT.equalsIgnoreCase(outputFormat) && (incrementalParsing) ) {
+			IllegalArgumentException illegalArgumentException = new IllegalArgumentException("-i option requires mse format.");
+			System.err.println(illegalArgumentException.getMessage());
+			usage();
+			throw illegalArgumentException;
+		}
+
+		if (outputFormat == null) {
+			if (incrementalParsing) {
+				outputFormat = MSE_OUTPUT_FORMAT;
+			} else {
+				outputFormat= JSON_OUTPUT_FORMAT;
 			}
 		}
 
@@ -227,13 +242,14 @@ public class VerveineJOptions {
 			}
 		} else if (arg.equals("-i")) {
 			incrementalParsing = true;
+
 		}
 		else if (arg.equals("-debugging")) {
 				debugging = true;
 		} else {
 			throw new IllegalArgumentException("** Unrecognized option: " + arg);
 		}
-	
+
 		return argumentsTreated;
 	}
 
