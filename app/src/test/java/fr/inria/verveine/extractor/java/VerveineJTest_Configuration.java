@@ -2,10 +2,13 @@ package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Assert;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+
+//import junit.framework.Assert;
 
 import java.io.File;
 import java.io.FileReader;
@@ -37,7 +40,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 
 	private void parse(String[] sources) {
-		parser.configure( sources);
+		parser.configure(sources);
 		parser.parse();
 	}
 
@@ -351,5 +354,16 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
         }
         assertEquals(3, count);
     }
+
+
+	@Test
+	public void testFormatAndIncrementalIncompatibility() {
+		String[] args = new String[] {
+			"-format", "json",
+			"-i",
+			"src/test/resources/LANModel/moose/lan/server/PrintServer.java",
+		};
+		assertThrows(IllegalArgumentException.class, () -> parser.configure(args));
+	}
 
 }

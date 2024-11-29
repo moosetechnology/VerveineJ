@@ -156,7 +156,8 @@ public class VerveineJOptions {
 				throw e;
 			}
 		}
-		if ((outputFormat == JSON_OUTPUT_FORMAT) && (incrementalParsing) ) {
+
+		if ((outputFormat.equals(JSON_OUTPUT_FORMAT)) && (incrementalParsing) ) {
 			IllegalArgumentException illegalArgumentException = new IllegalArgumentException("-i option requires mse format.");
 			System.err.println(illegalArgumentException.getMessage());
 			usage();
