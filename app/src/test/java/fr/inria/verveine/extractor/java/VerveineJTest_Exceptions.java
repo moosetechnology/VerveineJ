@@ -135,4 +135,16 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
         assertEquals(declaredException, firstElt(throwerMethod.getThrownExceptions()));
     }
 
+    @Test
+    public void testStubExpressionInThrow() {
+        org.moosetechnology.model.famix.famixjavaentities.Method throwerMethod = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Method.class , "throwerOfStub");
+        org.moosetechnology.model.famix.famixjavaentities.Exception inferredException = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "Throwable");
+        
+        assertNotNull(throwerMethod);
+        assertNotNull(inferredException);
+
+        assertEquals(1,throwerMethod.getThrownExceptions().size());
+        assertEquals(inferredException, firstElt(throwerMethod.getThrownExceptions()));
+    }
+
 }
