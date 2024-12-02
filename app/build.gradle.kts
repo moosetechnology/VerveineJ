@@ -29,7 +29,7 @@ repositories {
 
 dependencies {
     // Use JUnit test framework.
-    testImplementation(libs.junit)
+    testImplementation("junit:junit:4.13.2")
     testImplementation("org.hamcrest:hamcrest-core:1.3")
 
 
@@ -68,6 +68,6 @@ tasks.jacocoTestReport {
 
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveBaseName.set("VerveineJ")
-    archiveClassifier.set(System.getenv("VERSION") as String? ?: "Snapshot")
+    archiveClassifier.set(System.getenv("VERSION") ?: "Snapshot")
     archiveVersion.set("")
 }
