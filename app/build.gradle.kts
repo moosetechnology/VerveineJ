@@ -34,7 +34,7 @@ dependencies {
 
 
     // This dependency is used by the application.
-    implementation("org.moosetechnology:fame-java:v1.0.3")
+    implementation("org.moosetechnology:fame-java:v1.0.4")
     implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.13.50")
     implementation("commons-codec:commons-codec:1.7")
 
