@@ -29,11 +29,7 @@ import org.moosetechnology.model.famix.famixtraits.TWithComments;
 
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
-import fr.inria.verveine.extractor.java.utils.StructuralEntityKinds;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
-
-
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
 /**
  * A class to collect all comments.
  * Some important details on comments in JDT:
