@@ -22,10 +22,6 @@ public class VerveineJTest_ImplicitVarBinding extends VerveineJTest_Basic {
         mth2 = new Method();
     }
 
-    public VerveineJTest_ImplicitVarBinding() throws IllegalAccessException {
-        super(false);
-    }
-
     /**
      * Returns an ImplicitVariable instance for the given owner with the given name
      */

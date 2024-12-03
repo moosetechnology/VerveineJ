@@ -11,10 +11,6 @@ import static org.junit.Assert.*;
 
 public class VerveineJTest_Ser extends VerveineJTest_Basic {
 
-    public VerveineJTest_Ser() {
-        super(false);
-    }
-
     /**
      * @throws java.lang.Exception
      */

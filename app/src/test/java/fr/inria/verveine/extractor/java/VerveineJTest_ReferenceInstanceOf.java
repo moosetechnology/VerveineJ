@@ -9,10 +9,6 @@ import static org.junit.Assert.assertNotNull;
 
 public class VerveineJTest_ReferenceInstanceOf extends VerveineJTest_Basic {
 
-    public VerveineJTest_ReferenceInstanceOf() {
-        super(false);
-    }
-
     /**
      * @throws Exception
      */

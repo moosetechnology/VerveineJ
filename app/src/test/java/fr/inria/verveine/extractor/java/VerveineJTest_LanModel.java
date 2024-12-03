@@ -61,10 +61,6 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 
 	private static final String DEFAULT_MSE_FILE = "output.mse";
 
-	public VerveineJTest_LanModel() throws IllegalAccessException {
-		super(true);
-	}
-
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -119,6 +115,39 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 						// tests
 		parser.exportModel(); // to create a new one
 	}
+	
+
+	@Test
+	public void testBelongsTo() {
+		super.testBelongsTo();
+	}
+
+	@Test
+	public void testMethodAndClassSourceAnchor() {
+		super.testMethodAndClassSourceAnchor();
+	}
+
+	@Test
+	public void testJavaCore() {
+		super.testJavaCore();
+	}
+
+	@Test
+	public void testSystemClass() {
+		super.testSystemClass();
+	}
+
+	@Test
+	public void testSourceLanguage() {
+		super.testSourceLanguage();
+	}
+
+	@Test
+	public void testPrimitiveTypes() {
+		super.testPrimitiveTypes();
+	}
+
+	
 	@Test
 	public void testEntitiesNumber() {
 		Collection<java.lang.Class<?>> lanModelJavaClasses = allJavaSuperClasses(LAN_MODEL_JAVA_CLASSES_USED);

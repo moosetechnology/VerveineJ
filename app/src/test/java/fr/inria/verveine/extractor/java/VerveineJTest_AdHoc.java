@@ -59,10 +59,6 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	protected VerveineJParser parser;
 
-	public VerveineJTest_AdHoc() {
-	    super(false);
-    }
-
 	/**
 	 * @throws java.lang.Exception
 	 */

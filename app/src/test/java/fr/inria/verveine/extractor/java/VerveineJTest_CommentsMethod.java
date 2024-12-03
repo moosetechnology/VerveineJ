@@ -13,10 +13,6 @@ import static org.junit.Assert.assertEquals;
 
 public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
-    public VerveineJTest_CommentsMethod() {
-        super(false);
-    }
-
     /**
      * @throws Exception
      */
