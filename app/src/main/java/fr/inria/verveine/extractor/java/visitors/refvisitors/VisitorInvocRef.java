@@ -201,7 +201,6 @@ public class VisitorInvocRef extends AbstractRefVisitor {
      *     [Javadoc] { ExtendedModifier } Type VariableDeclarationFragment
      *          { , VariableDeclarationFragment } ;
      */
-    @SuppressWarnings("unchecked")
     @Override
     public boolean visit(FieldDeclaration node) {
         hasInitBlock(node);  // to recover optional EntityDictionary.INIT_BLOCK_NAME method
@@ -324,7 +323,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 	public boolean visit(SuperConstructorInvocation node) {
 		// ConstructorInvocation (i.e. 'super(...)' ) happen in constructor, so the name is that of the superclass
-        Class superC = superClass();
+        //Class superC = superClass();
 		Method invoked = null;
 
 //		if (superC != null) {

@@ -5,14 +5,10 @@ import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-//import org.moosetechnology.model.famix.famixjavaentities.ParameterizableInterface;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-//import org.moosetechnology.model.famix.famixtraits.TParameterizedTypeUser;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
-//import org.moosetechnology.model.famix.famixtraits.TWithParameterizedTypes;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 /**
@@ -136,7 +132,8 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 			//}
 
 			for (ITypeBinding targ : bnd.getTypeArguments()) {
-				TType fmxTArg = this.referedType(targ, ctxt, false);
+				/* note: referedType() may create Famix entities, so it needs to be called */
+				/*TType fmxTArg =*/ this.referedType(targ, ctxt, false);
 				/*if (fmxTArg != null) {
 					((org.moosetechnology.model.famix.famixjavaentities.ParametricClass) fmxTyp).addArguments((TParameterizedTypeUser) fmxTArg);
 				}*/
