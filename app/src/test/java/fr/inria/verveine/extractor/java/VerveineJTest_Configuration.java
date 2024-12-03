@@ -31,11 +31,6 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 	private static final String OTHER_JSON_FILE = "other_output.json";
 	private static final String MSE_OUTPUT_FILE = "output.mse";
 
-
-	public VerveineJTest_Configuration() {
-		super(false);
-	}
-
 	/**
 	 * @throws java.lang.Exception
 	 */

@@ -23,8 +23,29 @@ import static org.junit.Assert.*;
  */
 public class VerveineJTest_JWSBasic extends VerveineJTest_Basic {
 
-	public VerveineJTest_JWSBasic() throws IllegalAccessException {
-		super(new boolean[] { true, true, true, true, true, false, true });
+	@Test
+	public void testBelongsTo() {
+		super.testBelongsTo();
+	}
+
+	@Test
+	public void testMethodAndClassSourceAnchor() {
+		super.testMethodAndClassSourceAnchor();
+	}
+
+	@Test
+	public void testJavaCore() {
+		super.testJavaCore();
+	}
+
+	@Test
+	public void testSystemClass() {
+		super.testSystemClass();
+	}
+
+	@Test
+	public void testPrimitiveTypes() {
+		super.testPrimitiveTypes();
 	}
 
 	/**

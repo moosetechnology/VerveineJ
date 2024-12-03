@@ -13,10 +13,6 @@ import static org.junit.Assert.*;
 
 public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 
-    public VerveineJTest_Lambdas() {
-        super(false);
-    }
-
     /**
      * @throws java.lang.Exception
      */

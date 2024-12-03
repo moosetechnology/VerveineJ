@@ -12,10 +12,6 @@ import static org.junit.Assert.assertEquals;
 
 public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
 
-    public VerveineJTest_ClassRef() {
-        super(false);
-    }
-
     /**
      * @throws Exception
      */

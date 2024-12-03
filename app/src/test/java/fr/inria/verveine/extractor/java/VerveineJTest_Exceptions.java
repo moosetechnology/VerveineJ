@@ -10,10 +10,6 @@ import static org.junit.Assert.*;
 
 public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
 
-    public VerveineJTest_Exceptions() {
-        super(false);
-    }
-
     /**
      * @throws java.lang.Exception
      */

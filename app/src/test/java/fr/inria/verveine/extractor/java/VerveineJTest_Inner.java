@@ -19,10 +19,6 @@ import static org.junit.Assert.assertEquals;
 
 public class VerveineJTest_Inner extends VerveineJTest_Basic {
 
-    public VerveineJTest_Inner() {
-        super(false);
-    }
-
     /**
      * @throws Exception
      */

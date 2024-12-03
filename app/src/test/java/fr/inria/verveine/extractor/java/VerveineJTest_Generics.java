@@ -54,11 +54,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         java.util.AbstractMap.class
 	};
 
-		
-    public VerveineJTest_Generics() {
-        super(false);
-    }
-
+	
     /**
      * @throws java.lang.Exception
      */
