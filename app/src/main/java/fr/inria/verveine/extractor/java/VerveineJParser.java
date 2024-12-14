@@ -146,7 +146,7 @@ public class VerveineJParser {
 
 	public void exportModel(String outputFile) {
 		try {
-			exportmodel(new FileOutputStream(outputFile));
+			exportModel(new FileOutputStream(outputFile));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -159,7 +159,7 @@ public class VerveineJParser {
 	 *
 	 * @param output
 	 */
-	public void exportmodel(OutputStream output) {
+	public void exportModel(OutputStream output) {
 		// Adds default SourceLanguage for the repository
 		if ((listAll(SourceLanguage.class).size() == 0) && (getMyLgge() != null)) {
 			getFamixRepo().add(getMyLgge());
