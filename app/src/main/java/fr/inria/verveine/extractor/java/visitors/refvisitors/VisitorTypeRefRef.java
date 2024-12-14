@@ -2,11 +2,14 @@ package fr.inria.verveine.extractor.java.visitors.refvisitors;
 
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
+import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
+
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Reference;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famix.famixtraits.TThrowable;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
@@ -244,6 +247,15 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public void endVisit(EnumConstantDeclaration node) {
 		endVisitEnumConstantDeclaration(node);
 	}
+
+    @Override
+    /* We are not dealing with the variable of the catch here but in VisitorExceptionRef
+     * therefore we only visit the body of the catch
+     */
+    public boolean visit(CatchClause node) {
+    	node.getBody().accept(this);
+        return false;
+    }
 
 	/**
 	 * SingleVariableDeclaration ::=
