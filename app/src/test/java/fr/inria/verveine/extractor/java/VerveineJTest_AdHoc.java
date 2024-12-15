@@ -32,6 +32,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Invocation;
 import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
+import org.moosetechnology.model.famix.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.Parameter;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
@@ -823,5 +824,19 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
         assertEquals( 1, subClass.getSuperInheritances().size() );
         assertEquals(superClass, firstElt(subClass.getSuperInheritances()).getSuperclass() );
     }
-    
+
+	@Test
+	/* 
+	 * Issue https://github.com/moosetechnology/VerveineJ/issues/111
+	 */
+	public void testReferencedExceptionInCatch(){
+		parse(new String[] {"src/test/resources/ad_hoc/Example.java"});
+
+		LocalVariable catchParameter = detectFamixElement( LocalVariable.class, "e");
+
+		assertNotNull( catchParameter);
+		assertNotNull( catchParameter.getDeclaredType());
+		assertEquals( org.moosetechnology.model.famix.famixjavaentities.Exception.class, catchParameter.getDeclaredType().getClass());
+	}
+ 
 }
