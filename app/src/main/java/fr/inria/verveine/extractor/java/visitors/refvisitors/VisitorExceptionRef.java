@@ -6,15 +6,18 @@ import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TThrowable;
 import org.moosetechnology.model.famix.famixtraits.TType;
+import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
 
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
@@ -82,23 +85,6 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 	}
 
     @Override
-    public boolean visit(CatchClause node) {
-        Method meth = (Method) this.context.topMethod();
-        Type excepClass = node.getException().getType();
-        if (meth != null) {
-            TThrowable excepFmx = null;
-            if ( NodeTypeChecker.isSimpleType(excepClass) || NodeTypeChecker.isQualifiedType(excepClass) ) {
-                excepFmx = dico.asException(referedType(excepClass, meth, true, true));
-            }
-            if (excepFmx != null) {
-            	dico.createFamixCaughtException(meth, excepFmx);
-            }
-        }
-
-        return super.visit(node);
-    }
-
-    @Override
     public boolean visit(ThrowStatement node) {
         Method meth = (Method) this.context.topMethod();
         TType thrownExceptionType = this.referedType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
@@ -113,5 +99,39 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         }
         return super.visit(node);
     }
+
+    /**
+     *  CatchClause ::=
+     *		catch ( FormalParameter ) Block
+ 	 *	The FormalParameter is represented by a SingleVariableDeclaration
+ 	 *
+ 	 * We set the type of the catchClause variable here because it would be more difficult in VisitorTypeRefRef
+     */
+    @Override
+    public boolean visit(CatchClause node) {
+        Method meth = (Method) this.context.topMethod();
+        Type excepClass = node.getException().getType();
+        if (meth != null) {
+            TThrowable excepFmx = null;
+            if ( NodeTypeChecker.isSimpleType(excepClass) || NodeTypeChecker.isQualifiedType(excepClass) ) {
+                excepFmx = dico.asException(referedType(excepClass, meth, true, true));
+            }
+            if (excepFmx != null) {
+            	dico.createFamixCaughtException(meth, excepFmx);
+            	setVariableDeclaredType(node.getException(), (Exception)excepFmx);
+            }
+        }
+    	node.getBody().accept(this);
+
+        return false;
+    }
+
+	public void setVariableDeclaredType(SingleVariableDeclaration varDecl, Exception excepFmx) {
+
+		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(varDecl.resolveBinding());
+		if (fmx != null) {
+			fmx.setDeclaredType(excepFmx);
+		}
+	}
 
 }
