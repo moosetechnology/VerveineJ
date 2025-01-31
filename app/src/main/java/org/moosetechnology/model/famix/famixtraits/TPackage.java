@@ -1,16 +1,16 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TPackage")
-public interface TPackage extends TNamedEntity, TSourceEntity, TEntityMetaLevelDependency {
+public interface TPackage extends TNamedEntity, TSourceEntity, TCanBeStub, TEntityMetaLevelDependency {
 
         @FameProperty(name = "weightedMethodCount", derived = true)
     public Number getWeightedMethodCount();

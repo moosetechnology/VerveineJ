@@ -1,10 +1,10 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
 
 
 @FamePackage("Famix-Traits")
@@ -14,18 +14,13 @@ public interface TSourceEntity  {
         @FameProperty(name = "duplicationRate", derived = true)
     public Number getDuplicationRate();
 
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub();
-
-    public void setIsStub(Boolean isStub);
+    @FameProperty(name = "containsReplicas", derived = true)
+    public Boolean getContainsReplicas();
 
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)
     public TSourceAnchor getSourceAnchor();
 
     public void setSourceAnchor(TSourceAnchor sourceAnchor);
-
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas();
 
     @FameProperty(name = "numberOfLinesOfCodeWithMoreThanOneCharacter", derived = true)
     public Number getNumberOfLinesOfCodeWithMoreThanOneCharacter();

@@ -1,55 +1,53 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import ch.akuhn.fame.internal.MultivalueSet;
-import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAssociation;
-import org.moosetechnology.model.famix.famixtraits.TConcretization;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
-import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAssociation;
+import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
+import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
+import org.moosetechnology.model.famixjava.famixtraits.TParametricAssociation;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TTypeParameter;
+import org.moosetechnology.model.famixjava.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Concretization")
 public class Concretization extends Entity implements TAssociation, TAssociationMetaLevelDependency, TConcretization, TSourceEntity {
 
-    private TParametricEntity concreteEntity;
+    private TConcreteType concreteParameter;
     
-    private TParametricEntity genericEntity;
-    
-    private Boolean isStub;
+    private TTypeParameter genericParameter;
     
     private TAssociation next;
     
     private Number numberOfLinesOfCode;
     
-    private Collection<TParameterConcretization> parameterConcretizations; 
-
     private TAssociation previous;
     
     private TSourceAnchor sourceAnchor;
     
+    private TParametricAssociation triggeringAssociation;
+    
 
 
-    @FameProperty(name = "concreteEntity", opposite = "genericization")
-    public TParametricEntity getConcreteEntity() {
-        return concreteEntity;
+    @FameProperty(name = "concreteParameter", opposite = "outgoingConcretizations")
+    public TConcreteType getConcreteParameter() {
+        return concreteParameter;
     }
 
-    public void setConcreteEntity(TParametricEntity concreteEntity) {
-        if (this.concreteEntity == null ? concreteEntity != null : !this.concreteEntity.equals(concreteEntity)) {
-            TParametricEntity old_concreteEntity = this.concreteEntity;
-            this.concreteEntity = concreteEntity;
-            if (old_concreteEntity != null) old_concreteEntity.setGenericization(null);
-            if (concreteEntity != null) concreteEntity.setGenericization(this);
+    public void setConcreteParameter(TConcreteType concreteParameter) {
+        if (this.concreteParameter != null) {
+            if (this.concreteParameter.equals(concreteParameter)) return;
+            this.concreteParameter.getOutgoingConcretizations().remove(this);
         }
+        this.concreteParameter = concreteParameter;
+        if (concreteParameter == null) return;
+        concreteParameter.getOutgoingConcretizations().add(this);
     }
     
     @FameProperty(name = "containsReplicas", derived = true)
@@ -64,28 +62,19 @@ public class Concretization extends Entity implements TAssociation, TAssociation
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "genericEntity", opposite = "concretizations")
-    public TParametricEntity getGenericEntity() {
-        return genericEntity;
+    @FameProperty(name = "genericParameter", opposite = "concretizations")
+    public TTypeParameter getGenericParameter() {
+        return genericParameter;
     }
 
-    public void setGenericEntity(TParametricEntity genericEntity) {
-        if (this.genericEntity != null) {
-            if (this.genericEntity.equals(genericEntity)) return;
-            this.genericEntity.getConcretizations().remove(this);
+    public void setGenericParameter(TTypeParameter genericParameter) {
+        if (this.genericParameter != null) {
+            if (this.genericParameter.equals(genericParameter)) return;
+            this.genericParameter.getConcretizations().remove(this);
         }
-        this.genericEntity = genericEntity;
-        if (genericEntity == null) return;
-        genericEntity.getConcretizations().add(this);
-    }
-    
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub() {
-        return isStub;
-    }
-
-    public void setIsStub(Boolean isStub) {
-        this.isStub = isStub;
+        this.genericParameter = genericParameter;
+        if (genericParameter == null) return;
+        genericParameter.getConcretizations().add(this);
     }
     
     @FameProperty(name = "next", opposite = "previous", derived = true)
@@ -117,56 +106,6 @@ public class Concretization extends Entity implements TAssociation, TAssociation
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "parameterConcretizations", opposite = "concretizations", derived = true)
-    public Collection<TParameterConcretization> getParameterConcretizations() {
-        if (parameterConcretizations == null) {
-            parameterConcretizations = new MultivalueSet<TParameterConcretization>() {
-                @Override
-                protected void clearOpposite(TParameterConcretization e) {
-                    e.getConcretizations().remove(Concretization.this);
-                }
-                @Override
-                protected void setOpposite(TParameterConcretization e) {
-                    e.getConcretizations().add(Concretization.this);
-                }
-            };
-        }
-        return parameterConcretizations;
-    }
-    
-    public void setParameterConcretizations(Collection<? extends TParameterConcretization> parameterConcretizations) {
-        this.getParameterConcretizations().clear();
-        this.getParameterConcretizations().addAll(parameterConcretizations);
-    }
-    
-    public void addParameterConcretizations(TParameterConcretization one) {
-        this.getParameterConcretizations().add(one);
-    }   
-    
-    public void addParameterConcretizations(TParameterConcretization one, TParameterConcretization... many) {
-        this.getParameterConcretizations().add(one);
-        for (TParameterConcretization each : many)
-            this.getParameterConcretizations().add(each);
-    }   
-    
-    public void addParameterConcretizations(Iterable<? extends TParameterConcretization> many) {
-        for (TParameterConcretization each : many)
-            this.getParameterConcretizations().add(each);
-    }   
-                
-    public void addParameterConcretizations(TParameterConcretization[] many) {
-        for (TParameterConcretization each : many)
-            this.getParameterConcretizations().add(each);
-    }
-    
-    public int numberOfParameterConcretizations() {
-        return getParameterConcretizations().size();
-    }
-
-    public boolean hasParameterConcretizations() {
-        return !getParameterConcretizations().isEmpty();
-    }
-
     @FameProperty(name = "previous", opposite = "next")
     public TAssociation getPrevious() {
         return previous;
@@ -205,6 +144,21 @@ public class Concretization extends Entity implements TAssociation, TAssociation
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "triggeringAssociation", opposite = "concretization")
+    public TParametricAssociation getTriggeringAssociation() {
+        return triggeringAssociation;
+    }
+
+    public void setTriggeringAssociation(TParametricAssociation triggeringAssociation) {
+        if (this.triggeringAssociation != null) {
+            if (this.triggeringAssociation.equals(triggeringAssociation)) return;
+            this.triggeringAssociation.getConcretization().remove(this);
+        }
+        this.triggeringAssociation = triggeringAssociation;
+        if (triggeringAssociation == null) return;
+        triggeringAssociation.getConcretization().add(this);
     }
     
 

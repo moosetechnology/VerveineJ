@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -11,61 +11,22 @@ import java.util.*;
 @FameDescription("TParametricEntity")
 public interface TParametricEntity  {
 
-        @FameProperty(name = "concretizations", opposite = "genericEntity", derived = true)
-    public Collection<TConcretization> getConcretizations();
+        @FameProperty(name = "parameters", opposite = "genericEntities", derived = true)
+    public Collection<TConcreteType> getParameters();
 
-    public void setConcretizations(Collection<? extends TConcretization> concretizations);
+    public void setParameters(Collection<? extends TConcreteType> parameters);
 
-    public void addConcretizations(TConcretization one);
+    public void addParameters(TConcreteType one);
 
-    public void addConcretizations(TConcretization one, TConcretization... many);
+    public void addParameters(TConcreteType one, TConcreteType... many);
 
-    public void addConcretizations(Iterable<? extends TConcretization> many);
+    public void addParameters(Iterable<? extends TConcreteType> many);
 
-    public void addConcretizations(TConcretization[] many);
+    public void addParameters(TConcreteType[] many);
 
-    public int numberOfConcretizations();
+    public int numberOfParameters();
 
-    public boolean hasConcretizations();
-
-    @FameProperty(name = "genericParameters", opposite = "genericEntities")
-    public Collection<TGenericParameterType> getGenericParameters();
-
-    public void setGenericParameters(Collection<? extends TGenericParameterType> genericParameters);
-
-    public void addGenericParameters(TGenericParameterType one);
-
-    public void addGenericParameters(TGenericParameterType one, TGenericParameterType... many);
-
-    public void addGenericParameters(Iterable<? extends TGenericParameterType> many);
-
-    public void addGenericParameters(TGenericParameterType[] many);
-
-    public int numberOfGenericParameters();
-
-    public boolean hasGenericParameters();
-
-    @FameProperty(name = "concreteParameters", opposite = "concreteEntities")
-    public Collection<TConcreteParameterType> getConcreteParameters();
-
-    public void setConcreteParameters(Collection<? extends TConcreteParameterType> concreteParameters);
-
-    public void addConcreteParameters(TConcreteParameterType one);
-
-    public void addConcreteParameters(TConcreteParameterType one, TConcreteParameterType... many);
-
-    public void addConcreteParameters(Iterable<? extends TConcreteParameterType> many);
-
-    public void addConcreteParameters(TConcreteParameterType[] many);
-
-    public int numberOfConcreteParameters();
-
-    public boolean hasConcreteParameters();
-
-    @FameProperty(name = "genericization", opposite = "concreteEntity", derived = true)
-    public TConcretization getGenericization();
-
-    public void setGenericization(TConcretization genericization);
+    public boolean hasParameters();
 
 
 

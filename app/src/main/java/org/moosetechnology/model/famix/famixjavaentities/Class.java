@@ -1,59 +1,66 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TCanBeAbstract;
-import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
-import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
-import org.moosetechnology.model.famix.famixtraits.TCanImplement;
-import org.moosetechnology.model.famix.famixtraits.TClass;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.THasVisibility;
-import org.moosetechnology.model.famix.famixtraits.TImplementation;
-import org.moosetechnology.model.famix.famixtraits.TImport;
-import org.moosetechnology.model.famix.famixtraits.TImportable;
-import org.moosetechnology.model.famix.famixtraits.TInheritance;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
-import org.moosetechnology.model.famix.famixtraits.TLCOMMetrics;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TPackage;
-import org.moosetechnology.model.famix.famixtraits.TPackageable;
-import org.moosetechnology.model.famix.famixtraits.TReference;
-import org.moosetechnology.model.famix.famixtraits.TReferenceable;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.famixtraits.TWithImports;
-import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
-import org.moosetechnology.model.famix.famixtraits.TWithMethods;
-import org.moosetechnology.model.famix.famixtraits.TWithTypes;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeAbstract;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeClassSide;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeFinal;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famixjava.famixtraits.TCanImplement;
+import org.moosetechnology.model.famixjava.famixtraits.TClass;
+import org.moosetechnology.model.famixjava.famixtraits.TClassMetrics;
+import org.moosetechnology.model.famixjava.famixtraits.TComment;
+import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
+import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
+import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famixjava.famixtraits.THasVisibility;
+import org.moosetechnology.model.famixjava.famixtraits.TImplementation;
+import org.moosetechnology.model.famixjava.famixtraits.TImport;
+import org.moosetechnology.model.famixjava.famixtraits.TImportable;
+import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
+import org.moosetechnology.model.famixjava.famixtraits.TInvocation;
+import org.moosetechnology.model.famixjava.famixtraits.TInvocationsReceiver;
+import org.moosetechnology.model.famixjava.famixtraits.TLCOMMetrics;
+import org.moosetechnology.model.famixjava.famixtraits.TMethod;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TPackage;
+import org.moosetechnology.model.famixjava.famixtraits.TPackageable;
+import org.moosetechnology.model.famixjava.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TReference;
+import org.moosetechnology.model.famixjava.famixtraits.TReferenceable;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TType;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
+import org.moosetechnology.model.famixjava.famixtraits.TWithImports;
+import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famixjava.famixtraits.TWithMethods;
+import org.moosetechnology.model.famixjava.famixtraits.TWithTypes;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Class")
-public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCanBeFinal, TCanImplement, TClass, TClassMetrics, TEntityMetaLevelDependency, THasVisibility, TImportable, TInvocationsReceiver, TLCOMMetrics, TNamedEntity, TPackageable, TReferenceable, TSourceEntity, TType, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
+public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCanBeFinal, TCanBeStub, TCanImplement, TClass, TClassMetrics, TConcreteType, TEntityMetaLevelDependency, THasVisibility, TImportable, TInvocationsReceiver, TLCOMMetrics, TNamedEntity, TPackageable, TReferenceable, TSourceEntity, TType, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
 
-	private Boolean isInterface;
-	
-	private Collection<TAttribute> attributes; 
+    private Collection<TAttribute> attributes; 
 
     private Collection<TComment> comments; 
+
+    private Collection<TParametricEntity> genericEntities; 
 
     private Collection<TImport> incomingImports; 
 
     private Collection<TReference> incomingReferences; 
+
+    private Collection<TEntityTyping> incomingTypings; 
 
     private Collection<TImplementation> interfaceImplementations; 
 
@@ -71,6 +78,8 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
     
     private Number numberOfLinesOfCode;
     
+    private Collection<TConcretization> outgoingConcretizations; 
+
     private Collection<TImport> outgoingImports; 
 
     private TPackage parentPackage;
@@ -85,12 +94,22 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
 
     private TWithTypes typeContainer;
     
-    private Collection<TTypedEntity> typedEntities; 
-
     private String visibility;
     
 
 
+    @FameProperty(name = "isJUnit4TestCase", derived = true)
+    public Boolean getIsJUnit4TestCase() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "isTestCase", derived = true)
+    public Boolean getIsTestCase() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "attributes", opposite = "parentType", derived = true)
     public Collection<TAttribute> getAttributes() {
         if (attributes == null) {
@@ -217,6 +236,56 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "genericEntities", opposite = "parameters")
+    public Collection<TParametricEntity> getGenericEntities() {
+        if (genericEntities == null) {
+            genericEntities = new MultivalueSet<TParametricEntity>() {
+                @Override
+                protected void clearOpposite(TParametricEntity e) {
+                    e.getParameters().remove(Class.this);
+                }
+                @Override
+                protected void setOpposite(TParametricEntity e) {
+                    e.getParameters().add(Class.this);
+                }
+            };
+        }
+        return genericEntities;
+    }
+    
+    public void setGenericEntities(Collection<? extends TParametricEntity> genericEntities) {
+        this.getGenericEntities().clear();
+        this.getGenericEntities().addAll(genericEntities);
+    }
+    
+    public void addGenericEntities(TParametricEntity one) {
+        this.getGenericEntities().add(one);
+    }   
+    
+    public void addGenericEntities(TParametricEntity one, TParametricEntity... many) {
+        this.getGenericEntities().add(one);
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }   
+    
+    public void addGenericEntities(Iterable<? extends TParametricEntity> many) {
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }   
+                
+    public void addGenericEntities(TParametricEntity[] many) {
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }
+    
+    public int numberOfGenericEntities() {
+        return getGenericEntities().size();
+    }
+
+    public boolean hasGenericEntities() {
+        return !getGenericEntities().isEmpty();
+    }
+
     @FameProperty(name = "hasComments", derived = true)
     public Boolean getHasComments() {
         // TODO: this is a derived property, implement this method manually.
@@ -280,17 +349,17 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         return !getIncomingImports().isEmpty();
     }
 
-    @FameProperty(name = "incomingReferences", opposite = "referredType", derived = true)
+    @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences() {
         if (incomingReferences == null) {
             incomingReferences = new MultivalueSet<TReference>() {
                 @Override
                 protected void clearOpposite(TReference e) {
-                    e.setReferredType(null);
+                    e.setReferredEntity(null);
                 }
                 @Override
                 protected void setOpposite(TReference e) {
-                    e.setReferredType(Class.this);
+                    e.setReferredEntity(Class.this);
                 }
             };
         }
@@ -329,6 +398,57 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
 
     public boolean hasIncomingReferences() {
         return !getIncomingReferences().isEmpty();
+    }
+
+    @FameProperty(name = "incomingTypings", opposite = "declaredType", derived = true)
+    public Collection<TEntityTyping> getIncomingTypings() {
+        if (incomingTypings == null) {
+            incomingTypings = new MultivalueSet<TEntityTyping>() {
+                @Override
+                protected void clearOpposite(TEntityTyping e) {
+                    e.setDeclaredType(null);
+                }
+                @Override
+                protected void setOpposite(TEntityTyping e) {
+                    e.setDeclaredType(Class.this);
+                }
+            };
+        }
+        return incomingTypings;
+    }
+    
+    public void setIncomingTypings(Collection<? extends TEntityTyping> incomingTypings) {
+        this.getIncomingTypings().clear();
+        this.getIncomingTypings().addAll(incomingTypings);
+    }                    
+    
+        
+    public void addIncomingTypings(TEntityTyping one) {
+        this.getIncomingTypings().add(one);
+    }   
+    
+    public void addIncomingTypings(TEntityTyping one, TEntityTyping... many) {
+        this.getIncomingTypings().add(one);
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }   
+    
+    public void addIncomingTypings(Iterable<? extends TEntityTyping> many) {
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }   
+                
+    public void addIncomingTypings(TEntityTyping[] many) {
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }
+    
+    public int numberOfIncomingTypings() {
+        return getIncomingTypings().size();
+    }
+
+    public boolean hasIncomingTypings() {
+        return !getIncomingTypings().isEmpty();
     }
 
     @FameProperty(name = "interfaceImplementations", opposite = "implementingClass", derived = true)
@@ -411,37 +531,32 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         return isFinal;
     }
 
-    @FameProperty(name = "isInterface")
-    public Boolean getIsInterface() {
-        return isInterface;
-    }
-
-    public void setIsInterface(Boolean isInterface) {
-        this.isInterface = isInterface;
-    }
-    
     public void setIsFinal(Boolean isFinal) {
         this.isFinal = isFinal;
     }
     
     @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
-        return this.visibility.equals("package");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
-
+    
     @FameProperty(name = "isPrivate", derived = true)
     public Boolean getIsPrivate() {
-        return this.visibility.equals("private");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
-
+    
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
-        return this.visibility.equals("protected");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
-
+    
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        return this.visibility.equals("public");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isRoot", derived = true)
@@ -457,12 +572,6 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
 
     public void setIsStub(Boolean isStub) {
         this.isStub = isStub;
-    }
-    
-    @FameProperty(name = "isTestCase", derived = true)
-    public Boolean getIsTestCase() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "lcom2", derived = true)
@@ -543,14 +652,14 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "numberOfAccessorMethods", derived = true)
-    public Number getNumberOfAccessorMethods() {
+    @FameProperty(name = "numberOfAttributes", derived = true)
+    public Number getNumberOfAttributes() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "numberOfAttributes", derived = true)
-    public Number getNumberOfAttributes() {
+    @FameProperty(name = "numberOfAttributesInherited", derived = true)
+    public Number getNumberOfAttributesInherited() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
@@ -563,12 +672,6 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
     
     @FameProperty(name = "numberOfComments", derived = true)
     public Number getNumberOfComments() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "numberOfConstructorMethods", derived = true)
-    public Number getNumberOfConstructorMethods() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
@@ -624,26 +727,32 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "numberOfLocallyDefinedMethods", derived = true)
+    public Number getNumberOfLocallyDefinedMethods() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "numberOfMethods", derived = true)
     public Number getNumberOfMethods() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "numberOfPrivateMethods", derived = true)
-    public Number getNumberOfPrivateMethods() {
+    @FameProperty(name = "numberOfMethodsInHierarchy", derived = true)
+    public Number getNumberOfMethodsInHierarchy() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "numberOfProtectedMethods", derived = true)
-    public Number getNumberOfProtectedMethods() {
+    @FameProperty(name = "numberOfMethodsInherited", derived = true)
+    public Number getNumberOfMethodsInherited() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "numberOfPublicMethods", derived = true)
-    public Number getNumberOfPublicMethods() {
+    @FameProperty(name = "numberOfMethodsOverridden", derived = true)
+    public Number getNumberOfMethodsOverridden() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
@@ -654,6 +763,57 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.setConcreteParameter(null);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.setConcreteParameter(Class.this);
+                }
+            };
+        }
+        return outgoingConcretizations;
+    }
+    
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
+    }                    
+    
+        
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
+    }   
+    
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+    
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+                
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+    
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
+    }
+
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
+    }
+
     @FameProperty(name = "outgoingImports", opposite = "importingEntity", derived = true)
     public Collection<TImport> getOutgoingImports() {
         if (outgoingImports == null) {
@@ -911,6 +1071,12 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "totalNumberOfSubclasses", derived = true)
+    public Number getTotalNumberOfSubclasses() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
     @FameProperty(name = "typeContainer", opposite = "types", container = true)
     public TWithTypes getTypeContainer() {
         return typeContainer;
@@ -926,57 +1092,6 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         typeContainer.getTypes().add(this);
     }
     
-    @FameProperty(name = "typedEntities", opposite = "declaredType", derived = true)
-    public Collection<TTypedEntity> getTypedEntities() {
-        if (typedEntities == null) {
-            typedEntities = new MultivalueSet<TTypedEntity>() {
-                @Override
-                protected void clearOpposite(TTypedEntity e) {
-                    e.setDeclaredType(null);
-                }
-                @Override
-                protected void setOpposite(TTypedEntity e) {
-                    e.setDeclaredType(Class.this);
-                }
-            };
-        }
-        return typedEntities;
-    }
-    
-    public void setTypedEntities(Collection<? extends TTypedEntity> typedEntities) {
-        this.getTypedEntities().clear();
-        this.getTypedEntities().addAll(typedEntities);
-    }                    
-    
-        
-    public void addTypedEntities(TTypedEntity one) {
-        this.getTypedEntities().add(one);
-    }   
-    
-    public void addTypedEntities(TTypedEntity one, TTypedEntity... many) {
-        this.getTypedEntities().add(one);
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }   
-    
-    public void addTypedEntities(Iterable<? extends TTypedEntity> many) {
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }   
-                
-    public void addTypedEntities(TTypedEntity[] many) {
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }
-    
-    public int numberOfTypedEntities() {
-        return getTypedEntities().size();
-    }
-
-    public boolean hasTypedEntities() {
-        return !getTypedEntities().isEmpty();
-    }
-
     @FameProperty(name = "visibility")
     public String getVisibility() {
         return visibility;

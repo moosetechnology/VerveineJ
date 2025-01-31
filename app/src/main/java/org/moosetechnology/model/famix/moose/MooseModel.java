@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.moose;
+package org.moosetechnology.model.famixjava.moose;
 
 import ch.akuhn.fame.MetaRepository;
 
@@ -12,13 +12,12 @@ public class MooseModel {
     }
     
     public static void importInto(MetaRepository metamodel) {
-		metamodel.with(org.moosetechnology.model.famix.moose.AbstractGroup.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.Entity.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.Group.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.Model.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.Object.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.PropertyGroup.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.SpecializedGroup.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moose.AbstractGroup.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moose.Entity.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moose.Group.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moose.Model.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moose.Object.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moose.SpecializedGroup.class);
 
     }
 

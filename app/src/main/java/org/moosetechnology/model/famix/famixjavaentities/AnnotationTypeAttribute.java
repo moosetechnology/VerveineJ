@@ -1,33 +1,34 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TAnnotationTypeAttribute;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstanceAttribute;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
-import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAccess;
+import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TAnnotationTypeAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famixjava.famixtraits.TComment;
+import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TTypedAnnotationInstanceAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TTypedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAccesses;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationTypeAttribute")
-public class AnnotationTypeAttribute extends NamedEntity implements TAccessible, TAnnotationTypeAttribute, TAttribute, TEntityMetaLevelDependency, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedAnnotationInstanceAttribute, TTypedEntity, TWithComments {
+public class AnnotationTypeAttribute extends NamedEntity implements TAccessible, TAnnotationTypeAttribute, TAttribute, TCanBeStub, TEntityMetaLevelDependency, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedAnnotationInstanceAttribute, TTypedEntity, TWithComments {
 
     private Collection<TTypedAnnotationInstanceAttribute> annotationAttributeInstances; 
 
@@ -35,8 +36,6 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
     
     private Collection<TComment> comments; 
 
-    private TType declaredType;
-    
     private Collection<TAccess> incomingAccesses; 
 
     private Boolean isStub;
@@ -48,6 +47,8 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
     private TWithAttributes parentType;
     
     private TSourceAnchor sourceAnchor;
+    
+    private TEntityTyping typing;
     
 
 
@@ -184,21 +185,6 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
     public Boolean getContainsReplicas() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "declaredType", opposite = "typedEntities")
-    public TType getDeclaredType() {
-        return declaredType;
-    }
-
-    public void setDeclaredType(TType declaredType) {
-        if (this.declaredType != null) {
-            if (this.declaredType.equals(declaredType)) return;
-            this.declaredType.getTypedEntities().remove(this);
-        }
-        this.declaredType = declaredType;
-        if (declaredType == null) return;
-        declaredType.getTypedEntities().add(this);
     }
     
     @FameProperty(name = "duplicationRate", derived = true)
@@ -438,6 +424,20 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "typing", opposite = "typedEntity")
+    public TEntityTyping getTyping() {
+        return typing;
+    }
+
+    public void setTyping(TEntityTyping typing) {
+        if (this.typing == null ? typing != null : !this.typing.equals(typing)) {
+            TEntityTyping old_typing = this.typing;
+            this.typing = typing;
+            if (old_typing != null) old_typing.setTypedEntity(null);
+            if (typing != null) typing.setTypedEntity(this);
+        }
     }
     
 

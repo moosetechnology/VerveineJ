@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.moosecore;
+package org.moosetechnology.model.famixjava.moosecore;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;

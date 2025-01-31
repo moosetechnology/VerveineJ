@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -10,10 +10,10 @@ import ch.akuhn.fame.FameProperty;
 @FameDescription("TTypedEntity")
 public interface TTypedEntity  {
 
-        @FameProperty(name = "declaredType", opposite = "typedEntities")
-    public TType getDeclaredType();
+        @FameProperty(name = "typing", opposite = "typedEntity")
+    public TEntityTyping getTyping();
 
-    public void setDeclaredType(TType declaredType);
+    public void setTyping(TEntityTyping typing);
 
 
 

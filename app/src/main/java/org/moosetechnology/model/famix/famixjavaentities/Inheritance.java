@@ -1,24 +1,22 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAssociation;
-import org.moosetechnology.model.famix.famixtraits.TInheritance;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAssociation;
+import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famixjava.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Inheritance")
 public class Inheritance extends Entity implements TAssociation, TAssociationMetaLevelDependency, TInheritance, TSourceEntity {
 
-    private Boolean isStub;
-    
     private TAssociation next;
     
     private Number numberOfLinesOfCode;
@@ -43,15 +41,6 @@ public class Inheritance extends Entity implements TAssociation, TAssociationMet
     public Number getDuplicationRate() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub() {
-        return isStub;
-    }
-
-    public void setIsStub(Boolean isStub) {
-        this.isStub = isStub;
     }
     
     @FameProperty(name = "next", opposite = "previous", derived = true)

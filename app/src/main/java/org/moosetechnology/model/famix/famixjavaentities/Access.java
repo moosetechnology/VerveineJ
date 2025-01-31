@@ -1,17 +1,17 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TAssociation;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAccess;
+import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TAssociation;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAccesses;
+import org.moosetechnology.model.famixjava.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
@@ -19,8 +19,6 @@ import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependenc
 public class Access extends Entity implements TAccess, TAssociation, TAssociationMetaLevelDependency, TSourceEntity {
 
     private TWithAccesses accessor;
-    
-    private Boolean isStub;
     
     private Boolean isWrite;
     
@@ -65,22 +63,14 @@ public class Access extends Entity implements TAccess, TAssociation, TAssociatio
     
     @FameProperty(name = "isRead", derived = true)
     public Boolean getIsRead() {
-        return !this.isWrite;
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isReadWriteUnknown", derived = true)
     public Boolean getIsReadWriteUnknown() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub() {
-        return isStub;
-    }
-
-    public void setIsStub(Boolean isStub) {
-        this.isStub = isStub;
     }
     
     @FameProperty(name = "isWrite")

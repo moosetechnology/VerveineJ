@@ -1,52 +1,51 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
-import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.THasVisibility;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
-import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAccess;
+import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeClassSide;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeFinal;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famixjava.famixtraits.TComment;
+import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famixjava.famixtraits.THasVisibility;
+import org.moosetechnology.model.famixjava.famixtraits.TInvocation;
+import org.moosetechnology.model.famixjava.famixtraits.TInvocationsReceiver;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TTypedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAccesses;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Attribute")
-public class Attribute extends NamedEntity implements TAccessible, TAttribute, TCanBeClassSide, TCanBeFinal, TCanBeTransient, TCanBeVolatile, TEntityMetaLevelDependency, THasVisibility, TInvocationsReceiver, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity, TWithComments {
+public class Attribute extends NamedEntity implements TAccessible, TAttribute, TCanBeClassSide, TCanBeFinal, TCanBeStub, TCanBeTransient, TCanBeVolatile, TEntityMetaLevelDependency, THasVisibility, TInvocationsReceiver, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity, TWithComments {
 
     private Collection<TComment> comments; 
 
-    private TType declaredType;
-    
     private Collection<TAccess> incomingAccesses; 
 
-    private Boolean isClassSide = false;
+    private Boolean isClassSide;
     
-    private Boolean isFinal = false;
+    private Boolean isFinal;
     
-    private Boolean isStub = false;
-
-    private Boolean isTransient = false;
-
-    private Boolean isVolatile = false;
+    private Boolean isStub;
+    
+    private Boolean isTransient;
+    
+    private Boolean isVolatile;
     
     private String name;
     
@@ -57,6 +56,8 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     private Collection<TInvocation> receivingInvocations; 
 
     private TSourceAnchor sourceAnchor;
+    
+    private TEntityTyping typing;
     
     private String visibility;
     
@@ -123,21 +124,6 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     public Boolean getContainsReplicas() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "declaredType", opposite = "typedEntities")
-    public TType getDeclaredType() {
-        return declaredType;
-    }
-
-    public void setDeclaredType(TType declaredType) {
-        if (this.declaredType != null) {
-            if (this.declaredType.equals(declaredType)) return;
-            this.declaredType.getTypedEntities().remove(this);
-        }
-        this.declaredType = declaredType;
-        if (declaredType == null) return;
-        declaredType.getTypedEntities().add(this);
     }
     
     @FameProperty(name = "duplicationRate", derived = true)
@@ -247,22 +233,26 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     
     @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
-        return this.visibility.equals("package");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isPrivate", derived = true)
     public Boolean getIsPrivate() {
-        return this.visibility.equals("private");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
-
+    
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
-        return this.visibility.equals("protected");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
-
+    
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        return this.visibility.equals("public");
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "isRoot", derived = true)
@@ -484,6 +474,20 @@ public class Attribute extends NamedEntity implements TAccessible, TAttribute, T
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "typing", opposite = "typedEntity")
+    public TEntityTyping getTyping() {
+        return typing;
+    }
+
+    public void setTyping(TEntityTyping typing) {
+        if (this.typing == null ? typing != null : !this.typing.equals(typing)) {
+            TEntityTyping old_typing = this.typing;
+            this.typing = typing;
+            if (old_typing != null) old_typing.setTypedEntity(null);
+            if (typing != null) typing.setTypedEntity(this);
+        }
     }
     
     @FameProperty(name = "visibility")

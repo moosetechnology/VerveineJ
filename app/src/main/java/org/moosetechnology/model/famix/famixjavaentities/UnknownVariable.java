@@ -1,33 +1,32 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TUnknownVariable;
-import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAccess;
+import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famixjava.famixtraits.TInvocation;
+import org.moosetechnology.model.famixjava.famixtraits.TInvocationsReceiver;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TTypedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TUnknownVariable;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAccesses;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("UnknownVariable")
-public class UnknownVariable extends NamedEntity implements TAccessible, TEntityMetaLevelDependency, TInvocationsReceiver, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity, TUnknownVariable {
+public class UnknownVariable extends NamedEntity implements TAccessible, TCanBeStub, TEntityMetaLevelDependency, TInvocationsReceiver, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity, TUnknownVariable {
 
-    private TType declaredType;
-    
     private Collection<TAccess> incomingAccesses; 
 
     private Boolean isStub;
@@ -39,6 +38,8 @@ public class UnknownVariable extends NamedEntity implements TAccessible, TEntity
     private Collection<TInvocation> receivingInvocations; 
 
     private TSourceAnchor sourceAnchor;
+    
+    private TEntityTyping typing;
     
 
 
@@ -52,21 +53,6 @@ public class UnknownVariable extends NamedEntity implements TAccessible, TEntity
     public Boolean getContainsReplicas() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "declaredType", opposite = "typedEntities")
-    public TType getDeclaredType() {
-        return declaredType;
-    }
-
-    public void setDeclaredType(TType declaredType) {
-        if (this.declaredType != null) {
-            if (this.declaredType.equals(declaredType)) return;
-            this.declaredType.getTypedEntities().remove(this);
-        }
-        this.declaredType = declaredType;
-        if (declaredType == null) return;
-        declaredType.getTypedEntities().add(this);
     }
     
     @FameProperty(name = "duplicationRate", derived = true)
@@ -324,6 +310,20 @@ public class UnknownVariable extends NamedEntity implements TAccessible, TEntity
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "typing", opposite = "typedEntity")
+    public TEntityTyping getTyping() {
+        return typing;
+    }
+
+    public void setTyping(TEntityTyping typing) {
+        if (this.typing == null ? typing != null : !this.typing.equals(typing)) {
+            TEntityTyping old_typing = this.typing;
+            this.typing = typing;
+            if (old_typing != null) old_typing.setTypedEntity(null);
+            if (typing != null) typing.setTypedEntity(this);
+        }
     }
     
 

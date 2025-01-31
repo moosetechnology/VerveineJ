@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -11,7 +11,7 @@ import java.util.*;
 @FameDescription("TReferenceable")
 public interface TReferenceable  {
 
-        @FameProperty(name = "incomingReferences", opposite = "referredType", derived = true)
+        @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences();
 
     public void setIncomingReferences(Collection<? extends TReference> incomingReferences);

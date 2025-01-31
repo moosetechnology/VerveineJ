@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixreplication;
+package org.moosetechnology.model.famixjava.famixreplication;
 
 import ch.akuhn.fame.MetaRepository;
 
@@ -12,8 +12,8 @@ public class FamixReplicationModel {
     }
     
     public static void importInto(MetaRepository metamodel) {
-		metamodel.with(org.moosetechnology.model.famix.famixreplication.Replica.class);
-		metamodel.with(org.moosetechnology.model.famix.famixreplication.ReplicatedFragment.class);
+		metamodel.with(org.moosetechnology.model.famixjava.famixreplication.Replica.class);
+		metamodel.with(org.moosetechnology.model.famixjava.famixreplication.ReplicatedFragment.class);
 
     }
 

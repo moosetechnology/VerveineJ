@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -11,24 +11,7 @@ import java.util.*;
 @FameDescription("TWithFileIncludes")
 public interface TWithFileIncludes  {
 
-        @FameProperty(name = "outgoingIncludeRelations", opposite = "source", derived = true)
-    public Collection<TFileInclude> getOutgoingIncludeRelations();
-
-    public void setOutgoingIncludeRelations(Collection<? extends TFileInclude> outgoingIncludeRelations);
-
-    public void addOutgoingIncludeRelations(TFileInclude one);
-
-    public void addOutgoingIncludeRelations(TFileInclude one, TFileInclude... many);
-
-    public void addOutgoingIncludeRelations(Iterable<? extends TFileInclude> many);
-
-    public void addOutgoingIncludeRelations(TFileInclude[] many);
-
-    public int numberOfOutgoingIncludeRelations();
-
-    public boolean hasOutgoingIncludeRelations();
-
-    @FameProperty(name = "incomingIncludeRelations", opposite = "target", derived = true)
+        @FameProperty(name = "incomingIncludeRelations", opposite = "target", derived = true)
     public Collection<TFileInclude> getIncomingIncludeRelations();
 
     public void setIncomingIncludeRelations(Collection<? extends TFileInclude> incomingIncludeRelations);
@@ -44,6 +27,23 @@ public interface TWithFileIncludes  {
     public int numberOfIncomingIncludeRelations();
 
     public boolean hasIncomingIncludeRelations();
+
+    @FameProperty(name = "outgoingIncludeRelations", opposite = "source", derived = true)
+    public Collection<TFileInclude> getOutgoingIncludeRelations();
+
+    public void setOutgoingIncludeRelations(Collection<? extends TFileInclude> outgoingIncludeRelations);
+
+    public void addOutgoingIncludeRelations(TFileInclude one);
+
+    public void addOutgoingIncludeRelations(TFileInclude one, TFileInclude... many);
+
+    public void addOutgoingIncludeRelations(Iterable<? extends TFileInclude> many);
+
+    public void addOutgoingIncludeRelations(TFileInclude[] many);
+
+    public int numberOfOutgoingIncludeRelations();
+
+    public boolean hasOutgoingIncludeRelations();
 
 
 

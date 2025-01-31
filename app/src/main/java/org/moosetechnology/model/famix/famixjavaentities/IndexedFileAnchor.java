@@ -1,12 +1,12 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixtraits.TFile;
-import org.moosetechnology.model.famix.famixtraits.TFileAnchor;
-import org.moosetechnology.model.famix.famixtraits.TIndexedFileNavigation;
+import org.moosetechnology.model.famixjava.famixtraits.TFile;
+import org.moosetechnology.model.famixjava.famixtraits.TFileAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TIndexedFileNavigation;
 
 
 @FamePackage("Famix-Java-Entities")

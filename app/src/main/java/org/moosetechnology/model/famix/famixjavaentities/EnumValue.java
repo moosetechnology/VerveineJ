@@ -1,36 +1,35 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TEnumValue;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
-import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.famixtraits.TWithEnumValues;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAccess;
+import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famixjava.famixtraits.TComment;
+import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famixjava.famixtraits.TEnumValue;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TTypedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAccesses;
+import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
+import org.moosetechnology.model.famixjava.famixtraits.TWithEnumValues;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("EnumValue")
-public class EnumValue extends NamedEntity implements TAccessible, TEntityMetaLevelDependency, TEnumValue, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity, TWithComments {
+public class EnumValue extends NamedEntity implements TAccessible, TCanBeStub, TEntityMetaLevelDependency, TEnumValue, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity, TWithComments {
 
     private Collection<TComment> comments; 
 
-    private TType declaredType;
-    
     private Collection<TAccess> incomingAccesses; 
 
     private Boolean isStub;
@@ -42,6 +41,8 @@ public class EnumValue extends NamedEntity implements TAccessible, TEntityMetaLe
     private TWithEnumValues parentEnum;
     
     private TSourceAnchor sourceAnchor;
+    
+    private TEntityTyping typing;
     
 
 
@@ -106,21 +107,6 @@ public class EnumValue extends NamedEntity implements TAccessible, TEntityMetaLe
     public Boolean getContainsReplicas() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "declaredType", opposite = "typedEntities")
-    public TType getDeclaredType() {
-        return declaredType;
-    }
-
-    public void setDeclaredType(TType declaredType) {
-        if (this.declaredType != null) {
-            if (this.declaredType.equals(declaredType)) return;
-            this.declaredType.getTypedEntities().remove(this);
-        }
-        this.declaredType = declaredType;
-        if (declaredType == null) return;
-        declaredType.getTypedEntities().add(this);
     }
     
     @FameProperty(name = "duplicationRate", derived = true)
@@ -354,6 +340,20 @@ public class EnumValue extends NamedEntity implements TAccessible, TEntityMetaLe
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
+    }
+    
+    @FameProperty(name = "typing", opposite = "typedEntity")
+    public TEntityTyping getTyping() {
+        return typing;
+    }
+
+    public void setTyping(TEntityTyping typing) {
+        if (this.typing == null ? typing != null : !this.typing.equals(typing)) {
+            TEntityTyping old_typing = this.typing;
+            this.typing = typing;
+            if (old_typing != null) old_typing.setTypedEntity(null);
+            if (typing != null) typing.setTypedEntity(this);
+        }
     }
     
 

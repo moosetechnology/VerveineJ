@@ -1,12 +1,12 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.tagging;
+package org.moosetechnology.model.famixjava.tagging;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.moose.Entity;
+import org.moosetechnology.model.famixjava.moose.Entity;
 
 
 @FamePackage("Tagging")

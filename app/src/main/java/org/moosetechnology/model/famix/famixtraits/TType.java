@@ -1,38 +1,38 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TType")
-public interface TType extends TNamedEntity, TSourceEntity, TEntityMetaLevelDependency, TReferenceable {
+public interface TType extends TReferenceable, TNamedEntity, TSourceEntity, TCanBeStub, TEntityMetaLevelDependency {
 
         @FameProperty(name = "typeContainer", opposite = "types", container = true)
     public TWithTypes getTypeContainer();
 
     public void setTypeContainer(TWithTypes typeContainer);
 
-    @FameProperty(name = "typedEntities", opposite = "declaredType", derived = true)
-    public Collection<TTypedEntity> getTypedEntities();
+    @FameProperty(name = "incomingTypings", opposite = "declaredType", derived = true)
+    public Collection<TEntityTyping> getIncomingTypings();
 
-    public void setTypedEntities(Collection<? extends TTypedEntity> typedEntities);
+    public void setIncomingTypings(Collection<? extends TEntityTyping> incomingTypings);
 
-    public void addTypedEntities(TTypedEntity one);
+    public void addIncomingTypings(TEntityTyping one);
 
-    public void addTypedEntities(TTypedEntity one, TTypedEntity... many);
+    public void addIncomingTypings(TEntityTyping one, TEntityTyping... many);
 
-    public void addTypedEntities(Iterable<? extends TTypedEntity> many);
+    public void addIncomingTypings(Iterable<? extends TEntityTyping> many);
 
-    public void addTypedEntities(TTypedEntity[] many);
+    public void addIncomingTypings(TEntityTyping[] many);
 
-    public int numberOfTypedEntities();
+    public int numberOfIncomingTypings();
 
-    public boolean hasTypedEntities();
+    public boolean hasIncomingTypings();
 
 
 

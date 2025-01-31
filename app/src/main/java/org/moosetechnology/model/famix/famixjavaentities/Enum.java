@@ -1,41 +1,45 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TEnum;
-import org.moosetechnology.model.famix.famixtraits.TEnumValue;
-import org.moosetechnology.model.famix.famixtraits.THasVisibility;
-import org.moosetechnology.model.famix.famixtraits.TImport;
-import org.moosetechnology.model.famix.famixtraits.TImportable;
-import org.moosetechnology.model.famix.famixtraits.TInheritance;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TReference;
-import org.moosetechnology.model.famix.famixtraits.TReferenceable;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.famixtraits.TWithEnumValues;
-import org.moosetechnology.model.famix.famixtraits.TWithImports;
-import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
-import org.moosetechnology.model.famix.famixtraits.TWithMethods;
-import org.moosetechnology.model.famix.famixtraits.TWithTypes;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famixjava.famixtraits.TComment;
+import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
+import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
+import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famixjava.famixtraits.TEnum;
+import org.moosetechnology.model.famixjava.famixtraits.TEnumValue;
+import org.moosetechnology.model.famixjava.famixtraits.THasVisibility;
+import org.moosetechnology.model.famixjava.famixtraits.TImport;
+import org.moosetechnology.model.famixjava.famixtraits.TImportable;
+import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
+import org.moosetechnology.model.famixjava.famixtraits.TMethod;
+import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TReference;
+import org.moosetechnology.model.famixjava.famixtraits.TReferenceable;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TType;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
+import org.moosetechnology.model.famixjava.famixtraits.TWithEnumValues;
+import org.moosetechnology.model.famixjava.famixtraits.TWithImports;
+import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famixjava.famixtraits.TWithMethods;
+import org.moosetechnology.model.famixjava.famixtraits.TWithTypes;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Enum")
-public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THasVisibility, TImportable, TNamedEntity, TReferenceable, TSourceEntity, TType, TWithAttributes, TWithComments, TWithEnumValues, TWithImports, TWithInheritances, TWithMethods {
+public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMetaLevelDependency, TEnum, THasVisibility, TImportable, TNamedEntity, TReferenceable, TSourceEntity, TType, TWithAttributes, TWithComments, TWithEnumValues, TWithImports, TWithInheritances, TWithMethods {
 
     private Collection<TAttribute> attributes; 
 
@@ -43,9 +47,13 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
 
     private Collection<TEnumValue> enumValues; 
 
+    private Collection<TParametricEntity> genericEntities; 
+
     private Collection<TImport> incomingImports; 
 
     private Collection<TReference> incomingReferences; 
+
+    private Collection<TEntityTyping> incomingTypings; 
 
     private Boolean isStub;
     
@@ -55,6 +63,8 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
     
     private Number numberOfLinesOfCode;
     
+    private Collection<TConcretization> outgoingConcretizations; 
+
     private Collection<TImport> outgoingImports; 
 
     private TSourceAnchor sourceAnchor;
@@ -65,8 +75,6 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
 
     private TWithTypes typeContainer;
     
-    private Collection<TTypedEntity> typedEntities; 
-
     private String visibility;
     
 
@@ -248,6 +256,56 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "genericEntities", opposite = "parameters")
+    public Collection<TParametricEntity> getGenericEntities() {
+        if (genericEntities == null) {
+            genericEntities = new MultivalueSet<TParametricEntity>() {
+                @Override
+                protected void clearOpposite(TParametricEntity e) {
+                    e.getParameters().remove(Enum.this);
+                }
+                @Override
+                protected void setOpposite(TParametricEntity e) {
+                    e.getParameters().add(Enum.this);
+                }
+            };
+        }
+        return genericEntities;
+    }
+    
+    public void setGenericEntities(Collection<? extends TParametricEntity> genericEntities) {
+        this.getGenericEntities().clear();
+        this.getGenericEntities().addAll(genericEntities);
+    }
+    
+    public void addGenericEntities(TParametricEntity one) {
+        this.getGenericEntities().add(one);
+    }   
+    
+    public void addGenericEntities(TParametricEntity one, TParametricEntity... many) {
+        this.getGenericEntities().add(one);
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }   
+    
+    public void addGenericEntities(Iterable<? extends TParametricEntity> many) {
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }   
+                
+    public void addGenericEntities(TParametricEntity[] many) {
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }
+    
+    public int numberOfGenericEntities() {
+        return getGenericEntities().size();
+    }
+
+    public boolean hasGenericEntities() {
+        return !getGenericEntities().isEmpty();
+    }
+
     @FameProperty(name = "hasComments", derived = true)
     public Boolean getHasComments() {
         // TODO: this is a derived property, implement this method manually.
@@ -311,17 +369,17 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
         return !getIncomingImports().isEmpty();
     }
 
-    @FameProperty(name = "incomingReferences", opposite = "referredType", derived = true)
+    @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences() {
         if (incomingReferences == null) {
             incomingReferences = new MultivalueSet<TReference>() {
                 @Override
                 protected void clearOpposite(TReference e) {
-                    e.setReferredType(null);
+                    e.setReferredEntity(null);
                 }
                 @Override
                 protected void setOpposite(TReference e) {
-                    e.setReferredType(Enum.this);
+                    e.setReferredEntity(Enum.this);
                 }
             };
         }
@@ -360,6 +418,57 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
 
     public boolean hasIncomingReferences() {
         return !getIncomingReferences().isEmpty();
+    }
+
+    @FameProperty(name = "incomingTypings", opposite = "declaredType", derived = true)
+    public Collection<TEntityTyping> getIncomingTypings() {
+        if (incomingTypings == null) {
+            incomingTypings = new MultivalueSet<TEntityTyping>() {
+                @Override
+                protected void clearOpposite(TEntityTyping e) {
+                    e.setDeclaredType(null);
+                }
+                @Override
+                protected void setOpposite(TEntityTyping e) {
+                    e.setDeclaredType(Enum.this);
+                }
+            };
+        }
+        return incomingTypings;
+    }
+    
+    public void setIncomingTypings(Collection<? extends TEntityTyping> incomingTypings) {
+        this.getIncomingTypings().clear();
+        this.getIncomingTypings().addAll(incomingTypings);
+    }                    
+    
+        
+    public void addIncomingTypings(TEntityTyping one) {
+        this.getIncomingTypings().add(one);
+    }   
+    
+    public void addIncomingTypings(TEntityTyping one, TEntityTyping... many) {
+        this.getIncomingTypings().add(one);
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }   
+    
+    public void addIncomingTypings(Iterable<? extends TEntityTyping> many) {
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }   
+                
+    public void addIncomingTypings(TEntityTyping[] many) {
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }
+    
+    public int numberOfIncomingTypings() {
+        return getIncomingTypings().size();
+    }
+
+    public boolean hasIncomingTypings() {
+        return !getIncomingTypings().isEmpty();
     }
 
     @FameProperty(name = "isDead", derived = true)
@@ -554,6 +663,57 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.setConcreteParameter(null);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.setConcreteParameter(Enum.this);
+                }
+            };
+        }
+        return outgoingConcretizations;
+    }
+    
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
+    }                    
+    
+        
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
+    }   
+    
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+    
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+                
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+    
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
+    }
+
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
+    }
+
     @FameProperty(name = "outgoingImports", opposite = "importingEntity", derived = true)
     public Collection<TImport> getOutgoingImports() {
         if (outgoingImports == null) {
@@ -760,57 +920,6 @@ public class Enum extends Type implements TEntityMetaLevelDependency, TEnum, THa
         typeContainer.getTypes().add(this);
     }
     
-    @FameProperty(name = "typedEntities", opposite = "declaredType", derived = true)
-    public Collection<TTypedEntity> getTypedEntities() {
-        if (typedEntities == null) {
-            typedEntities = new MultivalueSet<TTypedEntity>() {
-                @Override
-                protected void clearOpposite(TTypedEntity e) {
-                    e.setDeclaredType(null);
-                }
-                @Override
-                protected void setOpposite(TTypedEntity e) {
-                    e.setDeclaredType(Enum.this);
-                }
-            };
-        }
-        return typedEntities;
-    }
-    
-    public void setTypedEntities(Collection<? extends TTypedEntity> typedEntities) {
-        this.getTypedEntities().clear();
-        this.getTypedEntities().addAll(typedEntities);
-    }                    
-    
-        
-    public void addTypedEntities(TTypedEntity one) {
-        this.getTypedEntities().add(one);
-    }   
-    
-    public void addTypedEntities(TTypedEntity one, TTypedEntity... many) {
-        this.getTypedEntities().add(one);
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }   
-    
-    public void addTypedEntities(Iterable<? extends TTypedEntity> many) {
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }   
-                
-    public void addTypedEntities(TTypedEntity[] many) {
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }
-    
-    public int numberOfTypedEntities() {
-        return getTypedEntities().size();
-    }
-
-    public boolean hasTypedEntities() {
-        return !getTypedEntities().isEmpty();
-    }
-
     @FameProperty(name = "visibility")
     public String getVisibility() {
         return visibility;

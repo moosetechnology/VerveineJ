@@ -1,16 +1,16 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
+import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TAnnotationTypeAttribute")
-public interface TAnnotationTypeAttribute extends TTypedEntity, TNamedEntity, TSourceEntity, TEntityMetaLevelDependency, TStructuralEntity, TAttribute, TAccessible {
+public interface TAnnotationTypeAttribute extends TNamedEntity, TSourceEntity, TCanBeStub, TEntityMetaLevelDependency, TStructuralEntity, TAttribute, TTypedEntity, TAccessible {
 
         @FameProperty(name = "annotationAttributeInstances", opposite = "annotationTypeAttribute", derived = true)
     public Collection<TTypedAnnotationInstanceAttribute> getAnnotationAttributeInstances();

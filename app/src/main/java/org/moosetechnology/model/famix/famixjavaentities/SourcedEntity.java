@@ -1,20 +1,18 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famixjava.famixreplication.Replica;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("SourcedEntity")
 public class SourcedEntity extends Entity implements TSourceEntity {
 
-    private Boolean isStub;
-    
     private Number numberOfLinesOfCode;
     
     private TSourceAnchor sourceAnchor;
@@ -37,15 +35,6 @@ public class SourcedEntity extends Entity implements TSourceEntity {
     public Number getDuplicationRate() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub() {
-        return isStub;
-    }
-
-    public void setIsStub(Boolean isStub) {
-        this.isStub = isStub;
     }
     
     @FameProperty(name = "numberOfLinesOfCode")

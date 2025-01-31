@@ -1,30 +1,33 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.THasVisibility;
-import org.moosetechnology.model.famix.famixtraits.TImplementable;
-import org.moosetechnology.model.famix.famixtraits.TImplementation;
-import org.moosetechnology.model.famix.famixtraits.TInheritance;
-import org.moosetechnology.model.famix.famixtraits.TPackage;
-import org.moosetechnology.model.famix.famixtraits.TPackageable;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance;
-import org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes;
-import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famixjava.famixtraits.TAnnotationType;
+import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
+import org.moosetechnology.model.famixjava.famixtraits.TComment;
+import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
+import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
+import org.moosetechnology.model.famixjava.famixtraits.THasVisibility;
+import org.moosetechnology.model.famixjava.famixtraits.TImplementable;
+import org.moosetechnology.model.famixjava.famixtraits.TImplementation;
+import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
+import org.moosetechnology.model.famixjava.famixtraits.TPackage;
+import org.moosetechnology.model.famixjava.famixtraits.TPackageable;
+import org.moosetechnology.model.famixjava.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famixjava.famixtraits.TTypedAnnotationInstance;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAnnotationTypes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
+import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationType")
-public class AnnotationType extends Type implements TAnnotationType, THasVisibility, TImplementable, TPackageable, TWithAttributes, TWithComments, TWithInheritances {
+public class AnnotationType extends Type implements TAnnotationType, TConcreteType, THasVisibility, TImplementable, TPackageable, TWithAttributes, TWithComments, TWithInheritances {
 
     private TWithAnnotationTypes annotationTypesContainer;
     
@@ -32,9 +35,13 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
 
     private Collection<TComment> comments; 
 
+    private Collection<TParametricEntity> genericEntities; 
+
     private Collection<TImplementation> implementations; 
 
     private Collection<TTypedAnnotationInstance> instances; 
+
+    private Collection<TConcretization> outgoingConcretizations; 
 
     private TPackage parentPackage;
     
@@ -161,6 +168,56 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
 
     public boolean hasComments() {
         return !getComments().isEmpty();
+    }
+
+    @FameProperty(name = "genericEntities", opposite = "parameters")
+    public Collection<TParametricEntity> getGenericEntities() {
+        if (genericEntities == null) {
+            genericEntities = new MultivalueSet<TParametricEntity>() {
+                @Override
+                protected void clearOpposite(TParametricEntity e) {
+                    e.getParameters().remove(AnnotationType.this);
+                }
+                @Override
+                protected void setOpposite(TParametricEntity e) {
+                    e.getParameters().add(AnnotationType.this);
+                }
+            };
+        }
+        return genericEntities;
+    }
+    
+    public void setGenericEntities(Collection<? extends TParametricEntity> genericEntities) {
+        this.getGenericEntities().clear();
+        this.getGenericEntities().addAll(genericEntities);
+    }
+    
+    public void addGenericEntities(TParametricEntity one) {
+        this.getGenericEntities().add(one);
+    }   
+    
+    public void addGenericEntities(TParametricEntity one, TParametricEntity... many) {
+        this.getGenericEntities().add(one);
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }   
+    
+    public void addGenericEntities(Iterable<? extends TParametricEntity> many) {
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }   
+                
+    public void addGenericEntities(TParametricEntity[] many) {
+        for (TParametricEntity each : many)
+            this.getGenericEntities().add(each);
+    }
+    
+    public int numberOfGenericEntities() {
+        return getGenericEntities().size();
+    }
+
+    public boolean hasGenericEntities() {
+        return !getGenericEntities().isEmpty();
     }
 
     @FameProperty(name = "hasComments", derived = true)
@@ -325,6 +382,57 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.setConcreteParameter(null);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.setConcreteParameter(AnnotationType.this);
+                }
+            };
+        }
+        return outgoingConcretizations;
+    }
+    
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
+    }                    
+    
+        
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
+    }   
+    
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+    
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+                
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+    
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
+    }
+
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
+    }
+
     @FameProperty(name = "parentPackage", opposite = "childEntities", container = true)
     public TPackage getParentPackage() {
         return parentPackage;

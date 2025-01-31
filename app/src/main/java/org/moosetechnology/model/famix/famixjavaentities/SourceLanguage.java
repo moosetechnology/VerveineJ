@@ -1,13 +1,13 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixjavaentities;
+package org.moosetechnology.model.famixjava.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixtraits.TSourceLanguage;
-import org.moosetechnology.model.famix.famixtraits.TWithSourceLanguages;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceLanguage;
+import org.moosetechnology.model.famixjava.famixtraits.TWithSourceLanguages;
 
 
 @FamePackage("Famix-Java-Entities")

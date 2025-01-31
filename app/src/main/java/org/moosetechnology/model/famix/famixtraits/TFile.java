@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -31,17 +31,17 @@ public interface TFile extends TFileSystemEntity {
 
     public boolean hasEntities();
 
-    @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
-    public Number getTotalNumberOfLinesOfText();
-
     @FameProperty(name = "numberOfKiloBytes", derived = true)
     public Number getNumberOfKiloBytes();
 
-    @FameProperty(name = "numberOfCharacters", derived = true)
-    public Number getNumberOfCharacters();
+    @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
+    public Number getTotalNumberOfLinesOfText();
 
     @FameProperty(name = "numberOfEmptyLinesOfText", derived = true)
     public Number getNumberOfEmptyLinesOfText();
+
+    @FameProperty(name = "numberOfCharacters", derived = true)
+    public Number getNumberOfCharacters();
 
     @FameProperty(name = "numberOfBytes", derived = true)
     public Number getNumberOfBytes();

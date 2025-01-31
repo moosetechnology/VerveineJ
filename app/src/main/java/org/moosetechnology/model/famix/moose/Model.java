@@ -1,10 +1,10 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.moose;
+package org.moosetechnology.model.famixjava.moose;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixtraits.TSourceLanguage;
+import org.moosetechnology.model.famixjava.famixtraits.TSourceLanguage;
 
 
 @FamePackage("Moose")

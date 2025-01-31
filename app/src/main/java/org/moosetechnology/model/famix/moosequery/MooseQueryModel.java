@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.moosequery;
+package org.moosetechnology.model.famixjava.moosequery;
 
 import ch.akuhn.fame.MetaRepository;
 
@@ -12,8 +12,8 @@ public class MooseQueryModel {
     }
     
     public static void importInto(MetaRepository metamodel) {
-		metamodel.with(org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency.class);
-		metamodel.with(org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moosequery.TAssociationMetaLevelDependency.class);
+		metamodel.with(org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency.class);
 
     }
 

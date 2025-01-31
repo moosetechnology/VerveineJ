@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famix.famixtraits;
+package org.moosetechnology.model.famixjava.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
@@ -31,11 +31,11 @@ public interface TFolder extends TFileSystemEntity {
 
     public boolean hasChildrenFileSystemEntities();
 
-    @FameProperty(name = "numberOfFolders", derived = true)
-    public Number getNumberOfFolders();
-
     @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
     public Number getTotalNumberOfLinesOfText();
+
+    @FameProperty(name = "numberOfFolders", derived = true)
+    public Number getNumberOfFolders();
 
     @FameProperty(name = "numberOfEmptyLinesOfText", derived = true)
     public Number getNumberOfEmptyLinesOfText();
