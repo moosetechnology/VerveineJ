@@ -1,16 +1,17 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
+
+import org.moosetechnology.model.famix.famixreplication.Replica;
+import org.moosetechnology.model.famix.famixtraits.TAssociation;
+import org.moosetechnology.model.famix.famixtraits.TInheritance;
+import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famixjava.famixreplication.Replica;
-import org.moosetechnology.model.famixjava.famixtraits.TAssociation;
-import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
-import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
-import org.moosetechnology.model.famixjava.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")

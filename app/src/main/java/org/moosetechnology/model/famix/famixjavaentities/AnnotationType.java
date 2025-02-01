@@ -1,28 +1,29 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixtraits.TAnnotationType;
-import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
-import org.moosetechnology.model.famixjava.famixtraits.TComment;
-import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
-import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
-import org.moosetechnology.model.famixjava.famixtraits.THasVisibility;
-import org.moosetechnology.model.famixjava.famixtraits.TImplementable;
-import org.moosetechnology.model.famixjava.famixtraits.TImplementation;
-import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
-import org.moosetechnology.model.famixjava.famixtraits.TPackage;
-import org.moosetechnology.model.famixjava.famixtraits.TPackageable;
-import org.moosetechnology.model.famixjava.famixtraits.TParametricEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TTypedAnnotationInstance;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAnnotationTypes;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
-import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
+
+import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
+import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TComment;
+import org.moosetechnology.model.famix.famixtraits.TConcreteType;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.THasVisibility;
+import org.moosetechnology.model.famix.famixtraits.TImplementable;
+import org.moosetechnology.model.famix.famixtraits.TImplementation;
+import org.moosetechnology.model.famix.famixtraits.TInheritance;
+import org.moosetechnology.model.famix.famixtraits.TPackage;
+import org.moosetechnology.model.famix.famixtraits.TPackageable;
+import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance;
+import org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes;
+import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famix.famixtraits.TWithComments;
+import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
 
 
 @FamePackage("Famix-Java-Entities")

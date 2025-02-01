@@ -1,17 +1,18 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
-import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
-import org.moosetechnology.model.famixjava.famixtraits.TParametricEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TThrowable;
-import org.moosetechnology.model.famixjava.famixtraits.TTypeParameter;
-import org.moosetechnology.model.famixjava.famixtraits.TWithExceptions;
+
+import org.moosetechnology.model.famix.famixtraits.TConcreteType;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TThrowable;
+import org.moosetechnology.model.famix.famixtraits.TTypeParameter;
+import org.moosetechnology.model.famix.famixtraits.TWithExceptions;
 
 
 @FamePackage("Famix-Java-Entities")

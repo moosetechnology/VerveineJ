@@ -1,11 +1,12 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixtraits;
+package org.moosetechnology.model.famix.famixtraits;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-import org.moosetechnology.model.famixjava.moosequery.TAssociationMetaLevelDependency;
+
+import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")

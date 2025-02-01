@@ -1,30 +1,31 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixreplication.Replica;
-import org.moosetechnology.model.famixjava.famixtraits.TAccess;
-import org.moosetechnology.model.famixjava.famixtraits.TAccessible;
-import org.moosetechnology.model.famixjava.famixtraits.TCanBeFinal;
-import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
-import org.moosetechnology.model.famixjava.famixtraits.TComment;
-import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
-import org.moosetechnology.model.famixjava.famixtraits.TInvocation;
-import org.moosetechnology.model.famixjava.famixtraits.TInvocationsReceiver;
-import org.moosetechnology.model.famixjava.famixtraits.TLocalVariable;
-import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAccesses;
-import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
-import org.moosetechnology.model.famixjava.famixtraits.TWithLocalVariables;
-import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
+
+import org.moosetechnology.model.famix.famixreplication.Replica;
+import org.moosetechnology.model.famix.famixtraits.TAccess;
+import org.moosetechnology.model.famix.famixtraits.TAccessible;
+import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famix.famixtraits.TComment;
+import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famix.famixtraits.TInvocation;
+import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
+import org.moosetechnology.model.famix.famixtraits.TLocalVariable;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
+import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
+import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
+import org.moosetechnology.model.famix.famixtraits.TWithComments;
+import org.moosetechnology.model.famix.famixtraits.TWithLocalVariables;
+import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")

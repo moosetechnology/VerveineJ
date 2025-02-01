@@ -1,17 +1,18 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixtraits.TAnnotationInstance;
-import org.moosetechnology.model.famixjava.famixtraits.TInvocation;
-import org.moosetechnology.model.famixjava.famixtraits.TInvocationsReceiver;
-import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAnnotationInstances;
-import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
+
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
+import org.moosetechnology.model.famix.famixtraits.TInvocation;
+import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstances;
+import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")

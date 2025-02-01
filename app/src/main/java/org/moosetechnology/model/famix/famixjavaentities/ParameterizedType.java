@@ -1,20 +1,21 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixtraits.TCanImplement;
-import org.moosetechnology.model.famixjava.famixtraits.TImplementable;
-import org.moosetechnology.model.famixjava.famixtraits.TImplementation;
-import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
-import org.moosetechnology.model.famixjava.famixtraits.TParameterizedType;
-import org.moosetechnology.model.famixjava.famixtraits.TParameterizedTypeUser;
-import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
-import org.moosetechnology.model.famixjava.famixtraits.TWithParameterizedTypeUsers;
-import org.moosetechnology.model.famixjava.famixtraits.TWithParameterizedTypes;
+
+import org.moosetechnology.model.famix.famixtraits.TCanImplement;
+import org.moosetechnology.model.famix.famixtraits.TImplementable;
+import org.moosetechnology.model.famix.famixtraits.TImplementation;
+import org.moosetechnology.model.famix.famixtraits.TInheritance;
+import org.moosetechnology.model.famix.famixtraits.TParameterizedType;
+import org.moosetechnology.model.famix.famixtraits.TParameterizedTypeUser;
+import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famix.famixtraits.TWithParameterizedTypeUsers;
+import org.moosetechnology.model.famix.famixtraits.TWithParameterizedTypes;
 
 
 @FamePackage("Famix-Java-Entities")

@@ -1,18 +1,19 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixtraits.TAnnotationInstance;
-import org.moosetechnology.model.famixjava.famixtraits.TAnnotationInstanceAttribute;
-import org.moosetechnology.model.famixjava.famixtraits.TAnnotationType;
-import org.moosetechnology.model.famixjava.famixtraits.TTypedAnnotationInstance;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAnnotationInstanceAttributes;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAnnotationInstances;
-import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
+
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstanceAttribute;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
+import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance;
+import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstanceAttributes;
+import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstances;
+import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")

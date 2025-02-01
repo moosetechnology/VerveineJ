@@ -1,10 +1,11 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixtraits;
+package org.moosetechnology.model.famix.famixtraits;
+
+import org.moosetechnology.model.famix.famixreplication.Replica;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famixjava.famixreplication.Replica;
 
 
 @FamePackage("Famix-Traits")

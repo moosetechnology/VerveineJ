@@ -1,11 +1,12 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
+
+import org.moosetechnology.model.famix.famixtraits.TDeclaredException;
+import org.moosetechnology.model.famix.famixtraits.TWithDeclaredExceptions;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famixjava.famixtraits.TDeclaredException;
-import org.moosetechnology.model.famixjava.famixtraits.TWithDeclaredExceptions;
 
 
 @FamePackage("Famix-Java-Entities")

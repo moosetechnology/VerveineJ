@@ -1,5 +1,5 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.moosecore;
+package org.moosetechnology.model.famix.moosecore;
 
 import ch.akuhn.fame.MetaRepository;
 
@@ -12,7 +12,7 @@ public class MooseCoreModel {
     }
     
     public static void importInto(MetaRepository metamodel) {
-		metamodel.with(org.moosetechnology.model.famixjava.moosecore.TEntityCreator.class);
+		metamodel.with(org.moosetechnology.model.famix.moosecore.TEntityCreator.class);
 
     }
 

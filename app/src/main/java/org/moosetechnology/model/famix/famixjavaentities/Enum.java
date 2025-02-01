@@ -1,40 +1,41 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixreplication.Replica;
-import org.moosetechnology.model.famixjava.famixtraits.TAttribute;
-import org.moosetechnology.model.famixjava.famixtraits.TCanBeStub;
-import org.moosetechnology.model.famixjava.famixtraits.TComment;
-import org.moosetechnology.model.famixjava.famixtraits.TConcreteType;
-import org.moosetechnology.model.famixjava.famixtraits.TConcretization;
-import org.moosetechnology.model.famixjava.famixtraits.TEntityTyping;
-import org.moosetechnology.model.famixjava.famixtraits.TEnum;
-import org.moosetechnology.model.famixjava.famixtraits.TEnumValue;
-import org.moosetechnology.model.famixjava.famixtraits.THasVisibility;
-import org.moosetechnology.model.famixjava.famixtraits.TImport;
-import org.moosetechnology.model.famixjava.famixtraits.TImportable;
-import org.moosetechnology.model.famixjava.famixtraits.TInheritance;
-import org.moosetechnology.model.famixjava.famixtraits.TMethod;
-import org.moosetechnology.model.famixjava.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TParametricEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TReference;
-import org.moosetechnology.model.famixjava.famixtraits.TReferenceable;
-import org.moosetechnology.model.famixjava.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famixjava.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TType;
-import org.moosetechnology.model.famixjava.famixtraits.TWithAttributes;
-import org.moosetechnology.model.famixjava.famixtraits.TWithComments;
-import org.moosetechnology.model.famixjava.famixtraits.TWithEnumValues;
-import org.moosetechnology.model.famixjava.famixtraits.TWithImports;
-import org.moosetechnology.model.famixjava.famixtraits.TWithInheritances;
-import org.moosetechnology.model.famixjava.famixtraits.TWithMethods;
-import org.moosetechnology.model.famixjava.famixtraits.TWithTypes;
-import org.moosetechnology.model.famixjava.moosequery.TEntityMetaLevelDependency;
+
+import org.moosetechnology.model.famix.famixreplication.Replica;
+import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
+import org.moosetechnology.model.famix.famixtraits.TComment;
+import org.moosetechnology.model.famix.famixtraits.TConcreteType;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
+import org.moosetechnology.model.famix.famixtraits.TEnum;
+import org.moosetechnology.model.famix.famixtraits.TEnumValue;
+import org.moosetechnology.model.famix.famixtraits.THasVisibility;
+import org.moosetechnology.model.famix.famixtraits.TImport;
+import org.moosetechnology.model.famix.famixtraits.TImportable;
+import org.moosetechnology.model.famix.famixtraits.TInheritance;
+import org.moosetechnology.model.famix.famixtraits.TMethod;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TReference;
+import org.moosetechnology.model.famix.famixtraits.TReferenceable;
+import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famix.famixtraits.TType;
+import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
+import org.moosetechnology.model.famix.famixtraits.TWithComments;
+import org.moosetechnology.model.famix.famixtraits.TWithEnumValues;
+import org.moosetechnology.model.famix.famixtraits.TWithImports;
+import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
+import org.moosetechnology.model.famix.famixtraits.TWithMethods;
+import org.moosetechnology.model.famix.famixtraits.TWithTypes;
+import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")

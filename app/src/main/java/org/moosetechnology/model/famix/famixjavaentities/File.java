@@ -1,15 +1,16 @@
 // Automagically generated code, please do not change
-package org.moosetechnology.model.famixjava.famixjavaentities;
+package org.moosetechnology.model.famix.famixjavaentities;
 
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famixjava.famixtraits.TFile;
-import org.moosetechnology.model.famixjava.famixtraits.TFileSystemEntity;
-import org.moosetechnology.model.famixjava.famixtraits.TFolder;
-import org.moosetechnology.model.famixjava.famixtraits.TWithFiles;
+
+import org.moosetechnology.model.famix.famixtraits.TFile;
+import org.moosetechnology.model.famix.famixtraits.TFileSystemEntity;
+import org.moosetechnology.model.famix.famixtraits.TFolder;
+import org.moosetechnology.model.famix.famixtraits.TWithFiles;
 
 
 @FamePackage("Famix-Java-Entities")
