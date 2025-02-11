@@ -6,7 +6,6 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-
 import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TCanBeAbstract;
@@ -237,17 +236,17 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "genericEntities", opposite = "parameters")
+    @FameProperty(name = "genericEntities", opposite = "typeParameters")
     public Collection<TParametricEntity> getGenericEntities() {
         if (genericEntities == null) {
             genericEntities = new MultivalueSet<TParametricEntity>() {
                 @Override
                 protected void clearOpposite(TParametricEntity e) {
-                    e.getParameters().remove(Class.this);
+                    e.getTypeParameters().remove(Class.this);
                 }
                 @Override
                 protected void setOpposite(TParametricEntity e) {
-                    e.getParameters().add(Class.this);
+                    e.getTypeParameters().add(Class.this);
                 }
             };
         }

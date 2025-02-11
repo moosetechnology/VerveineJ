@@ -6,7 +6,6 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-
 import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 
@@ -15,14 +14,14 @@ import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 @FameDescription("ParametricInterface")
 public class ParametricInterface extends Interface implements TParametricEntity {
 
-    private Collection<TConcreteType> parameters; 
+    private Collection<TConcreteType> typeParameters; 
 
 
 
-    @FameProperty(name = "parameters", opposite = "genericEntities", derived = true)
-    public Collection<TConcreteType> getParameters() {
-        if (parameters == null) {
-            parameters = new MultivalueSet<TConcreteType>() {
+    @FameProperty(name = "typeParameters", opposite = "genericEntities", derived = true)
+    public Collection<TConcreteType> getTypeParameters() {
+        if (typeParameters == null) {
+            typeParameters = new MultivalueSet<TConcreteType>() {
                 @Override
                 protected void clearOpposite(TConcreteType e) {
                     e.getGenericEntities().remove(ParametricInterface.this);
@@ -33,40 +32,40 @@ public class ParametricInterface extends Interface implements TParametricEntity 
                 }
             };
         }
-        return parameters;
+        return typeParameters;
     }
     
-    public void setParameters(Collection<? extends TConcreteType> parameters) {
-        this.getParameters().clear();
-        this.getParameters().addAll(parameters);
+    public void setTypeParameters(Collection<? extends TConcreteType> typeParameters) {
+        this.getTypeParameters().clear();
+        this.getTypeParameters().addAll(typeParameters);
     }
     
-    public void addParameters(TConcreteType one) {
-        this.getParameters().add(one);
+    public void addTypeParameters(TConcreteType one) {
+        this.getTypeParameters().add(one);
     }   
     
-    public void addParameters(TConcreteType one, TConcreteType... many) {
-        this.getParameters().add(one);
+    public void addTypeParameters(TConcreteType one, TConcreteType... many) {
+        this.getTypeParameters().add(one);
         for (TConcreteType each : many)
-            this.getParameters().add(each);
+            this.getTypeParameters().add(each);
     }   
     
-    public void addParameters(Iterable<? extends TConcreteType> many) {
+    public void addTypeParameters(Iterable<? extends TConcreteType> many) {
         for (TConcreteType each : many)
-            this.getParameters().add(each);
+            this.getTypeParameters().add(each);
     }   
                 
-    public void addParameters(TConcreteType[] many) {
+    public void addTypeParameters(TConcreteType[] many) {
         for (TConcreteType each : many)
-            this.getParameters().add(each);
+            this.getTypeParameters().add(each);
     }
     
-    public int numberOfParameters() {
-        return getParameters().size();
+    public int numberOfTypeParameters() {
+        return getTypeParameters().size();
     }
 
-    public boolean hasParameters() {
-        return !getParameters().isEmpty();
+    public boolean hasTypeParameters() {
+        return !getTypeParameters().isEmpty();
     }
 
 

@@ -6,7 +6,6 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-
 import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
@@ -188,17 +187,17 @@ public class TypeParameter extends Type implements TBounded, TConcreteType, TThr
         return !getDeclaringEntities().isEmpty();
     }
 
-    @FameProperty(name = "genericEntities", opposite = "parameters")
+    @FameProperty(name = "genericEntities", opposite = "typeParameters")
     public Collection<TParametricEntity> getGenericEntities() {
         if (genericEntities == null) {
             genericEntities = new MultivalueSet<TParametricEntity>() {
                 @Override
                 protected void clearOpposite(TParametricEntity e) {
-                    e.getParameters().remove(TypeParameter.this);
+                    e.getTypeParameters().remove(TypeParameter.this);
                 }
                 @Override
                 protected void setOpposite(TParametricEntity e) {
-                    e.getParameters().add(TypeParameter.this);
+                    e.getTypeParameters().add(TypeParameter.this);
                 }
             };
         }

@@ -1,15 +1,14 @@
 // Automagically generated code, please do not change
 package org.moosetechnology.model.famix.famixtraits;
 
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
-
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
+import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TException")
-public interface TException extends TReferenceable, TSourceEntity, TType, TNamedEntity, TWithAttributes, TWithMethods, TEntityMetaLevelDependency, TCanBeStub, TInvocationsReceiver, TWithInheritances, TClass, TThrowable, TWithComments {
+public interface TException extends TNamedEntity, TSourceEntity, TReferenceable, TType, TWithAttributes, TWithMethods, TCanBeStub, TEntityMetaLevelDependency, TInvocationsReceiver, TWithInheritances, TClass, TThrowable, TWithComments {
 
     
 

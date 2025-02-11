@@ -28,7 +28,7 @@ public interface TConcreteType  {
 
     public boolean hasOutgoingConcretizations();
 
-    @FameProperty(name = "genericEntities", opposite = "parameters")
+    @FameProperty(name = "genericEntities", opposite = "typeParameters")
     public Collection<TParametricEntity> getGenericEntities();
 
     public void setGenericEntities(Collection<? extends TParametricEntity> genericEntities);

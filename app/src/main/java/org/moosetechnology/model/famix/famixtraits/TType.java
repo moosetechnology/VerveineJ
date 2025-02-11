@@ -5,13 +5,12 @@ import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-
 import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TType")
-public interface TType extends TReferenceable, TNamedEntity, TSourceEntity, TCanBeStub, TEntityMetaLevelDependency {
+public interface TType extends TNamedEntity, TSourceEntity, TCanBeStub, TEntityMetaLevelDependency, TReferenceable {
 
         @FameProperty(name = "typeContainer", opposite = "types", container = true)
     public TWithTypes getTypeContainer();

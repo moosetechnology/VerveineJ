@@ -5,7 +5,6 @@ import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-
 import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 

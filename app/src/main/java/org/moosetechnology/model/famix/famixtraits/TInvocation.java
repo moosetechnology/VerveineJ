@@ -5,13 +5,12 @@ import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-
 import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TInvocation")
-public interface TInvocation extends THasSignature, TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
+public interface TInvocation extends TAssociation, TSourceEntity, THasSignature, TAssociationMetaLevelDependency {
 
         @FameProperty(name = "candidates", opposite = "incomingInvocations")
     public Collection<TInvocable> getCandidates();

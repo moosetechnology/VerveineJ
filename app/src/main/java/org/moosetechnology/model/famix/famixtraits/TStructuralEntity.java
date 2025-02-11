@@ -1,15 +1,14 @@
 // Automagically generated code, please do not change
 package org.moosetechnology.model.famix.famixtraits;
 
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
-
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
+import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TStructuralEntity")
-public interface TStructuralEntity extends TCanBeStub, TNamedEntity, TSourceEntity, TEntityMetaLevelDependency, TTypedEntity, TAccessible {
+public interface TStructuralEntity extends TNamedEntity, TSourceEntity, TCanBeStub, TEntityMetaLevelDependency, TTypedEntity, TAccessible {
 
     
 

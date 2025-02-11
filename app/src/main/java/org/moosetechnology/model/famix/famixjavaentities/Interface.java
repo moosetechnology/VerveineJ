@@ -6,7 +6,6 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
@@ -170,17 +169,17 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TCo
         return !getComments().isEmpty();
     }
 
-    @FameProperty(name = "genericEntities", opposite = "parameters")
+    @FameProperty(name = "genericEntities", opposite = "typeParameters")
     public Collection<TParametricEntity> getGenericEntities() {
         if (genericEntities == null) {
             genericEntities = new MultivalueSet<TParametricEntity>() {
                 @Override
                 protected void clearOpposite(TParametricEntity e) {
-                    e.getParameters().remove(Interface.this);
+                    e.getTypeParameters().remove(Interface.this);
                 }
                 @Override
                 protected void setOpposite(TParametricEntity e) {
-                    e.getParameters().add(Interface.this);
+                    e.getTypeParameters().add(Interface.this);
                 }
             };
         }

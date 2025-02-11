@@ -1,15 +1,14 @@
 // Automagically generated code, please do not change
 package org.moosetechnology.model.famix.famixjavaentities;
 
+import ch.akuhn.fame.FameDescription;
+import ch.akuhn.fame.FamePackage;
+import ch.akuhn.fame.FameProperty;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstanceAttribute;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationTypeAttribute;
 import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstanceAttribute;
 import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstanceAttributes;
 import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
-
-import ch.akuhn.fame.FameDescription;
-import ch.akuhn.fame.FamePackage;
-import ch.akuhn.fame.FameProperty;
 
 
 @FamePackage("Famix-Java-Entities")

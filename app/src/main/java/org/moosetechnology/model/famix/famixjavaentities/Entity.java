@@ -1,5 +1,3 @@
-
-
 // Automagically generated code, please do not change
 package org.moosetechnology.model.famix.famixjavaentities;
 
