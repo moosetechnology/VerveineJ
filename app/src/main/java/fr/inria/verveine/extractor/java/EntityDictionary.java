@@ -2857,6 +2857,7 @@ public class EntityDictionary {
 		ImplicitVariable fmx;
 		fmx = ensureFamixEntity(ImplicitVariable.class, key, name);
 		fmx.setParentBehaviouralEntity(tMethod);
+		fmx.setIsStub(tMethod.getIsStub());
 		return fmx;
 	}
 
