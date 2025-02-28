@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
+import org.moosetechnology.model.famix.famixtraits.TImplicitVariable;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import java.util.Collection;
@@ -45,24 +46,19 @@ public class VerveineJTest_ImplicitVarBinding extends VerveineJTest_Basic {
 	}
 
 	@Test
-	public void testImplicitThisNotStub() {
+	public void testImplicitVariablesAttributes() {
 		 parse(new String[] {"-alllocals", "src/test/resources/ad_hoc/ImplicitVarExamples.java"});
-		 Method methodWithThis = detectFamixElement(Method.class, "methodWithThis");
+		 Method methodWithThis = detectFamixElement(Method.class, "methodWithImplicitReferences");
 		 assertNotNull(methodWithThis);
-		 ImplicitVariable thisVar = (ImplicitVariable) methodWithThis.getImplicitVariables().toArray()[0];
-		 assertNotNull(thisVar);
-		 assertFalse(thisVar.getIsStub());
+		 assertTrue(methodWithThis.getImplicitVariables().size() > 1);
+		 for(TImplicitVariable impVar:  methodWithThis.getImplicitVariables()) {
+			 assertFalse(impVar.getIsStub());
+			 assertNotNull(impVar.getDeclaredType());
+			 assertEquals(impVar.getDeclaredType().getName(), "ImplicitVarExamples");
+			 assertEquals(impVar.getDeclaredType(), methodWithThis.getParentType());
+		 }
 	}
 	
-	@Test
-	public void testImplicitSuperNotStub() {
-		 parse(new String[] {"-alllocals", "src/test/resources/ad_hoc/ImplicitVarExamples.java"});
-		 Method methodWithSuper = detectFamixElement(Method.class, "methodWithSuper");
-		 assertNotNull(methodWithSuper);
-		 ImplicitVariable thisVar = (ImplicitVariable) methodWithSuper.getImplicitVariables().toArray()[0];
-		 assertNotNull(thisVar);
-		 assertFalse(thisVar.getIsStub());
-	}
 
 	@Test
 	public void testDiffForMethods() {

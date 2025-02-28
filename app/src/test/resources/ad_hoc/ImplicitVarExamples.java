@@ -2,11 +2,9 @@ package ad_hoc;
 
 public class ImplicitVarExamples {
 
-	public void methodWithThis() {
+	public void methodWithImplicitReferences() {
 		System.out.println(this.toString());
-	}
-	
-	public void methodWithSuper() {
 		System.out.println(super.toString());
 	}
+	
 }
