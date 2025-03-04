@@ -86,6 +86,8 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     private TEntityTyping typing;
     
     private String visibility;
+
+    private Boolean isDead;
     
 
 
@@ -583,8 +585,11 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "isDead", derived = true)
     public Boolean getIsDead() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.isDead;
+     }
+
+    public void setIsDead(boolean b) {
+        this.isDead = b;
     }
     
     @FameProperty(name = "isFinal")
@@ -604,26 +609,22 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "isPackageVisibility", derived = true)
     public Boolean getIsPackageVisibility() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("package");
     }
     
     @FameProperty(name = "isPrivate", derived = true)
     public Boolean getIsPrivate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("private");
     }
     
     @FameProperty(name = "isProtected", derived = true)
     public Boolean getIsProtected() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("protected");
     }
-    
+
     @FameProperty(name = "isPublic", derived = true)
     public Boolean getIsPublic() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.visibility.equals("public");
     }
     
     @FameProperty(name = "isRoot", derived = true)
