@@ -6,6 +6,7 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TComment;
@@ -18,7 +19,6 @@ import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TPackage;
 import org.moosetechnology.model.famix.famixtraits.TPackageable;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
@@ -39,7 +39,7 @@ public class AnnotationType extends Type implements TAnnotationType, TConcreteTy
 
     private Collection<TImplementation> implementations; 
 
-    private Collection<TTypedAnnotationInstance> instances; 
+    private Collection<TAnnotationInstance> instances; 
 
     private Collection<TConcretization> outgoingConcretizations; 
 
@@ -284,15 +284,15 @@ public class AnnotationType extends Type implements TAnnotationType, TConcreteTy
     }
 
     @FameProperty(name = "instances", opposite = "annotationType", derived = true)
-    public Collection<TTypedAnnotationInstance> getInstances() {
+    public Collection<TAnnotationInstance> getInstances() {
         if (instances == null) {
-            instances = new MultivalueSet<TTypedAnnotationInstance>() {
+            instances = new MultivalueSet<TAnnotationInstance>() {
                 @Override
-                protected void clearOpposite(TTypedAnnotationInstance e) {
+                protected void clearOpposite(TAnnotationInstance e) {
                     e.setAnnotationType(null);
                 }
                 @Override
-                protected void setOpposite(TTypedAnnotationInstance e) {
+                protected void setOpposite(TAnnotationInstance e) {
                     e.setAnnotationType(AnnotationType.this);
                 }
             };
@@ -300,29 +300,29 @@ public class AnnotationType extends Type implements TAnnotationType, TConcreteTy
         return instances;
     }
     
-    public void setInstances(Collection<? extends TTypedAnnotationInstance> instances) {
+    public void setInstances(Collection<? extends TAnnotationInstance> instances) {
         this.getInstances().clear();
         this.getInstances().addAll(instances);
     }                    
     
         
-    public void addInstances(TTypedAnnotationInstance one) {
+    public void addInstances(TAnnotationInstance one) {
         this.getInstances().add(one);
     }   
     
-    public void addInstances(TTypedAnnotationInstance one, TTypedAnnotationInstance... many) {
+    public void addInstances(TAnnotationInstance one, TAnnotationInstance... many) {
         this.getInstances().add(one);
-        for (TTypedAnnotationInstance each : many)
+        for (TAnnotationInstance each : many)
             this.getInstances().add(each);
     }   
     
-    public void addInstances(Iterable<? extends TTypedAnnotationInstance> many) {
-        for (TTypedAnnotationInstance each : many)
+    public void addInstances(Iterable<? extends TAnnotationInstance> many) {
+        for (TAnnotationInstance each : many)
             this.getInstances().add(each);
     }   
                 
-    public void addInstances(TTypedAnnotationInstance[] many) {
-        for (TTypedAnnotationInstance each : many)
+    public void addInstances(TAnnotationInstance[] many) {
+        for (TAnnotationInstance each : many)
             this.getInstances().add(each);
     }
     

@@ -64,6 +64,7 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Type.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.TypeParameter.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.UnknownVariable.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Variable.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Wildcard.class);
 
     }

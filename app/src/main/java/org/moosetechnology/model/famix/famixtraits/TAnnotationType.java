@@ -12,17 +12,17 @@ import java.util.*;
 public interface TAnnotationType  {
 
         @FameProperty(name = "instances", opposite = "annotationType", derived = true)
-    public Collection<TTypedAnnotationInstance> getInstances();
+    public Collection<TAnnotationInstance> getInstances();
 
-    public void setInstances(Collection<? extends TTypedAnnotationInstance> instances);
+    public void setInstances(Collection<? extends TAnnotationInstance> instances);
 
-    public void addInstances(TTypedAnnotationInstance one);
+    public void addInstances(TAnnotationInstance one);
 
-    public void addInstances(TTypedAnnotationInstance one, TTypedAnnotationInstance... many);
+    public void addInstances(TAnnotationInstance one, TAnnotationInstance... many);
 
-    public void addInstances(Iterable<? extends TTypedAnnotationInstance> many);
+    public void addInstances(Iterable<? extends TAnnotationInstance> many);
 
-    public void addInstances(TTypedAnnotationInstance[] many);
+    public void addInstances(TAnnotationInstance[] many);
 
     public int numberOfInstances();
 

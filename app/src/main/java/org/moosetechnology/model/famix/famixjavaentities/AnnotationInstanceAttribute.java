@@ -4,20 +4,18 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstanceAttribute;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationTypeAttribute;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstanceAttribute;
-import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstanceAttributes;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationInstanceAttribute")
-public class AnnotationInstanceAttribute extends SourcedEntity implements TAnnotationInstanceAttribute, TEntityMetaLevelDependency, TTypedAnnotationInstanceAttribute {
+public class AnnotationInstanceAttribute extends SourcedEntity implements TAnnotationInstanceAttribute {
 
     private TAnnotationTypeAttribute annotationTypeAttribute;
     
-    private TWithAnnotationInstanceAttributes parentAnnotationInstance;
+    private TAnnotationInstance parentAnnotationInstance;
     
     private String value;
     
@@ -99,11 +97,11 @@ public class AnnotationInstanceAttribute extends SourcedEntity implements TAnnot
     }
     
     @FameProperty(name = "parentAnnotationInstance", opposite = "attributes", container = true)
-    public TWithAnnotationInstanceAttributes getParentAnnotationInstance() {
+    public TAnnotationInstance getParentAnnotationInstance() {
         return parentAnnotationInstance;
     }
 
-    public void setParentAnnotationInstance(TWithAnnotationInstanceAttributes parentAnnotationInstance) {
+    public void setParentAnnotationInstance(TAnnotationInstance parentAnnotationInstance) {
         if (this.parentAnnotationInstance != null) {
             if (this.parentAnnotationInstance.equals(parentAnnotationInstance)) return;
             this.parentAnnotationInstance.getAttributes().remove(this);

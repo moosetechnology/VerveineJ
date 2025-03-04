@@ -6,9 +6,7 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
@@ -19,27 +17,23 @@ import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImport;
 import org.moosetechnology.model.famix.famixtraits.TImportable;
 import org.moosetechnology.model.famix.famixtraits.TInheritance;
+import org.moosetechnology.model.famix.famixtraits.TInvocation;
+import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
-import org.moosetechnology.model.famix.famixtraits.TReferenceable;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.famixtraits.TWithEnumValues;
 import org.moosetechnology.model.famix.famixtraits.TWithImports;
 import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Enum")
-public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMetaLevelDependency, TEnum, THasVisibility, TImportable, TNamedEntity, TReferenceable, TSourceEntity, TType, TWithAttributes, TWithComments, TWithEnumValues, TWithImports, TWithInheritances, TWithMethods {
+public class Enum extends Type implements TConcreteType, TEnum, THasVisibility, TImportable, TInvocationsReceiver, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
 
     private Collection<TAttribute> attributes; 
 
@@ -48,6 +42,8 @@ public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMeta
     private Collection<TEnumValue> enumValues; 
 
     private Collection<TParametricEntity> genericEntities; 
+
+    private Collection<TImport> imports; 
 
     private Collection<TImport> incomingImports; 
 
@@ -65,7 +61,7 @@ public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMeta
     
     private Collection<TConcretization> outgoingConcretizations; 
 
-    private Collection<TImport> outgoingImports; 
+    private Collection<TInvocation> receivingInvocations; 
 
     private TSourceAnchor sourceAnchor;
     
@@ -181,18 +177,6 @@ public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMeta
         return !getComments().isEmpty();
     }
 
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "enumValues", opposite = "parentEnum", derived = true)
     public Collection<TEnumValue> getEnumValues() {
         if (enumValues == null) {
@@ -318,6 +302,57 @@ public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMeta
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "imports", opposite = "importingEntity", derived = true)
+    public Collection<TImport> getImports() {
+        if (imports == null) {
+            imports = new MultivalueSet<TImport>() {
+                @Override
+                protected void clearOpposite(TImport e) {
+                    e.setImportingEntity(null);
+                }
+                @Override
+                protected void setOpposite(TImport e) {
+                    e.setImportingEntity(Enum.this);
+                }
+            };
+        }
+        return imports;
+    }
+    
+    public void setImports(Collection<? extends TImport> imports) {
+        this.getImports().clear();
+        this.getImports().addAll(imports);
+    }                    
+    
+        
+    public void addImports(TImport one) {
+        this.getImports().add(one);
+    }   
+    
+    public void addImports(TImport one, TImport... many) {
+        this.getImports().add(one);
+        for (TImport each : many)
+            this.getImports().add(each);
+    }   
+    
+    public void addImports(Iterable<? extends TImport> many) {
+        for (TImport each : many)
+            this.getImports().add(each);
+    }   
+                
+    public void addImports(TImport[] many) {
+        for (TImport each : many)
+            this.getImports().add(each);
+    }
+    
+    public int numberOfImports() {
+        return getImports().size();
+    }
+
+    public boolean hasImports() {
+        return !getImports().isEmpty();
+    }
+
     @FameProperty(name = "incomingImports", opposite = "importedEntity", derived = true)
     public Collection<TImport> getIncomingImports() {
         if (incomingImports == null) {
@@ -714,63 +749,57 @@ public class Enum extends Type implements TCanBeStub, TConcreteType, TEntityMeta
         return !getOutgoingConcretizations().isEmpty();
     }
 
-    @FameProperty(name = "outgoingImports", opposite = "importingEntity", derived = true)
-    public Collection<TImport> getOutgoingImports() {
-        if (outgoingImports == null) {
-            outgoingImports = new MultivalueSet<TImport>() {
+    @FameProperty(name = "receivingInvocations", opposite = "receiver", derived = true)
+    public Collection<TInvocation> getReceivingInvocations() {
+        if (receivingInvocations == null) {
+            receivingInvocations = new MultivalueSet<TInvocation>() {
                 @Override
-                protected void clearOpposite(TImport e) {
-                    e.setImportingEntity(null);
+                protected void clearOpposite(TInvocation e) {
+                    e.setReceiver(null);
                 }
                 @Override
-                protected void setOpposite(TImport e) {
-                    e.setImportingEntity(Enum.this);
+                protected void setOpposite(TInvocation e) {
+                    e.setReceiver(Enum.this);
                 }
             };
         }
-        return outgoingImports;
+        return receivingInvocations;
     }
     
-    public void setOutgoingImports(Collection<? extends TImport> outgoingImports) {
-        this.getOutgoingImports().clear();
-        this.getOutgoingImports().addAll(outgoingImports);
+    public void setReceivingInvocations(Collection<? extends TInvocation> receivingInvocations) {
+        this.getReceivingInvocations().clear();
+        this.getReceivingInvocations().addAll(receivingInvocations);
     }                    
     
         
-    public void addOutgoingImports(TImport one) {
-        this.getOutgoingImports().add(one);
+    public void addReceivingInvocations(TInvocation one) {
+        this.getReceivingInvocations().add(one);
     }   
     
-    public void addOutgoingImports(TImport one, TImport... many) {
-        this.getOutgoingImports().add(one);
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
+    public void addReceivingInvocations(TInvocation one, TInvocation... many) {
+        this.getReceivingInvocations().add(one);
+        for (TInvocation each : many)
+            this.getReceivingInvocations().add(each);
     }   
     
-    public void addOutgoingImports(Iterable<? extends TImport> many) {
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
+    public void addReceivingInvocations(Iterable<? extends TInvocation> many) {
+        for (TInvocation each : many)
+            this.getReceivingInvocations().add(each);
     }   
                 
-    public void addOutgoingImports(TImport[] many) {
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
+    public void addReceivingInvocations(TInvocation[] many) {
+        for (TInvocation each : many)
+            this.getReceivingInvocations().add(each);
     }
     
-    public int numberOfOutgoingImports() {
-        return getOutgoingImports().size();
+    public int numberOfReceivingInvocations() {
+        return getReceivingInvocations().size();
     }
 
-    public boolean hasOutgoingImports() {
-        return !getOutgoingImports().isEmpty();
+    public boolean hasReceivingInvocations() {
+        return !getReceivingInvocations().isEmpty();
     }
 
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)
     public TSourceAnchor getSourceAnchor() {
         return sourceAnchor;

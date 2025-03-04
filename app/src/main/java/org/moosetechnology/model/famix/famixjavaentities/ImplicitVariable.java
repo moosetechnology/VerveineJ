@@ -6,27 +6,17 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TImplicitVariable;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithImplicitVariables;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("ImplicitVariable")
-public class ImplicitVariable extends NamedEntity implements TAccessible, TCanBeStub, TEntityMetaLevelDependency, TImplicitVariable, TInvocationsReceiver, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedEntity {
+public class ImplicitVariable extends Variable implements TImplicitVariable {
 
     private Collection<TAccess> incomingAccesses; 
 
@@ -38,8 +28,6 @@ public class ImplicitVariable extends NamedEntity implements TAccessible, TCanBe
     
     private TWithImplicitVariables parentBehaviouralEntity;
     
-    private Collection<TInvocation> receivingInvocations; 
-
     private TSourceAnchor sourceAnchor;
     
     private TEntityTyping typing;
@@ -52,18 +40,6 @@ public class ImplicitVariable extends NamedEntity implements TAccessible, TCanBe
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
         
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "fanIn", derived = true)
     public Number getFanIn() {
         // TODO: this is a derived property, implement this method manually.
@@ -251,63 +227,6 @@ public class ImplicitVariable extends NamedEntity implements TAccessible, TCanBe
         this.parentBehaviouralEntity = parentBehaviouralEntity;
         if (parentBehaviouralEntity == null) return;
         parentBehaviouralEntity.getImplicitVariables().add(this);
-    }
-    
-    @FameProperty(name = "receivingInvocations", opposite = "receiver", derived = true)
-    public Collection<TInvocation> getReceivingInvocations() {
-        if (receivingInvocations == null) {
-            receivingInvocations = new MultivalueSet<TInvocation>() {
-                @Override
-                protected void clearOpposite(TInvocation e) {
-                    e.setReceiver(null);
-                }
-                @Override
-                protected void setOpposite(TInvocation e) {
-                    e.setReceiver(ImplicitVariable.this);
-                }
-            };
-        }
-        return receivingInvocations;
-    }
-    
-    public void setReceivingInvocations(Collection<? extends TInvocation> receivingInvocations) {
-        this.getReceivingInvocations().clear();
-        this.getReceivingInvocations().addAll(receivingInvocations);
-    }                    
-    
-        
-    public void addReceivingInvocations(TInvocation one) {
-        this.getReceivingInvocations().add(one);
-    }   
-    
-    public void addReceivingInvocations(TInvocation one, TInvocation... many) {
-        this.getReceivingInvocations().add(one);
-        for (TInvocation each : many)
-            this.getReceivingInvocations().add(each);
-    }   
-    
-    public void addReceivingInvocations(Iterable<? extends TInvocation> many) {
-        for (TInvocation each : many)
-            this.getReceivingInvocations().add(each);
-    }   
-                
-    public void addReceivingInvocations(TInvocation[] many) {
-        for (TInvocation each : many)
-            this.getReceivingInvocations().add(each);
-    }
-    
-    public int numberOfReceivingInvocations() {
-        return getReceivingInvocations().size();
-    }
-
-    public boolean hasReceivingInvocations() {
-        return !getReceivingInvocations().isEmpty();
-    }
-
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)

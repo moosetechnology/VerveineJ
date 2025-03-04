@@ -9,7 +9,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TFunction")
-public interface TFunction extends TWithReferences, TNamedEntity, TSourceEntity, TWithAccesses, TWithParameters, TWithInvocations, TInvocable, TWithLocalVariables, TCanBeStub, TEntityMetaLevelDependency, THasSignature, TTypedEntity, TWithStatements {
+public interface TFunction extends TNamedEntity, TEntityMetaLevelDependency, TWithParameters, THasSignature, TInvocable, TTypedEntity, TWithStatements, TWithLocalVariables {
 
         @FameProperty(name = "functionOwner", opposite = "functions", container = true)
     public TWithFunctions getFunctionOwner();

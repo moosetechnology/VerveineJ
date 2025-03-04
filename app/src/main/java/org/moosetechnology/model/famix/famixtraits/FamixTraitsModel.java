@@ -38,7 +38,6 @@ public class FamixTraitsModel {
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TCanImplement.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TClass.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TClassMetrics.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TClassWithVisibility.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TCohesionCouplingMetrics.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TComment.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TCompilationUnit.class);
@@ -108,12 +107,9 @@ public class FamixTraitsModel {
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypeAlias.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypeParameter.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstanceAttribute.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypedEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TUnknownVariable.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TWithAccesses.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstanceAttributes.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstances.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TWithAttributes.class);

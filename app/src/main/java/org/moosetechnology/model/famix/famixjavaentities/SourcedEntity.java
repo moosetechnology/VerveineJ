@@ -4,7 +4,6 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 
@@ -25,18 +24,6 @@ public class SourcedEntity extends Entity implements TSourceEntity {
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "numberOfLinesOfCode")
     public Number getNumberOfLinesOfCode() {
         return numberOfLinesOfCode;
@@ -48,12 +35,6 @@ public class SourcedEntity extends Entity implements TSourceEntity {
     
     @FameProperty(name = "numberOfLinesOfCodeWithMoreThanOneCharacter", derived = true)
     public Number getNumberOfLinesOfCodeWithMoreThanOneCharacter() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }

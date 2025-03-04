@@ -16,11 +16,11 @@ public interface TClassMetrics  {
     @FameProperty(name = "numberOfAttributesInherited", derived = true)
     public Number getNumberOfAttributesInherited();
 
-    @FameProperty(name = "numberOfMethodsOverridden", derived = true)
-    public Number getNumberOfMethodsOverridden();
-
     @FameProperty(name = "totalNumberOfSubclasses", derived = true)
     public Number getTotalNumberOfSubclasses();
+
+    @FameProperty(name = "numberOfMethodsOverridden", derived = true)
+    public Number getNumberOfMethodsOverridden();
 
     @FameProperty(name = "numberOfMethodsInherited", derived = true)
     public Number getNumberOfMethodsInherited();

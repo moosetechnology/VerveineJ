@@ -6,34 +6,23 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAccessible;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstanceAttribute;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationTypeAttribute;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstanceAttribute;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationTypeAttribute")
-public class AnnotationTypeAttribute extends NamedEntity implements TAccessible, TAnnotationTypeAttribute, TAttribute, TCanBeStub, TEntityMetaLevelDependency, TNamedEntity, TSourceEntity, TStructuralEntity, TTypedAnnotationInstanceAttribute, TTypedEntity, TWithComments {
+public class AnnotationTypeAttribute extends Variable implements TAnnotationTypeAttribute, TWithComments {
 
-    private Collection<TTypedAnnotationInstanceAttribute> annotationAttributeInstances; 
+    private Collection<TAnnotationInstanceAttribute> annotationAttributeInstances; 
 
-    private TAnnotationTypeAttribute annotationTypeAttribute;
-    
     private Collection<TComment> comments; 
 
     private Collection<TAccess> incomingAccesses; 
@@ -65,15 +54,15 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
     }
         
     @FameProperty(name = "annotationAttributeInstances", opposite = "annotationTypeAttribute", derived = true)
-    public Collection<TTypedAnnotationInstanceAttribute> getAnnotationAttributeInstances() {
+    public Collection<TAnnotationInstanceAttribute> getAnnotationAttributeInstances() {
         if (annotationAttributeInstances == null) {
-            annotationAttributeInstances = new MultivalueSet<TTypedAnnotationInstanceAttribute>() {
+            annotationAttributeInstances = new MultivalueSet<TAnnotationInstanceAttribute>() {
                 @Override
-                protected void clearOpposite(TTypedAnnotationInstanceAttribute e) {
+                protected void clearOpposite(TAnnotationInstanceAttribute e) {
                     e.setAnnotationTypeAttribute(null);
                 }
                 @Override
-                protected void setOpposite(TTypedAnnotationInstanceAttribute e) {
+                protected void setOpposite(TAnnotationInstanceAttribute e) {
                     e.setAnnotationTypeAttribute(AnnotationTypeAttribute.this);
                 }
             };
@@ -81,29 +70,29 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
         return annotationAttributeInstances;
     }
     
-    public void setAnnotationAttributeInstances(Collection<? extends TTypedAnnotationInstanceAttribute> annotationAttributeInstances) {
+    public void setAnnotationAttributeInstances(Collection<? extends TAnnotationInstanceAttribute> annotationAttributeInstances) {
         this.getAnnotationAttributeInstances().clear();
         this.getAnnotationAttributeInstances().addAll(annotationAttributeInstances);
     }                    
     
         
-    public void addAnnotationAttributeInstances(TTypedAnnotationInstanceAttribute one) {
+    public void addAnnotationAttributeInstances(TAnnotationInstanceAttribute one) {
         this.getAnnotationAttributeInstances().add(one);
     }   
     
-    public void addAnnotationAttributeInstances(TTypedAnnotationInstanceAttribute one, TTypedAnnotationInstanceAttribute... many) {
+    public void addAnnotationAttributeInstances(TAnnotationInstanceAttribute one, TAnnotationInstanceAttribute... many) {
         this.getAnnotationAttributeInstances().add(one);
-        for (TTypedAnnotationInstanceAttribute each : many)
+        for (TAnnotationInstanceAttribute each : many)
             this.getAnnotationAttributeInstances().add(each);
     }   
     
-    public void addAnnotationAttributeInstances(Iterable<? extends TTypedAnnotationInstanceAttribute> many) {
-        for (TTypedAnnotationInstanceAttribute each : many)
+    public void addAnnotationAttributeInstances(Iterable<? extends TAnnotationInstanceAttribute> many) {
+        for (TAnnotationInstanceAttribute each : many)
             this.getAnnotationAttributeInstances().add(each);
     }   
                 
-    public void addAnnotationAttributeInstances(TTypedAnnotationInstanceAttribute[] many) {
-        for (TTypedAnnotationInstanceAttribute each : many)
+    public void addAnnotationAttributeInstances(TAnnotationInstanceAttribute[] many) {
+        for (TAnnotationInstanceAttribute each : many)
             this.getAnnotationAttributeInstances().add(each);
     }
     
@@ -115,21 +104,6 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
         return !getAnnotationAttributeInstances().isEmpty();
     }
 
-    @FameProperty(name = "annotationTypeAttribute", opposite = "annotationAttributeInstances")
-    public TAnnotationTypeAttribute getAnnotationTypeAttribute() {
-        return annotationTypeAttribute;
-    }
-
-    public void setAnnotationTypeAttribute(TAnnotationTypeAttribute annotationTypeAttribute) {
-        if (this.annotationTypeAttribute != null) {
-            if (this.annotationTypeAttribute.equals(annotationTypeAttribute)) return;
-            this.annotationTypeAttribute.getAnnotationAttributeInstances().remove(this);
-        }
-        this.annotationTypeAttribute = annotationTypeAttribute;
-        if (annotationTypeAttribute == null) return;
-        annotationTypeAttribute.getAnnotationAttributeInstances().add(this);
-    }
-    
     @FameProperty(name = "comments", opposite = "commentedEntity", derived = true)
     public Collection<TComment> getComments() {
         if (comments == null) {
@@ -181,18 +155,6 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
         return !getComments().isEmpty();
     }
 
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "fanIn", derived = true)
     public Number getFanIn() {
         // TODO: this is a derived property, implement this method manually.
@@ -398,12 +360,6 @@ public class AnnotationTypeAttribute extends NamedEntity implements TAccessible,
         this.parentType = parentType;
         if (parentType == null) return;
         parentType.getAttributes().add(this);
-    }
-    
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)

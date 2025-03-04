@@ -4,19 +4,16 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("EntityTyping")
-public class EntityTyping extends Entity implements TAssociation, TAssociationMetaLevelDependency, TEntityTyping, TSourceEntity {
+public class EntityTyping extends Entity implements TEntityTyping {
 
     private TType declaredType;
     
@@ -32,12 +29,6 @@ public class EntityTyping extends Entity implements TAssociation, TAssociationMe
     
 
 
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "declaredType", opposite = "incomingTypings")
     public TType getDeclaredType() {
         return declaredType;
@@ -51,12 +42,6 @@ public class EntityTyping extends Entity implements TAssociation, TAssociationMe
         this.declaredType = declaredType;
         if (declaredType == null) return;
         declaredType.getIncomingTypings().add(this);
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "next", opposite = "previous", derived = true)
@@ -100,12 +85,6 @@ public class EntityTyping extends Entity implements TAssociation, TAssociationMe
             if (old_previous != null) old_previous.setNext(null);
             if (previous != null) previous.setNext(this);
         }
-    }
-    
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)

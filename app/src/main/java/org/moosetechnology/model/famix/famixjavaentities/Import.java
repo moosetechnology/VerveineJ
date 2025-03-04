@@ -4,19 +4,16 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TImport;
 import org.moosetechnology.model.famix.famixtraits.TImportable;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithImports;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Import")
-public class Import extends Entity implements TAssociation, TAssociationMetaLevelDependency, TImport, TSourceEntity {
+public class Import extends Entity implements TImport {
 
     private TImportable importedEntity;
     
@@ -32,18 +29,6 @@ public class Import extends Entity implements TAssociation, TAssociationMetaLeve
     
 
 
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "importedEntity", opposite = "incomingImports")
     public TImportable getImportedEntity() {
         return importedEntity;
@@ -59,7 +44,7 @@ public class Import extends Entity implements TAssociation, TAssociationMetaLeve
         importedEntity.getIncomingImports().add(this);
     }
     
-    @FameProperty(name = "importingEntity", opposite = "outgoingImports")
+    @FameProperty(name = "importingEntity", opposite = "imports")
     public TWithImports getImportingEntity() {
         return importingEntity;
     }
@@ -67,11 +52,11 @@ public class Import extends Entity implements TAssociation, TAssociationMetaLeve
     public void setImportingEntity(TWithImports importingEntity) {
         if (this.importingEntity != null) {
             if (this.importingEntity.equals(importingEntity)) return;
-            this.importingEntity.getOutgoingImports().remove(this);
+            this.importingEntity.getImports().remove(this);
         }
         this.importingEntity = importingEntity;
         if (importingEntity == null) return;
-        importingEntity.getOutgoingImports().add(this);
+        importingEntity.getImports().add(this);
     }
     
     @FameProperty(name = "next", opposite = "previous", derived = true)
@@ -115,12 +100,6 @@ public class Import extends Entity implements TAssociation, TAssociationMetaLeve
             if (old_previous != null) old_previous.setNext(null);
             if (previous != null) previous.setNext(this);
         }
-    }
-    
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)

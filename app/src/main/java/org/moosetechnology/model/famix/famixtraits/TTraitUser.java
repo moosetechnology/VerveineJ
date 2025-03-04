@@ -11,22 +11,22 @@ import java.util.*;
 @FameDescription("TTraitUser")
 public interface TTraitUser  {
 
-        @FameProperty(name = "outgoingTraitUsages", opposite = "user", derived = true)
-    public Collection<TTraitUsage> getOutgoingTraitUsages();
+        @FameProperty(name = "traitUsages", opposite = "user", derived = true)
+    public Collection<TTraitUsage> getTraitUsages();
 
-    public void setOutgoingTraitUsages(Collection<? extends TTraitUsage> outgoingTraitUsages);
+    public void setTraitUsages(Collection<? extends TTraitUsage> traitUsages);
 
-    public void addOutgoingTraitUsages(TTraitUsage one);
+    public void addTraitUsages(TTraitUsage one);
 
-    public void addOutgoingTraitUsages(TTraitUsage one, TTraitUsage... many);
+    public void addTraitUsages(TTraitUsage one, TTraitUsage... many);
 
-    public void addOutgoingTraitUsages(Iterable<? extends TTraitUsage> many);
+    public void addTraitUsages(Iterable<? extends TTraitUsage> many);
 
-    public void addOutgoingTraitUsages(TTraitUsage[] many);
+    public void addTraitUsages(TTraitUsage[] many);
 
-    public int numberOfOutgoingTraitUsages();
+    public int numberOfTraitUsages();
 
-    public boolean hasOutgoingTraitUsages();
+    public boolean hasTraitUsages();
 
 
 

@@ -43,6 +43,8 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TCo
 
     private Collection<TImplementation> implementations; 
 
+    private Collection<TImport> imports; 
+
     private Collection<TImport> incomingImports; 
 
     private Boolean isClassSide;
@@ -52,8 +54,6 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TCo
     private Collection<TMethod> methods; 
 
     private Collection<TConcretization> outgoingConcretizations; 
-
-    private Collection<TImport> outgoingImports; 
 
     private TPackage parentPackage;
     
@@ -280,6 +280,57 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TCo
 
     public boolean hasImplementations() {
         return !getImplementations().isEmpty();
+    }
+
+    @FameProperty(name = "imports", opposite = "importingEntity", derived = true)
+    public Collection<TImport> getImports() {
+        if (imports == null) {
+            imports = new MultivalueSet<TImport>() {
+                @Override
+                protected void clearOpposite(TImport e) {
+                    e.setImportingEntity(null);
+                }
+                @Override
+                protected void setOpposite(TImport e) {
+                    e.setImportingEntity(Interface.this);
+                }
+            };
+        }
+        return imports;
+    }
+    
+    public void setImports(Collection<? extends TImport> imports) {
+        this.getImports().clear();
+        this.getImports().addAll(imports);
+    }                    
+    
+        
+    public void addImports(TImport one) {
+        this.getImports().add(one);
+    }   
+    
+    public void addImports(TImport one, TImport... many) {
+        this.getImports().add(one);
+        for (TImport each : many)
+            this.getImports().add(each);
+    }   
+    
+    public void addImports(Iterable<? extends TImport> many) {
+        for (TImport each : many)
+            this.getImports().add(each);
+    }   
+                
+    public void addImports(TImport[] many) {
+        for (TImport each : many)
+            this.getImports().add(each);
+    }
+    
+    public int numberOfImports() {
+        return getImports().size();
+    }
+
+    public boolean hasImports() {
+        return !getImports().isEmpty();
     }
 
     @FameProperty(name = "incomingImports", opposite = "importedEntity", derived = true)
@@ -511,57 +562,6 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TCo
 
     public boolean hasOutgoingConcretizations() {
         return !getOutgoingConcretizations().isEmpty();
-    }
-
-    @FameProperty(name = "outgoingImports", opposite = "importingEntity", derived = true)
-    public Collection<TImport> getOutgoingImports() {
-        if (outgoingImports == null) {
-            outgoingImports = new MultivalueSet<TImport>() {
-                @Override
-                protected void clearOpposite(TImport e) {
-                    e.setImportingEntity(null);
-                }
-                @Override
-                protected void setOpposite(TImport e) {
-                    e.setImportingEntity(Interface.this);
-                }
-            };
-        }
-        return outgoingImports;
-    }
-    
-    public void setOutgoingImports(Collection<? extends TImport> outgoingImports) {
-        this.getOutgoingImports().clear();
-        this.getOutgoingImports().addAll(outgoingImports);
-    }                    
-    
-        
-    public void addOutgoingImports(TImport one) {
-        this.getOutgoingImports().add(one);
-    }   
-    
-    public void addOutgoingImports(TImport one, TImport... many) {
-        this.getOutgoingImports().add(one);
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
-    }   
-    
-    public void addOutgoingImports(Iterable<? extends TImport> many) {
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
-    }   
-                
-    public void addOutgoingImports(TImport[] many) {
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
-    }
-    
-    public int numberOfOutgoingImports() {
-        return getOutgoingImports().size();
-    }
-
-    public boolean hasOutgoingImports() {
-        return !getOutgoingImports().isEmpty();
     }
 
     @FameProperty(name = "parentPackage", opposite = "childEntities", container = true)

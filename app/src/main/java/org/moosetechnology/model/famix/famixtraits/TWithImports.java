@@ -11,22 +11,22 @@ import java.util.*;
 @FameDescription("TWithImports")
 public interface TWithImports  {
 
-        @FameProperty(name = "outgoingImports", opposite = "importingEntity", derived = true)
-    public Collection<TImport> getOutgoingImports();
+        @FameProperty(name = "imports", opposite = "importingEntity", derived = true)
+    public Collection<TImport> getImports();
 
-    public void setOutgoingImports(Collection<? extends TImport> outgoingImports);
+    public void setImports(Collection<? extends TImport> imports);
 
-    public void addOutgoingImports(TImport one);
+    public void addImports(TImport one);
 
-    public void addOutgoingImports(TImport one, TImport... many);
+    public void addImports(TImport one, TImport... many);
 
-    public void addOutgoingImports(Iterable<? extends TImport> many);
+    public void addImports(Iterable<? extends TImport> many);
 
-    public void addOutgoingImports(TImport[] many);
+    public void addImports(TImport[] many);
 
-    public int numberOfOutgoingImports();
+    public int numberOfImports();
 
-    public boolean hasOutgoingImports();
+    public boolean hasImports();
 
 
 

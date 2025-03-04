@@ -10,12 +10,11 @@ import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes;
 import org.moosetechnology.model.famix.famixtraits.TWithClasses;
-import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("ContainerEntity")
-public class ContainerEntity extends NamedEntity implements TWithAnnotationTypes, TWithClasses, TWithInterfaces, TWithTypes {
+public class ContainerEntity extends NamedEntity implements TWithAnnotationTypes, TWithClasses, TWithInterfaces {
 
     private Collection<TAnnotationType> definedAnnotationTypes; 
 

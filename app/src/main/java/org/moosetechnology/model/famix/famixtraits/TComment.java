@@ -9,7 +9,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TComment")
-public interface TComment extends TEntityMetaLevelDependency {
+public interface TComment extends TEntityMetaLevelDependency, TSourceEntity {
 
         @FameProperty(name = "commentedEntity", opposite = "comments", container = true)
     public TWithComments getCommentedEntity();

@@ -4,12 +4,11 @@ package org.moosetechnology.model.famix.famixtraits;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TReference")
-public interface TReference extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
+public interface TReference extends TAssociation {
 
         @FameProperty(name = "referredEntity", opposite = "incomingReferences")
     public TReferenceable getReferredEntity();

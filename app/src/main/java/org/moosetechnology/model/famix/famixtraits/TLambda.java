@@ -9,7 +9,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TLambda")
-public interface TLambda extends TWithReferences, TWithParameters, TSourceEntity, TWithAccesses, TCanBeStub, TEntityMetaLevelDependency, THasSignature, TWithInvocations, TInvocable, TWithStatements, TWithLocalVariables {
+public interface TLambda extends TEntityMetaLevelDependency, TWithParameters, THasSignature, TInvocable, TWithStatements, TWithLocalVariables {
 
         @FameProperty(name = "lambdaContainer", opposite = "lambdas", container = true)
     public TWithLambdas getLambdaContainer();
