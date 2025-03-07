@@ -24,6 +24,7 @@ import org.moosetechnology.model.famix.famixtraits.TParameter;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TThrowable;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
 import org.moosetechnology.model.famix.famixtraits.TWithExceptions;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
@@ -1066,6 +1067,10 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
             if (old_typing != null) old_typing.setTypedEntity(null);
             if (typing != null) typing.setTypedEntity(this);
         }
+    }
+
+    public TType getDeclaredType() {
+       return (this.typing == null) ? null : this.typing.getDeclaredType();
     }
     
     @FameProperty(name = "visibility")

@@ -243,7 +243,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		ParametricClass dico = null;
 		 Collection<ParametricClass> dicts = entitiesNamed(ParametricClass.class, "Dictionary");
 	        for(ParametricClass c : dicts) {
-	        	if(!c.getIsStub() && c.getGenericParameters().size() == 1 && firstElt(c.getGenericParameters()).getName().equals("B")) {
+	        	if(!c.getIsStub() && c.getTypeParameters().size() == 1 && ((Type)firstElt(c.getTypeParameters())).getName().equals("B")) {
 	        		dico = c;
 	        		break;
 	        	}
@@ -389,8 +389,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				assertNotNull(collec);
 				assertEquals("Collection", collec.getName());
 				assertEquals(ParametricInterface.class, collec.getClass());
-				assertEquals(1, ((ParametricInterface) collec).getConcreteParameters().size());
-				Type t = (Type) firstElt(((ParametricInterface) collec).getConcreteParameters());
+				assertEquals(1, ((ParametricInterface) collec).getTypeParameters().size());
+				Type t = (Type) firstElt(((ParametricInterface) collec).getTypeParameters());
 				assertEquals("T", t.getName());
 				assertSame(meth, Util.getOwner(t));
 			}
@@ -399,8 +399,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				assertNotNull(collec);
 				assertEquals("Collection", collec.getName());
 				assertEquals(ParametricInterface.class, collec.getClass());
-				assertEquals(1, ((ParametricInterface)collec).getConcreteParameters().size());
-				Type ne = (Type)firstElt( ((ParametricInterface)collec).getConcreteParameters());
+				assertEquals(1, ((ParametricInterface)collec).getTypeParameters().size());
+				Type ne = (Type)firstElt( ((ParametricInterface)collec).getTypeParameters());
 				assertEquals("NamedEntity", ne.getName());
 			}
 		}
@@ -436,7 +436,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, rk.getSuperInheritances().size());
 		Type rkSuper = (Type) firstElt(rk.getSuperInheritances()).getSuperclass();
 		assertEquals(ParametricClass.class, rkSuper.getClass());
-		assertEquals(javaLangEnum, ((ParametricClass) rkSuper).getGenericization().getGenericEntity());
+		assertEquals(javaLangEnum, ((ParametricClass) rkSuper));
 
 		// declared enum: Suit 
 		org.moosetechnology.model.famix.famixjavaentities.Enum st = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Suit");
@@ -444,7 +444,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, st.getSuperInheritances().size());
 		Type stSuper = (Type) firstElt(st.getSuperInheritances()).getSuperclass();
 		assertEquals(ParametricClass.class, stSuper.getClass());
-		assertEquals(javaLangEnum, ((ParametricClass) stSuper).getGenericization().getGenericEntity());
+		assertEquals(javaLangEnum, ((ParametricClass) stSuper));
 		assertEquals(4, st.getEnumValues().size());
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(st));
 
@@ -454,7 +454,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, pl.getSuperInheritances().size());
 		Type plSuper = (Type) firstElt(pl.getSuperInheritances()).getSuperclass();
 		assertEquals(ParametricClass.class, plSuper.getClass());
-		assertEquals(javaLangEnum,((ParametricClass) plSuper).getGenericization().getGenericEntity());
+		assertEquals(javaLangEnum,((ParametricClass) plSuper));
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(pl));
 		assertEquals(8, pl.getEnumValues().size());
 		assertEquals(4, pl.getAttributes().size());
@@ -731,14 +731,14 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		TType referred;
 		Iterator<TReference> iter = refs.iterator();
 
-		referred = (TType) iter.next().getReferredType();
+		referred = (TType) iter.next().getReferredEntity();
 		if (referred.getName().equals("IOException")) {
-		    referred = (TType) iter.next().getReferredType();
+		    referred = (TType) iter.next().getReferredEntity();
 		    assertEquals("Planet", referred.getName());
         }
         else {
 		    assertEquals("Planet", referred.getName());
-		    referred = (TType) iter.next().getReferredType();
+		    referred = (TType) iter.next().getReferredEntity();
 		    assertEquals("IOException", referred.getName());
 
         }

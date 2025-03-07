@@ -11,6 +11,7 @@ import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TEnumValue;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
 import org.moosetechnology.model.famix.famixtraits.TWithEnumValues;
@@ -330,7 +331,9 @@ public class EnumValue extends Variable implements TEnumValue, TWithComments {
         }
     }
     
-
+    public TType getDeclaredType() {
+        return (this.typing == null) ? null : this.typing.getDeclaredType();
+    }
 
 }
 

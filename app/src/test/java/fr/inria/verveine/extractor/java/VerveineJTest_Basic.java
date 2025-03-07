@@ -5,6 +5,7 @@ import fr.inria.verveine.extractor.java.utils.Util;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
@@ -66,7 +67,7 @@ public abstract class VerveineJTest_Basic {
 
 		found = false;
 		for (TStructuralEntity e : repo.all(TStructuralEntity.class)) {
-			if (!((TSourceEntity) e).getIsStub()) {
+			if (!((TCanBeStub) e).getIsStub()) {
 				assertNotNull("a StructuralEntity '" + ((TNamedEntity) e).getName() + "' does not belong to anything", Util.getOwner(e));
 				found = true;
 			}

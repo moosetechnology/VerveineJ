@@ -15,7 +15,7 @@ public interface TTypedEntity  {
 
     public void setTyping(TEntityTyping typing);
 
-
+    public TType getDeclaredType();
 
 }
 

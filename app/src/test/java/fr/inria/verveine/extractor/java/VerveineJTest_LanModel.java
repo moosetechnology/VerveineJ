@@ -41,6 +41,7 @@ import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TInheritance;
@@ -258,7 +259,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertSame(detectFamixElement(Method.class, "PrintServer"), clazz.getTypeContainer());
 
 		Method mth = (Method) firstElt(clazz.getMethods().stream()
-				.filter(aMethod -> !((TSourceEntity) aMethod).getIsStub()).collect(Collectors.toList()));
+				.filter(aMethod -> !((TCanBeStub) aMethod).getIsStub()).collect(Collectors.toList()));
 		assertEquals("print", mth.getName());
 		assertEquals(1, mth.getOutgoingReferences().size()); // System
 		assertEquals(1, mth.getAccesses().size()); // out

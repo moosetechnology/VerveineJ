@@ -14,6 +14,7 @@ import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
@@ -407,6 +408,10 @@ public class Attribute extends Variable implements TAttribute, TCanBeClassSide, 
             if (old_typing != null) old_typing.setTypedEntity(null);
             if (typing != null) typing.setTypedEntity(this);
         }
+    }
+
+    public TType getDeclaredType() {
+        return (this.typing == null) ? null : this.typing.getDeclaredType();
     }
     
     @FameProperty(name = "visibility")

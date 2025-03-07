@@ -12,6 +12,7 @@ import org.moosetechnology.model.famix.famixtraits.TAnnotationTypeAttribute;
 import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
@@ -396,7 +397,9 @@ public class AnnotationTypeAttribute extends Variable implements TAnnotationType
         }
     }
     
-
+    public TType getDeclaredType() {
+        return (this.typing == null) ? null : this.typing.getDeclaredType();
+    }
 
 }
 

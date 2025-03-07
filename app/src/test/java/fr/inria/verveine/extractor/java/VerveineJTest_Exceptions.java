@@ -6,7 +6,6 @@ import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
-import com.google.common.reflect.TypeParameter;
 
 import static org.junit.Assert.*;
 

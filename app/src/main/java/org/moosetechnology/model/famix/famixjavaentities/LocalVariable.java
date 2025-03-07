@@ -12,6 +12,7 @@ import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TLocalVariable;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
 import org.moosetechnology.model.famix.famixtraits.TWithLocalVariables;
@@ -342,7 +343,9 @@ public class LocalVariable extends Variable implements TCanBeFinal, TLocalVariab
         }
     }
     
-
+    public TType getDeclaredType() {
+        return (this.typing == null) ? null : this.typing.getDeclaredType();
+    }
 
 }
 

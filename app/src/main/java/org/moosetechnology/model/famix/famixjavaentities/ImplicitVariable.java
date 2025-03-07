@@ -10,6 +10,7 @@ import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TImplicitVariable;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 import org.moosetechnology.model.famix.famixtraits.TWithImplicitVariables;
 
@@ -263,7 +264,9 @@ public class ImplicitVariable extends Variable implements TImplicitVariable {
         }
     }
     
-
+    public TType getDeclaredType() {
+        return (this.typing == null) ? null : this.typing.getDeclaredType();
+    }
 
 }
 

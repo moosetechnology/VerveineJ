@@ -9,6 +9,7 @@ import java.util.*;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TUnknownVariable;
 import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 
@@ -244,8 +245,10 @@ public class UnknownVariable extends Variable implements TUnknownVariable {
             if (typing != null) typing.setTypedEntity(this);
         }
     }
-    
 
+    public TType getDeclaredType() {
+        return (this.typing == null) ? null : this.typing.getDeclaredType();
+    }
 
 }
 
