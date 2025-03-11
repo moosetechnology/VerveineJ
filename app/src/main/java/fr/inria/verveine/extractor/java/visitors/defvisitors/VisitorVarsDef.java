@@ -7,6 +7,7 @@ import fr.inria.verveine.extractor.java.utils.StructuralEntityKinds;
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
@@ -299,7 +300,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 		}
 
 		if (fmx != null) {
-			((TSourceEntity) fmx).setIsStub(false);
+			((TCanBeStub) fmx).setIsStub(false);
 			if (options.withAnchors()) {
 				dico.addSourceAnchor((TSourceEntity) fmx, varDecl);
 			}

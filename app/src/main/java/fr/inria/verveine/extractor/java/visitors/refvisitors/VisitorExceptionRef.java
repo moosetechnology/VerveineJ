@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
@@ -32,7 +33,6 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     public VisitorExceptionRef(EntityDictionary dico, VerveineJOptions options) {
         super(dico, options);
     }
-
 
     protected Package visitCompilationUnit(CompilationUnit node) {
         Package fmx = null;
@@ -67,7 +67,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     }
 
 	public boolean visit(MethodDeclaration node) {
-		Method fmx = visitMethodDeclaration( node);
+		Method fmx = visitMethodDeclaration(node);
 		if (fmx != null) {
 		    for (Type excep : (List<Type>) node.thrownExceptionTypes()) {
 		    	TThrowable excepFmx =  dico.asException(this.referedType(excep, (ContainerEntity) context.topType(), true, true));
@@ -130,7 +130,9 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 
 		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(varDecl.resolveBinding());
 		if (fmx != null) {
-			fmx.setDeclaredType(excepFmx);
+            EntityTyping typing = new EntityTyping();
+            typing.setTypedEntity(fmx);
+            typing.setDeclaredType(excepFmx);
 		}
 	}
 

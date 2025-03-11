@@ -90,6 +90,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
 
     private Boolean isDead;
     
+    private Number numberOfStatements;
 
 
     @FameProperty(name = "clientBehaviours", derived = true)
@@ -804,8 +805,11 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "numberOfStatements", derived = true)
     public Number getNumberOfStatements() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return this.numberOfStatements;
+    }
+
+    public void setNumberOfStatements(Number number) {
+        this.numberOfStatements = number;
     }
     
     @FameProperty(name = "outgoingInvocations", opposite = "sender", derived = true)

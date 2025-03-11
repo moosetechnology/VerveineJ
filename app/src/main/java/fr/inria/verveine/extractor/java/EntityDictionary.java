@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.commands.ParameterType;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
@@ -43,24 +44,23 @@ import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParameterConcretization;
-import org.moosetechnology.model.famix.famixjavaentities.ParameterType;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricMethod;
 import org.moosetechnology.model.famix.famixjavaentities.PrimitiveType;
 import org.moosetechnology.model.famix.famixjavaentities.Reference;
 import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
+import org.moosetechnology.model.famix.famixjavaentities.TBound;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
+import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
 import org.moosetechnology.model.famix.famixjavaentities.Wildcard;
 import org.moosetechnology.model.famix.famixtraits.TAccessible;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TCanImplement;
-import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
-import org.moosetechnology.model.famix.famixtraits.TGenericParameterType;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
@@ -68,7 +68,6 @@ import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
@@ -207,8 +206,8 @@ public class EntityDictionary {
 		for (NamedEntity ent : famixRepo.all(NamedEntity.class)) {
 			mapEntityToName( ent.getName(), ent);
 			// for the Exception to be raised, the return value must be tested
-			try { if (ent.getIsStub()) {} }
-			catch (NullPointerException e) { ent.setIsStub(Boolean.FALSE); }
+			try { if (((TCanBeStub) ent).getIsStub()) {} }
+			catch (NullPointerException e) { ((TCanBeStub)ent).setIsStub(Boolean.FALSE); }
 		}
 
 		for (Access acc : famixRepo.all(Access.class)) {
@@ -304,7 +303,7 @@ public class EntityDictionary {
 	 * @param name -- the name of the new instance must not be null (and this is not tested)
 	 * @return the FAMIX Entity or null in case of a FAMIX error
 	 */
-	protected <T extends TNamedEntity & TSourceEntity> T createFamixEntity(java.lang.Class<T> fmxClass, String name) {
+	protected <T extends TNamedEntity & TCanBeStub> T createFamixEntity(java.lang.Class<T> fmxClass, String name) {
 		T fmx = null;
 
 		if (name == null) {
@@ -373,20 +372,20 @@ public class EntityDictionary {
 
 
 	/**
-	 * Returns a FAMIX ParameterizableClass with the given <b>name</b>, creating it if it does not exist yet
+	 * Returns a Famix ParametericClass with the given <b>name</b>, creating it if it does not exist yet
 	 * In the second case, sets some default properties: not Abstract, not Final, not Private, not Protected, not Public, not Interface
-	 * @param name -- the name of the FAMIX Class
-	 * @return the FAMIX Class or null in case of a FAMIX error
+	 * @param name -- the name of the Famix Class
+	 * @return the Famix Class or null in case of a Famix error
 	 */
 	public ParametricClass ensureFamixParametricClass(ITypeBinding key, String name, TWithTypes owner) {
 		ParametricClass fmx = ensureFamixEntity(ParametricClass.class, key, name);
 		if(key != null) {
 			for (ITypeBinding tp : key.getTypeParameters()) {
-				// if there is a type parameter, then fmx will be a Famix ParameterizableClass
-				// note: owner of the ParameterType is the ParameterizableClass
-				ParameterType fmxParam = ensureFamixParameterType(tp,
+				// If there is a type parameter, then fmx will be a Famix ParametricClass
+				// note: in Famix, the owner of the TypeParameter is the ParametericClass
+				TypeParameter fmxParam = ensureFamixTypeParameter(tp,
 						tp.getName(), (TParametricEntity) fmx);
-				fmxParam.addGenericEntities((ParametricClass)fmx);
+				fmxParam.addGenericEntities((TParametricEntity)fmx);
 				if (fmxParam != null) {
 					fmxParam.setIsStub(false);
 				}
@@ -398,18 +397,18 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Returns a FAMIX ParameterizableInterface with the given <b>name</b>, creating it if it does not exist yet
+	 * Returns a Famix ParametericInterface with the given <b>name</b>, creating it if it does not exist yet
 	 * In the second case, sets some default properties: not Abstract, not Final, not Private, not Protected, not Public, not Interface
-	 * @param name -- the name of the FAMIX Class
-	 * @return the FAMIX Class or null in case of a FAMIX error
+	 * @param name -- the name of the Famix Class
+	 * @return the Famix Class or null in case of a Famix error
 	 */
 	public ParametricInterface ensureFamixParametricInterface(ITypeBinding key, String name, TWithTypes owner) {
 		ParametricInterface fmx = ensureFamixEntity(ParametricInterface.class, key, name);
 		if(key != null) {
 			for (ITypeBinding tp : key.getTypeParameters()) {
-				// if there is a type parameter, then fmx will be a Famix ParameterizableClass
-				// note: owner of the ParameterType is the ParameterizableClass
-				ParameterType fmxParam = ensureFamixParameterType(tp,
+				// If there is a type parameter, then fmx will be a Famix ParametericInterface
+				// note: in Famix, the owner of the TypeParameter is the ParametericInterface
+				TypeParameter fmxParam = ensureFamixTypeParameter(tp,
 						tp.getName(), (TParametricEntity) fmx);
 				fmxParam.addGenericEntities((ParametricInterface)fmx);
 				if (fmxParam != null) {
@@ -470,9 +469,7 @@ public class EntityDictionary {
 		chainPrevNext(prev, inh);
 		famixRepoAdd(inh);
 		return inh;
-	}
-	
-	
+	}	
 	
 	/**
 	 * Returns a Famix Concretization relationship between two Famix ParametricClass creating it if needed
@@ -576,14 +573,14 @@ public class EntityDictionary {
 
 		if (prev == null) {
 			for (TReference ref : src.getOutgoingReferences()) {
-				if (ref.getReferredType() == tgt) {
+				if (ref.getReferredEntity() == tgt) {
 					return (Reference) ref;
 				}
 			}
 		}
 
 		Reference ref = new Reference();
-		ref.setReferredType(tgt);
+		ref.setReferredEntity(tgt);
 		ref.setReferencer(src);
 		chainPrevNext(prev,ref);
 		famixRepoAdd(ref);
@@ -886,7 +883,7 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Returns a FAMIX Type with the given <b>name</b>, creating it if it does not exist yet.
+	 * Returns a Famix Type with the given <b>name</b>, creating it if it does not exist yet.
 	 * In the second case, sets some default properties: not Abstract, not Final, not Private, not Protected, not Public, not Interface
 	 * @param bnd -- binding for the type to create
 	 * @param name of the type
@@ -907,7 +904,7 @@ public class EntityDictionary {
 			}
 
 			if ( (owner != null) && (owner instanceof TParametricEntity) ) {
-				return this.ensureFamixParameterType(null, name, (TParametricEntity) owner);
+				return this.ensureFamixTypeParameter(null, name, (TParametricEntity) owner);
 			}
 			else {
 				fmx = ensureFamixEntity(Type.class, bnd, name);
@@ -944,7 +941,7 @@ public class EntityDictionary {
 		}
 		
 		if(bnd.isParameterizedType() && bnd.isInterface()) {
-			return (ParametricInterface) this.ensureFamixParameterizedType(bnd, name, null, ctxt);
+			// Do nothing. We do not represent the parameterized type in Famix anymore.
 		}
 
 		if (bnd.isInterface()) {
@@ -952,7 +949,7 @@ public class EntityDictionary {
 		}
 
 		if (bnd.isParameterizedType() || bnd.isRawType()) {
-			return (ParametricClass) this.ensureFamixParameterizedType(bnd, name, null, ctxt);
+			// Do nothing. We do not represent the parameterized type in Famix anymore.
 		}
 		if (isThrowable(bnd)) {
 			return this.ensureFamixException(bnd, name, owner, /*isGeneric*/false, modifiers);
@@ -975,7 +972,7 @@ public class EntityDictionary {
 		}
 
 		if (bnd.isTypeVariable() ) {
-			fmx = ensureFamixParameterType(bnd, name, (TParametricEntity)owner);
+			fmx = ensureFamixTypeParameter(bnd, name, (TParametricEntity)owner);
 			return fmx;
 		}
 
@@ -1288,7 +1285,7 @@ public class EntityDictionary {
 		if (fmx!=null) {
 			// we just created it or it was not bound, so we make sure it has the right information in it
 			if (bnd != null) {
-				setInterfaceModifiers(fmx, bnd.getDeclaredModifiers());
+				setInterfaceModifiers(fmx, bnd.getModifiers());
 			}
 			TAssociation lastAssociation = null;
 			if (bnd != null) {
@@ -1341,8 +1338,8 @@ public class EntityDictionary {
 		if (excepFmx instanceof Exception) {
 			return (Exception) excepFmx;
 		}
-		if(excepFmx instanceof ParameterType) {
-			return (ParameterType) excepFmx;
+		if(excepFmx instanceof TypeParameter) {
+			return (TypeParameter) excepFmx;
 		}
 		Exception tmp = null;
 		IBinding key = null;
@@ -1434,118 +1431,6 @@ public class EntityDictionary {
 		return owner;
 	}
 
-
-	/**
-	 * Returns a FAMIX ParameterizableType with the given <b>name</b>, creating it if it does not exist yet
-	 * @param name -- the name of the FAMIX Type
-	 * @return the FAMIX ParameterizableType or null in case of a FAMIX error
-	 */
-	public <T extends TWithTypes & TNamedEntity> TParametricEntity ensureFamixParameterizedType(ITypeBinding bnd, String name, TParametricEntity generic, TWithTypes owner) {
-		TParametricEntity fmx = null;
-
-		// --------------- to avoid useless computations if we can
-		fmx = (TParametricEntity)getEntityByKey(bnd);
-		if (fmx != null) {
-			return fmx;
-		}
-
-		// --------------- name
-		if (name == null) {
-			if (bnd == null) {
-				return null;
-			}
-			else {
-				name = bnd.getName();
-			}
-			// remove parameter types from name
-			// could also use "bnd.getErasure().getName()"
-			int i = name.indexOf('<');
-			if (i > 0) {
-				name = name.substring(0, i);
-			}
-		}
-
-		// --------------- generic
-		if ((generic == null) && (bnd != null)) {
-			int modifiers = (bnd.getErasure() != null) ? bnd.getErasure().getModifiers() : UNKNOWN_MODIFIERS;
-			if(bnd.isInterface()) {
-				generic = (ParametricInterface) ensureFamixInterface(bnd.getErasure(), name, /*owner*/null, /*isGeneric*/true, modifiers);
-			} else {
-				generic = (ParametricClass) ensureFamixClass(bnd.getErasure(), name, /*owner*/null, /*isGeneric*/true, modifiers);
-			}
-		}
-
-		// --------------- owner
-		owner = ((Type) generic).getTypeContainer();
-
-		// --------------- recover from name ?
-		for (ParametricClass candidate : getEntityByName(ParametricClass.class, name) ) {
-			if ( matchAndMapType(bnd, name, (T) owner, candidate) ) {
-				fmx = candidate;
-				break;
-			}
-		}
-		
-		
-
-		// --------------- create
-		if (fmx == null) {
-			if(bnd.isInterface()) {
-				fmx = (ParametricInterface) ensureFamixParametricInterface(bnd, name, owner);
-			}else {
-				fmx =(ParametricClass) ensureFamixParametricClass(bnd, name, owner);
-			}
-			TConcretization concretization = this.ensureFamixConcretization(generic, fmx); 
-			
-			ITypeBinding[] genericTypeArguments = bnd.getTypeDeclaration().getTypeParameters();
-			ITypeBinding[] typeArguments = bnd.getTypeArguments();
-			
-			
-			for (int i=0; i<typeArguments.length; i++) {
-				ITypeBinding tp = typeArguments[i];
-				ParameterType genType;
-				// Sometimes we don't have genericTypeArguments because the generic is stub 
-				if(genericTypeArguments.length == typeArguments.length) {
-					genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
-				}else {
-					genType = this.ensureFamixParameterType(null, "Stub"+(i+1), generic); 
-					genType.addGenericEntities(generic);
-				}
-				
-				if(tp.isClass() || tp.isInterface() || tp.isWildcardType()) {
-					Type fmxParam = (Type) this.ensureFamixType(tp);
-					
-					
-					TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
-					concretization.addParameterConcretizations(pConcretization);
-					genType.addConcretizations(pConcretization);
-					fmxParam.addConcreteEntities(fmx);
-				}else if(tp.isTypeVariable()) {
-					if(tp.getDeclaringMethod() != null || (tp.getDeclaringClass() != null && tp.getDeclaringClass() != bnd.getErasure())){
-						ParameterType fmxParam = this.ensureFamixParameterType(tp, null, null);
-						
-						TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
-						concretization.addParameterConcretizations(pConcretization);
-						genType.addConcretizations(pConcretization);
-						fmxParam.addConcreteEntities(fmx);
-					}else {
-						ParameterType fmxParam = this.ensureFamixParameterType(tp, null, null);
-						fmxParam.addGenericEntities(fmx);
-					}
-					
-				}
-			}
-			
-			fmx.setGenericization(concretization);
-		}
-
-		// --------------- stub: same as ParameterizableClass
-		if ( (generic != null) && (fmx != null) ) {
-			((Type)fmx).setIsStub(((Type)generic).getIsStub());
-		}
-
-		return fmx;
-	}
 
 	/**
 	 * Returns a FAMIX PrimitiveType with the given <b>name</b>, creating it if it does not exist yet
@@ -1836,16 +1721,16 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Returns a FAMIX ParameterType (created by a FAMIX ParameterizableClass) with the given <b>name</b>, creating it if it does not exist yet
+	 * Returns a Famix TypeParameter (created by a Famix ParametricClass) with the given <b>name</b>, creating it if it does not exist yet
 	 * In the second case, sets some default properties: not Abstract, not Final, not Private, not Protected, not Public
-	 * @param name -- the name of the FAMIX ParameterType
-	 * @return the FAMIX ParameterType or null in case of a FAMIX error
+	 * @param name -- the name of the Famix TypeParameter
+	 * @return the Famix TypeParameter or null in case of a Famix error
 	 */
-	public ParameterType ensureFamixParameterType(ITypeBinding bnd,	String name, TParametricEntity owner) {
-		ParameterType fmx = null;
+	public TypeParameter ensureFamixTypeParameter(ITypeBinding bnd,	String name, TParametricEntity owner) {
+		TypeParameter fmx = null;
 
 		// --------------- to avoid useless computations if we can
-		fmx = (ParameterType)getEntityByKey(bnd);
+		fmx = (TypeParameter)getEntityByKey(bnd);
 		if (fmx != null) {
 			return fmx;
 		}
@@ -1880,29 +1765,22 @@ public class EntityDictionary {
 		// --------------- recover from name ?
 		for (Type candidate : this.getEntityByName(Type.class, name)) {
 			if ( matchAndMapType(bnd, name, (ContainerEntity) owner, candidate) ) {
-				fmx = (ParameterType) candidate;
+				fmx = (TypeParameter) candidate;
 				break;
 			}
 		}
 
 		// --------------- create
 		if (fmx == null) {
-			fmx = ensureFamixEntity(ParameterType.class, bnd, name);
+			fmx = ensureFamixEntity(TypeParameter.class, bnd, name);
 			if(bnd != null && bnd.getSuperclass() != null) {
-				Inheritance inh = new Inheritance();
-				ITypeBinding supBnd = bnd.getSuperclass();
-				TWithInheritances superClass = (TWithInheritances)ensureFamixType(supBnd);
-				inh.setSuperclass(superClass);
-				inh.setSubclass(fmx);
-				fmx.addSuperInheritances(inh);
+				Type upperBound = (Type)ensureFamixType(bnd.getSuperclass());
+				fmx.setUpperBound(upperBound);
 			}
 			if(bnd != null && bnd.getInterfaces().length > 0) {
 				for(ITypeBinding intbnd: bnd.getInterfaces()) {
-					Inheritance inh = new Inheritance();
-					TWithInheritances superClass = (TWithInheritances)ensureFamixType(intbnd);
-					inh.setSuperclass(superClass);
-					inh.setSubclass(fmx);
-					fmx.addSuperInheritances(inh);
+					Type upperBound = (Type)ensureFamixType(intbnd);
+					fmx.setUpperBound(upperBound);
 				}
 			}
 			fmx.setTypeContainer((ContainerEntity) owner);
@@ -2526,7 +2404,7 @@ public class EntityDictionary {
 			if(bnd != null && bnd.isGenericMethod()) {
 				fmx = ensureFamixEntity(ParametricMethod.class, bnd, name);
 				for(ITypeBinding param: bnd.getTypeParameters()) {
-					ParameterType fmxParam = this.ensureFamixParameterType(param, null, (TParametricEntity)fmx);
+					ParameterType fmxParam = this.ensureFamixTypeParameter(param, null, (TParametricEntity)fmx);
 					fmxParam.addGenericEntities((TParametricEntity)fmx);
 				}
 				
@@ -2541,7 +2419,7 @@ public class EntityDictionary {
 				ITypeBinding [] fmxTypeParams = bnd.getTypeArguments();
 				for(int i = 0; i<genericTypeArguments.length; i++) {
 					Type fmxParam = (Type)this.ensureFamixType(fmxTypeParams[i]);
-					ParameterType genType = this.ensureFamixParameterType( genericTypeArguments[i], null, null);
+					ParameterType genType = this.ensureFamixTypeParameter( genericTypeArguments[i], null, null);
 					TParameterConcretization pConcretization = this.ensureFamixParameterConcretization(genType, fmxParam);
 					
 					Concretization.addParameterConcretizations(pConcretization);

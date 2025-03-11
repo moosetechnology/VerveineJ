@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationTypeAttribute;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
 
@@ -221,7 +221,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 	public boolean visit(VariableDeclarationFragment node) {
 		if (classMemberDeclarations) {
 			TWithComments fmx = dico.getFamixAttribute(node.resolveBinding(), node.getName().getIdentifier(), (TWithAttributes) context.topType());
-			if ( ! ((TSourceEntity) fmx).getIsStub() ) {
+			if ( ! ((TCanBeStub) fmx).getIsStub() ) {
 				// if it is a stub, it might have been created by the getFamixAttribute just above
 				// Anyway we cannot have a comment on a stub
 				assignCommentsBefore(node, /*optionalJavadoc*/null, fmx);

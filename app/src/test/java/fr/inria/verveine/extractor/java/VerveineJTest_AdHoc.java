@@ -32,7 +32,6 @@ import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Invocation;
 import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.Parameter;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
@@ -358,10 +357,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		ArrayList<Interface> withoutConcret = new ArrayList<Interface>();
 		for(Interface inter: entitiesOfType(Interface.class)) {
 			if(inter instanceof ParametricInterface) {
-				if(((ParametricInterface)inter).getGenericization() == null) {
 					genericInters.add(inter);
 					withoutConcret.add(inter);
-				}
 			}else {
 				withoutConcret.add(inter);
 			}
