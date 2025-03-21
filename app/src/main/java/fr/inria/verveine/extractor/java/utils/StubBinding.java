@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>Only used for entities that may contain other entities (ie types and methods)</p>
  * @author Anquetil
  */
-public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
+public class StubBinding implements ITypeBinding, IMethodBinding {
     public final static int UNKNOWN_KIND = 0;  // not used in IBinding
 
 

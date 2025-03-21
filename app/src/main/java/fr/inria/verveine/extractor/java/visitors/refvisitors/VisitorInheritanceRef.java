@@ -85,7 +85,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 				Package javaLang = dico.ensureFamixPackageJavaLang(null);
 				superclass = (ParametricClass) dico.ensureFamixClass(/*bnd*/null, /*name*/"Enum", /*owner*/javaLang, /*isGeneric*/true, /*modifiers*/Modifier.ABSTRACT & Modifier.PUBLIC);
 			}
-			dico.ensureFamixInheritance((TWithInheritances) superclass, fmx, /*lastInheritance*/null);
+			dico.ensureFamixInheritance((TWithInheritances) superclass, fmx, /*lastInheritance*/null, supbnd);
 
 			this.context.pushType(fmx);
 			return super.visit(node);
@@ -159,7 +159,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 		} else {
 			t = dico.ensureFamixClassObject(null);
 		}
-		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance);
+		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance, supbnd);
 
 		// --------------- interfaces
 		dico.ensureImplementedInterfaces(bnd, (TType)fmx, null, lastInheritance);
