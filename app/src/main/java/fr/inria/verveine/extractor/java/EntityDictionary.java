@@ -987,23 +987,16 @@ public class EntityDictionary {
 		if (bnd.isAnnotation()) {
 			return this.ensureFamixAnnotationType(bnd, name, (ContainerEntity) owner);
 		}
-		
-		if(bnd.isParameterizedType() && bnd.isInterface()) {
-			// Do nothing. We do not represent the parameterized type in Famix anymore.
-		}
 
 		if (bnd.isInterface()) {
 			return this.ensureFamixInterface(bnd, name, owner, /*isGeneric*/bnd.isGenericType() || bnd.isParameterizedType() || bnd.isRawType(), modifiers);
 		}
 
-		if (bnd.isParameterizedType() || bnd.isRawType()) {
-			// Do nothing. We do not represent the parameterized type in Famix anymore.
-		}
 		if (isThrowable(bnd)) {
 			return this.ensureFamixException(bnd, name, owner, /*isGeneric*/false, modifiers);
 		}
 		if (bnd.isClass()) {
-			return this.ensureFamixClass(bnd, name, (TNamedEntity) owner, /*isGeneric*/false, modifiers);
+			return this.ensureFamixClass(bnd, name, (TNamedEntity) owner, /*isGeneric*/bnd.isGenericType() || bnd.isParameterizedType() || bnd.isRawType(), modifiers);
 		}
 		if(bnd.isWildcardType()) {
 			return this.ensureFamixWildcardType(bnd, name, (TParametricEntity)owner, ctxt);
@@ -2580,14 +2573,9 @@ public class EntityDictionary {
 				return null;  // what would be the interest of creating an attribute for which we ignore the declaring class?
 			}
 			else {
-				ITypeBinding classBnd = bnd.getDeclaringClass();
+				ITypeBinding classBnd = bnd.getDeclaringClass().getErasure(); // Declaring class is the generic one if the class is parametric.
 				if (classBnd != null) {
-					TType tmpOwn = ensureFamixType(classBnd);
-					if (tmpOwn instanceof ParametricClass) {
-						owner = (TWithAttributes) ((ParametricClass) tmpOwn).getGenericization();
-					} else {
-						owner = (TWithAttributes) tmpOwn;
-					}
+					owner = (TWithAttributes)ensureFamixType(classBnd);
 				} else {
 					return null;  // what would be the interest of creating an attribute for which we ignore the declaring class?
 				}
@@ -2609,7 +2597,7 @@ public class EntityDictionary {
 
 		if (fmx != null) {
 			fmx.setParentType((TWithAttributes) owner);
-			fmx.setDeclaredType(type);
+			ensureFamixEntityTyping(fmx, type);
 			if (bnd != null) {
 				int mod = bnd.getModifiers();
 				setAttributeModifiers(fmx, mod);
@@ -2684,7 +2672,7 @@ public class EntityDictionary {
 
 		if (fmx != null) {
 			fmx.setParentBehaviouralEntity(tMethod);
-			fmx.setDeclaredType(typ);
+			ensureFamixEntityTyping(fmx, typ);
 		}
 
 		return fmx;

@@ -130,9 +130,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 
 		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(varDecl.resolveBinding());
 		if (fmx != null) {
-            EntityTyping typing = new EntityTyping();
-            typing.setTypedEntity(fmx);
-            typing.setDeclaredType(excepFmx);
+            dico.ensureFamixEntityTyping(fmx, excepFmx);
 		}
 	}
 
