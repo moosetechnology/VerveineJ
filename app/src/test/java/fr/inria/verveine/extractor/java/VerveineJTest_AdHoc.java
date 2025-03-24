@@ -416,7 +416,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
 		// java.lang.Enum entity
-		ParametricClass javaLangEnum = (ParametricClass)genericEntityNamed("Enum");
+		ParametricClass javaLangEnum = firstEntityNamed(ParametricClass.class, "Enum");
 		assertNotNull(javaLangEnum);
 		assertEquals("lang", Util.getOwner(javaLangEnum).getName());
 		assertEquals(ParametricClass.class, javaLangEnum.getClass());

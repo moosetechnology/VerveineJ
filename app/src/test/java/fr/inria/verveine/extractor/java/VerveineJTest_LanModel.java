@@ -23,6 +23,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Access;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstance;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
 import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Comment;
 import org.moosetechnology.model.famix.famixjavaentities.Implementation;
 import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
@@ -49,7 +50,6 @@ import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TParameter;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 
 /**
  * @author Nicolas Anquetil
@@ -154,27 +154,26 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		Collection<java.lang.Class<?>> lanModelJavaClasses = allJavaSuperClasses(LAN_MODEL_JAVA_CLASSES_USED);
 		assertEquals(
 				lanModelJavaClasses.size() + 10,  // FileServer, Node, AbstractDestinationAddress, WorkStation, XPrinter, Packet, PrintServer, SingleDestinationAddress, OutputServer, _Anonymous(IPrinter)
-				entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size());
+				entitiesOfType(Class.class).size());
 
 		ArrayList<Interface> genericInters = new ArrayList<Interface>();
 		ArrayList<Interface> withoutConcret = new ArrayList<Interface>();
+
 		for(Interface inter: entitiesOfType(Interface.class)) {
 			if(inter instanceof ParametricInterface) {
-				if(((ParametricInterface)inter).getGenericization() == null) {
 					genericInters.add(inter);
 					withoutConcret.add(inter);
-				}
-			}else {
+			} else {
 				withoutConcret.add(inter);
 			}
 		}
 		
 		assertEquals(
 				allInterfacesFromClasses(LAN_MODEL_JAVA_CLASSES_USED).size() + 1,  // add IPrinter
-				withoutConcret.size());
+				entitiesOfType(Interface.class).size());
 
 		assertEquals(3, entitiesOfType(PrimitiveType.class).size());//int,boolean,void
-		assertEquals(1, genericInters.size());// Comparable
+		assertEquals(1, entitiesOfType(ParametricInterface.class).size());// Comparable
 		assertEquals(40 + 8 + 1, entitiesOfType(Method.class).size());//40 + {System.out.println(),System.out.println(...),System.out.print,StringBuffer.append,Object.equals,String.equals,Object.toString,<Initializer>}
 		assertEquals(10 + 1, entitiesOfType(Attribute.class).size());//10 + System.out
 		assertEquals(2 + 4 + 1, entitiesOfType(Package.class).size());//2 + {moose, java.lang, java.io, java} // +1 new package named java.lang.constant (java17?)

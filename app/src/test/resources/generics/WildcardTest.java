@@ -1,8 +1,11 @@
+package generics;
+
 import java.util.List;
 
-public class WildcarTest{
+@SuppressWarnings("unused")
+public class WildcardTest{
 	
-	private static double sumListElementsWildcard(List<? extends Number> list)
+    private static double sumListElementsWildcard(List<? extends Number> list)
     {
         double sum = 0.0;
         for (Number i : list) {
