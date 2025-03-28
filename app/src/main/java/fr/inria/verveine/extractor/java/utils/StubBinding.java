@@ -186,6 +186,9 @@ public class StubBinding implements ITypeBinding, IMethodBinding {
     // ITypeBinding methods
 
     @Override
+    public boolean isRecord() { return false; }
+
+    @Override
     public IPackageBinding getPackage() {
         return null;
     }
@@ -442,6 +445,28 @@ public class StubBinding implements ITypeBinding, IMethodBinding {
     }
 
     // IMethodBinding methods
+
+    @Override
+    public String[] getParameterNames() {
+        return new String[0];
+    }
+
+    @Override
+    public boolean isSyntheticRecordMethod() { return false; }
+
+
+    @Override
+    public IVariableBinding[] getSyntheticOuterLocals() {
+        return new IVariableBinding[0];
+    }
+
+    @Override
+    public boolean    isCanonicalConstructor() {
+        return false;
+    }
+
+    @Override
+    public boolean    isCompactConstructor() { return false;}
 
     @Override
     public boolean isConstructor() {

@@ -1,13 +1,14 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run All Tests" type="JUnit" factoryName="JUnit">
-    <module name="VerveineJ" />
-    <useClassPathOnly />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/jdk-17" />
     <option name="MAIN_CLASS_NAME" value="" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="directory" />
     <option name="VM_PARAMETERS" />
     <option name="PARAMETERS" value="" />
-    <dir value="$PROJECT_DIR$/tests" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <dir value="$PROJECT_DIR$/app/src/test" />
     <fork_mode value="method" />
     <method v="2">
       <option name="Make" enabled="true" />
