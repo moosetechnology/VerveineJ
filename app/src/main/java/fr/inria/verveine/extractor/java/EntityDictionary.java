@@ -401,7 +401,7 @@ public class EntityDictionary {
 						tp.getName(), fmx);
 				fmxParam.addGenericEntities((TParametricEntity)fmx);
 				if (fmxParam != null) {
-					fmxParam.setIsStub(false);
+					fmxParam.setIsStub(fmx.getIsStub());
 				}
 			}
 		}
@@ -2573,9 +2573,9 @@ public class EntityDictionary {
 				return null;  // what would be the interest of creating an attribute for which we ignore the declaring class?
 			}
 			else {
-				ITypeBinding classBnd = bnd.getDeclaringClass().getErasure(); // Declaring class is the generic one if the class is parametric.
-				if (classBnd != null) {
-					owner = (TWithAttributes)ensureFamixType(classBnd);
+				if (bnd.getDeclaringClass() != null && bnd.getDeclaringClass().getErasure() != null) {
+					// Declaring class is the generic one if the class is parametric.
+					owner = (TWithAttributes)ensureFamixType(bnd.getDeclaringClass().getErasure());
 				} else {
 					return null;  // what would be the interest of creating an attribute for which we ignore the declaring class?
 				}
