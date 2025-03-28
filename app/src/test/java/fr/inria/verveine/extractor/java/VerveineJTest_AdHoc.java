@@ -454,7 +454,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(pl));
 		assertEquals(8, pl.getEnumValues().size());
 		assertEquals(4, pl.getAttributes().size());
-		assertEquals(7 + 1, pl.getMethods().size()); // 7 methods + <initializer>
+		assertEquals(7 + 2, pl.getMethods().size()); // 7 methods + <initializer> + values
 	}
 
 	@Test
