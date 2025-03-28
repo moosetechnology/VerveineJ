@@ -336,8 +336,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	public void testArrayListMatthias() {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
 
-		assertEquals(9, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); // Bla, Object, String, List, ArrayList, Arrays,Comparable,Serializable,CharSequence, AbstractList, AbstractCollection, Collection, Cloneable, RandomAccess, Iterable, ConstantDesc, Constable
-		assertEquals(5, entitiesOfType(ParametricClass.class).size());
+		assertEquals(7, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); // Classes are : Bla, Object, String, ArrayList, Arrays, AbstractList, AbstractCollection
+		assertEquals(3, entitiesOfType(ParametricClass.class).size()); // Parametric classes are : ArrayList, AbstractList, AbstractCollection
 		
 		// compute all interfaces used by the 3 types String, ArrayList, Arrays
 		Set<java.lang.Class<?>> allInterfaces = new HashSet<>();
@@ -454,7 +454,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(pl));
 		assertEquals(8, pl.getEnumValues().size());
 		assertEquals(4, pl.getAttributes().size());
-		assertEquals(7 + 2, pl.getMethods().size()); // 7 methods + <initializer> + implicit used: values()
+		assertEquals(7 + 1, pl.getMethods().size()); // 7 methods + <initializer>
 	}
 
 	@Test
