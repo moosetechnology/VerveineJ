@@ -64,7 +64,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration node) {
-		if (visitTypeDeclaration( node) != null) {
+		if (visitTypeDeclaration(node) != null) {
 			return super.visit(node);
 		} else {
 			return false;
@@ -317,10 +317,10 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
     @SuppressWarnings("unchecked")
 	@Override
     public boolean visit(MethodInvocation node) {
-        Expression receivr = node.getExpression();
-        if (receivr != null) {
+        Expression receiver = node.getExpression();
+        if (receiver != null) {
             searchTypeRef = true;
-            receivr.accept(this);
+            receiver.accept(this);
             searchTypeRef = false;
         }
         for (Expression arg : (List<Expression>)node.arguments()) {

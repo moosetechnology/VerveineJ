@@ -6,6 +6,7 @@ import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 import org.eclipse.jdt.core.dom.*;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
@@ -74,16 +75,14 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		if ((fmx != null) && (bnd != null)) {
 			// --------------- implicit superclass java.lang.Enum<> cannot use ensureInheritances(bnd,fmx)
-			ParametricClass superclass;
+			TType superclass;
 			ITypeBinding supbnd = null;
-			if (bnd != null) {
-				supbnd = bnd.getSuperclass();
-			}
+			supbnd = bnd.getSuperclass();
 			if (supbnd != null) {
-				superclass =(ParametricClass) dico.ensureFamixType(supbnd);
+				superclass = dico.ensureFamixType(supbnd);
 			} else {
 				Package javaLang = dico.ensureFamixPackageJavaLang(null);
-				superclass = (ParametricClass) dico.ensureFamixClass(/*bnd*/null, /*name*/"Enum", /*owner*/javaLang, /*isGeneric*/true, /*modifiers*/Modifier.ABSTRACT & Modifier.PUBLIC);
+				superclass = dico.ensureFamixClass(/*bnd*/null, /*name*/"Enum", /*owner*/javaLang, /*isGeneric*/true, /*modifiers*/Modifier.ABSTRACT & Modifier.PUBLIC);
 			}
 			dico.ensureFamixInheritance((TWithInheritances) superclass, fmx, /*lastInheritance*/null, supbnd);
 

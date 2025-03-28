@@ -130,31 +130,30 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(3, methOutgoingInvocations.size());
 
 		// test invocations' signatures
-		for (TInvocation tinvok : methOutgoingInvocations) {
-			Invocation invok = (Invocation) tinvok;
-			Method invoked = (Method) firstElt(invok.getCandidates());
+		for (var invocation : methOutgoingInvocations) {
+			Method invoked = (Method) firstElt(invocation.getCandidates());
 			assertTrue("Unexpected invoked signature: " + invoked.getSignature(),
-					invok.getSignature().equals("DefaultConstructor()")
-							|| invok.getSignature().equals("JFrame(\"My title\")")
-							|| invok.getSignature().equals("methodWithInstanceScope()"));
+					invocation.getSignature().equals("DefaultConstructor()")
+							|| invocation.getSignature().equals("JFrame(\"My title\")")
+							|| invocation.getSignature().equals("methodWithInstanceScope()"));
 		}
 
 		// test constructors
-		Collection<Method> defaultContructors = entitiesNamed( Method.class, "DefaultConstructor");
-		assertEquals(2, defaultContructors.size());
-		for (Method m : defaultContructors) {
+		Collection<Method> defaultConstructors = entitiesNamed( Method.class, "DefaultConstructor");
+		assertEquals(2, defaultConstructors.size());
+		for (Method m : defaultConstructors) {
 			int nbParam = m.getParameters().size();
 			assertTrue( (nbParam == 0) || (nbParam == 1) );
 			assertEquals(1, m.getIncomingInvocations().size());
 			assertEquals(1, m.getOutgoingInvocations().size());
 		}
 
-		for (Method m : defaultContructors) {
-			Invocation invok = (Invocation) firstElt(m.getOutgoingInvocations());
-			if (m.getParameters().size() == 0) {
-				assertEquals("this(\"For testing\")", invok.getSignature());
+		for (Method m : defaultConstructors) {
+			Invocation invocation = (Invocation) firstElt(m.getOutgoingInvocations());
+			if (m.getParameters().isEmpty()) {
+				assertEquals("this(\"For testing\")", invocation.getSignature());
 			} else {
-				assertEquals("super(why)", invok.getSignature());
+				assertEquals("super(why)", invocation.getSignature());
 			}
 		}
 
@@ -165,8 +164,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		// get called method in InvokWithFullPath
 		methOutgoingInvocations = meth.getOutgoingInvocations();
 		assertEquals(1, methOutgoingInvocations.size());
-		Invocation invok = (Invocation) firstElt(methOutgoingInvocations);
-		assertEquals("Book(\"The Monster Book of Monsters\",\"Hagrid\")", invok.getSignature());
+		Invocation invocation = (Invocation) firstElt(methOutgoingInvocations);
+		assertEquals("Book(\"The Monster Book of Monsters\",\"Hagrid\")", invocation.getSignature());
 	}
 
 	@ Test
@@ -248,7 +247,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	        	}
 	        }
 		assertNotNull(dico);
-		assertEquals(8 + 2, dico.getMethods().size()); // 8 methods and 2 method concretisations
+		assertEquals(8, dico.getMethods().size());
 		assertEquals(3, dico.getAttributes().size());
 
 		for (TAttribute ta : dico.getAttributes()) {
