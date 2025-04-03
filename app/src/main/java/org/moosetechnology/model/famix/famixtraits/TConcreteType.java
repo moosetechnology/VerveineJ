@@ -11,7 +11,7 @@ import java.util.*;
 @FameDescription("TConcreteType")
 public interface TConcreteType  {
 
-        @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
     public Collection<TConcretization> getOutgoingConcretizations();
 
     public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations);
@@ -27,23 +27,6 @@ public interface TConcreteType  {
     public int numberOfOutgoingConcretizations();
 
     public boolean hasOutgoingConcretizations();
-
-    @FameProperty(name = "genericEntities", opposite = "typeParameters")
-    public Collection<TParametricEntity> getGenericEntities();
-
-    public void setGenericEntities(Collection<? extends TParametricEntity> genericEntities);
-
-    public void addGenericEntities(TParametricEntity one);
-
-    public void addGenericEntities(TParametricEntity one, TParametricEntity... many);
-
-    public void addGenericEntities(Iterable<? extends TParametricEntity> many);
-
-    public void addGenericEntities(TParametricEntity[] many);
-
-    public int numberOfGenericEntities();
-
-    public boolean hasGenericEntities();
 
 
 

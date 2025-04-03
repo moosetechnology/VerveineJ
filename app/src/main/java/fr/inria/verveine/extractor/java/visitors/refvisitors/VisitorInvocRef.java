@@ -426,7 +426,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			signature += "<";
 			int size = ((ParametricMethod) invoked).getTypeParameters().size();
 			int i = 0;
-			for (TConcreteType param : ((ParametricMethod) invoked).getTypeParameters()) {
+			for (TTypeParameter param : ((ParametricMethod) invoked).getTypeParameters()) {
 				signature += ((TNamedEntity) param).getName() + (i < size - 1 ? "," : "");
 				i++;
 			}

@@ -210,56 +210,6 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
-    
-    @FameProperty(name = "genericEntities", opposite = "typeParameters")
-    public Collection<TParametricEntity> getGenericEntities() {
-        if (genericEntities == null) {
-            genericEntities = new MultivalueSet<TParametricEntity>() {
-                @Override
-                protected void clearOpposite(TParametricEntity e) {
-                    e.getTypeParameters().remove(Class.this);
-                }
-                @Override
-                protected void setOpposite(TParametricEntity e) {
-                    e.getTypeParameters().add(Class.this);
-                }
-            };
-        }
-        return genericEntities;
-    }
-    
-    public void setGenericEntities(Collection<? extends TParametricEntity> genericEntities) {
-        this.getGenericEntities().clear();
-        this.getGenericEntities().addAll(genericEntities);
-    }
-    
-    public void addGenericEntities(TParametricEntity one) {
-        this.getGenericEntities().add(one);
-    }   
-    
-    public void addGenericEntities(TParametricEntity one, TParametricEntity... many) {
-        this.getGenericEntities().add(one);
-        for (TParametricEntity each : many)
-            this.getGenericEntities().add(each);
-    }   
-    
-    public void addGenericEntities(Iterable<? extends TParametricEntity> many) {
-        for (TParametricEntity each : many)
-            this.getGenericEntities().add(each);
-    }   
-                
-    public void addGenericEntities(TParametricEntity[] many) {
-        for (TParametricEntity each : many)
-            this.getGenericEntities().add(each);
-    }
-    
-    public int numberOfGenericEntities() {
-        return getGenericEntities().size();
-    }
-
-    public boolean hasGenericEntities() {
-        return !getGenericEntities().isEmpty();
-    }
 
     @FameProperty(name = "hasComments", derived = true)
     public Boolean getHasComments() {

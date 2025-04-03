@@ -11,18 +11,18 @@ import java.util.*;
 @FameDescription("TParametricEntity")
 public interface TParametricEntity  {
 
-        @FameProperty(name = "typeParameters", opposite = "genericEntities", derived = true)
-    public Collection<TConcreteType> getTypeParameters();
+    @FameProperty(name = "typeParameters", opposite = "genericEntities", derived = true)
+    public Collection<TTypeParameter> getTypeParameters();
 
-    public void setTypeParameters(Collection<? extends TConcreteType> typeParameters);
+    public void setTypeParameters(Collection<? extends TTypeParameter> typeParameters);
 
-    public void addTypeParameters(TConcreteType one);
+    public void addTypeParameters(TTypeParameter one);
 
-    public void addTypeParameters(TConcreteType one, TConcreteType... many);
+    public void addTypeParameters(TTypeParameter one, TTypeParameter... many);
 
-    public void addTypeParameters(Iterable<? extends TConcreteType> many);
+    public void addTypeParameters(Iterable<? extends TTypeParameter> many);
 
-    public void addTypeParameters(TConcreteType[] many);
+    public void addTypeParameters(TTypeParameter[] many);
 
     public int numberOfTypeParameters();
 
