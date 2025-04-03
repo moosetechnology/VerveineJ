@@ -183,13 +183,13 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
 			if (! node.isConstructor()) {
-				dico.ensureFamixEntityTyping(fmx, referedType(node.getReturnType2(), fmx, false));
+				dico.ensureFamixEntityTyping(node.resolveBinding().getReturnType(), fmx, referedType(node.getReturnType2(), fmx, false));
 			}
 
 			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
 				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
 				if (fmxParam != null) {
-					dico.ensureFamixEntityTyping(fmxParam, referedType(param.getType(), fmx, false));
+					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, referedType(param.getType(), fmx, false));
 				}
 			}
 
@@ -371,7 +371,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	protected void setVariableDeclaredType(VariableDeclaration var, TType varTyp) {
 		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(var.resolveBinding());
 		if (fmx != null) {
-			dico.ensureFamixEntityTyping(fmx, varTyp);
+			dico.ensureFamixEntityTyping(var.resolveBinding().getType(), fmx, varTyp);
 		}
 	}
 

@@ -21,44 +21,11 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
-import org.moosetechnology.model.famix.famixjavaentities.Access;
-import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstance;
-import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstanceAttribute;
-import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
-import org.moosetechnology.model.famix.famixjavaentities.AnnotationTypeAttribute;
-import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixjavaentities.Comment;
-import org.moosetechnology.model.famix.famixjavaentities.Concretization;
-import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
-import org.moosetechnology.model.famix.famixjavaentities.Entity;
-import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
-import org.moosetechnology.model.famix.famixjavaentities.EnumValue;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
-import org.moosetechnology.model.famix.famixjavaentities.Implementation;
-import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
-import org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor;
-import org.moosetechnology.model.famix.famixjavaentities.Inheritance;
-import org.moosetechnology.model.famix.famixjavaentities.Interface;
-import org.moosetechnology.model.famix.famixjavaentities.Invocation;
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricImplementation;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInheritance;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricMethod;
-import org.moosetechnology.model.famix.famixjavaentities.PrimitiveType;
-import org.moosetechnology.model.famix.famixjavaentities.Reference;
-import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
-import org.moosetechnology.model.famix.famixjavaentities.TBound;
-import org.moosetechnology.model.famix.famixjavaentities.Type;
-import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
-import org.moosetechnology.model.famix.famixjavaentities.Wildcard;
 import org.moosetechnology.model.famix.famixtraits.TAccessible;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
@@ -731,11 +698,16 @@ public class EntityDictionary {
 	 * @param declaredType -- the declared type
 	 * @return the FamixEntityTyping
 	 */
-	public EntityTyping ensureFamixEntityTyping(TTypedEntity typedEntity, TType declaredType) {
+	public EntityTyping ensureFamixEntityTyping(ITypeBinding declaredTypeBnd, TTypedEntity typedEntity, TType declaredType) {
 		if ( (typedEntity == null) || (declaredType == null) ) {
 			return null;
 		}
-		EntityTyping typing = new EntityTyping();
+		EntityTyping typing;
+		if (declaredTypeBnd != null && declaredTypeBnd.isParameterizedType()) {
+			typing = (ParametricEntityTyping)buildFamixParametricAssociation(new ParametricEntityTyping(), declaredTypeBnd.getErasure().getTypeParameters(), declaredTypeBnd.getTypeArguments());
+		} else {
+			typing = new EntityTyping();
+		}
 		typing.setTypedEntity(typedEntity);
 		typing.setDeclaredType(declaredType);
 		famixRepoAdd(typing);
@@ -2466,7 +2438,8 @@ public class EntityDictionary {
 			}
 			
 			fmx.setSignature(sig);
-			ensureFamixEntityTyping(fmx, ret);
+			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
+			ensureFamixEntityTyping(returnTypeBnd, fmx, ret);
 			fmx.setParentType(owner);
 		}
 
@@ -2480,7 +2453,8 @@ public class EntityDictionary {
 
 		if ((fmx != null) && delayedRetTyp) {
 			int retTypModifiers = (retTypBnd != null) ? retTypBnd.getModifiers() : UNKNOWN_MODIFIERS;
-			ensureFamixEntityTyping(fmx, this.ensureFamixType(retTypBnd, /*name*/null, /*owner*/fmx, /*ctxt*/(ContainerEntity) owner, retTypModifiers));
+			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
+			ensureFamixEntityTyping(returnTypeBnd, fmx, this.ensureFamixType(retTypBnd, /*name*/null, /*owner*/fmx, /*ctxt*/(ContainerEntity) owner, retTypModifiers));
 		}
 
 		return fmx;
@@ -2597,7 +2571,8 @@ public class EntityDictionary {
 
 		if (fmx != null) {
 			fmx.setParentType((TWithAttributes) owner);
-			ensureFamixEntityTyping(fmx, type);
+			ITypeBinding declaredTypeBinding = (bnd == null) ? null : bnd.getType();
+			ensureFamixEntityTyping(declaredTypeBinding, fmx, type);
 			if (bnd != null) {
 				int mod = bnd.getModifiers();
 				setAttributeModifiers(fmx, mod);
@@ -2672,7 +2647,8 @@ public class EntityDictionary {
 
 		if (fmx != null) {
 			fmx.setParentBehaviouralEntity(tMethod);
-			ensureFamixEntityTyping(fmx, typ);
+			ITypeBinding declaredTypeBnd = (bnd == null) ? null : bnd.getType();
+			ensureFamixEntityTyping(declaredTypeBnd, fmx, typ);
 		}
 
 		return fmx;

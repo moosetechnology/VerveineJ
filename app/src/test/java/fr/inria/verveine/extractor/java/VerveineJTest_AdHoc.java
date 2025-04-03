@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,30 +24,10 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.moosetechnology.model.famix.famixjavaentities.Access;
-import org.moosetechnology.model.famix.famixjavaentities.Attribute;
-import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
-import org.moosetechnology.model.famix.famixjavaentities.EnumValue;
-import org.moosetechnology.model.famix.famixjavaentities.Interface;
-import org.moosetechnology.model.famix.famixjavaentities.Invocation;
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
-import org.moosetechnology.model.famix.famixjavaentities.Type;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TEnumValue;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TLocalVariable;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameter;
-import org.moosetechnology.model.famix.famixtraits.TReference;
-import org.moosetechnology.model.famix.famixtraits.TType;
+import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
 
@@ -377,27 +358,23 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		Method meth = detectFamixElement( Method.class, "getEntityByName");
 		assertNotNull(meth);
 		assertEquals(3, meth.getLocalVariables().size());
-		for (TLocalVariable tvar : meth.getLocalVariables()) {
-			LocalVariable var = (LocalVariable) tvar;
-			Type collec;
-			if (var.getName().equals("ret")) {
-				collec = (Type) var.getDeclaredType();
-				assertNotNull(collec);
-				assertEquals("Collection", collec.getName());
-				assertEquals(ParametricInterface.class, collec.getClass());
-				assertEquals(1, ((ParametricInterface) collec).getTypeParameters().size());
-				Type t = (Type) firstElt(((ParametricInterface) collec).getTypeParameters());
-				assertEquals("T", t.getName());
-				assertSame(meth, Util.getOwner(t));
-			}
-			if (var.getName().equals("l_name")) {
-				collec = (Type) var.getDeclaredType();
-				assertNotNull(collec);
-				assertEquals("Collection", collec.getName());
-				assertEquals(ParametricInterface.class, collec.getClass());
-				assertEquals(1, ((ParametricInterface)collec).getTypeParameters().size());
-				Type ne = (Type)firstElt( ((ParametricInterface)collec).getTypeParameters());
-				assertEquals("NamedEntity", ne.getName());
+		for (var var : meth.getLocalVariables()) {
+			if (!var.getName().equals("obj")) {
+				Type collection = (Type) var.getDeclaredType();
+				assertNotNull(collection);
+				assertEquals("Collection", collection.getName());
+				assertEquals(ParametricInterface.class, collection.getClass());
+				// Type parameter of the generic interface Collection is E.
+				assertEquals(1, ((ParametricInterface) collection).numberOfTypeParameters());
+				Type e = (Type) firstElt(((ParametricInterface) collection).getTypeParameters());
+				assertEquals("E", e.getName());
+				// E is defined in Collection. Collection is its owner
+				assertSame(collection, Util.getOwner(e));
+				// The entity typing is associated with a concretization from E to T.
+				assertSame(ParametricEntityTyping.class, var.getTyping().getClass());
+				assertEquals(1, ((ParametricEntityTyping) var.getTyping()).numberOfConcretization());
+				TConcretization concretization = firstElt(((ParametricEntityTyping)var.getTyping()).getConcretization());
+				assertSame(concretization.getGenericParameter(), e);
 			}
 		}
 	}

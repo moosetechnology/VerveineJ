@@ -2,14 +2,7 @@ package fr.inria.verveine.extractor.java.visitors.refvisitors;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.CatchClause;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.ThrowStatement;
-import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
@@ -126,11 +119,12 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         return false;
     }
 
-	public void setVariableDeclaredType(SingleVariableDeclaration varDecl, Exception excepFmx) {
-
-		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(varDecl.resolveBinding());
+	public void setVariableDeclaredType(SingleVariableDeclaration varDecl, Exception fmxException) {
+        IVariableBinding bnd = varDecl.resolveBinding();
+		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(bnd);
 		if (fmx != null) {
-            dico.ensureFamixEntityTyping(fmx, excepFmx);
+            ITypeBinding declaredTypeBinding = (bnd == null) ? null : bnd.getType();
+            dico.ensureFamixEntityTyping(declaredTypeBinding, fmx, fmxException);
 		}
 	}
 
