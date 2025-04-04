@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.ArrayAccess;
 import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Assignment;
+import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.DoStatement;
@@ -236,11 +237,14 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	/**
 	 * Currently not defining lambdas. Only parse their body and consider their parameters as local variables
 	 * of the parent method
-	 *
+	 *<pre>
+	 * {@code
 	 *  LambdaExpression:
 	 *     Identifier -> Body
 	 *     ( [ Identifier { , Identifier } ] ) -> Body
 	 *     ( [ FormalParameter { , FormalParameter } ] ) -> Body
+	 * }
+	 * </pre>
 	 */
 	@Override
 	public boolean visit(LambdaExpression node) {
