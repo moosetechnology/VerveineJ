@@ -183,7 +183,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
 			if (! node.isConstructor()) {
-				dico.ensureFamixEntityTyping(node.resolveBinding().getReturnType(), fmx, referedType(node.getReturnType2(), fmx, false));
+				ITypeBinding returnTypeBnd = (node.resolveBinding() == null) ? null : node.resolveBinding().getReturnType();
+				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, referedType(node.getReturnType2(), fmx, false));
 			}
 
 			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {

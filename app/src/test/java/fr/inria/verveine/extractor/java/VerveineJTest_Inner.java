@@ -38,7 +38,7 @@ public class VerveineJTest_Inner extends VerveineJTest_Basic {
         parse(new String[] {"src/test/resources/inner"});
         Collection<Class> classes = entitiesOfType(Class.class);
         assertEquals(12, classes.size());
-        assertEquals(5, entitiesOfType(Interface.class).size());
+        assertEquals(4, entitiesOfType(Interface.class).size()); // Serializable, Comparable<T>, Constable, ConstantDesc. Previously Comparable<Long> but we do not represent it anymore.
         // Number of stubs
         assertEquals(8, classes.stream().filter(aClass -> aClass.getIsStub()).toArray().length);
         assertEquals(4, classes.stream().filter(aClass -> !aClass.getIsStub()).toArray().length); // InnerClass, _Anonymous(Patate), _Anonymous(Canard)

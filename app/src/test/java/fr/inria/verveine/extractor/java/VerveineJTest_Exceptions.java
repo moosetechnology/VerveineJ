@@ -67,10 +67,9 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
         Method meth = detectFamixElement( Method.class, "doThrow");
         assertNotNull(meth);
 
-//        assertEquals(0, meth.getParentType().getTypes().size());
         assertEquals(1, meth.getDeclaredExceptions().size());
         TypeParameter exD = (TypeParameter) firstElt(meth.getDeclaredExceptions());
-        assertSame(meth, firstElt(exD.getGenericEntities()));
+        assertSame(meth.getParentType(), firstElt(exD.getGenericEntities()));
         assertEquals("T", exD.getName());
     }
 
