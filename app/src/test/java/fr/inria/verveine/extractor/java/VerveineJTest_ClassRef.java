@@ -39,7 +39,7 @@ public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
         Method meth = detectFamixElement(Method.class, "method_staticReference");
         assertNotNull(meth);
         assertEquals(1, meth.numberOfOutgoingReferences());
-        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredType();
+        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredEntity();
         assertEquals("ExternalClass", clazz.getName());
     }
 
@@ -48,7 +48,7 @@ public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
         Method meth = detectFamixElement(Method.class, "method_castReference");
         assertNotNull(meth);
         assertEquals(1, meth.numberOfOutgoingReferences());
-        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredType();
+        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredEntity();
         assertEquals("ExternalClass", clazz.getName());
     }
 
@@ -57,7 +57,7 @@ public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
         Method meth = detectFamixElement(Method.class, "method_instanceofReference");
         assertNotNull(meth);
         assertEquals(1, meth.numberOfOutgoingReferences());
-        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredType();
+        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredEntity();
         assertEquals("ExternalClass", clazz.getName());
     }
 

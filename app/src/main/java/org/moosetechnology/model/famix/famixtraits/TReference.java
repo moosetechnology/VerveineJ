@@ -11,10 +11,10 @@ import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependenc
 @FameDescription("TReference")
 public interface TReference extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
 
-        @FameProperty(name = "referredType", opposite = "incomingReferences")
-    public TReferenceable getReferredType();
+    @FameProperty(name = "referredEntity", opposite = "incomingReferences")
+    public TReferenceable getReferredEntity();
 
-    public void setReferredType(TReferenceable referredType);
+    public void setReferredEntity(TReferenceable referredEntity);
 
     @FameProperty(name = "referencer", opposite = "outgoingReferences")
     public TWithReferences getReferencer();

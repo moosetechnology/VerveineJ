@@ -28,7 +28,7 @@ public class Reference extends Entity implements TAssociation, TAssociationMetaL
     
     private TWithReferences referencer;
     
-    private TReferenceable referredType;
+    private TReferenceable referredEntity;
     
     private TSourceAnchor sourceAnchor;
     
@@ -113,19 +113,19 @@ public class Reference extends Entity implements TAssociation, TAssociationMetaL
         referencer.getOutgoingReferences().add(this);
     }
     
-    @FameProperty(name = "referredType", opposite = "incomingReferences")
-    public TReferenceable getReferredType() {
-        return referredType;
+    @FameProperty(name = "referredEntity", opposite = "incomingReferences")
+    public TReferenceable getReferredEntity() {
+        return referredEntity;
     }
 
-    public void setReferredType(TReferenceable referredType) {
-        if (this.referredType != null) {
-            if (this.referredType.equals(referredType)) return;
-            this.referredType.getIncomingReferences().remove(this);
+    public void setReferredEntity(TReferenceable referredEntity) {
+        if (this.referredEntity != null) {
+            if (this.referredEntity.equals(referredEntity)) return;
+            this.referredEntity.getIncomingReferences().remove(this);
         }
-        this.referredType = referredType;
-        if (referredType == null) return;
-        referredType.getIncomingReferences().add(this);
+        this.referredEntity = referredEntity;
+        if (referredEntity == null) return;
+        referredEntity.getIncomingReferences().add(this);
     }
     
     @FameProperty(name = "replicas", derived = true)
