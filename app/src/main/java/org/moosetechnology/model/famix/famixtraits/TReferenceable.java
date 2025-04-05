@@ -11,7 +11,7 @@ import java.util.*;
 @FameDescription("TReferenceable")
 public interface TReferenceable  {
 
-        @FameProperty(name = "incomingReferences", opposite = "referredType", derived = true)
+    @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences();
 
     public void setIncomingReferences(Collection<? extends TReference> incomingReferences);

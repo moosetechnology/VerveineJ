@@ -580,14 +580,14 @@ public class EntityDictionary {
 
 		if (prev == null) {
 			for (TReference ref : src.getOutgoingReferences()) {
-				if (ref.getReferredType() == tgt) {
+				if (ref.getReferredEntity() == tgt) {
 					return (Reference) ref;
 				}
 			}
 		}
 
 		Reference ref = new Reference();
-		ref.setReferredType(tgt);
+		ref.setReferredEntity(tgt);
 		ref.setReferencer(src);
 		chainPrevNext(prev,ref);
 		famixRepoAdd(ref);

@@ -196,17 +196,17 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
         return !getGenerics().isEmpty();
     }
 
-    @FameProperty(name = "incomingReferences", opposite = "referredType", derived = true)
+    @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences() {
         if (incomingReferences == null) {
             incomingReferences = new MultivalueSet<TReference>() {
                 @Override
                 protected void clearOpposite(TReference e) {
-                    e.setReferredType(null);
+                    e.setReferredEntity(null);
                 }
                 @Override
                 protected void setOpposite(TReference e) {
-                    e.setReferredType(Type.this);
+                    e.setReferredEntity(Type.this);
                 }
             };
         }
