@@ -10,7 +10,7 @@ import ch.akuhn.fame.FameProperty;
 @FameDescription("TReference")
 public interface TReference extends TAssociation {
 
-        @FameProperty(name = "referredEntity", opposite = "incomingReferences")
+    @FameProperty(name = "referredEntity", opposite = "incomingReferences")
     public TReferenceable getReferredEntity();
 
     public void setReferredEntity(TReferenceable referredEntity);

@@ -5,6 +5,7 @@ import java.util.List;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
+import org.eclipse.jdt.core.dom.CastExpression;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -352,7 +353,25 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		}
         return false;
     }
-
+/**
+	 * <pre>
+	 * {@code
+	 * CastExpression ::=
+	 *  ( Type ) Expression
+	 * }
+	 * </pre>
+	 */
+	public boolean visit(CastExpression node) {
+		IBinding bnd = node.getType().resolveBinding();
+		if (bnd != null) {
+			org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referedType((ITypeBinding) bnd, null, !((ITypeBinding) bnd).isEnum());
+			Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference());
+			context.setLastReference(ref);
+			if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
+				dico.addSourceAnchor(ref, node);
+			}
+		}		return true;
+	 }
 
     /**
 	 * same behaviour for VariableDeclarationStatement and VariableDeclarationExpression
