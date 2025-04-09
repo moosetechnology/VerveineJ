@@ -361,9 +361,9 @@ public class EntityDictionary {
 	public ParametricClass ensureFamixParametricClass(ITypeBinding key, String name, TWithTypes owner) {
 		ParametricClass fmx = ensureFamixEntity(ParametricClass.class, key, name);
 		if(key != null) {
-			for (ITypeBinding tp : key.getTypeParameters()) {
+			for (ITypeBinding tp : key.getErasure().getTypeParameters()) {
 				// If there is a type parameter, then fmx will be a Famix ParametricClass
-				// note: in Famix, the owner of the TypeParameter is the ParametericClass
+				// note: in Famix, the owner of the TypeParameter is the ParametricClass
 				TypeParameter fmxParam = ensureFamixTypeParameter(tp,
 						tp.getName(), fmx);
 				fmxParam.addGenericEntities((TParametricEntity)fmx);
@@ -447,7 +447,7 @@ public class EntityDictionary {
 
 		Inheritance inh;
 		if (supBnd != null && supBnd.isParameterizedType()) { // Needs checks and tests.
-			inh = (ParametricInheritance)buildFamixParametricAssociation(new ParametricInheritance(), supBnd.getTypeParameters(), supBnd.getTypeArguments());
+			inh = (ParametricInheritance)buildFamixParametricAssociation(new ParametricInheritance(), supBnd.getErasure().getTypeParameters(), supBnd.getTypeArguments());
 		} else {
 			inh = new Inheritance();
 		}
@@ -522,7 +522,7 @@ public class EntityDictionary {
 		
 		Implementation implementation;
 		if (supBnd != null && supBnd.isParameterizedType()) { // Needs checks and tests.
-			implementation = (ParametricImplementation)buildFamixParametricAssociation(new ParametricImplementation(), supBnd.getTypeParameters(), supBnd.getTypeArguments());
+			implementation = (ParametricImplementation)buildFamixParametricAssociation(new ParametricImplementation(), supBnd.getErasure().getTypeParameters(), supBnd.getTypeArguments());
 		} else {
 			implementation = new Implementation();
 		}
@@ -592,19 +592,27 @@ public class EntityDictionary {
 	 * @param prev -- previous invocation relationship in the same context
 	 * @return the FamixInvocation
 	 */
-	public Invocation addFamixInvocation(TMethod tMethod, TMethod invoked, TInvocationsReceiver receiver, String signature, TAssociation prev) {
+	public Invocation addFamixInvocation(TMethod tMethod, TMethod invoked, TInvocationsReceiver receiver, String signature, TAssociation prev, IMethodBinding invokedBnd) {
 		if ( (tMethod == null) || (invoked == null) ) {
 			return null;
 		}
-		Invocation invok = new Invocation();
-		invok.setReceiver(receiver);
-		invok.setSender(tMethod);
-		invok.setSignature((signature == null) ? invoked.getSignature() : signature);
-		invok.addCandidates(invoked);
-		chainPrevNext(prev,invok);
-		famixRepoAdd(invok);
+		Invocation invocation;
+		if (invokedBnd != null && invokedBnd.isParameterizedMethod()) {
+			invocation = (ParametricInvocation)buildFamixParametricAssociation(new ParametricInvocation(), invokedBnd.getMethodDeclaration().getTypeParameters(), invokedBnd.getTypeArguments());
+		} else if ( invokedBnd != null && invokedBnd.isConstructor() && invokedBnd.getMethodDeclaration().getDeclaringClass().isGenericType()) {
+			invocation = (ParametricInvocation)buildFamixParametricAssociation(new ParametricInvocation(), invokedBnd.getMethodDeclaration().getDeclaringClass().getTypeParameters(), invokedBnd.getDeclaringClass().getTypeArguments());
+		} else {
+			invocation = new Invocation();
+		}
+
+		invocation.setReceiver(receiver);
+		invocation.setSender(tMethod);
+		invocation.setSignature((signature == null) ? invoked.getSignature() : signature);
+		invocation.addCandidates(invoked);
+		chainPrevNext(prev,invocation);
+		famixRepoAdd(invocation);
 		
-		return invok;
+		return invocation;
 	}
 
 	/**
@@ -2890,7 +2898,11 @@ public class EntityDictionary {
 	 */
 	public Class ensureFamixMetaClass(ITypeBinding bnd) {
 		Package javaLang = ensureFamixPackageJavaLang((bnd == null) ? null : bnd.getPackage());
-		Class fmx = this.ensureFamixClass(null, METACLASS_NAME, javaLang, /*isGeneric*/true, Modifier.PUBLIC & Modifier.FINAL);
+		ParametricClass fmx = (ParametricClass) this.ensureFamixClass(null, METACLASS_NAME, javaLang, /*isGeneric*/true, Modifier.PUBLIC & Modifier.FINAL);
+
+		if (fmx != null) {
+			fmx.addTypeParameters(ensureFamixTypeParameter(null, "T", fmx));
+		}
 
 		if ((fmx != null) && (fmx.getSuperInheritances() == null)) {
 			ensureFamixInheritance(ensureFamixClassObject(null), fmx, null, null);

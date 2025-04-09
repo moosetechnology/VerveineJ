@@ -230,7 +230,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		if (bnd == null) {
 			methodInvocation(bnd, calledName, receiver, getInvokedMethodOwner(callingExpr, receiver), node.arguments());
 		} else {
-			methodInvocation(bnd.getMethodDeclaration(), calledName, receiver, /* owner */null, node.arguments());
+			methodInvocation(bnd, calledName, receiver, /* owner */null, node.arguments());
 		}
 
 		// TODO could be TInvocation but it does not extends THassignature and we need
@@ -304,7 +304,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 				context.topMethod());
 
 		TInvocation invok = dico.addFamixInvocation(context.topMethod(), invoked, receiver, signature,
-				context.getLastInvocation());
+				context.getLastInvocation(), node.resolveConstructorBinding());
 		context.setLastInvocation(invok);
 
 		if (options.withAnchors(VerveineJOptions.AnchorOptions.assoc) && (invok != null)) {
@@ -342,7 +342,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 					context.topType(),
 					context.topMethod());
 			Invocation invok = dico.addFamixInvocation(context.topMethod(), invoked, receiver, signature,
-					context.getLastInvocation());
+					context.getLastInvocation(), node.resolveConstructorBinding());
 			context.setLastInvocation(invok);
 			if (options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) {
 				dico.addSourceAnchor(invok, node);
@@ -368,21 +368,20 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	 */
 	private Invocation methodInvocation(IMethodBinding calledBnd, String calledName, TNamedEntity receiver,
 			TType methOwner, Collection<Expression> l_args) {
+
 		TMethod sender = this.context.topMethod();
 		TMethod invoked;
 		Invocation invok;
 
-		if (calledBnd != null) {
-			// If the method is parametric, get the generic method.
-			calledBnd = calledBnd.getMethodDeclaration();
-		}
+		// If the method is parametric, get the generic method.
+		IMethodBinding actualCalledMethodBnd = (calledBnd == null ? null : calledBnd.getMethodDeclaration());
 
-		if ((receiver != null) && (receiver.getName().equals("class")) && (calledBnd != null)
-				&& (calledBnd.getDeclaringClass() == null)) {
+		if ((receiver != null) && (receiver.getName().equals("class")) && (actualCalledMethodBnd != null)
+				&& (actualCalledMethodBnd.getDeclaringClass() == null)) {
 			/* bug with JDT apparently has to do with invoking a method of a meta-class */
 			// humm ... we do not create the FamixInvocation ? Seems like a bug ...
 			return null;
-		} else if ((calledBnd != null) && (calledBnd.isAnnotationMember())) {
+		} else if ((actualCalledMethodBnd != null) && (actualCalledMethodBnd.isAnnotationMember())) {
 			// if this is not an AnnotationType member, it is similar to creating a
 			// FamixAttribute access
 			return null;
@@ -398,10 +397,10 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			}
 		}
 
-		int modifiers = (calledBnd != null) ? calledBnd.getModifiers() : EntityDictionary.UNKNOWN_MODIFIERS;
+		int modifiers = (actualCalledMethodBnd != null) ? actualCalledMethodBnd.getModifiers() : EntityDictionary.UNKNOWN_MODIFIERS;
 
 		if ((receiver != null) && (receiver instanceof TStructuralEntity)) {
-			invoked = this.dico.ensureFamixMethod(calledBnd, calledName, unkwnArgs, /* retType */null,
+			invoked = this.dico.ensureFamixMethod(actualCalledMethodBnd, calledName, unkwnArgs, /* retType */null,
 					(TWithMethods) methOwner, modifiers);
 		} else {
 			TType owner;
@@ -409,20 +408,20 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			if (receiver != null)
 				owner = (TType) receiver;
 			else {
-				if (calledBnd != null && calledBnd.getDeclaringClass().isParameterizedType()) {
-					owner = this.dico.ensureFamixType(calledBnd.getDeclaringClass().getErasure());
+				if (actualCalledMethodBnd != null && actualCalledMethodBnd.getDeclaringClass().isParameterizedType()) {
+					owner = this.dico.ensureFamixType(actualCalledMethodBnd.getDeclaringClass().getErasure());
 				} else {
 					owner = methOwner;
 				}
 			}
 
 			// static method called on the class (or null receiver)
-			invoked = this.dico.ensureFamixMethod(calledBnd, calledName, unkwnArgs, /* retType */null,
+			invoked = this.dico.ensureFamixMethod(actualCalledMethodBnd, calledName, unkwnArgs, /* retType */null,
 					(TWithMethods) /* owner */owner, modifiers);
 		}
 
 		String signature = "";
-		if (calledBnd != null && calledBnd.isParameterizedMethod()) {
+		if (actualCalledMethodBnd != null && actualCalledMethodBnd.isParameterizedMethod()) {
 			signature += "<";
 			int size = ((ParametricMethod) invoked).getTypeParameters().size();
 			int i = 0;
@@ -448,7 +447,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		signature += ")";
 		
 		invok = dico.addFamixInvocation(sender, invoked, (TInvocationsReceiver) receiver, signature,
-				context.getLastInvocation());
+				context.getLastInvocation(), calledBnd);
 		// TODO add FileAnchor to Invocation
 		context.setLastInvocation(invok);
 
