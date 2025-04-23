@@ -304,7 +304,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public boolean visit(QualifiedName node) {
 		IBinding qualifierBinding = node.getQualifier().resolveBinding();
 
-		if (qualifierBinding.getKind() == IBinding.TYPE) {
+		if ((qualifierBinding != null) && (qualifierBinding.getKind() == IBinding.TYPE)) {
 			TType fmx = referedType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top(), true);
 			addReference( node, fmx);
 		}
