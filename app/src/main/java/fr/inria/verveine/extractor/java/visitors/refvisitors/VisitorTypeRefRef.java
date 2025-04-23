@@ -141,6 +141,22 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	/**
+	 * Not visiting the AnnotationInstanceAttribute
+	 */
+	@Override
+	public boolean visit(SingleMemberAnnotation node) {
+		return false;
+	}
+
+	/**
+	 * Not visiting the AnnotationInstanceAttribute
+	 */
+	@Override
+	public boolean visit(NormalAnnotation node) {
+		return false;
+	}
+
+	/**
 	 * <pre>
 	 * {@code
 	 * MethodDeclaration ::=
