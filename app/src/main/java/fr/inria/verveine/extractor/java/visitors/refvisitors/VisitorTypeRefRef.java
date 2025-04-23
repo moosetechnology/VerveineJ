@@ -2,37 +2,11 @@ package fr.inria.verveine.extractor.java.visitors.refvisitors;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
-import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
-import org.eclipse.jdt.core.dom.CastExpression;
-import org.eclipse.jdt.core.dom.CatchClause;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
-import org.eclipse.jdt.core.dom.EnumDeclaration;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.InstanceofExpression;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.MethodInvocation;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationExpression;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
+import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Reference;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
-import org.moosetechnology.model.famix.famixtraits.TWithTypes;
+import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
@@ -45,8 +19,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
      */
 	private boolean searchTypeRef;
 
-	public VisitorTypeRefRef(EntityDictionary dico, VerveineJOptions options) {
-		super(dico, options);
+	public VisitorTypeRefRef(EntityDictionary dictionary, VerveineJOptions options) {
+		super(dictionary, options);
 		this.searchTypeRef = false;
 	}
 
@@ -228,18 +202,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(InstanceofExpression node) {
-		org.moosetechnology.model.famix.famixtraits.TType fmx = null;
-		Type clazz = node.getRightOperand();
-		fmx = referedType(clazz, (ContainerEntity) context.top(), true);
-
-		Reference ref = null;
-
-		ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
-		context.setLastReference(ref);
-		if (options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) {
-			dico.addSourceAnchor(ref, node);
-        }
-
+		TType fmx = referedType(node.getRightOperand(), (ContainerEntity) context.top(), true);
+		addReference( node, fmx);
 		return super.visit(node);
 	}
 
@@ -253,7 +217,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public boolean visit(FieldDeclaration node) {
 		hasInitBlock(node);  // to recover optional EntityDictionary.INIT_BLOCK_NAME method
 		visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());   // to create the TypeRefs
-		return true;
+		return false;
 	}
 
 	@Override
@@ -315,13 +279,30 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		return visitVariablesDeclaration((List<VariableDeclaration>)node.fragments(), node.getType());
 	}
 
+	public boolean visit(TypeLiteral node) {
+		TType fmx = referedType(node.getType(), (ContainerEntity) context.top(), true);
+		addReference( node, fmx);
+		return(false);
+	}
+
+	public boolean visit(QualifiedName node) {
+		IBinding qualifierBinding = node.getQualifier().resolveBinding();
+
+		if (qualifierBinding.getKind() == IBinding.TYPE) {
+			TType fmx = referedType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top(), true);
+			addReference( node, fmx);
+		}
+
+		return false;
+	}
+
     @SuppressWarnings("unchecked")
 	@Override
     public boolean visit(MethodInvocation node) {
-        Expression receivr = node.getExpression();
-        if (receivr != null) {
+    	Expression receiver = node.getExpression();
+        if (receiver != null) {
             searchTypeRef = true;
-            receivr.accept(this);
+            receiver.accept(this);
             searchTypeRef = false;
         }
         for (Expression arg : (List<Expression>)node.arguments()) {
@@ -393,5 +374,19 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 			fmx.setDeclaredType(varTyp);
 		}
 	}
+	
+	/**
+	 * creates a <code>Reference</code> to the Famix <code>TType</code> from the current method (<code>context.top()</code>)
+	 * 
+	 * <code>node</code> might be required to get the <code>sourceAnchor</code> of the <code>Reference</code> 
+	 */
+	protected void addReference( ASTNode node, TType fmx) {
+		Reference ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
 
+		context.setLastReference(ref);
+		if (options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) {
+			dico.addSourceAnchor(ref, node);
+        }
+
+	}
 }
