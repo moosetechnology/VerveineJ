@@ -31,12 +31,30 @@ public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
     public void testHasRefToExternalClass() {
         Class clazz = detectFamixElement(Class.class, "ExternalClass");
         assertNotNull(clazz);
-        assertEquals(3, clazz.numberOfIncomingReferences());
+        assertEquals(5, clazz.numberOfIncomingReferences());
     }
 
     @Test
-    public void testReferenceThroughStatic() {
-        Method meth = detectFamixElement(Method.class, "method_staticReference");
+    public void testReferenceThroughClassAttribute() {
+        Method meth = detectFamixElement(Method.class, "method_classAttributeReference");
+        assertNotNull(meth);
+        assertEquals(1, meth.numberOfOutgoingReferences());
+        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredEntity();
+        assertEquals("ExternalClass", clazz.getName());
+    }
+
+    @Test
+    public void testReferenceThroughStaticAttribute() {
+        Method meth = detectFamixElement(Method.class, "method_staticAttributeReference");
+        assertNotNull(meth);
+        assertEquals(1, meth.numberOfOutgoingReferences());
+        Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredEntity();
+        assertEquals("ExternalClass", clazz.getName());
+    }
+
+    @Test
+    public void testReferenceThroughStaticMethod() {
+        Method meth = detectFamixElement(Method.class, "method_staticMethodReference");
         assertNotNull(meth);
         assertEquals(1, meth.numberOfOutgoingReferences());
         Class clazz = (Class) ((Reference)firstElt(meth.getOutgoingReferences())).getReferredEntity();
