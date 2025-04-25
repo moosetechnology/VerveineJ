@@ -11,7 +11,7 @@ import java.util.*;
 @FameDescription("TParametricEntity")
 public interface TParametricEntity  {
 
-    @FameProperty(name = "typeParameters", opposite = "genericEntities", derived = true)
+    @FameProperty(name = "typeParameters", opposite = "genericEntity", derived = true)
     public Collection<TTypeParameter> getTypeParameters();
 
     public void setTypeParameters(Collection<? extends TTypeParameter> typeParameters);

@@ -6,13 +6,13 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Wildcard")
-public class Wildcard extends Type implements TBounded, TConcreteType {
+public class Wildcard extends Type implements TBounded, TTypeArgument {
 
     private TBound lowerBound;
 
@@ -37,17 +37,17 @@ public class Wildcard extends Type implements TBounded, TConcreteType {
         lowerBound.getLowerBoundedWildcards().add(this);
     }
 
-    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
     public Collection<TConcretization> getOutgoingConcretizations() {
         if (outgoingConcretizations == null) {
             outgoingConcretizations = new MultivalueSet<TConcretization>() {
                 @Override
                 protected void clearOpposite(TConcretization e) {
-                    e.setConcreteParameter(null);
+                    e.setTypeArgument(null);
                 }
                 @Override
                 protected void setOpposite(TConcretization e) {
-                    e.setConcreteParameter(Wildcard.this);
+                    e.setTypeArgument(Wildcard.this);
                 }
             };
         }

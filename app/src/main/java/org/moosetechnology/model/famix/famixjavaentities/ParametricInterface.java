@@ -18,17 +18,17 @@ public class ParametricInterface extends Interface implements TParametricEntity 
 
 
 
-    @FameProperty(name = "typeParameters", opposite = "genericEntities", derived = true)
+    @FameProperty(name = "typeParameters", opposite = "genericEntity", derived = true)
     public Collection<TTypeParameter> getTypeParameters() {
         if (typeParameters == null) {
             typeParameters = new MultivalueSet<TTypeParameter>() {
                 @Override
                 protected void clearOpposite(TTypeParameter e) {
-                    e.getGenericEntities().remove(ParametricInterface.this);
+                    e.setGenericEntity(null);
                 }
                 @Override
                 protected void setOpposite(TTypeParameter e) {
-                    e.getGenericEntities().add(ParametricInterface.this);
+                    e.setGenericEntity(ParametricInterface.this);
                 }
             };
         }

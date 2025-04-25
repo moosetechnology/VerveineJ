@@ -13,7 +13,6 @@ import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TCanImplement;
 import org.moosetechnology.model.famix.famixtraits.TClass;
 import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
@@ -29,13 +28,14 @@ import org.moosetechnology.model.famix.famixtraits.TPackageable;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithImports;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Class")
-public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCanBeFinal, TCanImplement, TClass, TClassMetrics, TConcreteType, THasVisibility, TImportable, TLCOMMetrics, TPackageable, TWithImports {
+public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCanBeFinal, TCanImplement, TClass, TClassMetrics, TTypeArgument, THasVisibility, TImportable, TLCOMMetrics, TPackageable, TWithImports {
 
     private Collection<TAttribute> attributes; 
 
@@ -735,17 +735,17 @@ public class Class extends Type implements TCanBeAbstract, TCanBeClassSide, TCan
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
     public Collection<TConcretization> getOutgoingConcretizations() {
         if (outgoingConcretizations == null) {
             outgoingConcretizations = new MultivalueSet<TConcretization>() {
                 @Override
                 protected void clearOpposite(TConcretization e) {
-                    e.setConcreteParameter(null);
+                    e.setTypeArgument(null);
                 }
                 @Override
                 protected void setOpposite(TConcretization e) {
-                    e.setConcreteParameter(Class.this);
+                    e.setTypeArgument(Class.this);
                 }
             };
         }

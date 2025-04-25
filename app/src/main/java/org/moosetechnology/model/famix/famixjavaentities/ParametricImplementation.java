@@ -14,14 +14,14 @@ import org.moosetechnology.model.famix.famixtraits.TParametricAssociation;
 @FameDescription("ParametricImplementation")
 public class ParametricImplementation extends Implementation implements TParametricAssociation {
 
-    private Collection<TConcretization> concretization; 
+    private Collection<TConcretization> concretizations;
 
 
 
-    @FameProperty(name = "concretization", opposite = "triggeringAssociation", derived = true)
-    public Collection<TConcretization> getConcretization() {
-        if (concretization == null) {
-            concretization = new MultivalueSet<TConcretization>() {
+    @FameProperty(name = "concretizations", opposite = "triggeringAssociation", derived = true)
+    public Collection<TConcretization> getConcretizations() {
+        if (concretizations == null) {
+            concretizations = new MultivalueSet<TConcretization>() {
                 @Override
                 protected void clearOpposite(TConcretization e) {
                     e.setTriggeringAssociation(null);
@@ -32,41 +32,41 @@ public class ParametricImplementation extends Implementation implements TParamet
                 }
             };
         }
-        return concretization;
+        return concretizations;
     }
     
-    public void setConcretization(Collection<? extends TConcretization> concretization) {
-        this.getConcretization().clear();
-        this.getConcretization().addAll(concretization);
-    }                    
+    public void setConcretizations(Collection<? extends TConcretization> concretizations) {
+        this.getConcretizations().clear();
+        this.getConcretizations().addAll(concretizations);
+    }
     
         
     public void addConcretization(TConcretization one) {
-        this.getConcretization().add(one);
+        this.getConcretizations().add(one);
     }   
     
-    public void addConcretization(TConcretization one, TConcretization... many) {
-        this.getConcretization().add(one);
+    public void addConcretizations(TConcretization one, TConcretization... many) {
+        this.getConcretizations().add(one);
         for (TConcretization each : many)
-            this.getConcretization().add(each);
+            this.getConcretizations().add(each);
     }   
     
-    public void addConcretization(Iterable<? extends TConcretization> many) {
+    public void addConcretizations(Iterable<? extends TConcretization> many) {
         for (TConcretization each : many)
-            this.getConcretization().add(each);
+            this.getConcretizations().add(each);
     }   
                 
-    public void addConcretization(TConcretization[] many) {
+    public void addConcretizations(TConcretization[] many) {
         for (TConcretization each : many)
-            this.getConcretization().add(each);
+            this.getConcretizations().add(each);
     }
     
-    public int numberOfConcretization() {
-        return getConcretization().size();
+    public int numberOfConcretizations() {
+        return getConcretizations().size();
     }
 
-    public boolean hasConcretization() {
-        return !getConcretization().isEmpty();
+    public boolean hasConcretizations() {
+        return !getConcretizations().isEmpty();
     }
 
 

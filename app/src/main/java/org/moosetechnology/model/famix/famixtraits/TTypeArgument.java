@@ -8,10 +8,10 @@ import java.util.*;
 
 
 @FamePackage("Famix-Traits")
-@FameDescription("TConcreteType")
-public interface TConcreteType  {
+@FameDescription("TTypeArgument")
+public interface TTypeArgument  {
 
-    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+        @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
     public Collection<TConcretization> getOutgoingConcretizations();
 
     public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations);
