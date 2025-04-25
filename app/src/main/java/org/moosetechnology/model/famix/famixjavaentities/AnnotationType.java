@@ -10,7 +10,6 @@ import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
@@ -19,6 +18,7 @@ import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TPackage;
 import org.moosetechnology.model.famix.famixtraits.TPackageable;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
@@ -27,7 +27,7 @@ import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationType")
-public class AnnotationType extends Type implements TAnnotationType, TConcreteType, THasVisibility, TImplementable, TPackageable, TWithAttributes, TWithComments, TWithInheritances {
+public class AnnotationType extends Type implements TAnnotationType, TTypeArgument, THasVisibility, TImplementable, TPackageable, TWithAttributes, TWithComments, TWithInheritances {
 
     private TWithAnnotationTypes annotationTypesContainer;
     
@@ -333,17 +333,17 @@ public class AnnotationType extends Type implements TAnnotationType, TConcreteTy
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
     public Collection<TConcretization> getOutgoingConcretizations() {
         if (outgoingConcretizations == null) {
             outgoingConcretizations = new MultivalueSet<TConcretization>() {
                 @Override
                 protected void clearOpposite(TConcretization e) {
-                    e.setConcreteParameter(null);
+                    e.setTypeArgument(null);
                 }
                 @Override
                 protected void setOpposite(TConcretization e) {
-                    e.setConcreteParameter(AnnotationType.this);
+                    e.setTypeArgument(AnnotationType.this);
                 }
             };
         }

@@ -372,9 +372,9 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				assertSame(collection, Util.getOwner(e));
 				// The entity typing is associated with a concretization from E to T.
 				assertSame(ParametricEntityTyping.class, var.getTyping().getClass());
-				assertEquals(1, ((ParametricEntityTyping) var.getTyping()).numberOfConcretization());
-				TConcretization concretization = firstElt(((ParametricEntityTyping)var.getTyping()).getConcretization());
-				assertSame(concretization.getGenericParameter(), e);
+				assertEquals(1, ((ParametricEntityTyping) var.getTyping()).numberOfConcretizations());
+				TConcretization concretization = firstElt(((ParametricEntityTyping)var.getTyping()).getConcretizations());
+				assertSame(concretization.getTypeParameter(), e);
 			}
 		}
 	}

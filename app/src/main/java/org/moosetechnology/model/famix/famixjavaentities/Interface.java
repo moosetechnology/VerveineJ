@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TConcreteType;
+
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
@@ -24,6 +24,7 @@ import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TPackage;
 import org.moosetechnology.model.famix.famixtraits.TPackageable;
 import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
 import org.moosetechnology.model.famix.famixtraits.TWithImports;
@@ -33,7 +34,7 @@ import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Interface")
-public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TConcreteType, THasVisibility, TImplementable, TImportable, TInvocationsReceiver, TPackageable, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
+public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TTypeArgument, THasVisibility, TImplementable, TImportable, TInvocationsReceiver, TPackageable, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
 
     private Collection<TAttribute> attributes; 
 
@@ -464,17 +465,17 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TCo
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "outgoingConcretizations", opposite = "concreteParameter", derived = true)
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
     public Collection<TConcretization> getOutgoingConcretizations() {
         if (outgoingConcretizations == null) {
             outgoingConcretizations = new MultivalueSet<TConcretization>() {
                 @Override
                 protected void clearOpposite(TConcretization e) {
-                    e.setConcreteParameter(null);
+                    e.setTypeArgument(null);
                 }
                 @Override
                 protected void setOpposite(TConcretization e) {
-                    e.setConcreteParameter(Interface.this);
+                    e.setTypeArgument(Interface.this);
                 }
             };
         }

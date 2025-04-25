@@ -41,7 +41,6 @@ public class FamixTraitsModel {
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TCohesionCouplingMetrics.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TComment.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TCompilationUnit.class);
-		metamodel.with(org.moosetechnology.model.famix.famixtraits.TConcreteType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TConcretization.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TDefinedInModule.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TDereferencedInvocation.class);
@@ -106,6 +105,7 @@ public class FamixTraitsModel {
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTraitUser.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypeAlias.class);
+		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypeArgument.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypeParameter.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TTypedEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixtraits.TUnknownVariable.class);

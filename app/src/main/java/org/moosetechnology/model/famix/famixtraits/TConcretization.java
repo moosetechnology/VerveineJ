@@ -10,22 +10,24 @@ import ch.akuhn.fame.FameProperty;
 @FameDescription("TConcretization")
 public interface TConcretization extends TAssociation {
 
-        @FameProperty(name = "concreteParameter", opposite = "outgoingConcretizations")
-    public TConcreteType getConcreteParameter();
+    @FameProperty(name = "typeParameter", opposite = "concretizations")
+    public TTypeParameter getTypeParameter();
 
-    public void setConcreteParameter(TConcreteType concreteParameter);
+    public void setTypeParameter(TTypeParameter typeParameter);
 
-    @FameProperty(name = "triggeringAssociation", opposite = "concretization")
+    @FameProperty(name = "typeArgument", opposite = "outgoingConcretizations")
+    public TTypeArgument getTypeArgument();
+
+    public void setTypeArgument(TTypeArgument typeArgument);
+
+    @FameProperty(name = "triggeringAssociation", opposite = "concretizations")
     public TParametricAssociation getTriggeringAssociation();
 
     public void setTriggeringAssociation(TParametricAssociation triggeringAssociation);
 
-    @FameProperty(name = "genericParameter", opposite = "concretizations")
-    public TTypeParameter getGenericParameter();
-
-    public void setGenericParameter(TTypeParameter genericParameter);
-
 
 
 }
+
+
 

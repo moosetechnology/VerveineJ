@@ -11,22 +11,22 @@ import java.util.*;
 @FameDescription("TParametricAssociation")
 public interface TParametricAssociation  {
 
-        @FameProperty(name = "concretization", opposite = "triggeringAssociation", derived = true)
-    public Collection<TConcretization> getConcretization();
+        @FameProperty(name = "concretizations", opposite = "triggeringAssociation", derived = true)
+    public Collection<TConcretization> getConcretizations();
 
-    public void setConcretization(Collection<? extends TConcretization> concretization);
+    public void setConcretizations(Collection<? extends TConcretization> concretizations);
 
     public void addConcretization(TConcretization one);
 
-    public void addConcretization(TConcretization one, TConcretization... many);
+    public void addConcretizations(TConcretization one, TConcretization... many);
 
-    public void addConcretization(Iterable<? extends TConcretization> many);
+    public void addConcretizations(Iterable<? extends TConcretization> many);
 
-    public void addConcretization(TConcretization[] many);
+    public void addConcretizations(TConcretization[] many);
 
-    public int numberOfConcretization();
+    public int numberOfConcretizations();
 
-    public boolean hasConcretization();
+    public boolean hasConcretizations();
 
 
 

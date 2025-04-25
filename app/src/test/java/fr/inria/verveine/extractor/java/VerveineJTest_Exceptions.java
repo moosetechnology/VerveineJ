@@ -69,7 +69,7 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
 
         assertEquals(1, meth.getDeclaredExceptions().size());
         TypeParameter exD = (TypeParameter) firstElt(meth.getDeclaredExceptions());
-        assertSame(meth.getParentType(), firstElt(exD.getGenericEntities()));
+        assertSame(meth.getParentType(), exD.getGenericEntity());
         assertEquals("T", exD.getName());
     }
 

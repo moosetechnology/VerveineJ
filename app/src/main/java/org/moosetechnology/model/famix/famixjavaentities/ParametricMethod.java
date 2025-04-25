@@ -18,17 +18,17 @@ public class ParametricMethod extends Method implements TParametricEntity {
 
 
 
-    @FameProperty(name = "typeParameters", opposite = "genericEntities", derived = true)
+    @FameProperty(name = "typeParameters", opposite = "genericEntity", derived = true)
     public Collection<TTypeParameter> getTypeParameters() {
         if (typeParameters == null) {
             typeParameters = new MultivalueSet<TTypeParameter>() {
                 @Override
                 protected void clearOpposite(TTypeParameter e) {
-                    e.getGenericEntities().remove(ParametricMethod.this);
+                    e.setGenericEntity(null);
                 }
                 @Override
                 protected void setOpposite(TTypeParameter e) {
-                    e.getGenericEntities().add(ParametricMethod.this);
+                    e.setGenericEntity(ParametricMethod.this);
                 }
             };
         }

@@ -26,7 +26,6 @@ import org.moosetechnology.model.famix.famixjavaentities.ParametricMethod;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
 import org.moosetechnology.model.famix.famixjavaentities.Wildcard;
-import org.moosetechnology.model.famix.famixtraits.TConcreteType;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
@@ -34,6 +33,7 @@ import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 
 public class VerveineJTest_Generics extends VerveineJTest_Basic {
 
@@ -94,11 +94,11 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         Parameter param = (Parameter) firstElt(methodWithWildcardParam.getParameters());
         ParametricInterface list = (ParametricInterface) param.getDeclaredType();
 
-        Collection<TConcretization> concretizations = ((ParametricEntityTyping) param.getTyping()).getConcretization();
+        Collection<TConcretization> concretizations = ((ParametricEntityTyping) param.getTyping()).getConcretizations();
         assertEquals(1, concretizations.size());
-        assertSame(Wildcard.class, firstElt(concretizations).getConcreteParameter().getClass());
+        assertSame(Wildcard.class, firstElt(concretizations).getTypeArgument().getClass());
 
-        Wildcard wc = (Wildcard) firstElt(concretizations).getConcreteParameter();
+        Wildcard wc = (Wildcard) firstElt(concretizations).getTypeArgument();
         assertTrue(wc.getUpperBound() != null);
         assertTrue(wc.getLowerBound() == null);
 
@@ -107,7 +107,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         // assertEquals(1, wc.getOutgoingConcretizations().size()); // This should work
         // but there is an error in Famix metamodel. See issue #911
 
-        assertEquals(firstElt(concretizations).getGenericParameter(), firstElt(list.getTypeParameters()));
+        assertEquals(firstElt(concretizations).getTypeParameter(), firstElt(list.getTypeParameters()));
     }
 
     @Test
@@ -118,11 +118,11 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
 
         Parameter param = (Parameter) firstElt(methodWithWildcardParam.getParameters());
 
-        Collection<TConcretization> concretizations = ((ParametricEntityTyping) param.getTyping()).getConcretization();
+        Collection<TConcretization> concretizations = ((ParametricEntityTyping) param.getTyping()).getConcretizations();
         assertEquals(1, concretizations.size());
-        assertSame(Wildcard.class, firstElt(concretizations).getConcreteParameter().getClass());
+        assertSame(Wildcard.class, firstElt(concretizations).getTypeArgument().getClass());
 
-        Wildcard wc = (Wildcard) (firstElt(concretizations)).getConcreteParameter();
+        Wildcard wc = (Wildcard) (firstElt(concretizations)).getTypeArgument();
         assertTrue(wc.getUpperBound() == null);
         assertTrue(wc.getLowerBound() != null);
     }
@@ -144,11 +144,11 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         LocalVariable e = (LocalVariable) firstElt(main.getLocalVariables());
         assertNotNull(e);
         assertEquals(classE, e.getDeclaredType());
-        assertEquals(1, ((ParametricEntityTyping) e.getTyping()).numberOfConcretization());
+        assertEquals(1, ((ParametricEntityTyping) e.getTyping()).numberOfConcretizations());
 
-        Concretization concretization = (Concretization) firstElt(((ParametricEntityTyping)e.getTyping()).getConcretization());
-        assertEquals(concretization.getGenericParameter(), t);
-        assertEquals("Integer", ((Type) concretization.getConcreteParameter()).getName());
+        Concretization concretization = (Concretization) firstElt(((ParametricEntityTyping)e.getTyping()).getConcretizations());
+        assertEquals(concretization.getTypeParameter(), t);
+        assertEquals("Integer", ((Type) concretization.getTypeArgument()).getName());
 
         assertEquals(1, classE.numberOfIncomingTypings());
 
@@ -168,7 +168,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals(2, inheritances.size());
         for (TInheritance inheritance : inheritances) {
             assertEquals(ParametricInheritance.class, inheritance.getClass());
-            assertEquals(2, ((ParametricInheritance) inheritance).numberOfConcretization());
+            assertEquals(2, ((ParametricInheritance) inheritance).numberOfConcretizations());
         }
     }
 
@@ -180,7 +180,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals(1, implementations.size());
         TImplementation impl = firstElt(implementations);
         assertEquals(ParametricImplementation.class, impl.getClass());
-        assertEquals(1, ((ParametricImplementation) impl).numberOfConcretization());
+        assertEquals(1, ((ParametricImplementation) impl).numberOfConcretizations());
     }
 
     @Test
@@ -191,7 +191,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals(1, invocations.size());
         TInvocation invocation = (TInvocation) firstElt(invocations);
         assertEquals (ParametricInvocation.class, invocation.getClass());
-        assertEquals(1, ((ParametricInvocation) invocation).numberOfConcretization());
+        assertEquals(1, ((ParametricInvocation) invocation).numberOfConcretizations());
     }
 
     @Test
@@ -211,22 +211,22 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
             assertEquals(ParametricInheritance.class, inheritance.getClass());
             ParametricInheritance parametricInheritance = (ParametricInheritance) inheritance;
 
-            assertEquals(2, parametricInheritance.numberOfConcretization());
-            Iterator<TConcretization> iterator = parametricInheritance.getConcretization().iterator();
+            assertEquals(2, parametricInheritance.numberOfConcretizations());
+            Iterator<TConcretization> iterator = parametricInheritance.getConcretizations().iterator();
 
             TConcretization concretizationToTypeParameter = iterator.next();
-            assertEquals(TypeParameter.class, concretizationToTypeParameter.getConcreteParameter().getClass());
+            assertEquals(TypeParameter.class, concretizationToTypeParameter.getTypeArgument().getClass());
             assertEquals(inheritance.getSubclass(),
-                    ((TypeParameter) concretizationToTypeParameter.getConcreteParameter()).getTypeContainer());
-            assertEquals(TypeParameter.class, concretizationToTypeParameter.getGenericParameter().getClass());
+                    ((TypeParameter) concretizationToTypeParameter.getTypeArgument()).getTypeContainer());
+            assertEquals(TypeParameter.class, concretizationToTypeParameter.getTypeParameter().getClass());
             assertEquals(inheritance.getSuperclass(),
-                    ((TypeParameter) concretizationToTypeParameter.getGenericParameter()).getTypeContainer());
+                    ((TypeParameter) concretizationToTypeParameter.getTypeParameter()).getTypeContainer());
 
             TConcretization concretizationToClass = iterator.next();
-            assertEquals(Class.class, concretizationToClass.getConcreteParameter().getClass());
-            assertEquals(TypeParameter.class, concretizationToClass.getGenericParameter().getClass());
+            assertEquals(Class.class, concretizationToClass.getTypeArgument().getClass());
+            assertEquals(TypeParameter.class, concretizationToClass.getTypeParameter().getClass());
             assertEquals(inheritance.getSuperclass(),
-                    ((TypeParameter) concretizationToClass.getGenericParameter()).getTypeContainer());
+                    ((TypeParameter) concretizationToClass.getTypeParameter()).getTypeContainer());
         }
 
     }
@@ -273,10 +273,10 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals("ArrayList", arrayList.getName());
         assertEquals(1, arrayList.numberOfTypeParameters());
 
-        assertEquals(1, ((ParametricInvocation)invocation).numberOfConcretization());
+        assertEquals(1, ((ParametricInvocation)invocation).numberOfConcretizations());
 
-        Concretization concretization = (Concretization) firstElt(((ParametricInvocation)invocation).getConcretization());
-        assertSame(firstElt(arrayList.getTypeParameters()), concretization.getGenericParameter());
+        Concretization concretization = (Concretization) firstElt(((ParametricInvocation)invocation).getConcretizations());
+        assertSame(firstElt(arrayList.getTypeParameters()), concretization.getTypeParameter());
         
     }
 
@@ -315,7 +315,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
                 TypeParameter genericT = (TypeParameter) firstElt(((ParametricClass) classT).getTypeParameters());
                 assertEquals("T", genericT.getName());
                 assertSame(classT, genericT.getTypeContainer());
-                TypeParameter concreteT = (TypeParameter) firstElt(((ParametricEntityTyping) param.getTyping()).getConcretization()).getConcreteParameter();
+                TypeParameter concreteT = (TypeParameter) firstElt(((ParametricEntityTyping) param.getTyping()).getConcretizations()).getTypeArgument();
                 assertEquals("T", concreteT.getName());
                 assertSame(meth, concreteT.getTypeContainer());
             } else if (param.getName().equals("bnd")) {
@@ -344,8 +344,8 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals(ParametricClass.class, arrayList.getClass());
         assertEquals(1, ((ParametricClass) arrayList).getTypeParameters().size());
 
-        Concretization concretization = (Concretization) firstElt(((ParametricEntityTyping)param.getTyping()).getConcretization());
-        TConcreteType b = concretization.getConcreteParameter();
+        Concretization concretization = (Concretization) firstElt(((ParametricEntityTyping)param.getTyping()).getConcretizations());
+        TTypeArgument b = concretization.getTypeArgument();
         assertSame(TypeParameter.class, b.getClass());
         assertEquals("B", ((TypeParameter)b).getName());
         assertSame(meth.getParentType(), ((TypeParameter)b).getTypeContainer());
@@ -368,10 +368,10 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals(ParametricInterface.class, myInterface.getClass());
         TImplementation implementation = firstElt(classA.getInterfaceImplementations());
         assertSame(ParametricImplementation.class, implementation.getClass());
-        assertEquals(1, ((ParametricImplementation) implementation).numberOfConcretization());
+        assertEquals(1, ((ParametricImplementation) implementation).numberOfConcretizations());
 
-        Concretization concretization = (Concretization) firstElt(((ParametricImplementation)implementation).getConcretization());
-        assertSame(firstElt(((ParametricInterface)myInterface).getTypeParameters()), concretization.getGenericParameter());
+        Concretization concretization = (Concretization) firstElt(((ParametricImplementation)implementation).getConcretizations());
+        assertSame(firstElt(((ParametricInterface)myInterface).getTypeParameters()), concretization.getTypeParameter());
     }
 
     @Test
