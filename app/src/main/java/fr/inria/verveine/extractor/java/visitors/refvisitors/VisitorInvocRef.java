@@ -90,7 +90,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			typName = fmx.getName();
 		} else {
 			Type clazz = node.getType();
-			fmx = referedType(clazz, (ContainerEntity) context.top(), true);
+			fmx = referredType(clazz, (ContainerEntity) context.top(), true);
 
 			// create an invocation to the constructor
 			if (fmx == null) {
@@ -611,7 +611,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		// ((type)expr).msg()
 		if (NodeTypeChecker.isCastExpression(expr)) {
 			Type tcast = ((CastExpression) expr).getType();
-			return referedType(tcast, (ContainerEntity) this.context.top(), true);
+			return referredType(tcast, (ContainerEntity) this.context.top(), true);
 		}
 
 		// new Class().msg()
@@ -623,7 +623,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if (NodeTypeChecker.isMethodInvocation(expr)) {
 			IMethodBinding callerBnd = ((MethodInvocation) expr).resolveMethodBinding();
 			if (callerBnd != null) {
-				return referedType(callerBnd.getReturnType(), (ContainerEntity) this.context.top(), true);
+				return referredType(callerBnd.getReturnType(), (ContainerEntity) this.context.top(), true);
 			} else {
 				return null;
 			}
@@ -644,7 +644,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if (NodeTypeChecker.isSuperMethodInvocation(expr)) {
 			IMethodBinding superBnd = ((SuperMethodInvocation) expr).resolveMethodBinding();
 			if (superBnd != null) {
-				return this.referedType(superBnd.getReturnType(), (ContainerEntity) context.topType(), true);
+				return this.referredType(superBnd.getReturnType(), (ContainerEntity) context.topType(), true);
 			} else {
 				return null;
 			}

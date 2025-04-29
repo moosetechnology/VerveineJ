@@ -6,12 +6,11 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
 
-
 @FamePackage("Famix-Traits")
 @FameDescription("TParametricAssociation")
 public interface TParametricAssociation  {
 
-        @FameProperty(name = "concretizations", opposite = "triggeringAssociation", derived = true)
+    @FameProperty(name = "concretizations", opposite = "triggeringAssociation", derived = true)
     public Collection<TConcretization> getConcretizations();
 
     public void setConcretizations(Collection<? extends TConcretization> concretizations);
@@ -31,4 +30,3 @@ public interface TParametricAssociation  {
 
 
 }
-

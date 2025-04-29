@@ -559,7 +559,7 @@ public class EntityDictionary {
 	 * @param prev -- previous reference relationship in the same context
 	 * @return the FamixReference
 	 */
-	public Reference addFamixReference(Method src, TType tgt, TAssociation prev) {
+	public Reference addFamixReference(Method src, TType tgt, TAssociation prev, ITypeBinding referredTypeBnd) {
 		if ( (src == null) || (tgt == null) ) {
 			return null;
 		}
@@ -572,7 +572,13 @@ public class EntityDictionary {
 			}
 		}
 
-		Reference ref = new Reference();
+		Reference ref;
+		if (referredTypeBnd != null && referredTypeBnd.isParameterizedType()) { // Needs checks and tests.
+			ref = (ParametricReference)buildFamixParametricAssociation(new ParametricReference(), referredTypeBnd.getErasure().getTypeParameters(), referredTypeBnd.getTypeArguments());
+		} else {
+			ref = new Reference();
+		}
+
 		ref.setReferredEntity(tgt);
 		ref.setReferencer(src);
 		chainPrevNext(prev,ref);

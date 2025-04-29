@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
-import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
@@ -63,7 +62,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration(node);
 		if (fmx != null) {
 		    for (Type excep : (List<Type>) node.thrownExceptionTypes()) {
-		    	TThrowable excepFmx =  dico.asException(this.referedType(excep, (ContainerEntity) context.topType(), true, true));
+		    	TThrowable excepFmx =  dico.asException(this.referredType(excep, (ContainerEntity) context.topType(), true, true));
 		    	dico.createFamixDeclaredException(fmx,excepFmx);
             }
 			return super.visit(node);
@@ -80,7 +79,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     @Override
     public boolean visit(ThrowStatement node) {
         Method meth = (Method) this.context.topMethod();
-        TType thrownExceptionType = this.referedType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
+        TType thrownExceptionType = this.referredType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
         TThrowable excepFmx;
         if (thrownExceptionType == null) {
             excepFmx = dico.ensureFamixException(null, "Throwable", null, false, EntityDictionary.UNKNOWN_MODIFIERS) ;
@@ -107,7 +106,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         if (meth != null) {
             TThrowable excepFmx = null;
             if ( NodeTypeChecker.isSimpleType(excepClass) || NodeTypeChecker.isQualifiedType(excepClass) ) {
-                excepFmx = dico.asException(referedType(excepClass, meth, true, true));
+                excepFmx = dico.asException(referredType(excepClass, meth, true, true));
             }
             if (excepFmx != null) {
             	dico.createFamixCaughtException(meth, excepFmx);

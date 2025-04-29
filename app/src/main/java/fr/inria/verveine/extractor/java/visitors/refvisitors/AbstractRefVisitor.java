@@ -58,8 +58,8 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 	 * @param isClass we are sure that the type is actually a class
 	 * @return a famix type or null
 	 */
-	protected <T extends TWithTypes & TNamedEntity> TType referedType(Type typ, T ctxt, boolean isClass) {
-		return referedType(typ, ctxt, isClass, /*isExcep*/false);
+	protected <T extends TWithTypes & TNamedEntity> TType referredType(Type typ, T ctxt, boolean isClass) {
+		return referredType(typ, ctxt, isClass, /*isExcep*/false);
 	}
 
 	/**
@@ -69,17 +69,17 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 	 * @param isClass we are sure that the type is actually a class
 	 * @return a famix type or null
 	 */
-	protected <T extends TWithTypes & TNamedEntity> TType referedType(Type typ, T ctxt, boolean isClass, boolean isExcep) {
+	protected <T extends TWithTypes & TNamedEntity> TType referredType(Type typ, T ctxt, boolean isClass, boolean isException) {
 		if (typ == null) {
 			return null;
 		} else if (typ.resolveBinding() != null) {
-			return this.referedType(typ.resolveBinding(), ctxt, isClass);
+			return this.referredType(typ.resolveBinding(), ctxt, isClass);
 		}
 		// from here, we assume the owner is the context
-		else if (isClass && !isExcep) {
+		else if (isClass && !isException) {
 			return dico.ensureFamixClass(null, findTypeName(typ), /*owner*/ctxt, /*isGeneric*/false,
 					EntityDictionary.UNKNOWN_MODIFIERS);
-		} else if (isExcep) {
+		} else if (isException) {
 			// return ensure FamixException
 			return dico.ensureFamixException(null, findTypeName(typ), (ContainerEntity) /*owner*/ctxt, /*isGeneric*/false,
 					EntityDictionary.UNKNOWN_MODIFIERS);
@@ -97,7 +97,7 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 		}
 	}
 
-	protected TType referedType(ITypeBinding bnd, TNamedEntity ctxt, boolean isClass) {
+	protected TType referredType(ITypeBinding bnd, TNamedEntity ctxt, boolean isClass) {
 		TType fmxTyp = null;
 
 		if (bnd == null) {

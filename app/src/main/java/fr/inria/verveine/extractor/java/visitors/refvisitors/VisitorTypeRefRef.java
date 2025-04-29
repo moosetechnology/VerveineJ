@@ -175,13 +175,13 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		if (fmx != null) {
 			if (! node.isConstructor()) {
 				ITypeBinding returnTypeBnd = (node.resolveBinding() == null) ? null : node.resolveBinding().getReturnType();
-				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, referedType(node.getReturnType2(), fmx, false));
+				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, referredType(node.getReturnType2(), fmx, false));
 			}
 
 			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
 				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
 				if (fmxParam != null) {
-					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, referedType(param.getType(), fmx, false));
+					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, referredType(param.getType(), fmx, false));
 				}
 			}
 
@@ -219,8 +219,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(InstanceofExpression node) {
-		TType fmx = referedType(node.getRightOperand(), (ContainerEntity) context.top(), true);
-		addReference( node, fmx);
+		TType fmx = referredType(node.getRightOperand(), (ContainerEntity) context.top(), true);
+		addReference( node, fmx, node.resolveTypeBinding());
 		return super.visit(node);
 	}
 
@@ -267,7 +267,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public boolean visit(SingleVariableDeclaration node) {
 		setVariableDeclaredType(
 			node, 
-			referedType(
+			referredType(
 				node.getType(), 
 				(org.moosetechnology.model.famix.famixjavaentities.Type) context.topType(),
 				false));
@@ -297,8 +297,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(TypeLiteral node) {
-		TType fmx = referedType(node.getType(), (ContainerEntity) context.top(), true);
-		addReference( node, fmx);
+		TType fmx = referredType(node.getType(), (ContainerEntity) context.top(), true);
+		addReference(node, fmx, node.resolveTypeBinding());
 		return(false);
 	}
 
@@ -306,8 +306,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		IBinding qualifierBinding = node.getQualifier().resolveBinding();
 
 		if ((qualifierBinding != null) && (qualifierBinding.getKind() == IBinding.TYPE)) {
-			TType fmx = referedType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top(), true);
-			addReference( node, fmx);
+			TType fmx = referredType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top(), true);
+			addReference(node, fmx, (ITypeBinding) qualifierBinding);
 		}
 
 		return false;
@@ -340,8 +340,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	    if (this.searchTypeRef) {
 			IBinding bnd = node.resolveBinding();
 			if ((bnd != null) && (bnd.getKind() == IBinding.TYPE)) {
-				org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referedType((ITypeBinding) bnd, (ContainerEntity) context.top(), !((ITypeBinding) bnd).isEnum());
-				Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference());
+				org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referredType((ITypeBinding) bnd, (ContainerEntity) context.top(), !((ITypeBinding) bnd).isEnum());
+				Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference(), (ITypeBinding) bnd);
 				context.setLastReference(ref);
 				if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
 					dico.addSourceAnchor(ref, node);
@@ -359,10 +359,10 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	 * </pre>
 	 */
 	public boolean visit(CastExpression node) {
-		IBinding bnd = node.getType().resolveBinding();
+		ITypeBinding bnd = node.getType().resolveBinding();
 		if (bnd != null) {
-			org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referedType((ITypeBinding) bnd, null, !((ITypeBinding) bnd).isEnum());
-			Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference());
+			org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referredType(bnd, null, !bnd.isEnum());
+			Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference(), bnd);
 			context.setLastReference(ref);
 			if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
 				dico.addSourceAnchor(ref, node);
@@ -378,7 +378,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	private <T extends TWithTypes & TNamedEntity> boolean visitVariablesDeclaration(List<VariableDeclaration> fragments, Type declType) {
 		for (VariableDeclaration varDecl : fragments) {
-			TType declaredType = referedType(declType, (T) context.topType(), false);
+			TType declaredType = referredType(declType, (T) context.topType(), false);
 			setVariableDeclaredType( varDecl, declaredType);
 			varDecl.accept(this);
 		}
@@ -397,8 +397,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	 *
 	 * <code>node</code> might be required to get the <code>sourceAnchor</code> of the <code>Reference</code>
 	 */
-	protected void addReference( ASTNode node, TType fmx) {
-		Reference ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference());
+	protected void addReference( ASTNode node, TType fmx, ITypeBinding bnd) {
+		Reference ref = dico.addFamixReference((Method) context.top(), fmx, context.getLastReference(), bnd);
 
 		context.setLastReference(ref);
 		if (options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) {
