@@ -6,32 +6,22 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
-import org.moosetechnology.model.famix.famixtraits.TConcreteParameterType;
+import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameterConcretization;
-import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TReference;
-import org.moosetechnology.model.famix.famixtraits.TReferenceable;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Type")
-public class Type extends ContainerEntity implements TBound, TConcreteParameterType, TEntityMetaLevelDependency, TNamedEntity, TReferenceable, TSourceEntity, TType, TWithMethods {
-
-    private Collection<TParametricEntity> concreteEntities; 
-
-    private Collection<TParameterConcretization> generics; 
+public class Type extends ContainerEntity implements TBound, TType, TWithMethods {
 
     private Collection<TReference> incomingReferences; 
+
+    private Collection<TEntityTyping> incomingTypings; 
 
     private Boolean isStub;
     
@@ -47,88 +37,12 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
     
     private TWithTypes typeContainer;
     
-    private Collection<TTypedEntity> typedEntities; 
-
     private Collection<TBounded> upperBoundedWildcards; 
 
 
 
     @FameProperty(name = "isInnerClass", derived = true)
     public Boolean getIsInnerClass() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "isJUnit4TestCase", derived = true)
-    public Boolean getIsJUnit4TestCase() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "isTestCase", derived = true)
-    public Boolean getIsTestCase() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "concreteEntities", opposite = "concreteParameters", derived = true)
-    public Collection<TParametricEntity> getConcreteEntities() {
-        if (concreteEntities == null) {
-            concreteEntities = new MultivalueSet<TParametricEntity>() {
-                @Override
-                protected void clearOpposite(TParametricEntity e) {
-                    e.getConcreteParameters().remove(Type.this);
-                }
-                @Override
-                protected void setOpposite(TParametricEntity e) {
-                    e.getConcreteParameters().add(Type.this);
-                }
-            };
-        }
-        return concreteEntities;
-    }
-    
-    public void setConcreteEntities(Collection<? extends TParametricEntity> concreteEntities) {
-        this.getConcreteEntities().clear();
-        this.getConcreteEntities().addAll(concreteEntities);
-    }
-    
-    public void addConcreteEntities(TParametricEntity one) {
-        this.getConcreteEntities().add(one);
-    }   
-    
-    public void addConcreteEntities(TParametricEntity one, TParametricEntity... many) {
-        this.getConcreteEntities().add(one);
-        for (TParametricEntity each : many)
-            this.getConcreteEntities().add(each);
-    }   
-    
-    public void addConcreteEntities(Iterable<? extends TParametricEntity> many) {
-        for (TParametricEntity each : many)
-            this.getConcreteEntities().add(each);
-    }   
-                
-    public void addConcreteEntities(TParametricEntity[] many) {
-        for (TParametricEntity each : many)
-            this.getConcreteEntities().add(each);
-    }
-    
-    public int numberOfConcreteEntities() {
-        return getConcreteEntities().size();
-    }
-
-    public boolean hasConcreteEntities() {
-        return !getConcreteEntities().isEmpty();
-    }
-
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
@@ -145,57 +59,6 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "generics", opposite = "concreteParameter", derived = true)
-    public Collection<TParameterConcretization> getGenerics() {
-        if (generics == null) {
-            generics = new MultivalueSet<TParameterConcretization>() {
-                @Override
-                protected void clearOpposite(TParameterConcretization e) {
-                    e.setConcreteParameter(null);
-                }
-                @Override
-                protected void setOpposite(TParameterConcretization e) {
-                    e.setConcreteParameter(Type.this);
-                }
-            };
-        }
-        return generics;
-    }
-    
-    public void setGenerics(Collection<? extends TParameterConcretization> generics) {
-        this.getGenerics().clear();
-        this.getGenerics().addAll(generics);
-    }                    
-    
-        
-    public void addGenerics(TParameterConcretization one) {
-        this.getGenerics().add(one);
-    }   
-    
-    public void addGenerics(TParameterConcretization one, TParameterConcretization... many) {
-        this.getGenerics().add(one);
-        for (TParameterConcretization each : many)
-            this.getGenerics().add(each);
-    }   
-    
-    public void addGenerics(Iterable<? extends TParameterConcretization> many) {
-        for (TParameterConcretization each : many)
-            this.getGenerics().add(each);
-    }   
-                
-    public void addGenerics(TParameterConcretization[] many) {
-        for (TParameterConcretization each : many)
-            this.getGenerics().add(each);
-    }
-    
-    public int numberOfGenerics() {
-        return getGenerics().size();
-    }
-
-    public boolean hasGenerics() {
-        return !getGenerics().isEmpty();
-    }
-
     @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences() {
         if (incomingReferences == null) {
@@ -245,6 +108,57 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
 
     public boolean hasIncomingReferences() {
         return !getIncomingReferences().isEmpty();
+    }
+
+    @FameProperty(name = "incomingTypings", opposite = "declaredType", derived = true)
+    public Collection<TEntityTyping> getIncomingTypings() {
+        if (incomingTypings == null) {
+            incomingTypings = new MultivalueSet<TEntityTyping>() {
+                @Override
+                protected void clearOpposite(TEntityTyping e) {
+                    e.setDeclaredType(null);
+                }
+                @Override
+                protected void setOpposite(TEntityTyping e) {
+                    e.setDeclaredType(Type.this);
+                }
+            };
+        }
+        return incomingTypings;
+    }
+    
+    public void setIncomingTypings(Collection<? extends TEntityTyping> incomingTypings) {
+        this.getIncomingTypings().clear();
+        this.getIncomingTypings().addAll(incomingTypings);
+    }                    
+    
+        
+    public void addIncomingTypings(TEntityTyping one) {
+        this.getIncomingTypings().add(one);
+    }   
+    
+    public void addIncomingTypings(TEntityTyping one, TEntityTyping... many) {
+        this.getIncomingTypings().add(one);
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }   
+    
+    public void addIncomingTypings(Iterable<? extends TEntityTyping> many) {
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }   
+                
+    public void addIncomingTypings(TEntityTyping[] many) {
+        for (TEntityTyping each : many)
+            this.getIncomingTypings().add(each);
+    }
+    
+    public int numberOfIncomingTypings() {
+        return getIncomingTypings().size();
+    }
+
+    public boolean hasIncomingTypings() {
+        return !getIncomingTypings().isEmpty();
     }
 
     @FameProperty(name = "isDead", derived = true)
@@ -442,12 +356,6 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)
     public TSourceAnchor getSourceAnchor() {
         return sourceAnchor;
@@ -489,57 +397,6 @@ public class Type extends ContainerEntity implements TBound, TConcreteParameterT
         typeContainer.getTypes().add(this);
     }
     
-    @FameProperty(name = "typedEntities", opposite = "declaredType", derived = true)
-    public Collection<TTypedEntity> getTypedEntities() {
-        if (typedEntities == null) {
-            typedEntities = new MultivalueSet<TTypedEntity>() {
-                @Override
-                protected void clearOpposite(TTypedEntity e) {
-                    e.setDeclaredType(null);
-                }
-                @Override
-                protected void setOpposite(TTypedEntity e) {
-                    e.setDeclaredType(Type.this);
-                }
-            };
-        }
-        return typedEntities;
-    }
-    
-    public void setTypedEntities(Collection<? extends TTypedEntity> typedEntities) {
-        this.getTypedEntities().clear();
-        this.getTypedEntities().addAll(typedEntities);
-    }                    
-    
-        
-    public void addTypedEntities(TTypedEntity one) {
-        this.getTypedEntities().add(one);
-    }   
-    
-    public void addTypedEntities(TTypedEntity one, TTypedEntity... many) {
-        this.getTypedEntities().add(one);
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }   
-    
-    public void addTypedEntities(Iterable<? extends TTypedEntity> many) {
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }   
-                
-    public void addTypedEntities(TTypedEntity[] many) {
-        for (TTypedEntity each : many)
-            this.getTypedEntities().add(each);
-    }
-    
-    public int numberOfTypedEntities() {
-        return getTypedEntities().size();
-    }
-
-    public boolean hasTypedEntities() {
-        return !getTypedEntities().isEmpty();
-    }
-
     @FameProperty(name = "upperBoundedWildcards", opposite = "upperBound", derived = true)
     public Collection<TBounded> getUpperBoundedWildcards() {
         if (upperBoundedWildcards == null) {

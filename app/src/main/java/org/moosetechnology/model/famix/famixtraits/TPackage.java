@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TPackage")
-public interface TPackage extends TNamedEntity, TSourceEntity, TEntityMetaLevelDependency {
+public interface TPackage extends TNamedEntity, TEntityMetaLevelDependency, TCanBeStub {
 
         @FameProperty(name = "weightedMethodCount", derived = true)
     public Number getWeightedMethodCount();

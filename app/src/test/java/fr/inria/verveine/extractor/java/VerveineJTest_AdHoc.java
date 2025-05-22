@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -23,31 +24,10 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.moosetechnology.model.famix.famixjavaentities.Access;
-import org.moosetechnology.model.famix.famixjavaentities.Attribute;
-import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
-import org.moosetechnology.model.famix.famixjavaentities.EnumValue;
-import org.moosetechnology.model.famix.famixjavaentities.Interface;
-import org.moosetechnology.model.famix.famixjavaentities.Invocation;
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.NamedEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
-import org.moosetechnology.model.famix.famixjavaentities.Type;
-import org.moosetechnology.model.famix.famixtraits.TAccess;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TEnumValue;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TLocalVariable;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParameter;
-import org.moosetechnology.model.famix.famixtraits.TReference;
-import org.moosetechnology.model.famix.famixtraits.TType;
+import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
 
@@ -131,31 +111,30 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(3, methOutgoingInvocations.size());
 
 		// test invocations' signatures
-		for (TInvocation tinvok : methOutgoingInvocations) {
-			Invocation invok = (Invocation) tinvok;
-			Method invoked = (Method) firstElt(invok.getCandidates());
+		for (var invocation : methOutgoingInvocations) {
+			Method invoked = (Method) firstElt(invocation.getCandidates());
 			assertTrue("Unexpected invoked signature: " + invoked.getSignature(),
-					invok.getSignature().equals("DefaultConstructor()")
-							|| invok.getSignature().equals("JFrame(\"My title\")")
-							|| invok.getSignature().equals("methodWithInstanceScope()"));
+					invocation.getSignature().equals("DefaultConstructor()")
+							|| invocation.getSignature().equals("JFrame(\"My title\")")
+							|| invocation.getSignature().equals("methodWithInstanceScope()"));
 		}
 
 		// test constructors
-		Collection<Method> defaultContructors = entitiesNamed( Method.class, "DefaultConstructor");
-		assertEquals(2, defaultContructors.size());
-		for (Method m : defaultContructors) {
+		Collection<Method> defaultConstructors = entitiesNamed( Method.class, "DefaultConstructor");
+		assertEquals(2, defaultConstructors.size());
+		for (Method m : defaultConstructors) {
 			int nbParam = m.getParameters().size();
 			assertTrue( (nbParam == 0) || (nbParam == 1) );
 			assertEquals(1, m.getIncomingInvocations().size());
 			assertEquals(1, m.getOutgoingInvocations().size());
 		}
 
-		for (Method m : defaultContructors) {
-			Invocation invok = (Invocation) firstElt(m.getOutgoingInvocations());
-			if (m.getParameters().size() == 0) {
-				assertEquals("this(\"For testing\")", invok.getSignature());
+		for (Method m : defaultConstructors) {
+			Invocation invocation = (Invocation) firstElt(m.getOutgoingInvocations());
+			if (m.getParameters().isEmpty()) {
+				assertEquals("this(\"For testing\")", invocation.getSignature());
 			} else {
-				assertEquals("super(why)", invok.getSignature());
+				assertEquals("super(why)", invocation.getSignature());
 			}
 		}
 
@@ -166,8 +145,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		// get called method in InvokWithFullPath
 		methOutgoingInvocations = meth.getOutgoingInvocations();
 		assertEquals(1, methOutgoingInvocations.size());
-		Invocation invok = (Invocation) firstElt(methOutgoingInvocations);
-		assertEquals("Book(\"The Monster Book of Monsters\",\"Hagrid\")", invok.getSignature());
+		Invocation invocation = (Invocation) firstElt(methOutgoingInvocations);
+		assertEquals("Book(\"The Monster Book of Monsters\",\"Hagrid\")", invocation.getSignature());
 	}
 
 	@ Test
@@ -243,13 +222,13 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		ParametricClass dico = null;
 		 Collection<ParametricClass> dicts = entitiesNamed(ParametricClass.class, "Dictionary");
 	        for(ParametricClass c : dicts) {
-	        	if(!c.getIsStub() && c.getGenericParameters().size() == 1 && firstElt(c.getGenericParameters()).getName().equals("B")) {
+	        	if(!c.getIsStub() && c.getTypeParameters().size() == 1 && ((Type)firstElt(c.getTypeParameters())).getName().equals("B")) {
 	        		dico = c;
 	        		break;
 	        	}
 	        }
 		assertNotNull(dico);
-		assertEquals(8 + 2, dico.getMethods().size()); // 8 methods and 2 method concretisations
+		assertEquals(8, dico.getMethods().size());
 		assertEquals(3, dico.getAttributes().size());
 
 		for (TAttribute ta : dico.getAttributes()) {
@@ -338,8 +317,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	public void testArrayListMatthias() {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
 
-		assertEquals(9, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); // Bla, Object, String, List, ArrayList, Arrays,Comparable,Serializable,CharSequence, AbstractList, AbstractCollection, Collection, Cloneable, RandomAccess, Iterable, ConstantDesc, Constable
-		assertEquals(5, entitiesOfType(ParametricClass.class).size());
+		assertEquals(7, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); // Classes are : Bla, Object, String, ArrayList, Arrays, AbstractList, AbstractCollection
+		assertEquals(3, entitiesOfType(ParametricClass.class).size()); // Parametric classes are : ArrayList, AbstractList, AbstractCollection
 		
 		// compute all interfaces used by the 3 types String, ArrayList, Arrays
 		Set<java.lang.Class<?>> allInterfaces = new HashSet<>();
@@ -358,10 +337,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		ArrayList<Interface> withoutConcret = new ArrayList<Interface>();
 		for(Interface inter: entitiesOfType(Interface.class)) {
 			if(inter instanceof ParametricInterface) {
-				if(((ParametricInterface)inter).getGenericization() == null) {
 					genericInters.add(inter);
 					withoutConcret.add(inter);
-				}
 			}else {
 				withoutConcret.add(inter);
 			}
@@ -381,27 +358,23 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		Method meth = detectFamixElement( Method.class, "getEntityByName");
 		assertNotNull(meth);
 		assertEquals(3, meth.getLocalVariables().size());
-		for (TLocalVariable tvar : meth.getLocalVariables()) {
-			LocalVariable var = (LocalVariable) tvar;
-			Type collec;
-			if (var.getName().equals("ret")) {
-				collec = (Type) var.getDeclaredType();
-				assertNotNull(collec);
-				assertEquals("Collection", collec.getName());
-				assertEquals(ParametricInterface.class, collec.getClass());
-				assertEquals(1, ((ParametricInterface) collec).getConcreteParameters().size());
-				Type t = (Type) firstElt(((ParametricInterface) collec).getConcreteParameters());
-				assertEquals("T", t.getName());
-				assertSame(meth, Util.getOwner(t));
-			}
-			if (var.getName().equals("l_name")) {
-				collec = (Type) var.getDeclaredType();
-				assertNotNull(collec);
-				assertEquals("Collection", collec.getName());
-				assertEquals(ParametricInterface.class, collec.getClass());
-				assertEquals(1, ((ParametricInterface)collec).getConcreteParameters().size());
-				Type ne = (Type)firstElt( ((ParametricInterface)collec).getConcreteParameters());
-				assertEquals("NamedEntity", ne.getName());
+		for (var var : meth.getLocalVariables()) {
+			if (!var.getName().equals("obj")) {
+				Type collection = (Type) var.getDeclaredType();
+				assertNotNull(collection);
+				assertEquals("Collection", collection.getName());
+				assertEquals(ParametricInterface.class, collection.getClass());
+				// Type parameter of the generic interface Collection is E.
+				assertEquals(1, ((ParametricInterface) collection).numberOfTypeParameters());
+				Type e = (Type) firstElt(((ParametricInterface) collection).getTypeParameters());
+				assertEquals("E", e.getName());
+				// E is defined in Collection. Collection is its owner
+				assertSame(collection, Util.getOwner(e));
+				// The entity typing is associated with a concretization from E to T.
+				assertSame(ParametricEntityTyping.class, var.getTyping().getClass());
+				assertEquals(1, ((ParametricEntityTyping) var.getTyping()).numberOfConcretizations());
+				TConcretization concretization = firstElt(((ParametricEntityTyping)var.getTyping()).getConcretizations());
+				assertSame(concretization.getTypeParameter(), e);
 			}
 		}
 	}
@@ -419,7 +392,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
 		// java.lang.Enum entity
-		ParametricClass javaLangEnum = (ParametricClass)genericEntityNamed("Enum");
+		ParametricClass javaLangEnum = firstEntityNamed(ParametricClass.class, "Enum");
 		assertNotNull(javaLangEnum);
 		assertEquals("lang", Util.getOwner(javaLangEnum).getName());
 		assertEquals(ParametricClass.class, javaLangEnum.getClass());
@@ -436,7 +409,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, rk.getSuperInheritances().size());
 		Type rkSuper = (Type) firstElt(rk.getSuperInheritances()).getSuperclass();
 		assertEquals(ParametricClass.class, rkSuper.getClass());
-		assertEquals(javaLangEnum, ((ParametricClass) rkSuper).getGenericization().getGenericEntity());
+		assertEquals(javaLangEnum, ((ParametricClass) rkSuper));
 
 		// declared enum: Suit 
 		org.moosetechnology.model.famix.famixjavaentities.Enum st = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Suit");
@@ -444,7 +417,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, st.getSuperInheritances().size());
 		Type stSuper = (Type) firstElt(st.getSuperInheritances()).getSuperclass();
 		assertEquals(ParametricClass.class, stSuper.getClass());
-		assertEquals(javaLangEnum, ((ParametricClass) stSuper).getGenericization().getGenericEntity());
+		assertEquals(javaLangEnum, ((ParametricClass) stSuper));
 		assertEquals(4, st.getEnumValues().size());
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(st));
 
@@ -454,11 +427,11 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, pl.getSuperInheritances().size());
 		Type plSuper = (Type) firstElt(pl.getSuperInheritances()).getSuperclass();
 		assertEquals(ParametricClass.class, plSuper.getClass());
-		assertEquals(javaLangEnum,((ParametricClass) plSuper).getGenericization().getGenericEntity());
+		assertEquals(javaLangEnum,((ParametricClass) plSuper));
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(pl));
 		assertEquals(8, pl.getEnumValues().size());
 		assertEquals(4, pl.getAttributes().size());
-		assertEquals(7 + 2, pl.getMethods().size()); // 7 methods + <initializer> + implicit used: values()
+		assertEquals(7 + 2, pl.getMethods().size()); // 7 methods + <initializer> + values
 	}
 
 	@Test

@@ -5,13 +5,12 @@ import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import org.moosetechnology.model.famix.famixtraits.THasImmediateSource;
-import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("SourceTextAnchor")
-public class SourceTextAnchor extends SourceAnchor implements THasImmediateSource, TSourceAnchor {
+public class SourceTextAnchor extends SourceAnchor implements THasImmediateSource {
 
     private TSourceEntity element;
     

@@ -154,7 +154,7 @@ public class VerveineJParser {
 
 	/**
 	 * Outputs the repository to an opened Stream according to the format in options
-	 * also add to it a SourceLanguage entity if their is none.
+	 * also add to it a SourceLanguage entity if there is none.
 	 * The SourceLanguage entity is the one returned by getMyLgge().
 	 *
 	 * @param output

@@ -4,42 +4,30 @@ package org.moosetechnology.model.famix.famixtraits;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import java.util.*;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TConcretization")
-public interface TConcretization extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
+public interface TConcretization extends TAssociation {
 
-        @FameProperty(name = "genericEntity", opposite = "concretizations")
-    public TParametricEntity getGenericEntity();
+    @FameProperty(name = "typeParameter", opposite = "concretizations")
+    public TTypeParameter getTypeParameter();
 
-    public void setGenericEntity(TParametricEntity genericEntity);
+    public void setTypeParameter(TTypeParameter typeParameter);
 
-    @FameProperty(name = "concreteEntity", opposite = "genericization")
-    public TParametricEntity getConcreteEntity();
+    @FameProperty(name = "typeArgument", opposite = "outgoingConcretizations")
+    public TTypeArgument getTypeArgument();
 
-    public void setConcreteEntity(TParametricEntity concreteEntity);
+    public void setTypeArgument(TTypeArgument typeArgument);
 
-    @FameProperty(name = "parameterConcretizations", opposite = "concretizations", derived = true)
-    public Collection<TParameterConcretization> getParameterConcretizations();
+    @FameProperty(name = "triggeringAssociation", opposite = "concretizations")
+    public TParametricAssociation getTriggeringAssociation();
 
-    public void setParameterConcretizations(Collection<? extends TParameterConcretization> parameterConcretizations);
-
-    public void addParameterConcretizations(TParameterConcretization one);
-
-    public void addParameterConcretizations(TParameterConcretization one, TParameterConcretization... many);
-
-    public void addParameterConcretizations(Iterable<? extends TParameterConcretization> many);
-
-    public void addParameterConcretizations(TParameterConcretization[] many);
-
-    public int numberOfParameterConcretizations();
-
-    public boolean hasParameterConcretizations();
+    public void setTriggeringAssociation(TParametricAssociation triggeringAssociation);
 
 
 
 }
+
+
 

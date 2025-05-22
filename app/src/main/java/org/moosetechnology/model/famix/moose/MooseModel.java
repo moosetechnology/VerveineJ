@@ -17,7 +17,6 @@ public class MooseModel {
 		metamodel.with(org.moosetechnology.model.famix.moose.Group.class);
 		metamodel.with(org.moosetechnology.model.famix.moose.Model.class);
 		metamodel.with(org.moosetechnology.model.famix.moose.Object.class);
-		metamodel.with(org.moosetechnology.model.famix.moose.PropertyGroup.class);
 		metamodel.with(org.moosetechnology.model.famix.moose.SpecializedGroup.class);
 
     }

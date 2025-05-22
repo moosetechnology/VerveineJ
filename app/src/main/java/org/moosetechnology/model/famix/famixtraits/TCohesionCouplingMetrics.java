@@ -4,12 +4,11 @@ package org.moosetechnology.model.famix.famixtraits;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TCohesionCouplingMetrics")
-public interface TCohesionCouplingMetrics extends TPackage, TNamedEntity, TSourceEntity, TEntityMetaLevelDependency {
+public interface TCohesionCouplingMetrics extends TPackage {
 
         @FameProperty(name = "efferentCoupling", derived = true)
     public Number getEfferentCoupling();

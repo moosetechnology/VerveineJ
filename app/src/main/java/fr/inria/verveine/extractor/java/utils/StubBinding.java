@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>Only used for entities that may contain other entities (ie types and methods)</p>
  * @author Anquetil
  */
-public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
+public class StubBinding implements ITypeBinding, IMethodBinding {
     public final static int UNKNOWN_KIND = 0;  // not used in IBinding
 
 
@@ -184,6 +184,9 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     // ITypeBinding methods
+
+    @Override
+    public boolean isRecord() { return false; }
 
     @Override
     public IPackageBinding getPackage() {
@@ -442,6 +445,28 @@ public class StubBinding implements IBinding, ITypeBinding, IMethodBinding {
     }
 
     // IMethodBinding methods
+
+    @Override
+    public String[] getParameterNames() {
+        return new String[0];
+    }
+
+    @Override
+    public boolean isSyntheticRecordMethod() { return false; }
+
+
+    @Override
+    public IVariableBinding[] getSyntheticOuterLocals() {
+        return new IVariableBinding[0];
+    }
+
+    @Override
+    public boolean    isCanonicalConstructor() {
+        return false;
+    }
+
+    @Override
+    public boolean    isCompactConstructor() { return false;}
 
     @Override
     public boolean isConstructor() {

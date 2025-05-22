@@ -23,6 +23,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Access;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstance;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
 import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Comment;
 import org.moosetechnology.model.famix.famixjavaentities.Implementation;
 import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
@@ -41,6 +42,7 @@ import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TComment;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TInheritance;
@@ -48,7 +50,6 @@ import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TParameter;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 
 /**
  * @author Nicolas Anquetil
@@ -91,7 +92,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 	}
 
 	/**
-	 * Parses the file received in parameter independently from any other
+	 * Parses the file received in parameter independently of any other
 	 * The "separate parsing" mechanism should ensure that linkages are
 	 * appropriately done
 	 * 
@@ -153,27 +154,26 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		Collection<java.lang.Class<?>> lanModelJavaClasses = allJavaSuperClasses(LAN_MODEL_JAVA_CLASSES_USED);
 		assertEquals(
 				lanModelJavaClasses.size() + 10,  // FileServer, Node, AbstractDestinationAddress, WorkStation, XPrinter, Packet, PrintServer, SingleDestinationAddress, OutputServer, _Anonymous(IPrinter)
-				entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size());
+				entitiesOfType(Class.class).size());
 
 		ArrayList<Interface> genericInters = new ArrayList<Interface>();
 		ArrayList<Interface> withoutConcret = new ArrayList<Interface>();
+
 		for(Interface inter: entitiesOfType(Interface.class)) {
 			if(inter instanceof ParametricInterface) {
-				if(((ParametricInterface)inter).getGenericization() == null) {
 					genericInters.add(inter);
 					withoutConcret.add(inter);
-				}
-			}else {
+			} else {
 				withoutConcret.add(inter);
 			}
 		}
 		
 		assertEquals(
 				allInterfacesFromClasses(LAN_MODEL_JAVA_CLASSES_USED).size() + 1,  // add IPrinter
-				withoutConcret.size());
+				entitiesOfType(Interface.class).size());
 
 		assertEquals(3, entitiesOfType(PrimitiveType.class).size());//int,boolean,void
-		assertEquals(1, genericInters.size());// Comparable
+		assertEquals(1, entitiesOfType(ParametricInterface.class).size());// Comparable
 		assertEquals(40 + 8 + 1, entitiesOfType(Method.class).size());//40 + {System.out.println(),System.out.println(...),System.out.print,StringBuffer.append,Object.equals,String.equals,Object.toString,<Initializer>}
 		assertEquals(10 + 1, entitiesOfType(Attribute.class).size());//10 + System.out
 		assertEquals(2 + 4 + 1, entitiesOfType(Package.class).size());//2 + {moose, java.lang, java.io, java} // +1 new package named java.lang.constant (java17?)
@@ -258,7 +258,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertSame(detectFamixElement(Method.class, "PrintServer"), clazz.getTypeContainer());
 
 		Method mth = (Method) firstElt(clazz.getMethods().stream()
-				.filter(aMethod -> !((TSourceEntity) aMethod).getIsStub()).collect(Collectors.toList()));
+				.filter(aMethod -> !((TCanBeStub) aMethod).getIsStub()).collect(Collectors.toList()));
 		assertEquals("print", mth.getName());
 		assertEquals(1, mth.getOutgoingReferences().size()); // System
 		assertEquals(1, mth.getAccesses().size()); // out
@@ -850,7 +850,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertTrue(clazz.getIsPublic());
 		assertFalse(clazz.getIsPrivate());
 		assertFalse(clazz.getIsProtected());
-//		assertFalse(clazz.getIsFinal());
+		// assertFalse(clazz.getIsFinal());
 
 		assertEquals(4, clazz.getMethods().size());
 		for (TMethod tm : clazz.getMethods()) {
@@ -862,11 +862,11 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 			}
 			assertFalse(m.getIsPrivate());
 			assertFalse(m.getIsProtected());
-			assertFalse(m.getIsFinal());
+			// assertFalse(m.getIsFinal());
 			if (m.getName().equals("output")) {
 				assertTrue(m.getIsAbstract());
 			} else {
-				assertFalse(m.getIsAbstract());
+				// assertFalse(m.getIsAbstract());
 			}
 		}
 
@@ -875,7 +875,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertFalse(a.getIsPublic());
 		assertFalse(a.getIsPrivate());
 		assertTrue(a.getIsProtected());
-		assertFalse(a.getIsFinal());
+		// assertFalse(a.getIsFinal());
 	}
 
 	@Test

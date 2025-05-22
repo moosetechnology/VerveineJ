@@ -5,9 +5,8 @@ import fr.inria.verveine.extractor.java.utils.Util;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
 
 import static org.junit.Assert.assertEquals;
@@ -66,7 +65,7 @@ public abstract class VerveineJTest_Basic {
 
 		found = false;
 		for (TStructuralEntity e : repo.all(TStructuralEntity.class)) {
-			if (!((TSourceEntity) e).getIsStub()) {
+			if (!((TCanBeStub) e).getIsStub()) {
 				assertNotNull("a StructuralEntity '" + ((TNamedEntity) e).getName() + "' does not belong to anything", Util.getOwner(e));
 				found = true;
 			}
@@ -238,19 +237,10 @@ public abstract class VerveineJTest_Basic {
         return ret;
     }
     
-    public TParametricEntity genericEntityNamed(String name) {
-    	Collection<NamedEntity> candidates = entitiesNamed( NamedEntity.class, name);
-    	TParametricEntity selected = null;
-    	
-    	for(NamedEntity ne: candidates) {
-    		if(ne instanceof TParametricEntity && ((TParametricEntity)ne).getGenericization() == null) {
-    			selected = (TParametricEntity)ne;
-    		}
-    	}
-    	
-    	return selected;
-    	
-    }
+	public <T extends NamedEntity> T firstEntityNamed(Class<T> famixClass, String name) {
+		return firstElt(entitiesNamed(famixClass, name));
+	}
+
   
 	// --------------------------------------------------
     //  computing super-classes and implemented interfaces

@@ -10,6 +10,8 @@ import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TComment;
+
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
@@ -21,6 +23,8 @@ import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TPackage;
 import org.moosetechnology.model.famix.famixtraits.TPackageable;
+import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
 import org.moosetechnology.model.famix.famixtraits.TWithImports;
@@ -30,13 +34,17 @@ import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Interface")
-public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, THasVisibility, TImplementable, TImportable, TInvocationsReceiver, TPackageable, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
+public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, TTypeArgument, THasVisibility, TImplementable, TImportable, TInvocationsReceiver, TPackageable, TWithAttributes, TWithComments, TWithImports, TWithInheritances, TWithMethods {
 
     private Collection<TAttribute> attributes; 
 
     private Collection<TComment> comments; 
 
+    private Collection<TParametricEntity> genericEntities; 
+
     private Collection<TImplementation> implementations; 
+
+    private Collection<TImport> imports; 
 
     private Collection<TImport> incomingImports; 
 
@@ -46,7 +54,7 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, THa
     
     private Collection<TMethod> methods; 
 
-    private Collection<TImport> outgoingImports; 
+    private Collection<TConcretization> outgoingConcretizations; 
 
     private TPackage parentPackage;
     
@@ -162,6 +170,7 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, THa
         return !getComments().isEmpty();
     }
 
+
     @FameProperty(name = "hasComments", derived = true)
     public Boolean getHasComments() {
         // TODO: this is a derived property, implement this method manually.
@@ -223,6 +232,57 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, THa
 
     public boolean hasImplementations() {
         return !getImplementations().isEmpty();
+    }
+
+    @FameProperty(name = "imports", opposite = "importingEntity", derived = true)
+    public Collection<TImport> getImports() {
+        if (imports == null) {
+            imports = new MultivalueSet<TImport>() {
+                @Override
+                protected void clearOpposite(TImport e) {
+                    e.setImportingEntity(null);
+                }
+                @Override
+                protected void setOpposite(TImport e) {
+                    e.setImportingEntity(Interface.this);
+                }
+            };
+        }
+        return imports;
+    }
+    
+    public void setImports(Collection<? extends TImport> imports) {
+        this.getImports().clear();
+        this.getImports().addAll(imports);
+    }                    
+    
+        
+    public void addImports(TImport one) {
+        this.getImports().add(one);
+    }   
+    
+    public void addImports(TImport one, TImport... many) {
+        this.getImports().add(one);
+        for (TImport each : many)
+            this.getImports().add(each);
+    }   
+    
+    public void addImports(Iterable<? extends TImport> many) {
+        for (TImport each : many)
+            this.getImports().add(each);
+    }   
+                
+    public void addImports(TImport[] many) {
+        for (TImport each : many)
+            this.getImports().add(each);
+    }
+    
+    public int numberOfImports() {
+        return getImports().size();
+    }
+
+    public boolean hasImports() {
+        return !getImports().isEmpty();
     }
 
     @FameProperty(name = "incomingImports", opposite = "importedEntity", derived = true)
@@ -405,55 +465,55 @@ public class Interface extends Type implements TCanBeClassSide, TCanBeFinal, THa
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
-    @FameProperty(name = "outgoingImports", opposite = "importingEntity", derived = true)
-    public Collection<TImport> getOutgoingImports() {
-        if (outgoingImports == null) {
-            outgoingImports = new MultivalueSet<TImport>() {
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
                 @Override
-                protected void clearOpposite(TImport e) {
-                    e.setImportingEntity(null);
+                protected void clearOpposite(TConcretization e) {
+                    e.setTypeArgument(null);
                 }
                 @Override
-                protected void setOpposite(TImport e) {
-                    e.setImportingEntity(Interface.this);
+                protected void setOpposite(TConcretization e) {
+                    e.setTypeArgument(Interface.this);
                 }
             };
         }
-        return outgoingImports;
+        return outgoingConcretizations;
     }
     
-    public void setOutgoingImports(Collection<? extends TImport> outgoingImports) {
-        this.getOutgoingImports().clear();
-        this.getOutgoingImports().addAll(outgoingImports);
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
     }                    
     
         
-    public void addOutgoingImports(TImport one) {
-        this.getOutgoingImports().add(one);
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
     }   
     
-    public void addOutgoingImports(TImport one, TImport... many) {
-        this.getOutgoingImports().add(one);
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
     }   
     
-    public void addOutgoingImports(Iterable<? extends TImport> many) {
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
     }   
                 
-    public void addOutgoingImports(TImport[] many) {
-        for (TImport each : many)
-            this.getOutgoingImports().add(each);
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
     }
     
-    public int numberOfOutgoingImports() {
-        return getOutgoingImports().size();
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
     }
 
-    public boolean hasOutgoingImports() {
-        return !getOutgoingImports().isEmpty();
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
     }
 
     @FameProperty(name = "parentPackage", opposite = "childEntities", container = true)

@@ -2,14 +2,7 @@ package fr.inria.verveine.extractor.java.visitors.refvisitors;
 
 import java.util.List;
 
-import org.eclipse.jdt.core.dom.CatchClause;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.ThrowStatement;
-import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
@@ -32,7 +25,6 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     public VisitorExceptionRef(EntityDictionary dico, VerveineJOptions options) {
         super(dico, options);
     }
-
 
     protected Package visitCompilationUnit(CompilationUnit node) {
         Package fmx = null;
@@ -67,10 +59,10 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     }
 
 	public boolean visit(MethodDeclaration node) {
-		Method fmx = visitMethodDeclaration( node);
+		Method fmx = visitMethodDeclaration(node);
 		if (fmx != null) {
 		    for (Type excep : (List<Type>) node.thrownExceptionTypes()) {
-		    	TThrowable excepFmx =  dico.asException(this.referedType(excep, (ContainerEntity) context.topType(), true, true));
+		    	TThrowable excepFmx =  dico.asException(this.referredType(excep, (ContainerEntity) context.topType(), true, true));
 		    	dico.createFamixDeclaredException(fmx,excepFmx);
             }
 			return super.visit(node);
@@ -87,7 +79,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
     @Override
     public boolean visit(ThrowStatement node) {
         Method meth = (Method) this.context.topMethod();
-        TType thrownExceptionType = this.referedType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
+        TType thrownExceptionType = this.referredType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
         TThrowable excepFmx;
         if (thrownExceptionType == null) {
             excepFmx = dico.ensureFamixException(null, "Throwable", null, false, EntityDictionary.UNKNOWN_MODIFIERS) ;
@@ -114,7 +106,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         if (meth != null) {
             TThrowable excepFmx = null;
             if ( NodeTypeChecker.isSimpleType(excepClass) || NodeTypeChecker.isQualifiedType(excepClass) ) {
-                excepFmx = dico.asException(referedType(excepClass, meth, true, true));
+                excepFmx = dico.asException(referredType(excepClass, meth, true, true));
             }
             if (excepFmx != null) {
             	dico.createFamixCaughtException(meth, excepFmx);
@@ -126,11 +118,12 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         return false;
     }
 
-	public void setVariableDeclaredType(SingleVariableDeclaration varDecl, Exception excepFmx) {
-
-		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(varDecl.resolveBinding());
+	public void setVariableDeclaredType(SingleVariableDeclaration varDecl, Exception fmxException) {
+        IVariableBinding bnd = varDecl.resolveBinding();
+		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(bnd);
 		if (fmx != null) {
-			fmx.setDeclaredType(excepFmx);
+            ITypeBinding declaredTypeBinding = (bnd == null) ? null : bnd.getType();
+            dico.ensureFamixEntityTyping(declaredTypeBinding, fmx, fmxException);
 		}
 	}
 

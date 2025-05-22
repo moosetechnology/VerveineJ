@@ -10,8 +10,8 @@ import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
+import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -66,8 +66,8 @@ public static Repository repo = null;
 		}
 	}
 
-	public static  <T extends TSourceEntity & TNamedEntity> void recursivelySetIsStub(T fmx, boolean b) {
-		TSourceEntity owner;
+	public static  <T extends TCanBeStub & TNamedEntity> void recursivelySetIsStub(T fmx, boolean b) {
+		TCanBeStub owner;
 		fmx.setIsStub(b);
 		owner = getOwner(fmx);
 		if ((owner != null) && (owner.getIsStub() != b)) {

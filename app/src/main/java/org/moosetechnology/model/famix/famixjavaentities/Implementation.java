@@ -4,25 +4,20 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TCanImplement;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Implementation")
-public class Implementation extends Entity implements TAssociation, TAssociationMetaLevelDependency, TImplementation, TSourceEntity {
+public class Implementation extends Entity implements TImplementation {
 
     private TCanImplement implementingClass;
     
     private TImplementable myInterface;
-    
-    private Boolean isStub;
     
     private TAssociation next;
     
@@ -34,18 +29,6 @@ public class Implementation extends Entity implements TAssociation, TAssociation
     
 
 
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
     @FameProperty(name = "implementingClass", opposite = "interfaceImplementations")
     public TCanImplement getImplementingClass() {
         return implementingClass;
@@ -74,15 +57,6 @@ public class Implementation extends Entity implements TAssociation, TAssociation
         this.myInterface = myInterface;
         if (myInterface == null) return;
         myInterface.getImplementations().add(this);
-    }
-    
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub() {
-        return isStub;
-    }
-
-    public void setIsStub(Boolean isStub) {
-        this.isStub = isStub;
     }
     
     @FameProperty(name = "next", opposite = "previous", derived = true)
@@ -126,12 +100,6 @@ public class Implementation extends Entity implements TAssociation, TAssociation
             if (old_previous != null) old_previous.setNext(null);
             if (previous != null) previous.setNext(this);
         }
-    }
-    
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)

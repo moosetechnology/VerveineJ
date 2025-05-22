@@ -9,15 +9,12 @@ import java.util.*;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstanceAttribute;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance;
-import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstanceAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithAnnotationInstances;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationInstance")
-public class AnnotationInstance extends SourcedEntity implements TAnnotationInstance, TEntityMetaLevelDependency, TTypedAnnotationInstance, TWithAnnotationInstanceAttributes {
+public class AnnotationInstance extends SourcedEntity implements TAnnotationInstance {
 
     private TWithAnnotationInstances annotatedEntity;
     

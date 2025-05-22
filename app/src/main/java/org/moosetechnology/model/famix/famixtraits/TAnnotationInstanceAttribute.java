@@ -11,10 +11,15 @@ import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 @FameDescription("TAnnotationInstanceAttribute")
 public interface TAnnotationInstanceAttribute extends TEntityMetaLevelDependency {
 
-        @FameProperty(name = "parentAnnotationInstance", opposite = "attributes", container = true)
-    public TWithAnnotationInstanceAttributes getParentAnnotationInstance();
+        @FameProperty(name = "annotationTypeAttribute", opposite = "annotationAttributeInstances")
+    public TAnnotationTypeAttribute getAnnotationTypeAttribute();
 
-    public void setParentAnnotationInstance(TWithAnnotationInstanceAttributes parentAnnotationInstance);
+    public void setAnnotationTypeAttribute(TAnnotationTypeAttribute annotationTypeAttribute);
+
+    @FameProperty(name = "parentAnnotationInstance", opposite = "attributes", container = true)
+    public TAnnotationInstance getParentAnnotationInstance();
+
+    public void setParentAnnotationInstance(TAnnotationInstance parentAnnotationInstance);
 
     @FameProperty(name = "value")
     public String getValue();

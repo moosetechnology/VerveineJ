@@ -8,7 +8,7 @@ import ch.akuhn.fame.FameProperty;
 
 @FamePackage("Famix-Traits")
 @FameDescription("TFileSystemEntity")
-public interface TFileSystemEntity  {
+public interface TFileSystemEntity extends TNamedEntity {
 
         @FameProperty(name = "parentFolder", opposite = "childrenFileSystemEntities", container = true)
     public TFolder getParentFolder();

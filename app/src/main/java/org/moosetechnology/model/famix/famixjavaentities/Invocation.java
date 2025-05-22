@@ -6,26 +6,20 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
-import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
-import org.moosetechnology.model.famix.famixtraits.THasSignature;
 import org.moosetechnology.model.famix.famixtraits.TInvocable;
 import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TInvocationsReceiver;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithInvocations;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Invocation")
-public class Invocation extends Entity implements TAssociation, TAssociationMetaLevelDependency, THasSignature, TInvocation, TSourceEntity {
+public class Invocation extends Entity implements TInvocation {
 
     private Collection<TInvocable> candidates; 
 
-    private Boolean isStub;
-    
     private TAssociation next;
     
     private Number numberOfLinesOfCode;
@@ -92,27 +86,6 @@ public class Invocation extends Entity implements TAssociation, TAssociationMeta
         return !getCandidates().isEmpty();
     }
 
-    @FameProperty(name = "containsReplicas", derived = true)
-    public Boolean getContainsReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "duplicationRate", derived = true)
-    public Number getDuplicationRate() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
-    }
-    
-    @FameProperty(name = "isStub")
-    public Boolean getIsStub() {
-        return isStub;
-    }
-
-    public void setIsStub(Boolean isStub) {
-        this.isStub = isStub;
-    }
-    
     @FameProperty(name = "next", opposite = "previous", derived = true)
     public TAssociation getNext() {
         return next;
@@ -169,12 +142,6 @@ public class Invocation extends Entity implements TAssociation, TAssociationMeta
         this.receiver = receiver;
         if (receiver == null) return;
         receiver.getReceivingInvocations().add(this);
-    }
-    
-    @FameProperty(name = "replicas", derived = true)
-    public Replica getReplicas() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
     @FameProperty(name = "sender", opposite = "outgoingInvocations")

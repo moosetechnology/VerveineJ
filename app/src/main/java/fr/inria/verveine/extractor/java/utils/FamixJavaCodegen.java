@@ -33,7 +33,7 @@ public class FamixJavaCodegen {
 
 	/*
 	 * Export the Java Famix metamodel as mse file in Moose with:
-	 * 'famixJava.mse' asFileReference writeStreamDo: [:stream |FamixJavaModel  metamodel exportOn: stream ]
+	 * 'famixJava.mse' asFileReference writeStreamDo: [:stream |FamixJavaModel  metamodel exportToMSEStream: stream ]
 	 */
 	// If there are additional properties that this generator cannot handle, you should ignore these properties in the metamodel exporter.
 	// In FMModelExporter>>shouldExportProperty: add the statement 'property name = 'users' ifTrue: [ ^ true ].' to ignore users property.

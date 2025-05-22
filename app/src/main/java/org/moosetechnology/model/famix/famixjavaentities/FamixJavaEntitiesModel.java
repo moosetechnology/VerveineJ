@@ -23,6 +23,7 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Concretization.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ContainerEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Entity.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.EntityTyping.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Enum.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.EnumValue.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Exception.class);
@@ -39,10 +40,12 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.NamedEntity.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Package.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Parameter.class);
-		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParameterConcretization.class);
-		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParameterType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricClass.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricEntityTyping.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricImplementation.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricInheritance.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricInterface.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricInvocation.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricMethod.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.PrimitiveType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Reference.class);
@@ -59,8 +62,9 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.TEntityCreator.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.TWithInterfaces.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Type.class);
-		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.UnknownSourceLanguage.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.TypeParameter.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.UnknownVariable.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Variable.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Wildcard.class);
 
     }

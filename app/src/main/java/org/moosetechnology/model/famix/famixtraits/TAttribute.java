@@ -4,12 +4,11 @@ package org.moosetechnology.model.famix.famixtraits;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.moosequery.TEntityMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TAttribute")
-public interface TAttribute extends TTypedEntity, TNamedEntity, TSourceEntity, TEntityMetaLevelDependency, TStructuralEntity, TAccessible {
+public interface TAttribute extends TStructuralEntity {
 
         @FameProperty(name = "hierarchyNestingLevel", derived = true)
     public Number getHierarchyNestingLevel();

@@ -4,12 +4,11 @@ package org.moosetechnology.model.famix.famixtraits;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
 @FameDescription("TFileInclude")
-public interface TFileInclude extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
+public interface TFileInclude extends TAssociation {
 
         @FameProperty(name = "source", opposite = "outgoingIncludeRelations")
     public TWithFileIncludes getSource();

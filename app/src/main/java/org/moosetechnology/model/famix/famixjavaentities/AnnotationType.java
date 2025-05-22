@@ -6,16 +6,19 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationType;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TComment;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.THasVisibility;
 import org.moosetechnology.model.famix.famixtraits.TImplementable;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TInheritance;
 import org.moosetechnology.model.famix.famixtraits.TPackage;
 import org.moosetechnology.model.famix.famixtraits.TPackageable;
-import org.moosetechnology.model.famix.famixtraits.TTypedAnnotationInstance;
+import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithAnnotationTypes;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 import org.moosetechnology.model.famix.famixtraits.TWithComments;
@@ -24,7 +27,7 @@ import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("AnnotationType")
-public class AnnotationType extends Type implements TAnnotationType, THasVisibility, TImplementable, TPackageable, TWithAttributes, TWithComments, TWithInheritances {
+public class AnnotationType extends Type implements TAnnotationType, TTypeArgument, THasVisibility, TImplementable, TPackageable, TWithAttributes, TWithComments, TWithInheritances {
 
     private TWithAnnotationTypes annotationTypesContainer;
     
@@ -32,9 +35,13 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
 
     private Collection<TComment> comments; 
 
+    private Collection<TParametricEntity> genericEntities; 
+
     private Collection<TImplementation> implementations; 
 
-    private Collection<TTypedAnnotationInstance> instances; 
+    private Collection<TAnnotationInstance> instances; 
+
+    private Collection<TConcretization> outgoingConcretizations; 
 
     private TPackage parentPackage;
     
@@ -163,6 +170,7 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
         return !getComments().isEmpty();
     }
 
+
     @FameProperty(name = "hasComments", derived = true)
     public Boolean getHasComments() {
         // TODO: this is a derived property, implement this method manually.
@@ -227,15 +235,15 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
     }
 
     @FameProperty(name = "instances", opposite = "annotationType", derived = true)
-    public Collection<TTypedAnnotationInstance> getInstances() {
+    public Collection<TAnnotationInstance> getInstances() {
         if (instances == null) {
-            instances = new MultivalueSet<TTypedAnnotationInstance>() {
+            instances = new MultivalueSet<TAnnotationInstance>() {
                 @Override
-                protected void clearOpposite(TTypedAnnotationInstance e) {
+                protected void clearOpposite(TAnnotationInstance e) {
                     e.setAnnotationType(null);
                 }
                 @Override
-                protected void setOpposite(TTypedAnnotationInstance e) {
+                protected void setOpposite(TAnnotationInstance e) {
                     e.setAnnotationType(AnnotationType.this);
                 }
             };
@@ -243,29 +251,29 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
         return instances;
     }
     
-    public void setInstances(Collection<? extends TTypedAnnotationInstance> instances) {
+    public void setInstances(Collection<? extends TAnnotationInstance> instances) {
         this.getInstances().clear();
         this.getInstances().addAll(instances);
     }                    
     
         
-    public void addInstances(TTypedAnnotationInstance one) {
+    public void addInstances(TAnnotationInstance one) {
         this.getInstances().add(one);
     }   
     
-    public void addInstances(TTypedAnnotationInstance one, TTypedAnnotationInstance... many) {
+    public void addInstances(TAnnotationInstance one, TAnnotationInstance... many) {
         this.getInstances().add(one);
-        for (TTypedAnnotationInstance each : many)
+        for (TAnnotationInstance each : many)
             this.getInstances().add(each);
     }   
     
-    public void addInstances(Iterable<? extends TTypedAnnotationInstance> many) {
-        for (TTypedAnnotationInstance each : many)
+    public void addInstances(Iterable<? extends TAnnotationInstance> many) {
+        for (TAnnotationInstance each : many)
             this.getInstances().add(each);
     }   
                 
-    public void addInstances(TTypedAnnotationInstance[] many) {
-        for (TTypedAnnotationInstance each : many)
+    public void addInstances(TAnnotationInstance[] many) {
+        for (TAnnotationInstance each : many)
             this.getInstances().add(each);
     }
     
@@ -325,6 +333,57 @@ public class AnnotationType extends Type implements TAnnotationType, THasVisibil
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
     
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.setTypeArgument(null);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.setTypeArgument(AnnotationType.this);
+                }
+            };
+        }
+        return outgoingConcretizations;
+    }
+    
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
+    }                    
+    
+        
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
+    }   
+    
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+    
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+                
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+    
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
+    }
+
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
+    }
+
     @FameProperty(name = "parentPackage", opposite = "childEntities", container = true)
     public TPackage getParentPackage() {
         return parentPackage;

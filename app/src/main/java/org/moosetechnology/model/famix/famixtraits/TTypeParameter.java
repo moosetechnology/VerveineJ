@@ -5,19 +5,18 @@ import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import java.util.*;
-import org.moosetechnology.model.famix.moosequery.TAssociationMetaLevelDependency;
 
 
 @FamePackage("Famix-Traits")
-@FameDescription("TParameterConcretization")
-public interface TParameterConcretization extends TAssociation, TSourceEntity, TAssociationMetaLevelDependency {
+@FameDescription("TTypeParameter")
+public interface TTypeParameter  {
 
-        @FameProperty(name = "concreteParameter", opposite = "generics")
-    public TConcreteParameterType getConcreteParameter();
+    @FameProperty(name = "genericEntity", opposite = "typeParameters")
+    public TParametricEntity getGenericEntity();
 
-    public void setConcreteParameter(TConcreteParameterType concreteParameter);
+    public void setGenericEntity(TParametricEntity genericEntity);
 
-    @FameProperty(name = "concretizations", opposite = "parameterConcretizations")
+    @FameProperty(name = "concretizations", opposite = "typeParameter", derived = true)
     public Collection<TConcretization> getConcretizations();
 
     public void setConcretizations(Collection<? extends TConcretization> concretizations);
@@ -34,12 +33,4 @@ public interface TParameterConcretization extends TAssociation, TSourceEntity, T
 
     public boolean hasConcretizations();
 
-    @FameProperty(name = "genericParameter", opposite = "concretizations")
-    public TGenericParameterType getGenericParameter();
-
-    public void setGenericParameter(TGenericParameterType genericParameter);
-
-
-
 }
-

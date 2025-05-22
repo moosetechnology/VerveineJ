@@ -31,17 +31,17 @@ public interface TFile extends TFileSystemEntity {
 
     public boolean hasEntities();
 
-    @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
-    public Number getTotalNumberOfLinesOfText();
-
     @FameProperty(name = "numberOfKiloBytes", derived = true)
     public Number getNumberOfKiloBytes();
 
-    @FameProperty(name = "numberOfCharacters", derived = true)
-    public Number getNumberOfCharacters();
+    @FameProperty(name = "totalNumberOfLinesOfText", derived = true)
+    public Number getTotalNumberOfLinesOfText();
 
     @FameProperty(name = "numberOfEmptyLinesOfText", derived = true)
     public Number getNumberOfEmptyLinesOfText();
+
+    @FameProperty(name = "numberOfCharacters", derived = true)
+    public Number getNumberOfCharacters();
 
     @FameProperty(name = "numberOfBytes", derived = true)
     public Number getNumberOfBytes();

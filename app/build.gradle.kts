@@ -35,8 +35,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("org.moosetechnology:fame-java:v1.0.5")
-    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.13.50")
-    implementation("commons-codec:commons-codec:1.7")
+    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.41.0")
+    implementation("commons-codec:commons-codec:1.13")
 
     implementation(fileTree("lib") { include("*.jar") })
 }
@@ -54,10 +54,10 @@ application {
 }
 
 
-
 tasks.test {
     finalizedBy(tasks.jacocoTestReport) // report is always generated after tests run
 }
+
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
@@ -65,6 +65,7 @@ tasks.jacocoTestReport {
         xml.required = true
     }
 }
+
 
 tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveBaseName.set("VerveineJ")

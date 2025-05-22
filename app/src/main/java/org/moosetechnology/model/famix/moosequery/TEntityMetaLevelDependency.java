@@ -13,14 +13,14 @@ public interface TEntityMetaLevelDependency  {
         @FameProperty(name = "numberOfDeadChildren", derived = true)
     public Number getNumberOfDeadChildren();
 
-    @FameProperty(name = "fanOut", derived = true)
-    public Number getFanOut();
-
     @FameProperty(name = "fanIn", derived = true)
     public Number getFanIn();
 
     @FameProperty(name = "numberOfChildren", derived = true)
     public Number getNumberOfChildren();
+
+    @FameProperty(name = "fanOut", derived = true)
+    public Number getFanOut();
 
     @FameProperty(name = "isRoot", derived = true)
     public Boolean getIsRoot();

@@ -10,12 +10,12 @@ import ch.akuhn.fame.FameProperty;
 @FameDescription("TTypedEntity")
 public interface TTypedEntity  {
 
-        @FameProperty(name = "declaredType", opposite = "typedEntities")
+        @FameProperty(name = "typing", opposite = "typedEntity")
+    public TEntityTyping getTyping();
+
+    public void setTyping(TEntityTyping typing);
+
     public TType getDeclaredType();
-
-    public void setDeclaredType(TType declaredType);
-
-
 
 }
 
