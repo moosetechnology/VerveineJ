@@ -1,4 +1,4 @@
-tedname: Release
+name: Release
 
 env:
   USERNAME: ${{ github.actor }}
