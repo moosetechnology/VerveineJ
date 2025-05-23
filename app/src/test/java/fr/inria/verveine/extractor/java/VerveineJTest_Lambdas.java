@@ -25,6 +25,7 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
 	private void parse(String[] sources) {
         parser.configure(sources);
         parser.parse();
+        parser.exportModel();
     }
 
     @Test
@@ -103,9 +104,37 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
     public void testAccessInDeclaration(){
         parse(new String[] {"-alllocals", "-anchor", "assoc", "src/test/resources/lambdas"});
         Collection<Access> accesses = entitiesOfType(Access.class);
-        assertEquals(6, accesses.size());
+        assertEquals(10, accesses.size());
 
 
     }
 
+    @Test
+    public void testLocalVariables(){
+        parse(new String[] {"-alllocals", "src/test/resources/lambdas"});
+        Method meth = detectFamixElement( Method.class, "withLocalVariableInLambda");
+        assertEquals(4, meth.getLocalVariables().size());
+        for (var localVar : meth.getLocalVariables()) {
+            if (localVar.getName().equals("s")) {
+                assertNotNull(localVar.getDeclaredType());
+                assertEquals("String",localVar.getDeclaredType().getName() );
+            }
+            else if (localVar.getName().equals("localValue")) {
+                assertNotNull(localVar.getDeclaredType());
+                assertEquals("int",localVar.getDeclaredType().getName() );
+            }
+            else if (localVar.getName().equals("ec")) {
+                assertNotNull(localVar.getDeclaredType());
+                assertEquals("ExistingClass",localVar.getDeclaredType().getName() );
+            }
+            else if (localVar.getName().equals("t")) {
+                assertNull(localVar.getDeclaredType());
+            }
+            else {
+                fail("Unknown local variable:" + localVar.getName());
+            }
+        }
+
+
+    }
 }

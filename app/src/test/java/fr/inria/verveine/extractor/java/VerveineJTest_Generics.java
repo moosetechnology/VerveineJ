@@ -5,35 +5,15 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.Exception;
 import java.util.Collection;
 import java.util.Iterator;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixjavaentities.Concretization;
-import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricEntityTyping;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricImplementation;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInheritance;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInvocation;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricMethod;
-import org.moosetechnology.model.famix.famixjavaentities.Type;
-import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
-import org.moosetechnology.model.famix.famixjavaentities.Wildcard;
-import org.moosetechnology.model.famix.famixtraits.TConcretization;
-import org.moosetechnology.model.famix.famixtraits.TImplementable;
-import org.moosetechnology.model.famix.famixtraits.TImplementation;
-import org.moosetechnology.model.famix.famixtraits.TInheritance;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TType;
-import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
+import org.moosetechnology.model.famix.famixtraits.*;
 
 public class VerveineJTest_Generics extends VerveineJTest_Basic {
 
@@ -71,6 +51,7 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         repo = parser.getFamixRepo();
         parser.configure(new String[] { "src/test/resources/generics/" });
         parser.parse();
+        parser.exportModel();
     }
 
     /*
@@ -398,6 +379,16 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
          * assertEquals("Interface2", ((Type)t.getUpperBound()).getName());
          */        
 
+    }
+
+    @Test
+    public void testParametricReference() {
+        ParametricClass resource = detectFamixElement(ParametricClass.class, "Resource");
+        assertNotNull(resource);
+        assertEquals(1, resource.numberOfIncomingReferences());
+
+        TReference ref = (TReference) firstElt(resource.getIncomingReferences());
+        assertEquals(ParametricReference.class, ref.getClass());
     }
 
     // UTILITIES --------------------------------------------------

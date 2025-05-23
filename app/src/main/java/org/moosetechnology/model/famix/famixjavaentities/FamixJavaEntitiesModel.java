@@ -47,6 +47,7 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricInterface.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricInvocation.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricMethod.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ParametricReference.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.PrimitiveType.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Reference.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.SourceAnchor.class);
