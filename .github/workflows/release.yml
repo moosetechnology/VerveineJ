@@ -1,4 +1,4 @@
-name: Release
+tedname: Release
 
 env:
   USERNAME: ${{ github.actor }}
@@ -9,7 +9,7 @@ env:
 
 on:
   release:
-    types: [created, updated]
+    types: [created, edited]
 
 jobs:
   test:
