@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "VerveineJ User run",
+      "request": "launch",
+      "mainClass": "fr.inria.verveine.extractor.java.VerveineJMain",
+      "args": "${input:userPrompt}",
+      "projectName": "app"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "userPrompt",
+      "type": "promptString",
+      "description": "Please enter VerveineJ arguments"
+    }
+  ]
+}
