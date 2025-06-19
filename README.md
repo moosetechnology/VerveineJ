@@ -22,6 +22,7 @@ If you already have docker the summary is:
 ```sh
 docker run -v <full/path/toSource>:/src [-v <full/path/toDependency>:/dependency] ghcr.io/evref-bl/verveinej:latest <verveineJOption>
 ```
+
 The resulting model file (.json or .mse) is in \<full/path/toSource\>.
 
 Otherwise, on the command line, download the jar of the latest release and the command is
@@ -67,7 +68,6 @@ You can build the project and produce a fat jar with
 ./gradlew app:shadowJar
 ```
 
-
 ### Debug advanced mode
 
 Sometimes, because of the JVM optimization, stacktraces are not fully displayed.
@@ -76,4 +76,5 @@ To force JVM keep the full stacktrace, you can use the following vm options:
 ```txt
 -XX:-OmitStackTraceInFastThrow -Xint
 ```
+
 > This will make the execution super slow, so keep this option for debug purpose only.
