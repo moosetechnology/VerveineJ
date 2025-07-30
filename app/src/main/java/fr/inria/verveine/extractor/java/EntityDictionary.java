@@ -560,20 +560,24 @@ public class EntityDictionary {
 	 * @return the FamixReference
 	 */
 	public Reference addFamixReference(Method src, TType tgt, TAssociation prev, ITypeBinding referredTypeBnd) {
+		Reference ref;
+		
 		if ( (src == null) || (tgt == null) ) {
 			return null;
 		}
 
 		if (prev == null) {
-			for (TReference ref : src.getOutgoingReferences()) {
-				if (ref.getReferredEntity() == tgt) {
-					return (Reference) ref;
+			for (TReference existingRef : src.getOutgoingReferences()) {
+				if (existingRef.getReferredEntity() == tgt) {
+					return (Reference) existingRef;
 				}
 			}
 		}
 
-		Reference ref;
-		if (referredTypeBnd != null && referredTypeBnd.isParameterizedType()) { // Needs checks and tests.
+		/* issue <href="https://github.com/moosetechnology/VerveineJ/issues/146">146</href> an expression like <code>char[].class</code> is a <code>Class</code>
+		 * gives referredTypeBnd.isParameterizedType() == true.
+		 * We test <code>tgt instanceof PrimitiveType</code> to avoid this case */
+		if (referredTypeBnd != null && referredTypeBnd.isParameterizedType() && ! (tgt instanceof PrimitiveType)) { // Needs checks and tests.
 			ref = (ParametricReference)buildFamixParametricAssociation(new ParametricReference(), referredTypeBnd.getErasure().getTypeParameters(), referredTypeBnd.getTypeArguments());
 		} else {
 			ref = new Reference();
