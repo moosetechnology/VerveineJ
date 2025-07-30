@@ -58,6 +58,18 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	
 
 	@Test
+	public void testClassImplementfullyQualifiedName() {
+		parse(new String[] {"src/test/resources/ad_hoc/ImplementsFQN.java"});
+
+		Package pckg = detectFamixElement(Package.class, "aPackage");
+		assertNotNull(pckg);
+		assertEquals(1, pckg.getTypes().size());
+
+		assertEquals("AnInterface", firstElt(pckg.getTypes()).getName());
+	}
+
+
+	@Test
 	public void testJunit5Bug1() {
 		File generatedMSE = new File(DEFAULT_OUTPUT_FILE);
 		generatedMSE.deleteOnExit();
