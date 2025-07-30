@@ -303,6 +303,12 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(QualifiedName node) {
+		// if the context top is not a method, we don't deal with this QualifiedName
+		// This might happen when a class inherits or implements a fully qualified name
+		if (!(context.top() instanceof Method)) {
+			return false;
+		}
+
 		IBinding qualifierBinding = node.getQualifier().resolveBinding();
 
 		if ((qualifierBinding != null) && (qualifierBinding.getKind() == IBinding.TYPE)) {
