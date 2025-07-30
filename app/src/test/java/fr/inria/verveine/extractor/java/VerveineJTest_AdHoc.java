@@ -70,6 +70,17 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 
 	@Test
+	public void testSeveralFieldsOneInit() {
+		parse(new String[] {"src/test/resources/ad_hoc/SeveralFieldsOneInit.java"});
+
+		assertEquals(1, entitiesOfType(Access.class).size());
+		Access access = firstElt(entitiesOfType(Access.class));
+		assertEquals("field2", ((TNamedEntity) access.getVariable()).getName());
+
+	}
+
+
+	@Test
 	public void testJunit5Bug1() {
 		File generatedMSE = new File(DEFAULT_OUTPUT_FILE);
 		generatedMSE.deleteOnExit();
