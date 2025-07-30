@@ -81,6 +81,16 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 
 	@Test
+	public void testCharTypeReference() {
+		parse(new String[] {"src/test/resources/ad_hoc/CharTypeReference.java"});
+
+		assertEquals(1, entitiesOfType(Reference.class).size());
+		Reference ref = firstElt(entitiesOfType(Reference.class));
+		assertEquals("char", ((TNamedEntity) ref.getReferredEntity()).getName());
+	}
+
+
+	@Test
 	public void testJunit5Bug1() {
 		File generatedMSE = new File(DEFAULT_OUTPUT_FILE);
 		generatedMSE.deleteOnExit();
