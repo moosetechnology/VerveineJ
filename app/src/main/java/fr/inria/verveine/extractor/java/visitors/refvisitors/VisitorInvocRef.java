@@ -41,11 +41,13 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	// VISITOR METHODS
 
 	public boolean visit(CompilationUnit node) {
+		//System.err.println("visit(CompilationUnit) ");
 		visitCompilationUnit(node);
 		return super.visit(node);
 	}
 
 	public void endVisit(CompilationUnit node) {
+		//System.err.println("endVisit(CompilationUnit) ");
 		endVisitCompilationUnit(node);
 	}
 
@@ -54,6 +56,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	 * Local type: see comment of visit(ClassInstanceCreation node)
 	 */
 	public boolean visit(TypeDeclaration node) {
+		//System.err.println("visit(TypeDeclaration) ");
 		if (visitTypeDeclaration(node) != null) {
 			return super.visit(node);
 		} else {
@@ -62,6 +65,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public void endVisit(TypeDeclaration node) {
+		//System.err.println("endVisit(TypeDeclaration) ");
 		endVisitTypeDeclaration(node);
 	}
 
@@ -78,6 +82,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	 */
 	@SuppressWarnings("unchecked")
 	public boolean visit(ClassInstanceCreation node) {
+		//System.err.println("visit(ClassInstanceCreation) ");
 		String typName;
 		TType fmx;
 
@@ -114,6 +119,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(AnonymousClassDeclaration node) {
+		//System.err.println("visit(AnonymousClassDeclaration) ");
 		if (visitAnonymousClassDeclaration(node) != null) {
 			return super.visit(node);
 		} else {
@@ -122,10 +128,12 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public void endVisit(AnonymousClassDeclaration node) {
+		//System.err.println("endVisit(AnonymousClassDeclaration) ");
 		endVisitAnonymousClassDeclaration(node);
 	}
 
 	public boolean visit(EnumDeclaration node) {
+		//System.err.println("visit(EnumDeclaration) ");
 		if (visitEnumDeclaration(node) != null) {
 			return super.visit(node);
 		} else {
@@ -134,10 +142,12 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public void endVisit(EnumDeclaration node) {
+		//System.err.println("endVisit(EnumDeclaration) ");
 		endVisitEnumDeclaration(node);
 	}
 
 	public boolean visit(AnnotationTypeDeclaration node) {
+		//System.err.println("visit(AnnotationTypeDeclaration) ");
 		if (visitAnnotationTypeDeclaration(node) != null) {
 			return super.visit(node);
 		} else {
@@ -146,10 +156,12 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public void endVisit(AnnotationTypeDeclaration node) {
+		//System.err.println("endVisit(AnnotationTypeDeclaration) ");
 		endVisitAnnotationTypeDeclaration(node);
 	}
 
 	public boolean visit(AnnotationTypeMemberDeclaration node) {
+		//System.err.println("visit(AnnotationTypeMemberDeclaration) ");
 		if (visitAnnotationTypeMemberDeclaration(node) != null) {
 			return super.visit(node);
 		} else {
@@ -158,11 +170,13 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public void endVisit(AnnotationTypeMemberDeclaration node) {
+		//System.err.println("endVisit(AnnotationTypeMemberDeclaration) ");
 		this.context.popAnnotationMember();
 		super.endVisit(node);
 	}
 
 	public boolean visit(MethodDeclaration node) {
+		//System.err.println("visit(MethodDeclaration): " + node.getName().getIdentifier());
 		TMethod fmx = visitMethodDeclaration(node);
 
 		if (fmx != null) {
@@ -177,11 +191,13 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 	@Override
 	public void endVisit(MethodDeclaration node) {
+		//System.err.println("endVisit(MethodDeclaration) ");
 		endVisitMethodDeclaration(node);
 	}
 
 	@Override
 	public boolean visit(Initializer node) {
+		//System.err.println("visit(Initializer) ");
 		if (visitInitializer(node) != null) {
 			return super.visit(node);
 		} else {
@@ -191,6 +207,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 	@Override
 	public void endVisit(Initializer node) {
+		//System.err.println("endVisit(Initializer) ");
 		endVisitInitializer(node);
 	}
 
@@ -201,25 +218,30 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	 */
 	@Override
 	public boolean visit(FieldDeclaration node) {
+		//System.err.println("visit(FieldDeclaration) ");
 		hasInitBlock(node); // to recover optional EntityDictionary.INIT_BLOCK_NAME method
 		return true;
 	}
 
 	@Override
 	public void endVisit(FieldDeclaration node) {
+		//System.err.println("endVisit(FieldDeclaration) ");
 		endVisitFieldDeclaration(node);
 	}
 
 	public boolean visit(EnumConstantDeclaration node) {
+		//System.err.println("visit(EnumConstantDeclaration) ");
 		return visitEnumConstantDeclaration(node);
 	}
 
 	public void endVisit(EnumConstantDeclaration node) {
+		//.err.println("endVisit(EnumConstantDeclaration) ");
 		endVisitEnumConstantDeclaration(node);
 	}
 
 	@SuppressWarnings("unchecked")
 	public boolean visit(MethodInvocation node) {
+		//System.err.println("visit(MethodInvocation): " + node.getName().getFullyQualifiedName());
 		Expression callingExpr = node.getExpression();
 		TNamedEntity receiver = getReceiver(callingExpr);
 
@@ -249,6 +271,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 	@SuppressWarnings("unchecked")
 	public boolean visit(SuperMethodInvocation node) {
+		//System.err.println("visit(SuperMethodInvocation) ");
 		// ConstructorInvocation (i.e. 'this(...)' ) happen in constructor, so the name
 		// is the same
 		TNamedEntity receiver = this.dico.ensureFamixImplicitVariable(
@@ -278,6 +301,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(ConstructorInvocation node) {
+		//System.err.println("visit(ConstructorInvocation) ");
 		// ConstructorInvocation (i.e. 'this(...)' ) happen in constructor, so the name
 		// is the same
 
@@ -315,6 +339,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(SuperConstructorInvocation node) {
+		//System.err.println("visit(SuperConstructorInvocation) ");
 		// ConstructorInvocation (i.e. 'super(...)' ) happen in constructor, so the name
 		// is that of the superclass
 		// Class superC = superClass();
@@ -368,6 +393,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	 */
 	private Invocation methodInvocation(IMethodBinding calledBnd, String calledName, TNamedEntity receiver,
 			TType methOwner, Collection<Expression> l_args) {
+		//System.err.println("methodInvocation(): " + calledName);
 
 		TMethod sender = this.context.topMethod();
 		TMethod invoked;
@@ -561,6 +587,13 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		// "string".msg()
 		if (NodeTypeChecker.isStringLiteral(expr)) {
+			return null;
+		}
+
+		// <text block>.msg()
+		// <text block> are created with triple quotes to allow defining multi-line string literals
+		// they are reported as NullLiteral in JDT and there does not seem to be a better way to test them
+		if (expr instanceof NullLiteral) {
 			return null;
 		}
 

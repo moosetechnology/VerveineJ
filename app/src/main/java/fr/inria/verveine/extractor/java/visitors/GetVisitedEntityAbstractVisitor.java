@@ -199,6 +199,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 	@SuppressWarnings("unchecked")
 	protected Method visitMethodDeclaration(MethodDeclaration node) {
+		//System.err.println("visitMethodDeclaration(): " + node.getName().getIdentifier());
 		IMethodBinding bnd = (IMethodBinding) StubBinding.getDeclarationBinding(node);
 
 		Collection<String> paramTypes = new ArrayList<>();
