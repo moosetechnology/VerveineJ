@@ -26,7 +26,9 @@ import org.moosetechnology.model.famix.famixjavaentities.Enum;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TAccessible;
+import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
+import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
@@ -203,11 +205,15 @@ public class EntityDictionary {
 	public void removeEntity( NamedEntity ent) {
 		IBinding key;
 		key = entityToKey.get(ent);
-		entityToKey.remove(ent);
-		keyToEntity.remove(key);
+		if (key != null) {
+			entityToKey.remove(ent);
+			keyToEntity.remove(key);
+		}
 
 		Collection<TNamedEntity> l_ent = nameToEntity.get(ent.getName());
-		l_ent.remove(ent);
+		if (l_ent != null) {
+			l_ent.remove(ent);
+		}
 
 		famixRepo.getElements().remove(ent);
 	}
@@ -1363,45 +1369,48 @@ public class EntityDictionary {
 		return tmp;
 	}
 
-	public TThrowable asException(TType excepFmx) {
-		if (excepFmx instanceof Exception) {
-			return (Exception) excepFmx;
+	public TThrowable asException(TType fmxType) {
+		if (fmxType instanceof Exception) {
+			return (Exception) fmxType;
 		}
-		if(excepFmx instanceof TypeParameter) {
-			return (TypeParameter) excepFmx;
+		if(fmxType instanceof TypeParameter) {
+			return (TypeParameter) fmxType;
 		}
-		Exception tmp = null;
+
+		Exception fmxException = null;
 		IBinding key = null;
+
 		try {
-			TWithTypes owner = (TWithTypes) Util.getOwner(excepFmx);
-			owner.getTypes().remove(excepFmx);
-			removeEntity((NamedEntity) excepFmx);
+			key = entityToKey.get((NamedEntity) fmxType);
 
-			key = entityToKey.get((NamedEntity) excepFmx);
-			tmp = ensureFamixException((ITypeBinding) key, excepFmx.getName(), owner, /*isGeneric*/false, UNKNOWN_MODIFIERS);
+			/* Remove entity immediatly so that its key and name are not "reassigned" in the various cache dictionnaries
+			 * the object still exists and its properties are still accessible */
+			removeEntity((NamedEntity) fmxType);
 
-			tmp.addMethods(((TWithMethods) excepFmx).getMethods());
-			if (excepFmx instanceof TWithAttributes) {
-				tmp.addAttributes(((TWithAttributes) excepFmx).getAttributes());
+			TWithTypes owner = fmxType.getTypeContainer();
+			fmxType.setTypeContainer(null);
+			fmxException = ensureFamixException((ITypeBinding) key, fmxType.getName(), owner, /*isGeneric*/false, UNKNOWN_MODIFIERS);
+
+			fmxException.addMethods( new ArrayList<>( ((TWithMethods)fmxType).getMethods() ) );
+			if (fmxType instanceof TWithAttributes) {
+				fmxException.addAttributes( new ArrayList<>( ((TWithAttributes)fmxType).getAttributes() ) );
 			}
 
-			if (excepFmx instanceof TWithInheritances) {
-				tmp.addSuperInheritances(((TWithInheritances) excepFmx).getSuperInheritances());
-				tmp.addSubInheritances(((TWithInheritances) excepFmx).getSubInheritances());
+			if (fmxType instanceof TWithInheritances) {
+				fmxException.addSuperInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSuperInheritances() ) );
+				fmxException.addSubInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSubInheritances() ) );
 			}
-			tmp.setSourceAnchor(excepFmx.getSourceAnchor());
-			tmp.addAnnotationInstances(((NamedEntity) excepFmx).getAnnotationInstances());
-			// tmp.addComments(excepFmx.getComments());
-			List<TReference> newList = excepFmx.getIncomingReferences().stream().collect(Collectors.toList());
-			tmp.addIncomingReferences(newList);
-			tmp.setIsStub(excepFmx.getIsStub());
-			tmp.addTypes(((ContainerEntity) excepFmx).getTypes());
+			fmxException.setSourceAnchor(fmxType.getSourceAnchor());
+			fmxException.addAnnotationInstances( new ArrayList<>( ((NamedEntity)fmxType).getAnnotationInstances() ) );
+			fmxException.addIncomingReferences( new ArrayList<>( fmxType.getIncomingReferences() ) );
+			fmxException.setIsStub(fmxType.getIsStub());
+			fmxException.addTypes( new ArrayList<>( ((ContainerEntity) fmxType).getTypes() ) );
 		}
 		catch( ConcurrentModificationException e) {
 			e.printStackTrace();
 		}
 
-		return (TThrowable)tmp;
+		return (TThrowable)fmxException;
 	}
 
 	/**
