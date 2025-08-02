@@ -112,7 +112,24 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertTrue(generatedMSE.length() > 0);
 	}
 
+	/** bug occurring when a Class with members is converted to an Exception
+	 	Initial implementation raised a java.util.ConcurrentModificationException because the list of methods
+	 	was modified during the conversion (adding a method to the Exception would automatically remove it from the Class)
+	 */
+	@Test
+	public void testClassConvertionToException() {
+		EntityDictionary dico = new EntityDictionary(repo);
 	
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java"});
+
+		org.moosetechnology.model.famix.famixjavaentities.Class clazz = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Card");
+		assertNotNull(clazz);
+		assertNull( detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "Card") );
+
+		dico.asException(clazz);
+
+		assertNotNull( detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class, "Card") );
+	}
 	
 	@Test
 	public void testUnresolvedDeclaration() {
