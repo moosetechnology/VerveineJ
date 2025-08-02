@@ -1330,7 +1330,11 @@ public class EntityDictionary {
 		return fmx;
 	}
 
-	public TType asClass(TType excepFmx) {
+	/*
+	 * Does not seems to be used.
+	 * REMOVE ?
+	
+	 public TType asClass(TType excepFmx) {
 		Class tmp = null;
 		IBinding key = null;
 		try {
@@ -1367,7 +1371,7 @@ public class EntityDictionary {
 		}
 
 		return tmp;
-	}
+	}*/
 
 	public TThrowable asException(TType fmxType) {
 		if (fmxType instanceof Exception) {
