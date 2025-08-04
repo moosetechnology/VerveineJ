@@ -12,4 +12,7 @@ public class StubSuperConstructor  extends ArrayList<String> {
         super(sz);
     }
 
+    void callingSuper() {
+        super.callingSuper();
+    }
 }
