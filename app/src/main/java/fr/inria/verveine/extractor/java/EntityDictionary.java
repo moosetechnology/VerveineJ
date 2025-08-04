@@ -26,9 +26,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Enum;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TAccessible;
-import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
-import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TCanBeClassSide;
 import org.moosetechnology.model.famix.famixtraits.TCanBeFinal;
 import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
@@ -328,13 +326,14 @@ public class EntityDictionary {
 		 * e.g. 2 parameters of 2 different methods but having the same name
 		 * so we cannot recover just from the name
 		 */
-		
+
 		if (bnd != null) {
 			fmx = (T) getEntityByKey(bnd);
 			if (fmx != null) {
 				return fmx;
 			}
 		}
+
 		// else
 		fmx = createFamixEntity(fmxClass, name);
 		if ( (bnd != null) && (fmx != null) ) {
@@ -1405,6 +1404,7 @@ public class EntityDictionary {
 				fmxException.addSubInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSubInheritances() ) );
 			}
 			fmxException.setSourceAnchor(fmxType.getSourceAnchor());
+			fmxException.addIncomingTypings( new ArrayList<>( fmxType.getIncomingTypings() ) );
 			fmxException.addAnnotationInstances( new ArrayList<>( ((NamedEntity)fmxType).getAnnotationInstances() ) );
 			fmxException.addIncomingReferences( new ArrayList<>( fmxType.getIncomingReferences() ) );
 			fmxException.setIsStub(fmxType.getIsStub());
@@ -2633,7 +2633,6 @@ public class EntityDictionary {
 		// --------------- to avoid useless computations if we can
 		try {
 			fmx = (Parameter)getEntityByKey(bnd);
-
 		}catch(Throwable e) {
 			e.printStackTrace();
 		}
@@ -2671,7 +2670,6 @@ public class EntityDictionary {
 
 		if (fmx == null) {
 			fmx = ensureFamixEntity(Parameter.class, bnd, name);
-			fmx.setParentBehaviouralEntity(tMethod);
 		}
 
 		if (fmx != null) {
