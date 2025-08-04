@@ -74,11 +74,15 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	 */
 	protected boolean inAssignmentLHS = false;
 
-	private boolean inLambda;
+	/**
+	 * Counts in how many nested lambdas we are
+	 * This is needed because Lambdas parameters are currently considered as local variables whereas JDT (rightly) reports them as parameters
+	 */
+	private int inLambda = 0;
 
 	public VisitorAccessRef(EntityDictionary dico, VerveineJOptions options) {
 		super(dico, options);
-		this.inLambda = false;
+		this.inLambda = 0;
 	}
 
 	// VISITOR METHODS
@@ -247,9 +251,9 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	 */
 	@Override
 	public boolean visit(LambdaExpression node) {
-		inLambda = true;
+		inLambda++;
 		node.getBody().accept(this);
-		inLambda = false;
+		inLambda--;
 		return false;  // only visit body of lambda
 	}
 
@@ -485,7 +489,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 
 	@Override
 	public boolean visit(SimpleName node) {
-        //		System.err.println("visitIfNotNull(): "+expr.getIdentifier() + " inAssignmentLHS=" + inAssignmentLHS);
+        //System.err.println("visit(SimpleName)");
         IBinding bnd = node.resolveBinding();
         if ( (bnd != null) && (bnd.getKind() == IBinding.VARIABLE) && (context.topMethod() != null) ) {
             // could be a variable, a field, an enumValue, ...
@@ -540,7 +544,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 				// special case: length attribute of arrays in Java
 				((Attribute) accessed).setParentType(dico.ensureFamixClassArray());
 			}
-		} else if (bnd.isParameter() && (! inLambda)) {
+		} else if (bnd.isParameter() && notInALambda()) {
 			accessed = dico.ensureFamixParameter(bnd, name, typ, (Method) owner);
 		} else {
 			// it seems it is a variable.
@@ -596,6 +600,10 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 			return localVariable(accessed, ((Method) ((org.moosetechnology.model.famix.famixjavaentities.Type) accessor.getParentType()).getTypeContainer()));
 		}
 		return false;
+	}
+
+	protected boolean notInALambda() {
+		return (inLambda == 0);
 	}
 
 }

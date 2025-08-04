@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Access;
 import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
+import org.moosetechnology.model.famix.famixjavaentities.Parameter;
 import org.moosetechnology.model.famix.famixtraits.TLocalVariable;
 
 import java.util.Collection;
@@ -101,12 +102,20 @@ public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
     }
 
     @Test
+    public void testNestedLambdasLocalVariables(){
+        parse(new String[] {"src/test/resources/lambdas/NestedLambdas.java"});
+        Collection<LocalVariable> localVars = entitiesOfType(LocalVariable.class);
+        Collection<Parameter> parameters = entitiesOfType(Parameter.class);
+
+        assertEquals(2, localVars.size());
+        assertEquals(0, parameters.size());
+    }
+
+    @Test
     public void testAccessInDeclaration(){
         parse(new String[] {"-alllocals", "-anchor", "assoc", "src/test/resources/lambdas"});
         Collection<Access> accesses = entitiesOfType(Access.class);
-        assertEquals(10, accesses.size());
-
-
+        assertEquals(15, accesses.size());
     }
 
     @Test

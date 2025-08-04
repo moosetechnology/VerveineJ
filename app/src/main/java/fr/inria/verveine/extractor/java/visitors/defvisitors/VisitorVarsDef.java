@@ -138,6 +138,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
+		//System.err.println("visit(MethodDeclaration) " + node.getName().getIdentifier());
 		visitMethodDeclaration( node);
 		structuralType = StructuralEntityKinds.PARAMETER;
 
