@@ -782,7 +782,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
     @Test
     public void testSuperConstructorInvocation() {
  		parse(new String[] {"src/test/resources/ad_hoc/StubSuperConstructor.java"});
-
+ 
        Collection<Method> meths = entitiesNamed( Method.class, "StubSuperConstructor");
 
         assertEquals(2, meths.size());
@@ -800,6 +800,15 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				assertEquals("ArrayList<String>", invoked.getName());
 			}
 		}
+    }
+
+    @Test
+    public void testSuperConstructorInvocationOfStub() {
+ 		parse(new String[] {"src/test/resources/ad_hoc/StubSuperConstructor.java"});
+ 
+       Collection<Method> meths = entitiesNamed( Method.class, "callingSuper");
+
+		assertEquals(2, meths.size());
     }
 
     @Test

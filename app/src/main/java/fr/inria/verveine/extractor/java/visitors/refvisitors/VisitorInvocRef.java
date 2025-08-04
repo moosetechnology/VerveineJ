@@ -272,8 +272,6 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	public boolean visit(SuperMethodInvocation node) {
 		//System.err.println("visit(SuperMethodInvocation) ");
-		// ConstructorInvocation (i.e. 'this(...)' ) happen in constructor, so the name
-		// is the same
 		TNamedEntity receiver = this.dico.ensureFamixImplicitVariable(
 				EntityDictionary.SUPER_NAME,
 				this.context.topType(),
@@ -282,8 +280,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		String calledName = node.getName().getFullyQualifiedName();
 
 		if (bnd == null) {
-			TType superClass = (TType) ((TWithInheritances) this.context.topType()).getSuperInheritances().iterator()
-					.next();
+			TType superClass = (TType) ((TWithInheritances) this.context.topType()).getSuperInheritances().iterator().next().getSuperclass();
 			methodInvocation(bnd, calledName, receiver, superClass, node.arguments());
 		} else {
 			methodInvocation(bnd, calledName, receiver, /* owner */null, node.arguments());
