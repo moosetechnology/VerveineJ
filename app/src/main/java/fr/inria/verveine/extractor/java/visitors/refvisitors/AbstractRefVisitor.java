@@ -126,6 +126,8 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 			} else {
 				fmxTyp = (ParametricClass) dico.ensureFamixClass(parameterizableBnd, name, /*owner*/null, /*isGeneric*/true, modifiers);
 			}
+		} else if ( (name != null) && name.equals("var") ) {
+			fmxTyp = dico.ensureFamixUniqEntity(org.moosetechnology.model.famix.famixjavaentities.Type.class, /*binding*/null, EntityDictionary.IMPLICIT_VAR_TYPE_NAME);	
 		} else {
 			fmxTyp = dico.ensureFamixType(bnd, name, /*owner*/null, (TWithTypes) ctxt, bnd.getModifiers());
 		}

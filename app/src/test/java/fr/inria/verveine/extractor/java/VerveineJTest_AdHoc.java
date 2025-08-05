@@ -364,11 +364,26 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	}
 
 	@Test
+	public void testImplicitVarType() {
+		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
+
+		Type varType = detectFamixElement(Type.class, EntityDictionary.IMPLICIT_VAR_TYPE_NAME);
+		assertNotNull(varType);
+
+		Collection<TEntityTyping> incomingTypings = varType.getIncomingTypings();
+		assertEquals(1, incomingTypings.size());
+
+		assertEquals("str", ((TNamedEntity)firstElt(incomingTypings).getTypedEntity()).getName());
+	}
+
+	@Test
 	public void testArrayListMatthias() {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
 
-		assertEquals(7, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); // Classes are : Bla, Object, String, ArrayList, Arrays, AbstractList, AbstractCollection
-		assertEquals(3, entitiesOfType(ParametricClass.class).size()); // Parametric classes are : ArrayList, AbstractList, AbstractCollection
+		// Classes are : Bla, Object, String, ArrayList, Arrays, AbstractList, AbstractCollection, TYPE_VAR_NAME
+		assertEquals(7, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); 
+		// Parametric classes are : ArrayList, AbstractList, AbstractCollection
+		assertEquals(3, entitiesOfType(ParametricClass.class).size()); 
 		
 		// compute all interfaces used by the 3 types String, ArrayList, Arrays
 		Set<java.lang.Class<?>> allInterfaces = new HashSet<>();

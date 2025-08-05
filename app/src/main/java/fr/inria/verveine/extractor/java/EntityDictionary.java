@@ -103,6 +103,11 @@ public class EntityDictionary {
 	 */
 	public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
 
+	/** name of the entity representing the "unknown" type 'var'
+	 * The entity is intended to be uniq, see {@link #ensureFamixUniqEntity(Class, IBinding, String)}
+	 */
+	public static final String IMPLICIT_VAR_TYPE_NAME = "<ImplicitVarType>";
+
 	/**
 	 * The FAMIX repository where all FAMIX entities are created and stored
 	 */
