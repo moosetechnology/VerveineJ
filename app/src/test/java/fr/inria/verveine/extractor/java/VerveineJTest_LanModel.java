@@ -550,7 +550,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 				assertEquals(ImplicitVariable.class, invok.getReceiver().getClass());
 
 				ImplicitVariable iv = (ImplicitVariable) invok.getReceiver();
-				assertEquals("self", iv.getName());
+				assertEquals("this", iv.getName());
 				assertSame(m, iv.getParentBehaviouralEntity());
 			}
 
@@ -652,11 +652,11 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 								|| invoked.getSignature().equals("equals(Object)"));
 				if (invoked.getSignature().equals("equalsSingle(String)")) {
 					assertSame(sdaClass, ((Method) inv.getSender()).getParentType());
-					assertEquals("self", ((TNamedEntity) inv.getReceiver()).getName());
+					assertEquals("this", ((TNamedEntity) inv.getReceiver()).getName());
 					assertSame(detectFamixElement(Method.class, "equalsSingle"), firstElt(inv.getCandidates()));
 				} else if (invoked.getSignature().equals("id()")) {
 					assertSame(detectFamixElement(Method.class, "equalsSingle"), inv.getSender());
-					assertEquals("self", ((TNamedEntity) inv.getReceiver()).getName());
+					assertEquals("this", ((TNamedEntity) inv.getReceiver()).getName());
 					assertSame(sdaClass, ((Method) firstElt(inv.getCandidates())).getParentType());
 				} else if (invoked.getSignature().equals("equals(Object)")) {
 					assertSame(detectFamixElement(Method.class, "equalsSingle"), inv.getSender());
@@ -748,7 +748,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 				case "out":
 					foundOut++;
 					break;
-				case "self":
+				case "this":
 					foundSelf++;
 					break;
 				case "printer":
