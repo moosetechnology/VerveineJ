@@ -11,7 +11,7 @@ import java.util.*;
 @FameDescription("TInvocation")
 public interface TInvocation extends THasSignature, TAssociation {
 
-        @FameProperty(name = "candidates", opposite = "incomingInvocations")
+    @FameProperty(name = "candidates", opposite = "incomingInvocations")
     public Collection<TInvocable> getCandidates();
 
     public void setCandidates(Collection<? extends TInvocable> candidates);

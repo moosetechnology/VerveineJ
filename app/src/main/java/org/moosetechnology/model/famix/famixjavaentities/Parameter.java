@@ -116,18 +116,18 @@ public class Parameter extends Variable implements TCanBeFinal, TParameter, TWit
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
-    
-    @FameProperty(name = "incomingAccesses", opposite = "variable", derived = true)
+
+    @FameProperty(name = "incomingAccesses", opposite = "candidates")
     public Collection<TAccess> getIncomingAccesses() {
         if (incomingAccesses == null) {
             incomingAccesses = new MultivalueSet<TAccess>() {
                 @Override
                 protected void clearOpposite(TAccess e) {
-                    e.setVariable(null);
+                    e.getCandidates().remove(Parameter.this);
                 }
                 @Override
                 protected void setOpposite(TAccess e) {
-                    e.setVariable(Parameter.this);
+                    e.getCandidates().add(Parameter.this);
                 }
             };
         }

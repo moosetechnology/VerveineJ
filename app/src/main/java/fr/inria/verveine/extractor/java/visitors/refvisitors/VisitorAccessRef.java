@@ -298,7 +298,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		if ( (options.withAnchors(VerveineJOptions.AnchorOptions.assoc))
 				// check that lastAccess corresponds to current one
 				&& (lastAccess != null) && (lastAccess.getAccessor() == accessor)
-				&& ((TNamedEntity) lastAccess.getVariable()).getName().equals(node.getName().getIdentifier())) {
+				&& ((TNamedEntity) (lastAccess.getCandidates().iterator().next())).getName().equals(node.getName().getIdentifier())) {
 			dico.addSourceAnchor(lastAccess, node);
 		}
 		return false;
@@ -318,7 +318,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 			if ( (options.withAnchors(VerveineJOptions.AnchorOptions.assoc))
 					// check that lastAccess corresponds to current one
 					&& (lastAccess != null) && (lastAccess.getAccessor() == accessor)
-					&& (((TNamedEntity) lastAccess.getVariable()).getName().equals(node.getName().getIdentifier()))) {
+					&& (((TNamedEntity) (lastAccess.getCandidates().iterator().next())).getName().equals(node.getName().getIdentifier()))) {
 				dico.addSourceAnchor(lastAccess, node);
 			}
 		}
@@ -500,7 +500,7 @@ public class VisitorAccessRef extends AbstractRefVisitor {
             if ( options.withAnchors(VerveineJOptions.AnchorOptions.assoc)
                     // check that lastAccess corresponds to current one
                     && (lastAccess != null) && (lastAccess.getAccessor() == accessor)
-                    && (((TNamedEntity) lastAccess.getVariable()).getName().equals(node.getIdentifier()))) {
+                    && (((TNamedEntity) (lastAccess.getCandidates().iterator().next())).getName().equals(node.getIdentifier()))) {
                 dico.addSourceAnchor(lastAccess, node);
             }
         }

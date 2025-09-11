@@ -75,7 +75,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 		assertEquals(1, entitiesOfType(Access.class).size());
 		Access access = firstElt(entitiesOfType(Access.class));
-		assertEquals("field2", ((TNamedEntity) access.getVariable()).getName());
+		assertEquals("field2", ((TNamedEntity) firstElt(access.getCandidates())).getName());
 
 	}
 
@@ -356,7 +356,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(2, meth.getAccesses().size());  // only 2 non-local variable accessed:  ImplicitVariable.class, Dictionary.mapBind
 		boolean classFieldFound = false;
 		for (TAccess acc : meth.getAccesses()) {
-			if (((TNamedEntity)acc.getVariable()).getName().equals("class")) {
+			if (((TNamedEntity) firstElt(acc.getCandidates())).getName().equals("class")) {
 				classFieldFound = true;
 			}
 		}

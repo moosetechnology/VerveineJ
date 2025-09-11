@@ -4,6 +4,8 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
+import ch.akuhn.fame.internal.MultivalueSet;
+import java.util.*;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TAccessible;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
@@ -16,7 +18,9 @@ import org.moosetechnology.model.famix.famixtraits.TWithAccesses;
 public class Access extends Entity implements TAccess {
 
     private TWithAccesses accessor;
-    
+
+    private Collection<TAccessible> candidates;
+
     private Boolean isWrite;
     
     private TAssociation next;
@@ -26,8 +30,6 @@ public class Access extends Entity implements TAccess {
     private TAssociation previous;
     
     private TSourceAnchor sourceAnchor;
-    
-    private TAccessible variable;
     
 
 
@@ -128,22 +130,56 @@ public class Access extends Entity implements TAccess {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
-    
-    @FameProperty(name = "variable", opposite = "incomingAccesses")
-    public TAccessible getVariable() {
-        return variable;
+
+    @FameProperty(name = "candidates", opposite = "incomingAccesses", derived = true)
+    public Collection<TAccessible> getCandidates() {
+        if (candidates == null) {
+            candidates = new MultivalueSet<TAccessible>() {
+                @Override
+                protected void clearOpposite(TAccessible e) {
+                    e.getIncomingAccesses().remove(Access.this);
+                }
+                @Override
+                protected void setOpposite(TAccessible e) {
+                    e.getIncomingAccesses().add(Access.this);
+                }
+            };
+        }
+        return candidates;
     }
 
-    public void setVariable(TAccessible variable) {
-        if (this.variable != null) {
-            if (this.variable.equals(variable)) return;
-            this.variable.getIncomingAccesses().remove(this);
-        }
-        this.variable = variable;
-        if (variable == null) return;
-        variable.getIncomingAccesses().add(this);
+    public void setCandidates(Collection<? extends TAccessible> candidates) {
+        this.getCandidates().clear();
+        this.getCandidates().addAll(candidates);
     }
-    
+
+    public void addCandidates(TAccessible one) {
+        this.getCandidates().add(one);
+    }
+
+    public void addCandidates(TAccessible one, TAccessible... many) {
+        this.getCandidates().add(one);
+        for (TAccessible each : many)
+            this.getCandidates().add(each);
+    }
+
+    public void addCandidates(Iterable<? extends TAccessible> many) {
+        for (TAccessible each : many)
+            this.getCandidates().add(each);
+    }
+
+    public void addCandidates(TAccessible[] many) {
+        for (TAccessible each : many)
+            this.getCandidates().add(each);
+    }
+
+    public int numberOfCandidates() {
+        return getCandidates().size();
+    }
+
+    public boolean hasCandidates() {
+        return !getCandidates().isEmpty();
+    }
 
 
 }
