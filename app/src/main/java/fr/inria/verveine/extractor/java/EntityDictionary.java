@@ -104,7 +104,7 @@ public class EntityDictionary {
 	public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
 
 	/** name of the entity representing the "unknown" type 'var'
-	 * The entity is intended to be uniq, see {@link #ensureFamixUniqEntity(Class, IBinding, String)}
+	 * The entity is intended to be uniq, see {@link #ensureFamixUniqEntity(java.lang.Class, IBinding , String )}
 	 */
 	public static final String IMPLICIT_VAR_TYPE_NAME = "<ImplicitVarType>";
 
@@ -647,7 +647,7 @@ public class EntityDictionary {
 		}
 		Access acc = new Access();
 		acc.setAccessor(accessor);
-		acc.setVariable((TAccessible) var);
+		acc.addCandidates((TAccessible) var);
 		acc.setIsWrite(isWrite);
 		chainPrevNext(prev, acc);
 		famixRepoAdd(acc);

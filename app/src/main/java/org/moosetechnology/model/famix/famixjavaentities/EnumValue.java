@@ -113,18 +113,18 @@ public class EnumValue extends Variable implements TEnumValue, TWithComments {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
-    
-    @FameProperty(name = "incomingAccesses", opposite = "variable", derived = true)
+
+    @FameProperty(name = "incomingAccesses", opposite = "candidates")
     public Collection<TAccess> getIncomingAccesses() {
         if (incomingAccesses == null) {
             incomingAccesses = new MultivalueSet<TAccess>() {
                 @Override
                 protected void clearOpposite(TAccess e) {
-                    e.setVariable(null);
+                    e.getCandidates().remove(EnumValue.this);
                 }
                 @Override
                 protected void setOpposite(TAccess e) {
-                    e.setVariable(EnumValue.this);
+                    e.getCandidates().add(EnumValue.this);
                 }
             };
         }

@@ -691,20 +691,20 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 
 			if (accessor.getSignature().equals("name()")) {
 				assertTrue(
-						"Wrong read/write property in access to:" + ((TNamedEntity) acc.getVariable()).getName()
+						"Wrong read/write property in access to:" + ((TNamedEntity) firstElt(acc.getCandidates())).getName()
 								+ " from:" + accessor.getSignature(),
 						acc.getIsRead());
 				assertFalse(
-						"Wrong read/write property in access to:" + ((TNamedEntity) acc.getVariable()).getName()
+						"Wrong read/write property in access to:" + ((TNamedEntity) firstElt(acc.getCandidates())).getName()
 								+ " from:" + accessor.getSignature(),
 						acc.getIsWrite());
 			} else {
 				assertFalse(
-						"Wrong read/write property in access to:" + ((TNamedEntity) acc.getVariable()).getName()
+						"Wrong read/write property in access to:" + ((TNamedEntity) firstElt(acc.getCandidates())).getName()
 								+ " from:" + accessor.getSignature(),
 						acc.getIsRead());
 				assertTrue(
-						"Wrong read/write property in access to:" + ((TNamedEntity) acc.getVariable()).getName()
+						"Wrong read/write property in access to:" + ((TNamedEntity) firstElt(acc.getCandidates())).getName()
 								+ " from:" + accessor.getSignature(),
 						acc.getIsWrite());
 			}
@@ -743,7 +743,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		int foundPrinter = 0;
 		for (TAccess acc : output.getAccesses()) {
 			assertEquals(output, acc.getAccessor());
-			switch (((TNamedEntity) acc.getVariable()).getName()) {
+			switch (((TNamedEntity) firstElt(acc.getCandidates())).getName()) {
 				// case "thePacket": foundThePacket++; break;
 				case "out":
 					foundOut++;
@@ -755,7 +755,7 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 					foundPrinter++;
 					break;
 				default:
-					fail("Unexpected field accessed: " + ((TNamedEntity) acc.getVariable()).getName());
+					fail("Unexpected field accessed: " + ((TNamedEntity) firstElt(acc.getCandidates())).getName());
 			}
 			assertTrue(acc.getIsRead());
 			assertFalse(acc.getIsWrite());

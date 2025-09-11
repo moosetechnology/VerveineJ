@@ -11,7 +11,7 @@ import java.util.*;
 @FameDescription("TAccessible")
 public interface TAccessible  {
 
-        @FameProperty(name = "numberOfAccesses", derived = true)
+    @FameProperty(name = "numberOfAccesses", derived = true)
     public Number getNumberOfAccesses();
 
     @FameProperty(name = "numberOfLocalAccesses", derived = true)
@@ -29,7 +29,7 @@ public interface TAccessible  {
     @FameProperty(name = "numberOfGlobalAccesses", derived = true)
     public Number getNumberOfGlobalAccesses();
 
-    @FameProperty(name = "incomingAccesses", opposite = "variable", derived = true)
+    @FameProperty(name = "incomingAccesses", opposite = "candidates")
     public Collection<TAccess> getIncomingAccesses();
 
     public void setIncomingAccesses(Collection<? extends TAccess> incomingAccesses);
@@ -45,8 +45,6 @@ public interface TAccessible  {
     public int numberOfIncomingAccesses();
 
     public boolean hasIncomingAccesses();
-
-
 
 }
 
