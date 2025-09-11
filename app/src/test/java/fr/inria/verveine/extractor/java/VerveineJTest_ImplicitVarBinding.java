@@ -31,19 +31,19 @@ public class VerveineJTest_ImplicitVarBinding extends VerveineJTest_Basic {
 
 	@Test
 	public void testUniqForMethod() {
-		assertEquals(getImplicitVar(mth1, EntityDictionary.SELF_NAME), getImplicitVar(mth1, EntityDictionary.SELF_NAME));
+		assertEquals(getImplicitVar(mth1, EntityDictionary.THIS_NAME), getImplicitVar(mth1, EntityDictionary.THIS_NAME));
 		assertEquals(getImplicitVar(mth1, EntityDictionary.SUPER_NAME), getImplicitVar(mth1, EntityDictionary.SUPER_NAME));
 	}
 
     @Test
 	public void testDiffForMethods() {
-		assertNotEquals(getImplicitVar(mth1, EntityDictionary.SELF_NAME), getImplicitVar(mth2, EntityDictionary.SELF_NAME));
+		assertNotEquals(getImplicitVar(mth1, EntityDictionary.THIS_NAME), getImplicitVar(mth2, EntityDictionary.THIS_NAME));
 		assertNotEquals(getImplicitVar(mth1, EntityDictionary.SUPER_NAME), getImplicitVar(mth2, EntityDictionary.SUPER_NAME));
 	}
 
 	@Test
 	public void testSefDiffSuper() {
-		assertNotEquals(getImplicitVar(mth1, EntityDictionary.SELF_NAME), getImplicitVar(mth1, EntityDictionary.SUPER_NAME));
+		assertNotEquals(getImplicitVar(mth1, EntityDictionary.THIS_NAME), getImplicitVar(mth1, EntityDictionary.SUPER_NAME));
 	}
 
 	@Test

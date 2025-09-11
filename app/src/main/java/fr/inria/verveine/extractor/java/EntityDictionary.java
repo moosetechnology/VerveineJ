@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -76,7 +75,7 @@ public class EntityDictionary {
 
 	public static final String DEFAULT_PCKG_NAME = "<Default Package>";
 	public static final String STUB_METHOD_CONTAINER_NAME = "<StubMethodContainer>";
-	public static final String SELF_NAME = "this";
+	public static final String THIS_NAME = "this";
 	public static final String SUPER_NAME = "super";
 	
 	public static final String OBJECT_NAME = "Object";
@@ -770,7 +769,7 @@ public class EntityDictionary {
 			iv = new ImplicitVars();
 		}
 		
-		if (name.equals(SELF_NAME)) {
+		if (name.equals(THIS_NAME)) {
 			ret = iv.self_iv;
 		}
 		else if (name.equals(SUPER_NAME)) {

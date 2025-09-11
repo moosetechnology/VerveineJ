@@ -451,10 +451,10 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 
 	@Override
 	public boolean visit(ThisExpression node) {
-		IBinding bnd = ImplicitVarBinding.getInstance(context.topMethod(), EntityDictionary.SELF_NAME);
+		IBinding bnd = ImplicitVarBinding.getInstance(context.topMethod(), EntityDictionary.THIS_NAME);
 		ImplicitVariable fmx = dico.ensureFamixImplicitVariable(
 				bnd, 
-				EntityDictionary.SELF_NAME, 
+				EntityDictionary.THIS_NAME,
 				this.context.topType(), 
 				context.topMethod());
 		if (fmx != null) {

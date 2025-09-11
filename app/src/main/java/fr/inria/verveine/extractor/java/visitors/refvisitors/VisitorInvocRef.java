@@ -320,7 +320,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			signature = signature.substring(0, signature.length() - 1);
 		}
 		ImplicitVariable receiver = dico.ensureFamixImplicitVariable(
-				EntityDictionary.SELF_NAME,
+				EntityDictionary.THIS_NAME,
 				context.topType(),
 				context.topMethod());
 
@@ -490,7 +490,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	private TNamedEntity getReceiver(Expression expr) {
 		// msg(), same as ThisExpression
 		if (expr == null) {
-			return this.dico.ensureFamixImplicitVariable(dico.SELF_NAME, this.context.topType(), context.topMethod());
+			return this.dico.ensureFamixImplicitVariable(dico.THIS_NAME, this.context.topType(), context.topMethod());
 		}
 
 		// array[i].msg()
@@ -612,7 +612,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		// this.msg()
 		if (NodeTypeChecker.isThisExpression(expr)) {
-			return this.dico.ensureFamixImplicitVariable(EntityDictionary.SELF_NAME, context.topType(),
+			return this.dico.ensureFamixImplicitVariable(EntityDictionary.THIS_NAME, context.topType(),
 					context.topMethod());
 		}
 

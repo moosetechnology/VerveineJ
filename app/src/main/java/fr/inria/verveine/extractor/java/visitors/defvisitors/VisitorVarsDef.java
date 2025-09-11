@@ -268,7 +268,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 	}
 
 	public boolean visit(ConstructorInvocation node) {
-		dico.ensureFamixImplicitVariable(EntityDictionary.SELF_NAME, context.topType(), context.topMethod());
+		dico.ensureFamixImplicitVariable(EntityDictionary.THIS_NAME, context.topType(), context.topMethod());
 
 		return super.visit(node);
 	}

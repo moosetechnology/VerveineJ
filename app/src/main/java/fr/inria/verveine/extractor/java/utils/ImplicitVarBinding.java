@@ -30,7 +30,7 @@ public class ImplicitVarBinding implements IBinding {
 	 * Used to keep the two possible ImplicitVariable for a given class
 	 */
 	protected static class ImplicitVars {
-		public ImplicitVarBinding self_iv;
+		public ImplicitVarBinding this_iv;
 		public ImplicitVarBinding super_iv;
 	}
 	
@@ -42,13 +42,13 @@ public class ImplicitVarBinding implements IBinding {
 			allImplicitVarBnd.put(tMethod, vars);
 		}
 		else {
-			bnd = (name.equals(EntityDictionary.SELF_NAME) ? vars.self_iv : vars.super_iv);
+			bnd = (name.equals(EntityDictionary.THIS_NAME) ? vars.this_iv : vars.super_iv);
 		}
 
 		if (bnd == null) {
 			bnd = new ImplicitVarBinding(tMethod, name);
-			if (name.equals(EntityDictionary.SELF_NAME)) {
-				vars.self_iv = bnd;
+			if (name.equals(EntityDictionary.THIS_NAME)) {
+				vars.this_iv = bnd;
 			}
 			else {
 				vars.super_iv = bnd;
