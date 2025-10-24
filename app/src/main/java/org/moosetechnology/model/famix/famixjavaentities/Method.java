@@ -628,6 +628,11 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     public Boolean getIsPublic() {
         return this.visibility.equals("public");
     }
+
+    @FameProperty(name = "isDefault", derived = true)
+    public Boolean getIsDefault() {
+        return this.kind == "default";
+    }
     
     @FameProperty(name = "isRoot", derived = true)
     public Boolean getIsRoot() {
