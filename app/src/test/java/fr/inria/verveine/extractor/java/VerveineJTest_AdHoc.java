@@ -836,6 +836,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		Method method = firstElt(meths);
 
 		assertNotNull(method);
+        assertFalse( method.getIsDefault());
 		assertTrue( method.getIsPublic());
 		assertTrue( method.getIsClassSide());
 		assertTrue( method.getIsFinal());
@@ -885,5 +886,22 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertNotNull( catchParameter.getDeclaredType());
 		assertEquals( org.moosetechnology.model.famix.famixjavaentities.Exception.class, catchParameter.getDeclaredType().getClass());
 	}
- 
+
+    @Test
+    /*
+     *   Issue: https://github.com/moosetechnology/VerveineJ/issues/165
+     *   The goal is to see if we can make the difference between declared and defined methods in interfaces
+     */
+    public void testDeclaredAndDefinedInterfaceMethods(){
+        parse(new String[] {"src/test/resources/ad_hoc/Interface.java"});
+
+        Collection<Method> meths = entitiesNamed( Method.class, "definedMethod");
+        assertEquals(1, meths.size());
+        Method method = firstElt(meths);
+        assertTrue(method.getIsDefault());
+        assertEquals(EntityDictionary.DEFAULT_IMPLEMENTATION_KIND_MARKER, method.getKind());
+
+    }
 }
+
+

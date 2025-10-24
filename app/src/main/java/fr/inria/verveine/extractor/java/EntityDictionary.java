@@ -97,10 +97,15 @@ public class EntityDictionary {
 	public static final String MODIFIER_VOLATILE = "volatile";
 	public static final String MODIFIER_SYNCHRONIZED = "synchronized";
 
-	/**
-	 * An MSE marker for methods
-	 */
-	public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
+    /**
+     * An MSE marker for methods
+     */
+    public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
+
+    /**
+     * The symbol kind to use to define that a method is a default implementation in an interface
+     */
+    public static final String DEFAULT_IMPLEMENTATION_KIND_MARKER = "default";
 
 	/** name of the entity representing the "unknown" type 'var'
 	 * The entity is intended to be uniq, see {@link #ensureFamixUniqEntity(java.lang.Class, IBinding , String )}
@@ -2482,6 +2487,11 @@ public class EntityDictionary {
 			if (fmx.getName().equals(Util.getOwner(fmx).getName())) {
 				fmx.setKind(CONSTRUCTOR_KIND_MARKER);
 			}
+
+            //If it has the #default keywork, we mark it as default implementation
+            if (Modifier.isDefault(modifiers)) {
+                fmx.setKind(DEFAULT_IMPLEMENTATION_KIND_MARKER);
+            }
 		}
 
 		if ((fmx != null) && delayedRetTyp) {
