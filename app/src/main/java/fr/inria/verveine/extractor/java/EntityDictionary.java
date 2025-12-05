@@ -89,10 +89,15 @@ public class EntityDictionary {
 	public static final String MODIFIER_VOLATILE = "volatile";
 	public static final String MODIFIER_SYNCHRONIZED = "synchronized";
 
-	/**
-	 * An MSE marker for methods
-	 */
-	public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
+    /**
+     * An MSE marker for methods
+     */
+    public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
+
+    /**
+     * The symbol kind to use to define that a method is a default implementation in an interface
+     */
+    public static final String DEFAULT_IMPLEMENTATION_KIND_MARKER = "default";
 
 	/** name of the entity representing the "unknown" type 'var'
 	 * The entity is intended to be unique, see {@link #ensureFamixUniqEntity(java.lang.Class, IBinding , String )}
@@ -1093,7 +1098,9 @@ public class EntityDictionary {
 			}
 		}
 
-		if (name.equals(OBJECT_NAME)) { // TODO && owner == java.lang
+        // We should ensure the creation of Object only if the owner is the Object from java.lang. The problem is that sometimes the owner is null. or now we consider that if the owner is null, we have the Object of java.lang.
+        boolean ownerIsJavaLang = (owner == null) || "java.lang".equals(owner.getName());
+		if (name.equals(OBJECT_NAME) && ownerIsJavaLang) {
 			return ensureFamixClassObject(bnd);
 		}
 
@@ -2479,6 +2486,11 @@ public class EntityDictionary {
 			if (fmx.getName().equals(Util.getOwner(fmx).getName())) {
 				fmx.setKind(CONSTRUCTOR_KIND_MARKER);
 			}
+
+            //If it has the #default keywork, we mark it as default implementation
+            if (Modifier.isDefault(modifiers)) {
+                fmx.setKind(DEFAULT_IMPLEMENTATION_KIND_MARKER);
+            }
 		}
 
 		if ((fmx != null) && delayedRetTyp) {
@@ -2939,13 +2951,18 @@ public class EntityDictionary {
 	 * @return a Famix class for "Object"
 	 */
 	public Class ensureFamixClassObject(ITypeBinding bnd) {
-		Class fmx = ensureFamixUniqEntity(Class.class, bnd, OBJECT_NAME);
+        // In the past we used #ensureFamixUniqEntity but that does not check that the parent package is right and we got some Object from other packages than java.lang...
+        Collection<Class> objects = getEntityByName(Class.class, "Object");
 
-		if (fmx != null) {
-			fmx.setTypeContainer(ensureFamixPackageJavaLang(null));
-		}
-		// Note: "Object" has no superclass
+        for (Class entity : objects) {
+                //We need to cast because the type container is a FamixTWithType but all implementors of this should be named in Java...
+                if ("java.lang".equals(((TNamedEntity) entity.getTypeContainer()).getName())) {
+                    return entity;
+                }
+        }
 
+        Class fmx = createFamixEntity(Class.class, "Object");
+        fmx.setTypeContainer(ensureFamixPackageJavaLang(null));
 		return fmx;
 	}
 

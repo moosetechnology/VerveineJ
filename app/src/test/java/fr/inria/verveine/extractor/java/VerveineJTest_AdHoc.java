@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
@@ -844,6 +845,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		Method method = firstElt(meths);
 
 		assertNotNull(method);
+        assertFalse( method.getIsDefault());
 		assertTrue( method.getIsPublic());
 		assertTrue( method.getIsClassSide());
 		assertTrue( method.getIsFinal());
@@ -893,5 +895,42 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertNotNull( catchParameter.getDeclaredType());
 		assertEquals( org.moosetechnology.model.famix.famixjavaentities.Exception.class, catchParameter.getDeclaredType().getClass());
 	}
- 
+
+    @Test
+    /*
+     *   Issue: https://github.com/moosetechnology/VerveineJ/issues/165
+     *   The goal is to see if we can make the difference between declared and defined methods in interfaces
+     */
+    public void testDeclaredAndDefinedInterfaceMethods(){
+        parse(new String[] {"src/test/resources/ad_hoc/Interface.java"});
+
+        Collection<Method> meths = entitiesNamed( Method.class, "definedMethod");
+        assertEquals(1, meths.size());
+        Method method = firstElt(meths);
+        assertTrue(method.getIsDefault());
+        assertEquals(EntityDictionary.DEFAULT_IMPLEMENTATION_KIND_MARKER, method.getKind());
+
+    }
+
+    @Test
+    /*
+    * Issue: https://github.com/moosetechnology/VerveineJ/issues/175
+    * Regression test ensuring that a class named Object does not always have "java.lang" as owner
+     */
+    public void testOwnerOfObjectIsNotAlwaysJavaLang() {
+        parse(new String[]{"src/test/resources/ad_hoc/Object.java"});
+
+        Collection<Class> classes = entitiesNamed(Class.class, "Object");
+        assertTrue("We should have at least java.lang.Object and adhoc.Object", classes.size() > 1);
+
+        //Maybe we can do the next line simpler but I'm bad in Java :'(
+        List<String> names = new ArrayList<>(classes.size());
+        for (Class c : classes) {
+            names.add(((TNamedEntity) c.getTypeContainer()).getName());
+        }
+
+        assertTrue(names.containsAll(Arrays.asList("lang", "ad_hoc")));
+    }
 }
+
+
