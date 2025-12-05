@@ -856,17 +856,18 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		for (TMethod tm : clazz.getMethods()) {
 			Method m = (Method) tm;
 			if (m.getName().equals(EntityDictionary.INIT_BLOCK_NAME)) {
+				assertTrue(m.getIsPrivate());
 				assertFalse(m.getIsPublic());
 			} else {
 				assertTrue(m.getIsPublic());
+				assertFalse(m.getIsPrivate());
 			}
-			assertFalse(m.getIsPrivate());
 			assertFalse(m.getIsProtected());
 			// assertFalse(m.getIsFinal());
 			if (m.getName().equals("output")) {
 				assertTrue(m.getIsAbstract());
 			} else {
-				// assertFalse(m.getIsAbstract());
+				assertFalse(m.getIsAbstract());
 			}
 		}
 

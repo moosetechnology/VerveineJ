@@ -5,6 +5,7 @@ import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 import fr.inria.verveine.extractor.java.utils.StructuralEntityKinds;
 import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.Initializer;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
 import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
@@ -202,16 +203,16 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 		structuralType = StructuralEntityKinds.ATTRIBUTE;
 
 		// creating the attribute(s)
-		for (VariableDeclaration vardecl : (List<VariableDeclaration>)node.fragments() ) {
-			createStructuralEntity( structuralType, vardecl, context.top());
+		for (var variableDeclaration : (List<VariableDeclaration>)node.fragments() ) {
+			createStructuralEntity( structuralType, variableDeclaration, context.top());
 		}
 
 		// Possible local variables in optional initializer
-		if (hasInitBlock(node)) {  // recovers optional EntityDictionary.INIT_BLOCK_NAME method
+		if (hasInitBlock(node)) {  // recovers optional Initializer and push it on the context stack.
 			structuralType = StructuralEntityKinds.LOCALVAR;
-			for (VariableDeclaration vardecl : (List<VariableDeclaration>)node.fragments() ) {
-				if (vardecl.getInitializer() != null) {
-					vardecl.getInitializer().accept(this);
+			for (var variableDeclaration : (List<VariableDeclaration>)node.fragments() ) {
+				if (variableDeclaration.getInitializer() != null) {
+					variableDeclaration.getInitializer().accept(this);
 				}
 			}
 		}

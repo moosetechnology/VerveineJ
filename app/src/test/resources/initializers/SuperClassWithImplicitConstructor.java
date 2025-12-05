@@ -1,3 +1,4 @@
-package constructors;
+package initializers;
 
-public class SuperClassWithImplicitConstructor {}
+public class SuperClassWithImplicitConstructor {
+}

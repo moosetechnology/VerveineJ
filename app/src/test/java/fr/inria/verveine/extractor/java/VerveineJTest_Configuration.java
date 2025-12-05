@@ -178,6 +178,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertEquals(1, clazz.getComments().size());
 
 		int numberTested = 0;
+
 		for (Attribute att : entitiesOfType(Attribute.class)) {
 			assertEquals(1, att.getComments().size());
 			numberTested++;
@@ -186,7 +187,11 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 		assertEquals(12, entitiesOfType(Method.class).size());
 		for (Method meth : entitiesOfType(Method.class)) {
-			if (meth.getSignature().equals("ClassWithComments(int i, int j)")) {
+			if (meth.getIsInitializer()) {
+				numberTested++;
+				assertEquals(0, meth.getComments().size());
+			}
+			else if (meth.getSignature().equals("ClassWithComments(int i, int j)")) {
 				numberTested++;
 				assertEquals(2, meth.getComments().size());
 			}
@@ -207,7 +212,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 				assertEquals(1, meth.getComments().size());
 			}
 		}
-		assertEquals(6, numberTested);  // check that all expected methods were actually found and tested
+		assertEquals(7, numberTested);  // check that all expected methods were actually found and tested
 	}
 
 	@Test

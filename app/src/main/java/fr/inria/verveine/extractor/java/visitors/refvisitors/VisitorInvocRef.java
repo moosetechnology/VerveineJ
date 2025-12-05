@@ -5,6 +5,7 @@ import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
 import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
+import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.*;
@@ -107,13 +108,13 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		methodInvocation(node.resolveConstructorBinding(), typName, /* receiver */null, /* methOwner */fmx,
 				(List<Expression>) node.arguments());
-		Invocation lastInvok = (Invocation) context.getLastInvocation();
+		Invocation lastInvocation = (Invocation) context.getLastInvocation();
 		if (options.withAnchors(VerveineJOptions.AnchorOptions.assoc)
-				&& (lastInvok != null)
-				&& (lastInvok.getSender() == context.topMethod())
-				&& (lastInvok.getReceiver() == null)
-				&& (lastInvok.getSignature().startsWith(typName))) {
-			dico.addSourceAnchor(lastInvok, node);
+				&& (lastInvocation != null)
+				&& (lastInvocation.getSender() == context.topMethod())
+				&& (lastInvocation.getReceiver() == null)
+				&& (lastInvocation.getSignature().startsWith(typName))) {
+			dico.addSourceAnchor(lastInvocation, node);
 		}
 		return super.visit(node);
 	}
@@ -218,14 +219,12 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 	 */
 	@Override
 	public boolean visit(FieldDeclaration node) {
-		//System.err.println("visit(FieldDeclaration) ");
 		hasInitBlock(node); // to recover optional EntityDictionary.INIT_BLOCK_NAME method
 		return true;
 	}
 
 	@Override
 	public void endVisit(FieldDeclaration node) {
-		//System.err.println("endVisit(FieldDeclaration) ");
 		endVisitFieldDeclaration(node);
 	}
 

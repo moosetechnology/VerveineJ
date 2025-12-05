@@ -496,7 +496,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertSame(detectFamixElement(Package.class, "ad_hoc"), Util.getOwner(pl));
 		assertEquals(8, pl.getEnumValues().size());
 		assertEquals(4, pl.getAttributes().size());
-		assertEquals(7 + 2, pl.getMethods().size()); // 7 methods + <initializer> + values
+		assertEquals(7 + 2 + 1, pl.getMethods().size()); // 7 methods + 2 initializers (1 static, 1 not) + values
 	}
 
 	@Test
@@ -592,7 +592,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 			}
 		}
 
-		assertEquals(7+2, pl.getMethods().size());  // see testEnumDecl()
+		assertEquals(7+2+1, pl.getMethods().size());  // see testEnumDecl()
 		for (TMethod tm : pl.getMethods()) {
 			Method m = (Method) tm;
 			if ( m.getName().equals("Planet") || m.getName().equals("main") || m.getName().equals("sillyArrayAssignement")
@@ -663,23 +663,31 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	public void testStaticInitializationBlock() {
 		parse(new String[] {"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/DefaultConstructor.java"});
 
-		Collection<Method> l_meth = entitiesNamed( Method.class, EntityDictionary.INIT_BLOCK_NAME);
-		assertEquals(3, l_meth.size());
-		for (Method meth : l_meth) {
-			assertEquals(EntityDictionary.INIT_BLOCK_NAME+"()", meth.getSignature());
-			assertFalse(meth.getIsDead());
+		Collection<Initializer> initializers = entitiesOfType( Initializer.class);
 
-			if (((TNamedEntity)meth.getParentType()).getName().equals("Card")) {
-				assertEquals(5, meth.getOutgoingInvocations().size());
+		/* Card has a static initializer containing a field initialization and 1 static initialization block.
+		 * Planet and DefaultConstructor all have 2 initializers: 1 static, 1 not.
+		 */
+		assertEquals(6, initializers.size());
+
+		for (Initializer initializer : initializers) {
+			assertEquals(EntityDictionary.INIT_BLOCK_NAME, initializer.getName());
+			assertFalse(initializer.getIsDead());
+
+			String className = ((TNamedEntity)initializer.getParentType()).getName();
+
+			if (className.equals("Card")) {
+				if (!initializer.getIsInitializationBlock()) {
+					assertEquals(1, initializer.numberOfOutgoingInvocations());
+				}else {
+					assertEquals(4, initializer.getOutgoingInvocations().size());
+				}
 			}
-			else if (((TNamedEntity)meth.getParentType()).getName().equals("Planet")) {
-				assertEquals(0, meth.getOutgoingInvocations().size());
-			}
-			else if (((TNamedEntity)meth.getParentType()).getName().equals("DefaultConstructor")) {
-				assertEquals(0, meth.getOutgoingInvocations().size());
+			else if (className.equals("Planet") || className.equals("DefaultConstructor")) {
+				assertEquals(0, initializer.getOutgoingInvocations().size());
 			}
 			else {
-				fail("Unknown class with an <Initializer> method: " + ((TNamedEntity)meth.getParentType()).getName());
+				fail("Unknown class with an <Initializer> method: " + ((TNamedEntity)initializer.getParentType()).getName());
 			}
 		}
 	}
@@ -694,7 +702,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, fmx.getEnumValues().size());
 		assertEquals("ONE", ((TNamedEntity) firstElt(fmx.getEnumValues())).getName());
 
-		assertEquals(2, fmx.getMethods().size());  // constructor + INIT_BLOCK
+		assertEquals(3, fmx.getMethods().size());  // constructor + 2 initializers (1 static, 1 not)
 	}
 
 	@Test

@@ -1,14 +1,6 @@
 package fr.inria.verveine.extractor.java;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.ConcurrentModificationException;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -103,7 +95,7 @@ public class EntityDictionary {
 	public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
 
 	/** name of the entity representing the "unknown" type 'var'
-	 * The entity is intended to be uniq, see {@link #ensureFamixUniqEntity(java.lang.Class, IBinding , String )}
+	 * The entity is intended to be unique, see {@link #ensureFamixUniqEntity(java.lang.Class, IBinding , String )}
 	 */
 	public static final String IMPLICIT_VAR_TYPE_NAME = "<ImplicitVarType>";
 
@@ -129,7 +121,7 @@ public class EntityDictionary {
 	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
-	 * or may have the same binding than their associated type so they can't be kept easily in {@link #keyToEntity}
+	 * or may have the same binding as their associated type so they can't be kept easily in {@link #keyToEntity}
 	 */
 	@Deprecated
 	protected Map<Type,ImplicitVars> typeToImpVar;
@@ -173,7 +165,7 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Resets the dictionnary in a proper state after loading entities from an existing MSE file:
+	 * Resets the dictionary in a proper state after loading entities from an existing MSE file:
 	 * <UL>
 	 * <li>map all named entities to their names in <b>mapName</b></li>
 	 * <li>reset some boolean properties (e.g. <b>isStub</b>) that are false (they are not saved in the mse file and therefore not initialized)</li>
@@ -181,7 +173,11 @@ public class EntityDictionary {
 	 */
 	protected void recoverExistingRepository() {
 		for (NamedEntity ent : famixRepo.all(NamedEntity.class)) {
-			mapEntityToName( ent.getName(), ent);
+			try {
+				mapEntityToName(ent.getName(), ent);
+			} catch (java.lang.Exception e) {
+				System.err.println("Error recovering entity " + ent.getName() + " from repository " + famixRepo);
+			};
 			// for the Exception to be raised, the return value must be tested
 			try { if (((TCanBeStub) ent).getIsStub()) {} }
 			catch (NullPointerException e) { ((TCanBeStub)ent).setIsStub(Boolean.FALSE); }
@@ -1050,8 +1046,8 @@ public class EntityDictionary {
 	/**
 	 * Returns a Famix Class associated with the ITypeBinding.
 	 * The Entity is created if it does not exist.
-	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
-	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
+	 * @param name -- the name of the Famix Class (MUST NOT be null, but this is not checked)
+	 * @param owner -- package defining the class (should not be null, but it will work if it is)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	@SuppressWarnings("deprecation")
@@ -1132,10 +1128,11 @@ public class EntityDictionary {
 		}
 
 		if (fmx!=null) {
-			// we just created it or it was not bound, so we make sure it has the right information in it
+			// we just created it, or it was not bound so we make sure it has the right information in it
 			if (bnd != null) {
 				setClassModifiers(fmx, bnd.getDeclaredModifiers());
 			}
+
 			TAssociation lastAssoc = null;
 
 			if (bnd != null) {
@@ -2354,7 +2351,7 @@ public class EntityDictionary {
 	/**
 	 * Returns a Famix Method associated with the IMethodBinding. The Entity is created if it does not exist.
 	 * The Entity is created if it does not exist.
-	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
+	 * @param name -- the name of the Famix Method (MUST NOT be null, but this is not checked)
 	 * @param ret -- Famix Type returned by the method (ideally should only be null in case of a constructor, but will accept it in any case)
 	 * @param owner -- type defining the method (should not be null, but it will work if it is)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
@@ -2492,6 +2489,42 @@ public class EntityDictionary {
 
 		return fmx;
 	}
+
+	/**
+	 * Creates or recovers the initializer method containing the attribute initializations of a type.
+	 * @param owner Type containing the initializer
+	 * @param isStatic Modifier of the initializer. A type can have 2 initializers for attribute initialization: 1 static and 1 not.
+	 * @param isInitializationBlock True if the entity is an initialization block. False for the artificial method containing all field initializations.
+	 * @return the FamixInitializer
+	 */
+	public Initializer ensureFamixInitializer(TWithMethods owner, Boolean isStatic, Boolean isInitializationBlock) {
+		Initializer fmx = null;
+
+		if (owner != null) {
+			Optional<TMethod> existingInitializer = owner.getMethods().stream()
+					.filter(meth ->
+							((Method) meth).getIsInitializer() &&
+							((Method) meth).getIsClassSide().equals(isStatic) &&
+							((Method) meth).getIsConstructor().equals(false) &&
+							((Initializer) meth).getIsInitializationBlock().equals(isInitializationBlock))
+					.findFirst();
+			if (existingInitializer.isPresent()) {
+				fmx = (Initializer) existingInitializer.get();
+			}
+		}
+
+		if (fmx == null) {
+			fmx = new Initializer();
+			fmx.setName(INIT_BLOCK_NAME);
+			fmx.setVisibility(MODIFIER_PRIVATE);
+			fmx.setParentType(owner);
+			fmx.setIsClassSide(isStatic);
+			fmx.setIsInitializationBlock(isInitializationBlock);
+		}
+
+		return fmx;
+	}
+
 
 	/**
 	 * Creates or recovers a stub Famix Method

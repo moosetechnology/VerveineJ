@@ -176,11 +176,11 @@ public class PrimitiveType extends Type implements TPrimitiveType {
     public void setName(String name) {
         this.name = name;
     }
-    
-    @FameProperty(name = "numberOfChildren", derived = true)
-    public Number getNumberOfChildren() {
+
+    @FameProperty(name = "numberOfContainedEntities", derived = true)
+    public Number getNumberOfContainedEntities() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
     
     @FameProperty(name = "numberOfDeadChildren", derived = true)

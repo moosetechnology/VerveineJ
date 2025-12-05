@@ -6,17 +6,20 @@ public enum EnumConstWithInitNewString {
 
        ONE(new String("whatever")) {
               @Override
-              void hook() {
+              public void hook() {
                      string.toString();
               }
        };
 
        String string;
-       
+
        EnumConstWithInitNewString(String s) {
               this.string = s;
        }
 
+       public void hook() {
+              string += "whatever";
+       }
 }
 
  

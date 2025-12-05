@@ -10,7 +10,7 @@ import ch.akuhn.fame.FameProperty;
 @FameDescription("THasKind")
 public interface THasKind  {
 
-        @FameProperty(name = "isGetter", derived = true)
+    @FameProperty(name = "isGetter", derived = true)
     public Boolean getIsGetter();
 
     @FameProperty(name = "isConstant", derived = true)
@@ -20,9 +20,6 @@ public interface THasKind  {
     public String getKind();
 
     public void setKind(String kind);
-
-    @FameProperty(name = "isConstructor", derived = true)
-    public Boolean getIsConstructor();
 
     @FameProperty(name = "isSetter", derived = true)
     public Boolean getIsSetter();
