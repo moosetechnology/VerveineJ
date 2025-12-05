@@ -1102,7 +1102,9 @@ public class EntityDictionary {
 			}
 		}
 
-		if (name.equals(OBJECT_NAME)) { // TODO && owner == java.lang
+        // We should ensure the creation of Object only if the owner is the Object from java.lang. The problem is that sometimes the owner is null. or now we consider that if the owner is null, we have the Object of java.lang.
+        boolean ownerIsJavaLang = (owner == null) || "java.lang".equals(owner.getName());
+		if (name.equals(OBJECT_NAME) && ownerIsJavaLang) {
 			return ensureFamixClassObject(bnd);
 		}
 
@@ -2916,13 +2918,18 @@ public class EntityDictionary {
 	 * @return a Famix class for "Object"
 	 */
 	public Class ensureFamixClassObject(ITypeBinding bnd) {
-		Class fmx = ensureFamixUniqEntity(Class.class, bnd, OBJECT_NAME);
+        // In the past we used #ensureFamixUniqEntity but that does not check that the parent package is right and we got some Object from other packages than java.lang...
+        Collection<Class> objects = getEntityByName(Class.class, "Object");
 
-		if (fmx != null) {
-			fmx.setTypeContainer(ensureFamixPackageJavaLang(null));
-		}
-		// Note: "Object" has no superclass
+        for (Class entity : objects) {
+                //We need to cast because the type container is a FamixTWithType but all implementors of this should be named in Java...
+                if ("java.lang".equals(((TNamedEntity) entity.getTypeContainer()).getName())) {
+                    return entity;
+                }
+        }
 
+        Class fmx = createFamixEntity(Class.class, "Object");
+        fmx.setTypeContainer(ensureFamixPackageJavaLang(null));
 		return fmx;
 	}
 
