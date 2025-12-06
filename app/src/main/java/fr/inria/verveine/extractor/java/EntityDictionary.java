@@ -1026,7 +1026,7 @@ public class EntityDictionary {
 	 */
 	@SuppressWarnings("deprecation")
 	public Class ensureFamixClass(ITypeBinding bnd, String name, TNamedEntity owner, boolean isGeneric, int modifiers) {
-		Class fmx = null;
+		Class fmx;
 
 		// --------------- some special cases
 		if (bnd != null) {

@@ -10,7 +10,6 @@ import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
@@ -107,11 +106,11 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
 		TType fmx;
 		if(bnd.isInterface()) {
-			fmx = dico.getFamixInterface(bnd, /*name*/node.getName().getIdentifier(), (ContainerEntity) /*owner*/context.top());
+			fmx = dico.getFamixInterface(bnd, node.getName().getIdentifier(), (ContainerEntity) /*owner*/context.top());
 		} else if (dico.isThrowable(bnd)) {
-			fmx = dico.getFamixException(bnd, /*name*/node.getName().getIdentifier(), (TWithTypes) /*owner*/context.top());
+			fmx = dico.getFamixException(bnd, node.getName().getIdentifier(), (TWithTypes) /*owner*/context.top());
 		} else {
-			fmx = dico.getFamixClass(bnd, /*name*/node.getName().getIdentifier(), (TNamedEntity) /*owner*/context.top());
+			fmx = dico.getFamixClass(bnd, node.getName().getIdentifier(), /*owner*/context.top());
 		}
 		if (fmx != null) {
 			this.context.pushType(fmx);
@@ -320,7 +319,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		Method ret = null;
 		if (owner != null) {
 			for (TMethod meth : owner.getMethods()) {
-				if (((Method) meth).getName().equals(EntityDictionary.INIT_BLOCK_NAME)) {
+				if (meth.getName().equals(EntityDictionary.INIT_BLOCK_NAME)) {
 					ret = (Method) meth;
 					break;
 				}
@@ -336,11 +335,6 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 		context.pushAnnotationMember(fmx);  // whether fmx==null or not
 		return fmx;
-	}
-
-	public void endVisitAnnotationTypeMemberDeclaration(AnnotationTypeMemberDeclaration node) {
-		this.context.popAnnotationMember();
-		super.endVisit(node);
 	}
 
 	protected String getAnonymousSuperTypeName() {

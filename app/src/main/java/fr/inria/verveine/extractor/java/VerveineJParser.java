@@ -166,7 +166,6 @@ public class VerveineJParser {
 			Writer writer = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8));
 			if (this.options.outputFormat.equalsIgnoreCase(VerveineJOptions.MSE_OUTPUT_FORMAT)) {
 				try {
-					Util.repo = famixRepo;
 					famixRepo.exportMSE(writer);
 				}
 				catch (UnknownElementError err) {
