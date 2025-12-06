@@ -6,10 +6,8 @@ import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 import org.eclipse.jdt.core.dom.*;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
@@ -156,7 +154,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 		if (supbnd != null) {
 			t = dico.ensureFamixType(supbnd);
 		} else {
-			t = dico.ensureFamixClassObject(null);
+			t = dico.ensureFamixClassObject();
 		}
 		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance, supbnd);
 

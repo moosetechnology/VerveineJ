@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.IPackageBinding;
@@ -86,16 +85,10 @@ public class EntityDictionary {
 	public static final String ANONYMOUS_NAME_PREFIX = "_Anonymous";
 
 	public static final int UNKNOWN_MODIFIERS = 0;
-	public static final String MODIFIER_ABSTRACT = "abstract";
 	public static final String MODIFIER_PUBLIC   = "public";
 	public static final String MODIFIER_PRIVATE  = "private";
 	public static final String MODIFIER_PROTECTED= "protected";
 	public static final String MODIFIER_PACKAGE = "package";
-	public static final String MODIFIER_FINAL    = "final";
-	public static final String MODIFIER_STATIC    = "static";
-	public static final String MODIFIER_TRANSIENT = "transient";
-	public static final String MODIFIER_VOLATILE = "volatile";
-	public static final String MODIFIER_SYNCHRONIZED = "synchronized";
 
     /**
      * An MSE marker for methods
@@ -173,11 +166,7 @@ public class EntityDictionary {
 			}
 		}
 
-  	public void mapKey(IBinding bnd, NamedEntity fmx) {
-		mapEntityToKey(bnd, fmx);
-	}
-
-	/**
+    /**
 	 * Resets the dictionnary in a proper state after loading entities from an existing MSE file:
 	 * <UL>
 	 * <li>map all named entities to their names in <b>mapName</b></li>
@@ -203,7 +192,7 @@ public class EntityDictionary {
 		
 		Collection<TNamedEntity> l_ent = nameToEntity.get(name);
 		if (l_ent == null) {
-			l_ent = new LinkedList<TNamedEntity>();
+			l_ent = new LinkedList<>();
 		}
 		l_ent.add(ent);
 		nameToEntity.put(name, l_ent);
@@ -378,10 +367,8 @@ public class EntityDictionary {
 				TypeParameter fmxParam = ensureFamixTypeParameter(tp,
 						tp.getName(), fmx);
 				fmxParam.setGenericEntity((TParametricEntity)fmx);
-				if (fmxParam != null) {
-					fmxParam.setIsStub(fmx.getIsStub());
-				}
-			}
+                fmxParam.setIsStub(fmx.getIsStub());
+            }
 		}
 		
 		fmx.setTypeContainer(owner);
@@ -402,11 +389,9 @@ public class EntityDictionary {
 				// note: in Famix, the owner of the TypeParameter is the ParametricInterface
 				TypeParameter fmxParam = ensureFamixTypeParameter(tp,
 						tp.getName(), fmx);
-				fmxParam.setGenericEntity((ParametricInterface)fmx);
-				if (fmxParam != null) {
-					fmxParam.setIsStub(false);
-				}
-			}
+				fmxParam.setGenericEntity(fmx);
+                fmxParam.setIsStub(false);
+            }
 		}
 		fmx.setTypeContainer(owner);
 		return fmx;
@@ -675,10 +660,6 @@ public class EntityDictionary {
 		if ( (meth == null) || (excep == null) ) {
 			return null;
 		}
-		//org.moosetechnology.model.famixjava.famixjavaentities.Exception decl = new org.moosetechnology.model.famixjava.famixjavaentities.Exception();
-		// decl.setExceptionClass(excep);
-		// excep.getDeclaringEntities().add(meth);
-		// famixRepoAdd(excep);
 		meth.getDeclaredExceptions().add(excep);
 		return excep;
 	}
@@ -693,10 +674,6 @@ public class EntityDictionary {
 		if ( (meth == null) || (excep == null) ) {
 			return null;
 		}
-		// CaughtException decl = new CaughtException();
-		// decl.setExceptionClass(excep);
-		// decl.setDefiningEntity(meth);
-		// famixRepoAdd(decl);
 		meth.getCaughtExceptions().add(excep);
 		return excep;
 	}
@@ -713,10 +690,6 @@ public class EntityDictionary {
 		if ( (meth == null) || (excep == null) ) {
 			return null;
 		}
-		// ThrownException decl = new ThrownException();
-		// decl.setExceptionClass(excep);
-		// decl.setDefiningEntity(meth);
-		// famixRepoAdd(decl);
 		meth.getThrownExceptions().add(excep);
 		return excep;
 	}
@@ -836,7 +809,7 @@ public class EntityDictionary {
 		if (fmx != null) {
 			fmx.setTypeContainer( ensureFamixPackageDefault());
 		}
-		ensureFamixInheritance(ensureFamixClassObject(null), fmx, /*prev*/null, null);
+		ensureFamixInheritance(ensureFamixClassObject(), fmx, /*prev*/null, null);
 
 		return fmx;
 	}
@@ -847,7 +820,7 @@ public class EntityDictionary {
 		}
 		
 		for (TType candidate : ctxt.getTypes()) {
-			if (((TNamedEntity)candidate).getName().equals(name) ) {
+			if (candidate.getName().equals(name) ) {
 				return (Type) candidate;
 			}
 		}
@@ -867,8 +840,8 @@ public class EntityDictionary {
 	 * @return the Famix Namespace found or created. May return null in case of a Famix error
 	 */
 	public Package ensureFamixPackage(IPackageBinding bnd, String name) {
-		Package fmx = null;
-		Package parent = null;
+		Package fmx;
+		Package parent;
 
 		if ((name == null) && (bnd != null)) {
 			name = bnd.getName();
@@ -902,9 +875,7 @@ public class EntityDictionary {
 	 * @return a Famix Namespace
 	 */
 	public Package ensureFamixPackageDefault() {
-		Package fmx = ensureFamixUniqEntity(Package.class, null, DEFAULT_PCKG_NAME);
-
-		return fmx;
+        return ensureFamixUniqEntity(Package.class, null, DEFAULT_PCKG_NAME);
 	}
 
 	/**
@@ -915,9 +886,8 @@ public class EntityDictionary {
 	 * @return a Famix Namespace for "java.lang"
 	 */
 	public Package ensureFamixPackageJavaLang(IPackageBinding bnd) {
-		Package fmx = this.ensureFamixPackage(bnd, OBJECT_PACKAGE_NAME);
 
-		return fmx;
+        return this.ensureFamixPackage(bnd, OBJECT_PACKAGE_NAME);
 	}
 
 	/**
@@ -942,7 +912,7 @@ public class EntityDictionary {
 	 */
 	public TType ensureFamixType(ITypeBinding bnd, String name, TWithTypes owner, TWithTypes ctxt, int modifiers) {
 		
-		TType fmx = null;
+		TType fmx;
 
 		if (bnd == null) {
 			if (name == null) {
@@ -953,7 +923,7 @@ public class EntityDictionary {
 				return fmx;
 			}
 
-			if ( (owner != null) && (owner instanceof TParametricEntity) ) {
+			if ((owner instanceof TParametricEntity)) {
 				return this.ensureFamixTypeParameter(null, name, owner);
 			}
 			else {
@@ -979,7 +949,7 @@ public class EntityDictionary {
 		}
 
 		if (bnd.isEnum()) {
-			return this.ensureFamixEnum(bnd, name, (ContainerEntity) owner);
+			return this.ensureFamixEnum(bnd, name, owner);
 		}
 
 		if ((bnd.isRawType() || bnd.isGenericType()) && !bnd.isInterface() ) {
@@ -1102,10 +1072,9 @@ public class EntityDictionary {
 			}
 		}
 
-        // We should ensure the creation of Object only if the owner is the Object from java.lang. The problem is that sometimes the owner is null. or now we consider that if the owner is null, we have the Object of java.lang.
-        boolean ownerIsJavaLang = (owner == null) || "java.lang".equals(owner.getName());
-		if (name.equals(OBJECT_NAME) && ownerIsJavaLang) {
-			return ensureFamixClassObject(bnd);
+        // If we have java.lang.Object we should ensure we create this class
+        if (bnd != null && bnd.getQualifiedName().equals("java.lang.Object")) {
+			return ensureFamixClassObject();
 		}
 
 		// --------------- owner
@@ -1120,7 +1089,7 @@ public class EntityDictionary {
 		// --------------- recover from name ?
 		if (owner != null) {
 			for (Class candidate : this.getEntityByName(Class.class, name)) {
-				if (matchAndMapClass(bnd, name, (ContainerEntity) owner, candidate)) {
+				if (matchAndMapClass(bnd, name, owner, candidate)) {
 					fmx = candidate;
 					break;
 				}
@@ -1151,7 +1120,7 @@ public class EntityDictionary {
 					lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixType(supbnd), fmx, lastAssoc, supbnd);
 				}
 				else {
-					lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixClassObject(null), fmx, lastAssoc, null);
+					lastAssoc = ensureFamixInheritance(ensureFamixClassObject(), fmx, lastAssoc, null);
 				}
 				ensureImplementedInterfaces(bnd, fmx, (TWithTypes) owner, lastAssoc);
 			}
@@ -1169,7 +1138,7 @@ public class EntityDictionary {
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	public <T extends TWithTypes & TNamedEntity> Exception ensureFamixException(ITypeBinding bnd, String name, TWithTypes owner, boolean isGeneric, int modifiers) {
-		Exception fmx = null;
+		Exception fmx;
 
 		// --------------- some special cases
 		if (bnd != null) {
@@ -1233,22 +1202,20 @@ public class EntityDictionary {
 			fmx.setTypeContainer(owner);
 		}
 
-		if (fmx!=null) {
-			// we just created it or it was not bound, so we make sure it has the right information in it
-			TAssociation lastAssoc = null;
-			if (bnd != null) {
-				ITypeBinding supbnd = bnd.getSuperclass();
-				if (supbnd != null) {
-					lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixType(supbnd), fmx, lastAssoc, supbnd);
-				}
-				else {
-					lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixClassObject(null), fmx, lastAssoc, null);
-				}
-				ensureImplementedInterfaces(bnd, fmx, owner, lastAssoc);
-			}
-		}
+        // we just created it or it was not bound, so we make sure it has the right information in it
+        TAssociation lastAssoc = null;
+        if (bnd != null) {
+            ITypeBinding supbnd = bnd.getSuperclass();
+            if (supbnd != null) {
+                lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixType(supbnd), fmx, lastAssoc, supbnd);
+            }
+            else {
+                lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixClassObject(), fmx, lastAssoc, null);
+            }
+            ensureImplementedInterfaces(bnd, fmx, owner, lastAssoc);
+        }
 
-		return fmx;
+        return fmx;
 	}
 
 	/**
@@ -1258,7 +1225,7 @@ public class EntityDictionary {
 	 * @return the FAMIX Class or null in case of a FAMIX error
 	 */
 	public <T extends TWithTypes & TNamedEntity> Interface ensureFamixInterface(ITypeBinding bnd, String name, TWithTypes owner, boolean isGeneric, int modifiers) {
-		Interface fmx = null;
+		Interface fmx;
 
 		// --------------- some special cases
 		if (bnd != null) {
@@ -1340,49 +1307,6 @@ public class EntityDictionary {
 		return fmx;
 	}
 
-	/*
-	 * Does not seems to be used.
-	 * REMOVE ?
-	
-	 public TType asClass(TType excepFmx) {
-		Class tmp = null;
-		IBinding key = null;
-		try {
-			TWithTypes owner = (TWithTypes) Util.getOwner(excepFmx);
-			owner.getTypes().remove(excepFmx);
-			removeEntity((NamedEntity) excepFmx);
-
-			key = entityToKey.get((NamedEntity) excepFmx);
-			tmp = ensureFamixEntity(Class.class, key, excepFmx.getName());
-			tmp.setTypeContainer((ContainerEntity)owner);
-
-			tmp.addMethods(((TWithMethods) excepFmx).getMethods());
-			if (excepFmx instanceof TWithAttributes) {
-				tmp.addAttributes(((TWithAttributes) excepFmx).getAttributes());
-			}
-
-			if (key != null) {
-				setClassModifiers(tmp, key.getModifiers());
-			}
-
-			if (excepFmx instanceof TWithInheritances) {
-				tmp.addSuperInheritances(((TWithInheritances) excepFmx).getSuperInheritances());
-				tmp.addSubInheritances(((TWithInheritances) excepFmx).getSubInheritances());
-			}
-			tmp.setSourceAnchor(excepFmx.getSourceAnchor());
-			tmp.addAnnotationInstances(((NamedEntity) excepFmx).getAnnotationInstances());
-			// tmp.addComments(excepFmx.getComments());
-			tmp.addIncomingReferences(excepFmx.getIncomingReferences());
-			tmp.setIsStub(excepFmx.getIsStub());
-			tmp.addTypes(((ContainerEntity) excepFmx).getTypes());
-		}
-		catch( ConcurrentModificationException e) {
-			e.printStackTrace();
-		}
-
-		return tmp;
-	}*/
-
 	public TThrowable asException(TType fmxType) {
 		if (fmxType instanceof Exception) {
 			return (Exception) fmxType;
@@ -1392,10 +1316,10 @@ public class EntityDictionary {
 		}
 
 		Exception fmxException = null;
-		IBinding key = null;
+		IBinding key;
 
 		try {
-			key = entityToKey.get((NamedEntity) fmxType);
+			key = entityToKey.get(fmxType);
 
 			/* Remove entity immediatly so that its key and name are not "reassigned" in the various cache dictionnaries
 			 * the object still exists and its properties are still accessible */
@@ -1425,7 +1349,7 @@ public class EntityDictionary {
 			e.printStackTrace();
 		}
 
-		return (TThrowable)fmxException;
+		return fmxException;
 	}
 
 	/**
@@ -1456,7 +1380,7 @@ public class EntityDictionary {
 	 * @return a famix entity for the owner
 	 */
 	private TNamedEntity ensureOwner(ITypeBinding bnd) {
-		TNamedEntity owner = null;
+		TNamedEntity owner;
 		IMethodBinding parentMtd = bnd.getDeclaringMethod();
 		if (parentMtd != null) {
 			owner = this.ensureFamixMethod(parentMtd);  // cast needed to desambiguate the call
@@ -1465,13 +1389,8 @@ public class EntityDictionary {
 			ITypeBinding parentClass = bnd.getDeclaringClass();
 			if (parentClass != null) {
 				TType tmpOwn = this.ensureFamixType(parentClass);
-				if (tmpOwn instanceof ParametricClass) {
-					owner =  (TNamedEntity) ((ParametricClass) tmpOwn);
-				}
-				else {
-					owner = tmpOwn;
-				}
-			}
+                owner = tmpOwn;
+            }
 			else {
 				IPackageBinding parentPckg = bnd.getPackage();
 				if (parentPckg != null) {
@@ -1543,7 +1462,7 @@ public class EntityDictionary {
 			fmx.setTypeContainer(owner);
 		}
 
-		if ((fmx != null) && (bnd != null) ) {
+		if (bnd != null) {
 			setVisibility(fmx, bnd.getModifiers());
 		}
 
@@ -1558,7 +1477,7 @@ public class EntityDictionary {
 	}
 
 	public EnumValue ensureFamixEnumValue(IVariableBinding bnd,	String name, Enum owner) {
-		EnumValue fmx = null;
+		EnumValue fmx;
 
 		// --------------- to avoid useless computations if we can
 		fmx = (EnumValue)getEntityByKey(bnd);
@@ -1598,25 +1517,16 @@ public class EntityDictionary {
 			fmx.setParentEnum(owner);
 		}
 
-		if (fmx!=null) {
-			fmx.setParentEnum(owner);
-		}
+        fmx.setParentEnum(owner);
 
-		return fmx;
+        return fmx;
 	}
 
-	/**
-	 * helper method, we know the type enumValue, ensureFamixEnumValue will recover it
-	 */
-	public EnumValue getFamixEnumValue(IVariableBinding bnd, String name, Enum owner) {
-		return ensureFamixEnumValue(bnd, name, owner);
-	}
-
-	/**
+    /**
 	 * e.g. see {@link EntityDictionary#ensureFamixClass}
 	 */
 	public AnnotationType ensureFamixAnnotationType(ITypeBinding bnd, String name, ContainerEntity owner) {
-		AnnotationType fmx = null;
+		AnnotationType fmx;
 
 		// --------------- to avoid useless computations if we can
 		fmx = (AnnotationType)getEntityByKey(bnd);
@@ -1663,7 +1573,7 @@ public class EntityDictionary {
 			fmx.setAnnotationTypesContainer(owner);
 		}
 
-		if ( (fmx!=null) && (bnd != null) ) {
+		if (bnd != null) {
 			// Not supported in Famix
 
 			// setVisibility(fmx, bnd.getModifiers());
@@ -1734,7 +1644,7 @@ public class EntityDictionary {
 			fmx.setParentType(owner);
 		}
 
-		if ( (fmx!=null) && (bnd != null) ) {
+		if (bnd != null) {
 			// Not suopp
 
 			// setVisibility(fmx, bnd.getModifiers());
@@ -1780,7 +1690,7 @@ public class EntityDictionary {
 	 * @return the Famix TypeParameter or null in case of a Famix error
 	 */
 	public TypeParameter ensureFamixTypeParameter(ITypeBinding bnd,	String name, TWithTypes owner) {
-		TypeParameter fmx = null;
+		TypeParameter fmx;
 
 		// --------------- to avoid useless computations if we can
 		fmx = (TypeParameter)getEntityByKey(bnd);
@@ -1799,20 +1709,12 @@ public class EntityDictionary {
 		}
 
 		// --------------- owner
-		if (owner == null) {
-			if (bnd == null) {
-				owner = null;  // not really sure what to do here
-			}
-			else {
-				if (bnd.getDeclaringClass() != null) {
-					owner = (TWithTypes) this.ensureFamixType(bnd.getDeclaringClass());
-				}else if(bnd.getDeclaringMethod() != null) {
-					owner = (TWithTypes) this.ensureFamixMethod(bnd.getDeclaringMethod());
-				}
-				else {
-					owner = null;  // not really sure what to do here
-				}
-			}
+		if (owner == null && bnd != null) {
+            if (bnd.getDeclaringClass() != null) {
+                owner = (TWithTypes) this.ensureFamixType(bnd.getDeclaringClass());
+            } else if(bnd.getDeclaringMethod() != null) {
+                owner = this.ensureFamixMethod(bnd.getDeclaringMethod());
+            }
 		}
 
 		// --------------- recover from name ?
@@ -1830,27 +1732,17 @@ public class EntityDictionary {
 				Type upperBound = (Type)ensureFamixType(bnd.getSuperclass());
 				fmx.setUpperBound(upperBound);
 			}
-			if(bnd != null && bnd.getInterfaces().length > 0) {
-				for(ITypeBinding intbnd: bnd.getInterfaces()) {
-					Type upperBound = (Type)ensureFamixType(intbnd);
-					fmx.setUpperBound(upperBound);
-				}
-			}
-			fmx.setTypeContainer((ContainerEntity) owner);
+			if(bnd != null) {
+                for (ITypeBinding intbnd : bnd.getInterfaces()) {
+                    Type upperBound = (Type) ensureFamixType(intbnd);
+                    fmx.setUpperBound(upperBound);
+                }
+            }
+			fmx.setTypeContainer(owner);
 		}
 
 		return fmx;
 	}
-
-
-	public IBinding getTypeParameterOwner(ITypeBinding typeParameterBinding, IBinding currentOwner) {
-		
-
-
-		return currentOwner;
-	}
-
-
 
 	/**
 	 * Checks whether the existing unmapped Famix Namespace matches the binding.
@@ -1993,14 +1885,14 @@ public class EntityDictionary {
 		}
 
 		// check whether bnd and candidate are already bound
-		CheckResult res = checkKeyMatch(bnd, (NamedEntity) candidate);
+		CheckResult res = checkKeyMatch(bnd, candidate);
 		if (res == CheckResult.MATCH) {
 			return true;
 		} else if (res == CheckResult.FAIL) {
 			return false;
 		}
 
-		if (checkNameMatch(bnd, name, (NamedEntity) candidate) == CheckResult.FAIL) {
+		if (checkNameMatch(bnd, name, candidate) == CheckResult.FAIL) {
 			return false;
 		}
 
@@ -2235,7 +2127,7 @@ public class EntityDictionary {
 	 * @return a {@link CheckResult}
 	 */
 	private  <T extends TNamedEntity> CheckResult matchAndMapOwnerAsMethod(IMethodBinding methBnd, T owner, T candidateOwner) {
-		if ((methBnd != null) || ((owner != null) && (owner instanceof Method))) {
+		if ((methBnd != null) || (owner instanceof Method)) {
 			if (!(candidateOwner instanceof Method)) {
 				return CheckResult.FAIL;
 			}
@@ -2260,13 +2152,13 @@ public class EntityDictionary {
 	 * @return a {@link CheckResult}
 	 */
 	private CheckResult matchAndMapOwnerAsType(ITypeBinding typBnd, TNamedEntity owner, TNamedEntity candidateOwner) {
-		if ((typBnd != null) || ((owner != null) && (owner instanceof Type))) {
+		if ((typBnd != null) || (owner instanceof Type)) {
 			if (!(candidateOwner instanceof Type)) {
 				return CheckResult.FAIL;
 			}
 
 			TNamedEntity ownerOwner = (owner != null) ? Util.getOwner(owner) : null;
-			String ownerName = (owner != null) ? ((Type) owner).getName() : null;
+			String ownerName = (owner != null) ? owner.getName() : null;
 
 			if (matchAndMapType(typBnd, ownerName, ownerOwner, candidateOwner)) {
 				return CheckResult.MATCH;
@@ -2278,13 +2170,13 @@ public class EntityDictionary {
 	}
 
 	private CheckResult matchAndMapOwnerAsNamespace(IPackageBinding pckgBnd, TNamedEntity owner, ContainerEntity candidateOwner) {
-		if ((pckgBnd != null) || ((owner != null) && (owner instanceof Package))) {
+		if ((pckgBnd != null) || (owner instanceof Package)) {
 			if (!(candidateOwner instanceof Package)) {
 				return CheckResult.FAIL;
 			}
 
 			Package ownerOwner = (owner != null) ? (Package) Util.getOwner(owner) : null;
-			String ownerName = (owner != null) ? ((Package) owner).getName() : null;
+			String ownerName = (owner != null) ? owner.getName() : null;
 
 			if (matchAndMapPackage(pckgBnd, ownerName, ownerOwner, candidateOwner)) {
 				return CheckResult.MATCH;
@@ -2352,7 +2244,7 @@ public class EntityDictionary {
 		return ensureFamixMethod(
 				bnd,
 				/*name*/null,
-				/*paramsType*/(Collection<String>)null,
+				/*paramsType*/null,
 				/*returnType*/null,
 				/*owner*/null,
 				(bnd == null) ? UNKNOWN_MODIFIERS : bnd.getModifiers());
@@ -2367,7 +2259,7 @@ public class EntityDictionary {
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, TType ret, TWithMethods owner, int modifiers) {
-		Method fmx = null;
+		Method fmx;
 		String sig;
 		boolean delayedRetTyp;
 
@@ -2404,35 +2296,24 @@ public class EntityDictionary {
 		delayedRetTyp = false;
 		ITypeBinding retTypBnd = null;
 		if (ret == null) {
-			if (bnd == null) {
-				ret = null;  // what else ?
-			}
-			else {
-				if (bnd.isConstructor()) {
-					ret = null;
-				}
-				else {
+			if (bnd != null) {
+                // must create the return type
+                // but for method like "<T> T mtd()" where T belongs to mtd and mtd returns T,
+                // we need T to create the method and the method to create T ...
+                // so we need to test the situation and deal with it
+                retTypBnd = bnd.getReturnType();
+                if (retTypBnd != null) {
+                    if (retTypBnd.isArray()) {
+                        retTypBnd = retTypBnd.getElementType();
+                    }
+                }
 
-					// must create the return type
-					// but for method like "<T> T mtd()" where T belongs to mtd and mtd returns T,
-					// we need T to create the method and the method to create T ...
-					// so we need to test the situation and deal with it
-					retTypBnd = bnd.getReturnType();
-					if (retTypBnd == null) {
-						ret = null;
-					}
-					else if (retTypBnd.isArray()) {
-						retTypBnd = retTypBnd.getElementType();
-					}
-
-					if ( (retTypBnd != null) && retTypBnd.isTypeVariable() && (retTypBnd.getDeclaringMethod() == bnd) ) {
-						ret = null;
-						delayedRetTyp = true;
-					}
-					else {
-						ret = this.ensureFamixType(retTypBnd,(TWithTypes) /*ctxt*/owner);
-					}
-				}
+                if ( (retTypBnd != null) && retTypBnd.isTypeVariable() && (retTypBnd.getDeclaringMethod() == bnd) ) {
+                    delayedRetTyp = true;
+                }
+                else {
+                    ret = this.ensureFamixType(retTypBnd,(TWithTypes) /*ctxt*/owner);
+                }
 			}
 		}
 
@@ -2467,12 +2348,12 @@ public class EntityDictionary {
 			if(bnd != null && bnd.isGenericMethod()) {
 				fmx = ensureFamixEntity(ParametricMethod.class, bnd, name);
 				for(ITypeBinding param: bnd.getTypeParameters()) {
-					TypeParameter fmxParam = this.ensureFamixTypeParameter(param, null, (TWithTypes)fmx);
+					TypeParameter fmxParam = this.ensureFamixTypeParameter(param, null, fmx);
 					fmxParam.setGenericEntity((ParametricMethod)fmx);
 				}
 			// parameterized method binding = when the method is the target of an invocation.
 			} else if (bnd != null && bnd.isParameterizedMethod()) {
-				fmx = (ParametricMethod)this.ensureFamixMethod(bnd.getMethodDeclaration());
+				fmx = this.ensureFamixMethod(bnd.getMethodDeclaration());
 			}else{
 				fmx = ensureFamixEntity(Method.class, bnd, name);
 			}
@@ -2483,22 +2364,20 @@ public class EntityDictionary {
 			fmx.setParentType(owner);
 		}
 
-		if (fmx != null) {
-			setMethodModifiers(fmx, modifiers);
-			// if it's a constructor
-			if (fmx.getName().equals(Util.getOwner(fmx).getName())) {
-				fmx.setKind(CONSTRUCTOR_KIND_MARKER);
-			}
+        setMethodModifiers(fmx, modifiers);
+        // if it's a constructor
+        if (fmx.getName().equals(Util.getOwner(fmx).getName())) {
+            fmx.setKind(CONSTRUCTOR_KIND_MARKER);
+        }
 
-            //If it has the #default keywork, we mark it as default implementation
-            if (Modifier.isDefault(modifiers)) {
-                fmx.setKind(DEFAULT_IMPLEMENTATION_KIND_MARKER);
-            }
-		}
+        //If it has the #default keywork, we mark it as default implementation
+        if (Modifier.isDefault(modifiers)) {
+            fmx.setKind(DEFAULT_IMPLEMENTATION_KIND_MARKER);
+        }
 
-		if ((fmx != null) && delayedRetTyp) {
-			int retTypModifiers = (retTypBnd != null) ? retTypBnd.getModifiers() : UNKNOWN_MODIFIERS;
-			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
+        if (delayedRetTyp) {
+			int retTypModifiers = retTypBnd.getModifiers();
+			ITypeBinding returnTypeBnd = bnd.getReturnType();
 			ensureFamixEntityTyping(returnTypeBnd, fmx, this.ensureFamixType(retTypBnd, /*name*/null, /*owner*/fmx, /*ctxt*/(ContainerEntity) owner, retTypModifiers));
 		}
 
@@ -2511,7 +2390,7 @@ public class EntityDictionary {
 	 * @return the Famix Method
 	 */
 	public Method ensureFamixStubMethod(String name) {
-		return ensureFamixMethod(null, name, /*paramType*/(Collection<String>)null, /*returnType*/null, ensureFamixClassStubOwner(), /*modifiers*/0);  // cast needed to desambiguate the call
+		return ensureFamixMethod(null, name, /*paramType*/null, /*returnType*/null, ensureFamixClassStubOwner(), /*modifiers*/0);
 	}
 
 	public void setAttributeModifiers(Attribute fmx, int mod) {
@@ -2568,7 +2447,7 @@ public class EntityDictionary {
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
 	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, Type type, TWithAttributes owner) {
-		Attribute fmx = null;
+		Attribute fmx;
 
 		// --------------- to avoid useless computations if we can
 		fmx = (Attribute)getEntityByKey(bnd);
@@ -2614,17 +2493,15 @@ public class EntityDictionary {
 			fmx.setParentType( owner);
 		}
 
-		if (fmx != null) {
-			fmx.setParentType((TWithAttributes) owner);
-			ITypeBinding declaredTypeBinding = (bnd == null) ? null : bnd.getType();
-			ensureFamixEntityTyping(declaredTypeBinding, fmx, type);
-			if (bnd != null) {
-				int mod = bnd.getModifiers();
-				setAttributeModifiers(fmx, mod);
-			}
-		}
+        fmx.setParentType(owner);
+        ITypeBinding declaredTypeBinding = (bnd == null) ? null : bnd.getType();
+        ensureFamixEntityTyping(declaredTypeBinding, fmx, type);
+        if (bnd != null) {
+            int mod = bnd.getModifiers();
+            setAttributeModifiers(fmx, mod);
+        }
 
-		return fmx;
+        return fmx;
 	}
 
 	public Attribute ensureFamixAttribute(IVariableBinding bnd, String name, TWithAttributes owner) {
@@ -2697,21 +2574,14 @@ public class EntityDictionary {
 		return fmx;
 	}
 
-	/**
-	 * helper method, we know the var exists, ensureFamixParameter will recover it
-	 */
-	public Parameter getFamixParameter(IVariableBinding bnd, String name, TMethod tMethod) {
-		return ensureFamixParameter(bnd, name, /*declared type*/null, tMethod);
-	}
-
-	/**
+    /**
 	 * Returns a Famix LocalVariable associated with the IVariableBinding.
 	 * The Entity is created if it does not exist.<br>
 	 * @param name -- the name of the FAMIX LocalVariable
 	 * @return the Famix Entity found or created. May return null if <b>bnd</b> and <b>name</b> are null, or <b>bnd</b> and <b>owner</b> are null, or in case of a Famix error
 	 */
 	public LocalVariable ensureFamixLocalVariable(IVariableBinding bnd, String name, TWithLocalVariables owner) {
-		LocalVariable fmx = null;
+		LocalVariable fmx;
 
 		// --------------- to avoid useless computations if we can
 		fmx = (LocalVariable)getEntityByKey(bnd);
@@ -2752,22 +2622,13 @@ public class EntityDictionary {
 			fmx.setParentBehaviouralEntity(owner);
 		}
 
-		if (fmx != null) {
-			// we just created it or it was not bound, so we make sure it has the right information in it
-			fmx.setParentBehaviouralEntity(owner);
-		}
+        // we just created it or it was not bound, so we make sure it has the right information in it
+        fmx.setParentBehaviouralEntity(owner);
 
-		return fmx;
+        return fmx;
 	}
 
-	/**
-	 * helper method, we know the var exists, ensureFamixLocalVariable will recover it
-	 */
-	public LocalVariable getFamixLocalVariable(IVariableBinding bnd, String name, TWithLocalVariables owner) {
-		return ensureFamixLocalVariable(bnd, name, owner);
-	}
-
-	/**
+    /**
 	 * Returns a FAMIX ImplicitVariable with the given <b>name</b> ("self" or "super") and corresponding to the <b>type</b>.
 	 * If this ImplicitVariable does not exist yet, it is created
 	 * @param name -- the name of the FAMIX ImplicitVariable (should be Dictionary.SELF_NAME or Dictionary.SUPER_NAME)
@@ -2836,7 +2697,7 @@ public class EntityDictionary {
 	 * @return the Famix SourceAnchor added to fmx. May be null in case of incorrect parameter ('fmx' or 'ast' == null)
 	 */
 	public SourceAnchor addSourceAnchor(TSourceEntity fmx, ASTNode node) {
-		IndexedFileAnchor fa = null;
+		IndexedFileAnchor fa;
 
 		fa = createIndexedFileAnchor(node);
 		if ((fmx != null) && (fa != null)) {
@@ -2851,7 +2712,7 @@ public class EntityDictionary {
 	 * Special case of  {@linkplain #addSourceAnchor(TSourceEntity, ASTNode)} to add location information to a Famix Method.
 	 */
 	public SourceAnchor addSourceAnchor(Method fmx, MethodDeclaration node) {
-		IndexedFileAnchor fa = null;
+		IndexedFileAnchor fa;
 
 		fa = createIndexedFileAnchor(node);
 		if ((fmx != null) && (fa != null)) {
@@ -2868,8 +2729,8 @@ public class EntityDictionary {
 			int beg = (methodDeclarationModifiers.stream().mapToInt(el -> el.getStartPosition()).min().getAsInt()) + 1;
 			int end = node.getStartPosition() + node.getLength();
 
-			((IndexedFileAnchor)fa).setStartPos(beg);
-			((IndexedFileAnchor)fa).setEndPos(end);
+			fa.setStartPos(beg);
+			fa.setEndPos(end);
 
 			fmx.setSourceAnchor(fa);
 			famixRepoAdd(fa);
@@ -2902,10 +2763,10 @@ public class EntityDictionary {
 		}
 
 		fa = new IndexedFileAnchor();
-		((IndexedFileAnchor)fa).setStartPos(beg);
-		((IndexedFileAnchor)fa).setEndPos(end);
+		fa.setStartPos(beg);
+		fa.setEndPos(end);
 
-		fa.setFileName((String) ((CompilationUnit)node).getProperty(SOURCE_FILENAME_PROPERTY));
+		fa.setFileName((String) node.getProperty(SOURCE_FILENAME_PROPERTY));
 
 		return fa;
 	}
@@ -2914,10 +2775,9 @@ public class EntityDictionary {
 	 * Creates or recovers the Famix Class for "Object".
 	 * Because "Object" is the root of the inheritance tree, it needs to be treated differently.
 	 *
-	 * @param bnd -- a potential binding for the java "Object" class
 	 * @return a Famix class for "Object"
 	 */
-	public Class ensureFamixClassObject(ITypeBinding bnd) {
+	public Class ensureFamixClassObject() {
         // In the past we used #ensureFamixUniqEntity but that does not check that the parent package is right and we got some Object from other packages than java.lang...
         Collection<Class> objects = getEntityByName(Class.class, "Object");
 
@@ -2945,7 +2805,7 @@ public class EntityDictionary {
 		}
 
 		if ((fmx != null) && (fmx.getSuperInheritances() == null)) {
-			ensureFamixInheritance(ensureFamixClassObject(null), fmx, null, null);
+			ensureFamixInheritance(ensureFamixClassObject(), fmx, null, null);
 		}
 
 		return fmx;
@@ -2966,7 +2826,7 @@ public class EntityDictionary {
 	public Class ensureFamixClassArray() {
 		Class fmx = ensureFamixUniqEntity(Class.class, null, ARRAYS_NAME);
 		if (fmx != null) {
-			ensureFamixInheritance(ensureFamixClassObject(null), fmx, /*prev*/null, null);
+			ensureFamixInheritance(ensureFamixClassObject(), fmx, /*prev*/null, null);
 			fmx.setTypeContainer(ensureFamixPackageDefault());
 
 			// may be not needed anymore now that we use modifiers
@@ -2982,7 +2842,7 @@ public class EntityDictionary {
 	}
 
 	public String removeLastPartOfPackageName(String qualifiedName) {
-		String ret = null;
+		String ret;
 		int last = qualifiedName.lastIndexOf('.');
 		if (last > 0) {
 			// recursively creating the parent
@@ -3000,7 +2860,7 @@ public class EntityDictionary {
 	 */
 	protected String signatureParamsFromBinding(IMethodBinding bnd) {
 		boolean first = true;
-		String sig = new String();
+		String sig = "";
 
 		for (ITypeBinding parBnd : bnd.getParameterTypes()) {
 			if (first) {
@@ -3016,7 +2876,7 @@ public class EntityDictionary {
 
 	private String signatureParamsFromStringCollection(Collection<String> paramTypes) {
 		boolean first = true;
-		String sig = new String();
+		String sig = "";
 
 		for (String t : paramTypes) {
 			if (first) {
