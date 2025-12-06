@@ -500,8 +500,6 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		// new type[].msg()
 		if (NodeTypeChecker.isArrayCreation(expr)) {
-			// System.err.println("WARNING: Ignored receiver expression in method call:
-			// ArrayCreation");
 			return null;
 		}
 
@@ -534,13 +532,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		// field.msg()
 		if (NodeTypeChecker.isFieldAccess(expr)) {
 			IVariableBinding bnd = ((FieldAccess) expr).resolveFieldBinding();
-			TNamedEntity fld = (TNamedEntity) dico.getEntityByKey(bnd);
-			/*
-			 * StructuralEntity fld = ensureAccessedStructEntity(bnd, ((FieldAccess)
-			 * expr).getName().getIdentifier(),
-			 * /*type* /null, /*owner* /null, /*accessor* /null);
-			 */
-			return fld;
+			return dico.getEntityByKey(bnd);
 		}
 
 		// (left-expr oper right-expr).msg()
@@ -565,13 +557,13 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			if (bnd.getKind() == IBinding.TYPE) {
 				// msg() is a static method of Name so name should be a class, except if its an
 				// Enum
-				ret = (TNamedEntity) dico.getEntityByKey(bnd);
+				ret = dico.getEntityByKey(bnd);
 			}
 
 			if (bnd.getKind() == IBinding.VARIABLE) {
 				// a bit convoluted, but sometimes 'bnd' is not directly the binding of the
 				// variable's declaration from which the Famix entity was created
-				return (TNamedEntity) dico.getEntityByKey(((IVariableBinding) bnd).getVariableDeclaration());
+				return dico.getEntityByKey(((IVariableBinding) bnd).getVariableDeclaration());
 			}
 
 			return ret;
@@ -596,13 +588,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		// super.field.msg()
 		if (NodeTypeChecker.isSuperFieldAccess(expr)) {
-			return (TNamedEntity) dico.getEntityByKey(((SuperFieldAccess) expr).resolveFieldBinding());
-			/*
-			 * return ensureAccessedStructEntity(((SuperFieldAccess)
-			 * expr).resolveFieldBinding(),
-			 * ((SuperFieldAccess) expr).getName().getIdentifier(), /*typ* /null, /*owner*
-			 * /null, /*accessor* /null);
-			 */
+			return dico.getEntityByKey(((SuperFieldAccess) expr).resolveFieldBinding());
 		}
 
 		// super.msg1().msg()
@@ -685,17 +671,6 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			if (receiver == null) {
 				return null;
 			}
-			/*
-			 * else if (receiver instanceof ImplicitVariable) {
-			 * if (receiver.getName().equals(EntityDictionary.SELF_NAME)) {
-			 * return context.topType();
-			 * }
-			 * else { // receiver.getName().equals(EntityDictionary.SUPER_NAME)
-			 * return
-			 * context.topType().getSuperInheritances().iterator().next().getSuperclass();
-			 * }
-			 * }
-			 */
 			else if (receiver instanceof TTypedEntity) {
 				return ((TTypedEntity) receiver).getDeclaredType();
 			} else if (receiver instanceof org.moosetechnology.model.famix.famixjavaentities.Type) {

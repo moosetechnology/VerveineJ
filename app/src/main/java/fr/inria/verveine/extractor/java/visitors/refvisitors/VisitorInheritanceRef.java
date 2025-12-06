@@ -8,6 +8,7 @@ import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
+import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
@@ -73,8 +74,8 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		if ((fmx != null) && (bnd != null)) {
 			// --------------- implicit superclass java.lang.Enum<> cannot use ensureInheritances(bnd,fmx)
-			TType superclass;
-			ITypeBinding supbnd = null;
+			Type superclass;
+			ITypeBinding supbnd;
 			supbnd = bnd.getSuperclass();
 			if (supbnd != null) {
 				superclass = dico.ensureFamixType(supbnd);
@@ -150,7 +151,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		// --------------- superclass
 		ITypeBinding supbnd = bnd.getSuperclass();
-		TType t;
+		Type t;
 		if (supbnd != null) {
 			t = dico.ensureFamixType(supbnd);
 		} else {

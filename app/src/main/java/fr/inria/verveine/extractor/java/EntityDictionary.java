@@ -533,7 +533,7 @@ public class EntityDictionary {
 
 	public void ensureImplementedInterfaces(ITypeBinding bnd, TType fmx, TWithTypes owner, TAssociation lastAssociation) {
 		for (ITypeBinding intbnd : bnd.getInterfaces()) {
-			TType superTyp;
+			Type superTyp;
 			if(intbnd.isClass()){
 				superTyp = this.ensureFamixInterface(intbnd, intbnd.getName(), null, intbnd.isGenericType() || intbnd.isParameterizedType() || intbnd.isRawType(), intbnd.getModifiers());
 			}else {
@@ -910,9 +910,9 @@ public class EntityDictionary {
 	 * @param owner of the type
 	 * @param ctxt -- context of use of the type
 	 */
-	public TType ensureFamixType(ITypeBinding bnd, String name, TWithTypes owner, TWithTypes ctxt, int modifiers) {
+	public Type ensureFamixType(ITypeBinding bnd, String name, TWithTypes owner, TWithTypes ctxt, int modifiers) {
 		
-		TType fmx;
+		Type fmx;
 
 		if (bnd == null) {
 			if (name == null) {
@@ -935,7 +935,7 @@ public class EntityDictionary {
 
 		// bnd != null
 
-		fmx = (TType) getEntityByKey(bnd);
+		fmx = (Type) getEntityByKey(bnd);
 		if (fmx != null) {
 			return fmx;
 		}
@@ -994,18 +994,13 @@ public class EntityDictionary {
 		return fmx;
 	}
 
-	public TType ensureFamixType(ITypeBinding bnd, TWithTypes context) {
-		int modifiers = extractModifierOfTypeFrom(bnd);
+	public Type ensureFamixType(ITypeBinding bnd, TWithTypes context) {
+        int modifiers = (bnd != null) ? bnd.getModifiers() : UNKNOWN_MODIFIERS;
 		return ensureFamixType(bnd, /*name*/null, /*owner*/null, context, modifiers);
 	}
 	
-	public TType ensureFamixType(ITypeBinding bnd) {
+	public Type ensureFamixType(ITypeBinding bnd) {
 		return ensureFamixType(bnd, /*ctxt*/null);
-	}
-
-	private int extractModifierOfTypeFrom(ITypeBinding bnd) {
-		int modifiers = (bnd != null) ? bnd.getModifiers() : UNKNOWN_MODIFIERS;
-		return modifiers;
 	}
 
 	public boolean isThrowable(ITypeBinding bnd) {
@@ -1210,7 +1205,7 @@ public class EntityDictionary {
                 lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixType(supbnd), fmx, lastAssoc, supbnd);
             }
             else {
-                lastAssoc = ensureFamixInheritance((TWithInheritances) ensureFamixClassObject(), fmx, lastAssoc, null);
+                lastAssoc = ensureFamixInheritance(ensureFamixClassObject(), fmx, lastAssoc, null);
             }
             ensureImplementedInterfaces(bnd, fmx, owner, lastAssoc);
         }
@@ -1388,8 +1383,7 @@ public class EntityDictionary {
 		else {
 			ITypeBinding parentClass = bnd.getDeclaringClass();
 			if (parentClass != null) {
-				TType tmpOwn = this.ensureFamixType(parentClass);
-                owner = tmpOwn;
+                owner = this.ensureFamixType(parentClass);
             }
 			else {
 				IPackageBinding parentPckg = bnd.getPackage();
@@ -1671,7 +1665,7 @@ public class EntityDictionary {
 	public Wildcard ensureFamixWildcardType(ITypeBinding bnd, String name, TParametricEntity owner, TWithTypes ctxt) {
 		Wildcard fmx = this.ensureFamixEntity(Wildcard.class, bnd, bnd.getName());
 		if(bnd.getBound() != null) {
-			Type bound = (Type) this.ensureFamixType(bnd.getBound()); 
+			Type bound = this.ensureFamixType(bnd.getBound());
 			if(bnd.isUpperbound()) {
 				fmx.setUpperBound(bound);
 				bound.addUpperBoundedWildcards(fmx);
@@ -1711,7 +1705,7 @@ public class EntityDictionary {
 		// --------------- owner
 		if (owner == null && bnd != null) {
             if (bnd.getDeclaringClass() != null) {
-                owner = (TWithTypes) this.ensureFamixType(bnd.getDeclaringClass());
+                owner = this.ensureFamixType(bnd.getDeclaringClass());
             } else if(bnd.getDeclaringMethod() != null) {
                 owner = this.ensureFamixMethod(bnd.getDeclaringMethod());
             }
@@ -1729,12 +1723,12 @@ public class EntityDictionary {
 		if (fmx == null) {
 			fmx = ensureFamixEntity(TypeParameter.class, bnd, name);
 			if(bnd != null && bnd.getSuperclass() != null) {
-				Type upperBound = (Type)ensureFamixType(bnd.getSuperclass());
+				Type upperBound = ensureFamixType(bnd.getSuperclass());
 				fmx.setUpperBound(upperBound);
 			}
 			if(bnd != null) {
                 for (ITypeBinding intbnd : bnd.getInterfaces()) {
-                    Type upperBound = (Type) ensureFamixType(intbnd);
+                    Type upperBound = ensureFamixType(intbnd);
                     fmx.setUpperBound(upperBound);
                 }
             }
@@ -2258,7 +2252,7 @@ public class EntityDictionary {
 	 * @param owner -- type defining the method (should not be null, but it will work if it is)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
-	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, TType ret, TWithMethods owner, int modifiers) {
+	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, Type ret, TWithMethods owner, int modifiers) {
 		Method fmx;
 		String sig;
 		boolean delayedRetTyp;
@@ -2325,10 +2319,7 @@ public class EntityDictionary {
 			else {
 				ITypeBinding classBnd = bnd.getDeclaringClass().getErasure();
 				if (classBnd != null) {
-					TType tmpOwn = ensureFamixType(classBnd);
-
-					owner = (TWithMethods) tmpOwn;
-					
+					owner = ensureFamixType(classBnd);
 				}
 				else {
 					owner = ensureFamixClassStubOwner();
