@@ -151,16 +151,21 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		// --------------- superclass
 		ITypeBinding supbnd = bnd.getSuperclass();
-		Type t;
+		Type type;
 		if (supbnd != null) {
-			t = dico.ensureFamixType(supbnd);
+			type = dico.ensureFamixType(supbnd);
 		} else {
-			t = dico.ensureFamixClassObject();
+            if(bnd.getQualifiedName().equals("java.lang.Object")){
+                // Edge case: If we are parsing java.lang.Object, then we should not have an inheritance at all
+                return;
+            }
+
+			type = dico.ensureFamixClassObject();
+
 		}
-		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance, supbnd);
+		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) type, fmx, lastInheritance, supbnd);
 
 		// --------------- interfaces
 		dico.ensureImplementedInterfaces(bnd, (TType)fmx, null, lastInheritance);
 	}
-
 }
