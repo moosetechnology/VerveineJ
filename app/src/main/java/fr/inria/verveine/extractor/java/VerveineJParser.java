@@ -33,7 +33,7 @@ public class VerveineJParser {
 	/**
 	 * Java parser, provided by JDT
 	 */
-	protected ASTParser jdtParser = null;
+	protected ASTParser jdtParser;
 
 	/**
 	 * Famix repository where the entities are stored
@@ -50,7 +50,7 @@ public class VerveineJParser {
 
 
 		options = new VerveineJOptions();
-		jdtParser = ASTParser.newParser(AST.JLS9);
+		jdtParser = ASTParser.newParser(AST.JLS23);
 	}
 
 	public void configure(String[] args) {
@@ -110,13 +110,9 @@ public class VerveineJParser {
 
 	protected void expandPackageName(Package ns) {
 		String name = ns.getName();
-		if (name.indexOf('.') > 0) {
-			return;
-		} else {
+		if (name.indexOf('.') <= 0) {
 			Package parent = (Package) ns.getParentPackage();
-			if (parent == null) {
-				return;
-			} else {
+			if (parent != null)  {
 				expandPackageName(parent);
 				ns.setName(parent.getName() + "." + ns.getName());
 			}
@@ -170,7 +166,6 @@ public class VerveineJParser {
 			Writer writer = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.UTF_8));
 			if (this.options.outputFormat.equalsIgnoreCase(VerveineJOptions.MSE_OUTPUT_FORMAT)) {
 				try {
-					Util.repo = famixRepo;
 					famixRepo.exportMSE(writer);
 				}
 				catch (UnknownElementError err) {
@@ -188,12 +183,10 @@ public class VerveineJParser {
 				}
 			}
 			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (UnknownElementError e) {
+		} catch (IOException | UnknownElementError e) {
 			e.printStackTrace();
 		}
-	}
+    }
 
 	/**
 	 * Returns a Collection of all FAMIXEntities in the repository of the given fmxClass
