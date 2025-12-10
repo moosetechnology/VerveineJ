@@ -923,6 +923,23 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
         assertTrue(names.containsAll(Arrays.asList("lang", "ad_hoc")));
     }
+
+    @Test
+    /*
+    * Issue: https://github.com/moosetechnology/VerveineJ/issues/180
+    * Regression test ensuring that a class named Object does not always have "java.lang" as owner
+     */
+    public void testInvocationReceiverCanBeATextBlock() {
+        parse(new String[]{"src/test/resources/ad_hoc/TextBlocks.java"});
+
+        Collection<Invocation> invoks = entitiesOfType(Invocation.class);
+        assertEquals(1, invoks.size());
+
+		Invocation invok = firstElt(invoks);
+		assertEquals("length", ((TMethod)firstElt(invok.getCandidates())).getName());
+		assertNull("Invocation on a String literal should have no receiver ", invok.getReceiver());
+    }
+
 }
 
 
