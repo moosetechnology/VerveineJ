@@ -581,8 +581,9 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		// <text block>.msg()
 		// <text block> are created with triple quotes to allow defining multi-line string literals
-		// they are reported as NullLiteral in JDT and there does not seem to be a better way to test them
-		if (expr instanceof NullLiteral) {
+		// they used to be reported as NullLiteral in JDT
+		// In more modern version there is a Node type for them
+		if (expr instanceof NullLiteral || ( expr.getNodeType() == ASTNode.TEXT_BLOCK) ) {
 			return null;
 		}
 
@@ -610,7 +611,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 		// ... OTHER POSSIBLE EXPRESSIONS ?
 		System.err.println("WARNING: Unexpected receiver expression: " + expr.getClass().getName()
-				+ " (method called is" + expr.getClass().getName() + ".aMethod(...))");
+				+ " (method called is " + expr.getClass().getName() + ".aMethod(...))");
 		return null;
 	}
 
