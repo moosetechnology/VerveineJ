@@ -5,17 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 
-import org.eclipse.jdt.internal.compiler.batch.Main;
-import org.eclipse.jdt.internal.compiler.env.IModule;
-import org.eclipse.jdt.internal.compiler.batch.FileSystem.Classpath;
-import org.eclipse.jdt.internal.compiler.lookup.TypeConstants;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
@@ -32,15 +22,6 @@ public class VerveineJTest_JDKImport extends VerveineJTest_Basic {
 		new File(DEFAULT_OUTPUT_FILE).delete();
 		parser = new VerveineJParser();
 		repo = parser.getFamixRepo();
-
-		OutputStreamWriter writer = new FileWriter("resources/java/base/module-info.java");
-		writer.write("module java.base {}");
-		writer.close();
-	}
-
-	@After
-	public void tearDown() throws IOException {
-		new File(("resources/java/base/module-info.java")).delete();
 	}
 
 	@Test
