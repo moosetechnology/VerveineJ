@@ -79,7 +79,8 @@ public class VerveineJParser {
 					/*requestor*/req,
 					/*monitor*/null);
 		} catch (java.lang.IllegalStateException e) {
-			System.out.println("VerveineJ could not launch parser, received error: " + e.getMessage());
+			System.out.println("VerveineJ could not launch parser");
+			e.printStackTrace();
 		}
 
 		this.compressPackagesNames();

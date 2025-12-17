@@ -129,6 +129,11 @@ public class VerveineJOptions {
 	 * Text of comments exported in the model instead of using source anchor
 	 */
 	protected boolean commentText;
+	
+	/**
+	 * Am I parsing a JDK?
+	 */
+	protected boolean parsingJdk = false;
 
 	public VerveineJOptions() {
 		this.allLocals = false;
@@ -243,6 +248,9 @@ public class VerveineJOptions {
 		} else if (arg.equals("-i")) {
 			incrementalParsing = true;
 
+		}
+		else if (arg.equals("-jdkMode")) {
+			parsingJdk = true;
 		}
 		else if (arg.equals("-debugging")) {
 				debugging = true;
@@ -386,6 +394,7 @@ public class VerveineJOptions {
 		System.err.println("      [-filecp FILE] gather all jars listed in FILE (absolute paths) and put them in the classpath");
 		System.err.println("      [-excludepath GLOBBINGEXPR] A globbing expression of file path to exclude from parsing");
 		System.err.println("      [-1.1 | -1 | -1.2 | -2 | ... | -1.7 | -7] specifies version of Java");
+		System.err.println("      [-jdkMode] option to ABSOLUTELY set if you are making a model of a JDK");
 		System.err.println("      <files-to-parse>|<dirs-to-parse> list of source files to parse or directories to search for source files");
 	}
 
@@ -417,7 +426,10 @@ public class VerveineJOptions {
 	}
 
 	public void configureJDTParser(ASTParser jdtParser) {
-		jdtParser.setEnvironment(classPathOptions, /*sourcepathEntries*/argPath.toArray(new String[0]), /*encodings*/null, /*includeRunningVMBootclasspath*/true);
+		// If I am parsing a JDK, jdt must not provide the VM's running libraries (=jdk used by VerveineJ at runtime)
+		boolean includeRunningVMBootclasspath = !parsingJdk;
+		
+		jdtParser.setEnvironment(classPathOptions, /*sourcepathEntries*/argPath.toArray(new String[0]), /*encodings*/null, includeRunningVMBootclasspath);
 		jdtParser.setResolveBindings(true);
 		/**
 		 *  Incremental parsing should not activate Binding recovery because using this option with incremental parsing
@@ -593,6 +605,10 @@ public class VerveineJOptions {
 
 	public boolean commentsAsText() {
 		return commentText;
+	}
+	
+	public boolean isParsingJdk() {
+		return parsingJdk;
 	}
 
 	public String getFileEncoding() {
