@@ -940,6 +940,27 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertNull("Invocation on a String literal should have no receiver ", invok.getReceiver());
     }
 
+    @Test
+    /*
+    *    Issue: https://github.com/moosetechnology/VerveineJ/issues/184
+    *    Regression test ensuring that Enum values defining methods have the typing information right for parameters.
+     */
+    public void testEnumValuesHaveTheRightTypingOfMethodParamaters() {
+        parse(new String[]{"src/test/resources/ad_hoc/Operation.java"});
+
+        Collection<Method> methods = entitiesNamed(Method.class, "apply");
+
+        assertEquals(5, methods.size()); // 4 enum value implementations and 1 abstract method
+
+        for (Method method : methods) {
+            assertEquals(2, method.numberOfParameters());
+           for (TParameter parameter : method.getParameters()) {
+               assertNotNull(parameter.getTyping());
+               assertEquals("int", parameter.getTyping().getDeclaredType().getName());
+           }
+
+        }
+    }
 }
 
 
