@@ -2254,7 +2254,7 @@ public class EntityDictionary {
 	 */
 	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, Type ret, TWithMethods owner, int modifiers) {
 		Method fmx;
-		String sig;
+		String signature;
 		boolean delayedRetTyp;
 
 		// --------------- to avoid useless computations if we can
@@ -2274,17 +2274,17 @@ public class EntityDictionary {
 		}
 
 		// --------------- signature
-		sig = name + "(";
+		signature = name + "(";
 		 if (bnd != null) {
-	            sig += signatureParamsFromBinding(bnd);
+	            signature += signatureParamsFromBinding(bnd);
 	        }
         else if (paramTypes != null) {
-			sig += signatureParamsFromStringCollection(paramTypes);
+			signature += signatureParamsFromStringCollection(paramTypes);
 		}
 		else {
-			sig += "???";
+			signature += "???";
 		}
-		sig += ")";
+		signature += ")";
 
 		// --------------- return type
 		delayedRetTyp = false;
@@ -2329,7 +2329,7 @@ public class EntityDictionary {
 
 		// --------------- recover from name ?
 		for (Method candidate : this.getEntityByName(Method.class, name)) {
-			if (matchAndMapMethod(bnd, sig, ret, (TNamedEntity) owner, candidate)) {
+			if (matchAndMapMethod(bnd, signature, ret, (TNamedEntity) owner, candidate)) {
 				fmx = candidate;
 				break;
 			}
@@ -2349,7 +2349,7 @@ public class EntityDictionary {
 				fmx = ensureFamixEntity(Method.class, bnd, name);
 			}
 			
-			fmx.setSignature(sig);
+			fmx.setSignature(signature);
 			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
 			ensureFamixEntityTyping(returnTypeBnd, fmx, ret);
 			fmx.setParentType(owner);
