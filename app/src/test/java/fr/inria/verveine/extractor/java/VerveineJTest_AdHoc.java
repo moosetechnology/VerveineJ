@@ -927,8 +927,8 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
     @Test
     /*
     * Issue: https://github.com/moosetechnology/VerveineJ/issues/180
-    * Regression test ensuring that a class named Object does not always have "java.lang" as owner
-     */
+    * Call of a (String) method directly on a BlockText
+    */
     public void testInvocationReceiverCanBeATextBlock() {
         parse(new String[]{"src/test/resources/ad_hoc/TextBlocks.java"});
 
