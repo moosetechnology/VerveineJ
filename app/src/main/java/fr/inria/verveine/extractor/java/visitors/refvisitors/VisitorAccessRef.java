@@ -276,12 +276,8 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		endVisitFieldDeclaration(node);
 	}
 
-	@SuppressWarnings("unchecked")
 	public boolean visit(EnumConstantDeclaration node) {
-        if (visitEnumConstantDeclaration(node)) {
-            visitNodeList(node.arguments());
-        }
-		return false;
+        return visitEnumConstantDeclaration(node);
 	}
 
 	public void endVisit(EnumConstantDeclaration node) {
