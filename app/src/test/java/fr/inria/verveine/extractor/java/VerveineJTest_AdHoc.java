@@ -152,7 +152,10 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@ Test
 	public void testConstructorInvocations() {
-		parse(new String[] {"src/test/resources/ad_hoc/DefaultConstructor.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/annotations/Book.java"});
+		parse(new String[] {
+				"src/test/resources/ad_hoc/DefaultConstructor.java",
+				"src/test/resources/ad_hoc/InvokWithFullPath.java",
+				"src/test/resources/ad_hoc/annotations/Book.java"});
 
 		Method meth = detectFamixElement( Method.class, "methodWithClassScope");
 		assertNotNull(meth);
@@ -564,7 +567,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				assertEquals("toString", ((TNamedEntity) access.getAccessor()).getName());
 			}
 		}
-		assertTrue("Did not find CUBS EnumValue in Suit Enum", foundClubs);
+		assertTrue("Did not find 'CLUBS' EnumValue in 'Suit' Enum", foundClubs);
 
 		org.moosetechnology.model.famix.famixjavaentities.Enum pl = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Planet");
 		assertNotNull(pl);
@@ -662,7 +665,11 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testStaticInitializationBlock() {
-		parse(new String[] {"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/DefaultConstructor.java"});
+		parse(new String[] {
+				"src/test/resources/ad_hoc/Card.java",
+				"src/test/resources/ad_hoc/Planet.java",
+				"src/test/resources/ad_hoc/InvokWithFullPath.java",
+				"src/test/resources/ad_hoc/DefaultConstructor.java"});
 
 		Collection<Method> l_meth = entitiesNamed( Method.class, EntityDictionary.INIT_BLOCK_NAME);
 		assertEquals(3, l_meth.size());
@@ -696,6 +703,32 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals("ONE", ((TNamedEntity) firstElt(fmx.getEnumValues())).getName());
 
 		assertEquals(2, fmx.getMethods().size());  // constructor + INIT_BLOCK
+		assertTrue("Enum constructor not found", fmx.getMethods().stream().anyMatch( m -> m.getName().equals("EnumConstWithInitNewString") ) );
+		assertTrue("Enum initializer method not found", fmx.getMethods().stream().anyMatch( m -> m.getName().equals("<Initializer>") ) );
+	}
+
+	@Test
+	public void testCastInEnumInitialization() {
+		parse(new String[]{"src/test/resources/ad_hoc/EnumConstWithInitNewString.java"});
+
+		Method fmx = detectFamixElement(Method.class, "<Initializer>");
+		assertNotNull(fmx);
+
+        assertEquals(1, fmx.numberOfOutgoingReferences());
+        Interface clazz = (Interface) ((Reference)firstElt(fmx.getOutgoingReferences())).getReferredEntity();
+        assertEquals("CharSequence", clazz.getName());
+	}
+
+	@Test
+	public void testInvocationInEnumInitialization() {
+		parse(new String[]{"src/test/resources/ad_hoc/EnumConstWithInitNewString.java"});
+
+		Method fmx = detectFamixElement(Method.class, "<Initializer>");
+		assertNotNull(fmx);
+
+        assertEquals(1, fmx.numberOfOutgoingInvocations());
+        String constructorName = ((Invocation)firstElt(fmx.getOutgoingInvocations())).getSignature();
+        assertEquals("String(\"whatever\")", constructorName);
 	}
 
 	@Test

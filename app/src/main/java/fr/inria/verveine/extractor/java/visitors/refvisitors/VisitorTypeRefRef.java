@@ -242,6 +242,14 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		endVisitFieldDeclaration(node);
 	}
 
+	public boolean visit(EnumConstantDeclaration node) {
+        return visitEnumConstantDeclaration(node);
+	}
+
+	public void endVisit(EnumConstantDeclaration node) {
+		endVisitEnumConstantDeclaration(node);
+	}
+
     @Override
     /* We are not dealing with the variable of the catch here but in VisitorExceptionRef
      * therefore we only visit the body of the catch

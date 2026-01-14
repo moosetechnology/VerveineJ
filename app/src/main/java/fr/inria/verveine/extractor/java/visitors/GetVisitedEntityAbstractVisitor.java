@@ -239,19 +239,28 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 	@SuppressWarnings("unchecked")
 	public boolean visitEnumConstantDeclaration(EnumConstantDeclaration node) {
-		boolean hasInitBlock = false;
+		boolean hasInitBlock = (node.getAnonymousClassDeclaration() != null);
+
 		for (Expression expr : (List<Expression>)node.arguments()) {
 			if (expr != null) {
-				visitClassMemberInitializer(expr);
 				hasInitBlock = true;
 				break;  // we recovered the INIT_BLOCK, no need to look for other declaration
 			}
 		}
-		return hasInitBlock;
 
+		if (hasInitBlock) {
+			ctxtPushInitializerMethod();
+		}
+		return hasInitBlock;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void endVisitEnumConstantDeclaration(EnumConstantDeclaration node) {
+		if (node.getAnonymousClassDeclaration() != null) {
+			context.pop();  // pops the EntityDictionary.INIT_BLOCK_NAME method
+			return;
+		}
+
 		for (Expression expr : (List<Expression>)node.arguments()) {
 			if (expr != null) {
 				context.pop();  // pops the EntityDictionary.INIT_BLOCK_NAME method
@@ -297,7 +306,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 *
 	 * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
-	private Method ctxtPushInitializerMethod() {
+	protected Method ctxtPushInitializerMethod() {
 		TType owner = context.topType();
 		Method fmx = recoverInitializerMethod((TWithMethods)owner);
 		if (fmx == null) {
