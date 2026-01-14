@@ -77,15 +77,33 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 	}
 
     @Override
+    /**
+     * Must create a FamixJavaThrownException relation and thus must find the appropriate FamixJavaException type
+     * 
+     * There is a difficulty with UnionType:
+     * <code>catch (SAXException | IOException e) { throw e; }</code>
+     * where JDT reports java.lang.object for the type of the exception thrown !?!?!<BR>
+     * There are also other cases where the type is unknown. <BR>
+     * In these case, we force <code>java.lang.Throwable</code>
+     */
     public boolean visit(ThrowStatement node) {
+    	TType thrownExceptionType = null;
+    	TThrowable excepFmx = null;
+    	ITypeBinding exceptTypeBnd = null;
+
         Method meth = (Method) this.context.topMethod();
-        TType thrownExceptionType = this.referredType(node.getExpression().resolveTypeBinding(), (TNamedEntity) context.topType(), true);
-        TThrowable excepFmx;
+
+        exceptTypeBnd = node.getExpression().resolveTypeBinding();
+        if ( (exceptTypeBnd != null) && (! exceptTypeBnd.getQualifiedName().equals("java.lang.Object")) ) {
+        	thrownExceptionType = this.referredType(exceptTypeBnd, (TNamedEntity) context.topType(), true);
+        }
+
         if (thrownExceptionType == null) {
             excepFmx = dico.ensureFamixException(null, "Throwable", null, false, EntityDictionary.UNKNOWN_MODIFIERS) ;
         }
         else {
-        excepFmx = dico.asException( thrownExceptionType);}
+        	excepFmx = dico.asException( thrownExceptionType);
+        }
         if (excepFmx != null) {
         	dico.createFamixThrownException(meth, excepFmx);
         }
@@ -98,6 +116,9 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
  	 *	The FormalParameter is represented by a SingleVariableDeclaration
  	 *
  	 * We set the type of the catchClause variable here because it would be more difficult in VisitorTypeRefRef
+ 	 * <p>
+ 	 * TODO handle UnionType such as in <code>catch (SAXException|IOException e)</code>
+ 	 * see {@linkplain https://github.com/moosetechnology/VerveineJ/issues/185 }
      */
     @Override
     public boolean visit(CatchClause node) {
