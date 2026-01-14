@@ -229,16 +229,6 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		endVisitFieldDeclaration(node);
 	}
 
-	public boolean visit(EnumConstantDeclaration node) {
-		//System.err.println("visit(EnumConstantDeclaration) ");
-		return visitEnumConstantDeclaration(node);
-	}
-
-	public void endVisit(EnumConstantDeclaration node) {
-		//.err.println("endVisit(EnumConstantDeclaration) ");
-		endVisitEnumConstantDeclaration(node);
-	}
-
 	@SuppressWarnings("unchecked")
 	public boolean visit(MethodInvocation node) {
 		//System.err.println("visit(MethodInvocation): " + node.getName().getFullyQualifiedName());
