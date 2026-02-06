@@ -629,11 +629,11 @@ public class Exception extends Class implements TCanImplement, TException, THasV
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
-    
-    @FameProperty(name = "numberOfChildren", derived = true)
-    public Number getNumberOfChildren() {
+
+    @FameProperty(name = "numberOfContainedEntities", derived = true)
+    public Number getNumberOfContainedEntities() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
     
     @FameProperty(name = "numberOfComments", derived = true)
