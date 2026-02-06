@@ -4,6 +4,7 @@ public class ClassWithInitializers extends SuperclassWithConstructor {
 
     private static String defaultValue = initializeFromStaticAttributeDefinition();
     private String anInstVar = initializeFromAttributeDefinition();
+    private SuperclassWithImplicitConstructor sc = new SuperclassWithImplicitConstructor();
 
     static {
         initializeFromStaticInitializationBlock();

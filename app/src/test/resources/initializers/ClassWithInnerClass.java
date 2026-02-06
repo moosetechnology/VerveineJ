@@ -8,4 +8,9 @@ public class ClassWithInnerClass {
         String t = "Test";
     };
 
+    Boolean b = ic.canBeInvoked();
+
+    public static void main(String[] args) {
+        System.out.println( ic.canBeInvoked());
+    }
 }

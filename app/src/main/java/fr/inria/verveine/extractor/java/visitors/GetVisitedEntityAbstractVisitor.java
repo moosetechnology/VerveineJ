@@ -10,7 +10,6 @@ import org.eclipse.jdt.core.dom.Initializer;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
@@ -228,7 +227,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * Initializer ::=
 	 *      [ static ] Block
 	 */
-	public Method visitInitializer(Initializer node) {
+	public org.moosetechnology.model.famix.famixjavaentities.Initializer visitInitializer(Initializer node) {
 		return ctxtPushInitializerMethod(Modifier.isStatic(node.getModifiers()), true);
 	}
 
@@ -289,8 +288,8 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * Recovers the correct initializer method, static or not.
 	 * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
-	private Method ctxtPushInitializerMethod(Boolean isStatic, Boolean isInitializationBlock) {
-		Method fmx = dico.ensureFamixInitializer((TWithMethods)context.topType(), isStatic, isInitializationBlock);
+	private org.moosetechnology.model.famix.famixjavaentities.Initializer ctxtPushInitializerMethod(Boolean isStatic, Boolean isInitializationBlock) {
+		org.moosetechnology.model.famix.famixjavaentities.Initializer fmx = dico.ensureFamixInitializer((TWithMethods)context.topType(), isStatic, isInitializationBlock);
 		if (fmx != null) {
 			context.pushMethod(fmx);
 		}

@@ -437,9 +437,14 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 				}
 			}
 
-			// static method called on the class (or null receiver)
-			invoked = this.dico.ensureFamixMethod(actualCalledMethodBnd, calledName, unkwnArgs, /* retType */null,
-					(TWithMethods) /* owner */owner, modifiers);
+			// Implicit constructor
+			if (owner != null && calledName.equals(owner.getName())) {
+				invoked = dico.ensureImplicitConstructor((TWithMethods) owner, calledName);
+			} else {
+				// static method called on the class (or null receiver)
+				invoked = this.dico.ensureFamixMethod(actualCalledMethodBnd, calledName, unkwnArgs, /* retType */null,
+						(TWithMethods) /* owner */owner, modifiers);
+			}
 		}
 
 		String signature = "";
