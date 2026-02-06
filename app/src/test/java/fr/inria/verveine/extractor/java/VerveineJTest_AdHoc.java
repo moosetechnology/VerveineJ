@@ -14,13 +14,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.lang.Exception;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +25,8 @@ import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
+
+import javax.smartcardio.Card;
 
 /**
  * @author Nicolas Anquetil
@@ -248,7 +244,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		Method stubConstructor = (Method) firstElt(stubClass.getMethods());
 
 		assertTrue(stubConstructor.getIsStub());
-		assertEquals("constructor", stubConstructor.getKind());
+		assertTrue(stubConstructor.getIsConstructor());
 
 	}
 
@@ -662,29 +658,36 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testStaticInitializationBlock() {
-		parse(new String[] {"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/DefaultConstructor.java"});
 
-		Collection<Initializer> initializers = entitiesOfType( Initializer.class);
+		parse(new String[] {
+				"src/test/resources/ad_hoc/Card.java",
+				"src/test/resources/ad_hoc/Planet.java",
+				"src/test/resources/ad_hoc/InvokWithFullPath.java",
+				"src/test/resources/ad_hoc/DefaultConstructor.java"});
 
-		/* Card has a static initializer containing a field initialization and 1 static initialization block.
-		 * Planet and DefaultConstructor all have 2 initializers: 1 static, 1 not.
+		/* Card has:
+		 *	- 1 static initializer containing a field initialization, with 4 outgoing invocations.
+		 *  - 1 static initialization block, with 1 outgoing invocation.
+		 * Planet and DefaultConstructor each have 2 initializers: 1 static, 1 not. They do not invoke any methods.
 		 */
-		assertEquals(6, initializers.size());
 
+		Collection<Initializer> initializers = entitiesNamed(Initializer.class, EntityDictionary.INIT_BLOCK_NAME);
+		assertEquals(6, initializers.size());
 		for (Initializer initializer : initializers) {
-			assertEquals(EntityDictionary.INIT_BLOCK_NAME, initializer.getName());
+			assertEquals(EntityDictionary.INIT_BLOCK_NAME+"()", initializer.getSignature());
 			assertFalse(initializer.getIsDead());
 
-			String className = ((TNamedEntity)initializer.getParentType()).getName();
-
-			if (className.equals("Card")) {
-				if (!initializer.getIsInitializationBlock()) {
-					assertEquals(1, initializer.numberOfOutgoingInvocations());
-				}else {
-					assertEquals(4, initializer.getOutgoingInvocations().size());
+			if (((TNamedEntity)initializer.getParentType()).getName().equals("Card")) {
+				if (initializer.getIsInitializationBlock()) {
+					assertEquals(4, initializer.numberOfOutgoingInvocations());
+				} else {
+					assertEquals(1, initializer.getOutgoingInvocations().size());
 				}
 			}
-			else if (className.equals("Planet") || className.equals("DefaultConstructor")) {
+			else if (((TNamedEntity)initializer.getParentType()).getName().equals("Planet")) {
+				assertEquals(0, initializer.getOutgoingInvocations().size());
+			}
+			else if (((TNamedEntity)initializer.getParentType()).getName().equals("DefaultConstructor")) {
 				assertEquals(0, initializer.getOutgoingInvocations().size());
 			}
 			else {
@@ -692,6 +695,9 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 			}
 		}
 	}
+
+
+
 
 	@Test
 	public void testStaticInitializationBlockNewString() {

@@ -802,8 +802,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "numberOfParameters", derived = true)
     public Number getNumberOfParameters() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return getParameters().size();
     }
     
     @FameProperty(name = "numberOfStatements")

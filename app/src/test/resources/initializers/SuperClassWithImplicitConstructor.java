@@ -1,4 +1,4 @@
 package initializers;
 
-public class SuperClassWithImplicitConstructor {
+public class SuperclassWithImplicitConstructor {
 }

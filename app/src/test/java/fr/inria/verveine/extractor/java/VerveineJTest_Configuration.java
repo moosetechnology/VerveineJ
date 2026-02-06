@@ -2,17 +2,8 @@ package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.moosetechnology.model.famix.famixjavaentities.Access;
-import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixjavaentities.Comment;
-import org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor;
-import org.moosetechnology.model.famix.famixjavaentities.Interface;
-import org.moosetechnology.model.famix.famixjavaentities.Invocation;
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
@@ -173,9 +164,9 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 			assertEquals('/', cmt.getContent().charAt(0));
 		}
 
-		Class clazz = detectFamixElement(Class.class, "ClassWithComments");
-		assertNotNull(clazz);
-		assertEquals(1, clazz.getComments().size());
+		Class classWithComments = detectFamixElement(Class.class, "ClassWithComments");
+		assertNotNull(classWithComments);
+		assertEquals(1, classWithComments.getComments().size());
 
 		int numberTested = 0;
 
@@ -187,7 +178,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 		assertEquals(12, entitiesOfType(Method.class).size());
 		for (Method meth : entitiesOfType(Method.class)) {
-			if (meth.getIsInitializer()) {
+			if (meth.getIsInitializer() && !meth.getIsConstructor()) {
 				numberTested++;
 				assertEquals(0, meth.getComments().size());
 			}

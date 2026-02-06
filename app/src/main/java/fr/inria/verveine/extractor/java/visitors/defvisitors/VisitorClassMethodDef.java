@@ -268,10 +268,6 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 			// fmx.setBodyHash(this.computeHashForMethodBody(node));
 
 			this.context.pushMethod(fmx);
-			
-			if (node.isConstructor()) {
-				fmx.setKind(EntityDictionary.CONSTRUCTOR_KIND_MARKER);
-			}
 
 			if (options.withAnchors()) {
 				dico.addSourceAnchor(fmx, node);
@@ -542,7 +538,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	 */
 	protected TMethod createInitBlock(Boolean isStatic, Boolean isInitializationBlock) {
 		// putting field's initialization code in an INIT_BLOCK_NAME method
-		Method ctxtMeth = (Method) this.context.topMethod();
+		org.moosetechnology.model.famix.famixjavaentities.Initializer ctxtMeth = (org.moosetechnology.model.famix.famixjavaentities.Initializer) this.context.topMethod();
 		if (ctxtMeth != null && !ctxtMeth.getIsInitializer() && ctxtMeth.getIsClassSide() != isStatic) {
 			ctxtMeth = null;
 		} else {

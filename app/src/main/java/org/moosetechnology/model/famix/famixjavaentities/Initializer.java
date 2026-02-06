@@ -5,6 +5,8 @@ import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 
+import java.util.Objects;
+
 @FamePackage("Famix-Java-Entities")
 @FameDescription("Initializer")
 public class Initializer extends Method  {
@@ -21,7 +23,8 @@ public class Initializer extends Method  {
 
     @FameProperty(name = "isInitializationBlock")
     public Boolean getIsInitializationBlock() {
-        return isInitializationBlock;
+        return Objects.requireNonNullElse(isInitializationBlock, false);
+
     }
 
     public void setIsInitializationBlock(Boolean isInitializationBlock) {

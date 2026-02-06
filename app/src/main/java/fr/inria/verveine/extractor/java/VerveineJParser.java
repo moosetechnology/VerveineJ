@@ -58,7 +58,7 @@ public class VerveineJParser {
 		options.configureJDTParser(jdtParser);
 	}
 
-	protected SourceLanguage getMyLgge() {
+	protected SourceLanguage getMyLanguage() {
 		return new SourceLanguage();
 	}
 
@@ -161,8 +161,8 @@ public class VerveineJParser {
 	 */
 	public void exportModel(OutputStream output) {
 		// Adds default SourceLanguage for the repository
-		if ((listAll(SourceLanguage.class).size() == 0) && (getMyLgge() != null)) {
-			getFamixRepo().add(getMyLgge());
+		if ((listAll(SourceLanguage.class).size() == 0) && (getMyLanguage() != null)) {
+			getFamixRepo().add(getMyLanguage());
 		}
 
 		// Outputting to a file
@@ -188,12 +188,10 @@ public class VerveineJParser {
 				}
 			}
 			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (UnknownElementError e) {
+		} catch (IOException | UnknownElementError e) {
 			e.printStackTrace();
 		}
-	}
+    }
 
 	/**
 	 * Returns a Collection of all FAMIXEntities in the repository of the given fmxClass

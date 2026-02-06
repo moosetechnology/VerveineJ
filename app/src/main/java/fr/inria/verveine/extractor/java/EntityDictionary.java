@@ -90,11 +90,6 @@ public class EntityDictionary {
 	public static final String MODIFIER_SYNCHRONIZED = "synchronized";
 
     /**
-     * An MSE marker for methods
-     */
-    public static final String CONSTRUCTOR_KIND_MARKER = "constructor";
-
-    /**
      * The symbol kind to use to define that a method is a default implementation in an interface
      */
     public static final String DEFAULT_IMPLEMENTATION_KIND_MARKER = "default";
@@ -2467,12 +2462,16 @@ public class EntityDictionary {
 					TypeParameter fmxParam = this.ensureFamixTypeParameter(param, null, (TWithTypes)fmx);
 					fmxParam.setGenericEntity((ParametricMethod)fmx);
 				}
-			// parameterized method binding = when the method is the target of an invocation.
+			// Parameterized method binding = when the method is the target of an invocation.
 			} else if (bnd != null && bnd.isParameterizedMethod()) {
-				fmx = (ParametricMethod)this.ensureFamixMethod(bnd.getMethodDeclaration());
-			}else{
-				fmx = ensureFamixEntity(Method.class, bnd, name);
-			}
+				fmx = this.ensureFamixMethod(bnd.getMethodDeclaration());
+			} else {
+                if (bnd != null && bnd.isConstructor()) {
+                    fmx = ensureFamixEntity(Initializer.class, bnd, name);
+                } else {
+                    fmx = ensureFamixEntity(Method.class, bnd, name);
+                }
+            }
 			
 			fmx.setSignature(sig);
 			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
@@ -2482,10 +2481,6 @@ public class EntityDictionary {
 
 		if (fmx != null) {
 			setMethodModifiers(fmx, modifiers);
-			// if it's a constructor
-			if (fmx.getName().equals(Util.getOwner(fmx).getName())) {
-				fmx.setKind(CONSTRUCTOR_KIND_MARKER);
-			}
 
             //If it has the #default keywork, we mark it as default implementation
             if (Modifier.isDefault(modifiers)) {
@@ -2516,8 +2511,8 @@ public class EntityDictionary {
 			Optional<TMethod> existingInitializer = owner.getMethods().stream()
 					.filter(meth ->
 							((Method) meth).getIsInitializer() &&
-							((Method) meth).getIsClassSide().equals(isStatic) &&
 							((Method) meth).getIsConstructor().equals(false) &&
+							((Method) meth).getIsClassSide().equals(isStatic) &&
 							((Initializer) meth).getIsInitializationBlock().equals(isInitializationBlock))
 					.findFirst();
 			if (existingInitializer.isPresent()) {
@@ -2528,6 +2523,7 @@ public class EntityDictionary {
 		if (fmx == null) {
 			fmx = new Initializer();
 			fmx.setName(INIT_BLOCK_NAME);
+			fmx.setSignature(INIT_BLOCK_NAME + "()" );
 			fmx.setVisibility(MODIFIER_PRIVATE);
 			fmx.setParentType(owner);
 			fmx.setIsClassSide(isStatic);
@@ -2537,6 +2533,29 @@ public class EntityDictionary {
 		return fmx;
 	}
 
+
+	public Initializer ensureImplicitConstructor(TWithMethods owner, String name) {
+		Initializer fmx = null;
+
+		if (owner != null) {
+			Optional<TMethod> existingInitializer = owner.getMethods().stream()
+					.filter(meth ->
+							((Method) meth).getIsInitializer() &&
+									((Method) meth).getIsConstructor() && meth.getNumberOfParameters().equals(0))
+					.findFirst();
+			if (existingInitializer.isPresent()) {
+				fmx = (Initializer) existingInitializer.get();
+			}
+		}
+
+		if (fmx == null) {
+			fmx = ensureFamixEntity(Initializer.class, null, name);
+			fmx.setParentType(owner);
+			fmx.setSignature(name + "()");
+		}
+
+		return fmx;
+	}
 
 	/**
 	 * Creates or recovers a stub Famix Method
