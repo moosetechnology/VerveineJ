@@ -287,9 +287,9 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		assertSame(javaLang, javaDictionary.ensureFamixPackageJavaLang(null));
 		assertTrue(javaLang.getIsStub());
 
-		org.moosetechnology.model.famix.famixjavaentities.Class obj = javaDictionary.ensureFamixClassObject(null);
+		org.moosetechnology.model.famix.famixjavaentities.Class obj = javaDictionary.ensureFamixClassObject();
 		assertEquals(EntityDictionary.OBJECT_NAME, obj.getName());
-		assertSame(obj, javaDictionary.ensureFamixClassObject(null));
+		assertSame(obj, javaDictionary.ensureFamixClassObject());
 		assertEquals(0, obj.getSuperInheritances().size());
 		assertSame(javaLang, obj.getTypeContainer());
 

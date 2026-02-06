@@ -6,10 +6,9 @@ import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 import org.eclipse.jdt.core.dom.*;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
+import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
@@ -75,8 +74,8 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		if ((fmx != null) && (bnd != null)) {
 			// --------------- implicit superclass java.lang.Enum<> cannot use ensureInheritances(bnd,fmx)
-			TType superclass;
-			ITypeBinding supbnd = null;
+			Type superclass;
+			ITypeBinding supbnd;
 			supbnd = bnd.getSuperclass();
 			if (supbnd != null) {
 				superclass = dico.ensureFamixType(supbnd);
@@ -152,16 +151,21 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		// --------------- superclass
 		ITypeBinding supbnd = bnd.getSuperclass();
-		TType t;
+		Type type;
 		if (supbnd != null) {
-			t = dico.ensureFamixType(supbnd);
+			type = dico.ensureFamixType(supbnd);
 		} else {
-			t = dico.ensureFamixClassObject(null);
+            if(bnd.getQualifiedName().equals("java.lang.Object")){
+                // Edge case: If we are parsing java.lang.Object, then we should not have an inheritance at all
+                return;
+            }
+
+			type = dico.ensureFamixClassObject();
+
 		}
-		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) t, fmx, lastInheritance, supbnd);
+		lastInheritance = dico.ensureFamixInheritance((TWithInheritances) type, fmx, lastInheritance, supbnd);
 
 		// --------------- interfaces
 		dico.ensureImplementedInterfaces(bnd, (TType)fmx, null, lastInheritance);
 	}
-
 }

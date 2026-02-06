@@ -1,19 +1,12 @@
 package ad_hoc;
-/*
- * A test copied from jdt2mse (I believe) that happenned to break verveinej
- */
+
 public enum EnumConstWithInitNewString {
 
-       ONE(new String("whatever")) {
-              @Override
-              public void hook() {
-                     string.toString();
-              }
-       };
+       ONE( (CharSequence)new String("whatever") );
 
-       String string;
-
-       EnumConstWithInitNewString(String s) {
+	CharSequence string;
+       
+       EnumConstWithInitNewString(CharSequence s) {
               this.string = s;
        }
 

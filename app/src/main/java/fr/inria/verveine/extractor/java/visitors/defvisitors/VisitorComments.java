@@ -231,13 +231,6 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 		return super.visit(node);
 	}
 
-/*
-	public boolean visit(EnumConstantDeclaration node) {
-		dico.getFamixEnumValue(node.resolveVariable(), node.getName().getIdentifier(), /*owner* /(Enum)context.topType());
-		return false;
-	}
-*/
-
 	// UTILITY METHODS
 
 	/**

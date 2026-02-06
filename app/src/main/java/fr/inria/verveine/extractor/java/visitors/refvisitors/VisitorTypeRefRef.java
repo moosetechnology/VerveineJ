@@ -243,7 +243,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(EnumConstantDeclaration node) {
-		return visitEnumConstantDeclaration(node);
+        return visitEnumConstantDeclaration(node);
 	}
 
 	public void endVisit(EnumConstantDeclaration node) {

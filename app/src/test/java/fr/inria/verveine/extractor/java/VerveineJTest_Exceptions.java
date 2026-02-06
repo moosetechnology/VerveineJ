@@ -9,6 +9,8 @@ import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import static org.junit.Assert.*;
 
+import org.eclipse.jdt.core.dom.ThrowStatement;
+
 public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
 
     /**
@@ -145,6 +147,21 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
         inferredException = firstElt( throwerMethod.getThrownExceptions() );
         assertEquals( org.moosetechnology.model.famix.famixjavaentities.Exception.class, inferredException.getClass());
         assertEquals( "Throwable", ((org.moosetechnology.model.famix.famixjavaentities.Exception)inferredException).getName());
+    }
+
+    @Test
+    /*
+     * Not really testing the intended special case in <code>VisitorExceptionRef.visit(ThrowStatement)</code>
+     * because cannot get <code>node.getExpression().resolveTypeBinding()</code> to return <code>Object</code>
+     * But at least, it is testing a case with <code>UnionType</code>
+     */
+    public void testThrowingUnionTypeException() {
+        org.moosetechnology.model.famix.famixjavaentities.Method throwerMethod = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Method.class , "unionTypeThrower");
+
+        assertNotNull(throwerMethod);
+
+        assertEquals(1,throwerMethod.getThrownExceptions().size());
+        assertEquals("Throwable", ((TNamedEntity)firstElt(throwerMethod.getThrownExceptions())).getName() );
     }
 
 }

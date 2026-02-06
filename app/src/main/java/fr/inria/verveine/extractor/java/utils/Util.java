@@ -1,13 +1,11 @@
 package fr.inria.verveine.extractor.java.utils;
 
 import ch.akuhn.fame.MetaRepository;
-import ch.akuhn.fame.Repository;
 import ch.akuhn.fame.fm3.MetaDescription;
 import ch.akuhn.fame.fm3.PropertyDescription;
 import ch.akuhn.fame.internal.RepositoryVisitor.UnknownElementError;
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import org.eclipse.jdt.core.dom.ArrayType;
-import org.eclipse.jdt.core.dom.LambdaExpression;
 import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
@@ -20,16 +18,6 @@ import java.util.stream.Collectors;
 public class Util {
 
 	public static MetaRepository metamodel;
-
-public static Repository repo = null;
-
-	/**
-	 * helper to "normalize" lambda names
-	 */
-	public static String lambdaName(LambdaExpression node, EntityStack context) {
-		return "_lambda" + context.top().getName() + node.getStartPosition();
-
-	}
 
 	/**
 	 * helper to "normalize" an anonymous type name
@@ -97,7 +85,7 @@ public static Repository repo = null;
 		String retStr = str;
 		try {
 			retStr = str.substring(0, 1).toUpperCase() + str.substring(1);
-		} catch (Exception e) {
+		} catch (Exception ignored) {
 		}
 		return retStr;
 	}

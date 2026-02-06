@@ -148,7 +148,10 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@ Test
 	public void testConstructorInvocations() {
-		parse(new String[] {"src/test/resources/ad_hoc/DefaultConstructor.java", "src/test/resources/ad_hoc/InvokWithFullPath.java", "src/test/resources/ad_hoc/annotations/Book.java"});
+		parse(new String[] {
+				"src/test/resources/ad_hoc/DefaultConstructor.java",
+				"src/test/resources/ad_hoc/InvokWithFullPath.java",
+				"src/test/resources/ad_hoc/annotations/Book.java"});
 
 		Method meth = detectFamixElement( Method.class, "methodWithClassScope");
 		assertNotNull(meth);
@@ -560,7 +563,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				assertEquals("toString", ((TNamedEntity) access.getAccessor()).getName());
 			}
 		}
-		assertTrue("Did not find CUBS EnumValue in Suit Enum", foundClubs);
+		assertTrue("Did not find 'CLUBS' EnumValue in 'Suit' Enum", foundClubs);
 
 		org.moosetechnology.model.famix.famixjavaentities.Enum pl = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Planet");
 		assertNotNull(pl);
@@ -658,6 +661,17 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testStaticInitializationBlock() {
+		parse(new String[] {
+				"src/test/resources/ad_hoc/Card.java",
+				"src/test/resources/ad_hoc/Planet.java",
+				"src/test/resources/ad_hoc/InvokWithFullPath.java",
+				"src/test/resources/ad_hoc/DefaultConstructor.java"});
+
+		Collection<Method> l_meth = entitiesNamed( Method.class, EntityDictionary.INIT_BLOCK_NAME);
+		assertEquals(3, l_meth.size());
+		for (Method meth : l_meth) {
+			assertEquals(EntityDictionary.INIT_BLOCK_NAME+"()", meth.getSignature());
+			assertFalse(meth.getIsDead());
 
 		parse(new String[] {
 				"src/test/resources/ad_hoc/Card.java",
@@ -710,6 +724,32 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals("ONE", ((TNamedEntity) firstElt(fmx.getEnumValues())).getName());
 
 		assertEquals(3, fmx.getMethods().size());  // constructor + 2 initializers (1 static, 1 not)
+		assertTrue("Enum constructor not found", fmx.getMethods().stream().anyMatch( m -> m.getName().equals("EnumConstWithInitNewString") ) );
+		assertTrue("Enum initializer method not found", fmx.getMethods().stream().anyMatch( m -> m.getName().equals("<Initializer>") ) );
+	}
+
+	@Test
+	public void testCastInEnumInitialization() {
+		parse(new String[]{"src/test/resources/ad_hoc/EnumConstWithInitNewString.java"});
+
+		Method fmx = detectFamixElement(Method.class, "<Initializer>");
+		assertNotNull(fmx);
+
+        assertEquals(1, fmx.numberOfOutgoingReferences());
+        Interface clazz = (Interface) ((Reference)firstElt(fmx.getOutgoingReferences())).getReferredEntity();
+        assertEquals("CharSequence", clazz.getName());
+	}
+
+	@Test
+	public void testInvocationInEnumInitialization() {
+		parse(new String[]{"src/test/resources/ad_hoc/EnumConstWithInitNewString.java"});
+
+		Method fmx = detectFamixElement(Method.class, "<Initializer>");
+		assertNotNull(fmx);
+
+        assertEquals(1, fmx.numberOfOutgoingInvocations());
+        String constructorName = ((Invocation)firstElt(fmx.getOutgoingInvocations())).getSignature();
+        assertEquals("String(\"whatever\")", constructorName);
 	}
 
 	@Test
@@ -936,6 +976,44 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
         }
 
         assertTrue(names.containsAll(Arrays.asList("lang", "ad_hoc")));
+    }
+
+    @Test
+    /*
+    * Issue: https://github.com/moosetechnology/VerveineJ/issues/180
+    * Call of a (String) method directly on a BlockText
+    */
+    public void testInvocationReceiverCanBeATextBlock() {
+        parse(new String[]{"src/test/resources/ad_hoc/TextBlocks.java"});
+
+        Collection<Invocation> invoks = entitiesOfType(Invocation.class);
+        assertEquals(1, invoks.size());
+
+		Invocation invok = firstElt(invoks);
+		assertEquals("length", ((TMethod)firstElt(invok.getCandidates())).getName());
+		assertNull("Invocation on a String literal should have no receiver ", invok.getReceiver());
+    }
+
+    @Test
+    /*
+    *    Issue: https://github.com/moosetechnology/VerveineJ/issues/184
+    *    Regression test ensuring that Enum values defining methods have the typing information right for parameters.
+     */
+    public void testEnumValuesHaveTheRightTypingOfMethodParamaters() {
+        parse(new String[]{"src/test/resources/ad_hoc/Operation.java"});
+
+        Collection<Method> methods = entitiesNamed(Method.class, "apply");
+
+        assertEquals(5, methods.size()); // 4 enum value implementations and 1 abstract method
+
+        for (Method method : methods) {
+            assertEquals(2, method.numberOfParameters());
+           for (TParameter parameter : method.getParameters()) {
+               assertNotNull(parameter.getTyping());
+               assertEquals("int", parameter.getTyping().getDeclaredType().getName());
+           }
+
+        }
     }
 }
 
