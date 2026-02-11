@@ -8,10 +8,6 @@ import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TParameter;
 
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-
 import static org.junit.Assert.*;
 
 public class VerveineJTest_Ser extends VerveineJTest_Basic {
