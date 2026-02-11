@@ -538,7 +538,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	 */
 	protected TMethod createInitBlock(Boolean isStatic, Boolean isInitializationBlock) {
 		// putting field's initialization code in an INIT_BLOCK_NAME method
-		org.moosetechnology.model.famix.famixjavaentities.Initializer ctxtMeth = (org.moosetechnology.model.famix.famixjavaentities.Initializer) this.context.topMethod();
+		Method ctxtMeth = (Method) this.context.topMethod();
 		if (ctxtMeth != null && !ctxtMeth.getIsInitializer() && ctxtMeth.getIsClassSide() != isStatic) {
 			ctxtMeth = null;
 		} else {

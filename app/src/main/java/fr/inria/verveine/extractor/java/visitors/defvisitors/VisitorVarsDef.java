@@ -297,16 +297,16 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 		String name = varDecl.getName().getIdentifier();
 
 		switch (structKind) {
-			case PARAMETER:	fmx = dico.ensureFamixParameter(bnd, name, /*declared type*/null, (Method) owner);	break;
+			case PARAMETER:	fmx = dico.ensureFamixParameter(bnd, name, null, (Method) owner);				break;
 			case ATTRIBUTE: fmx = dico.ensureFamixAttribute(bnd, name, (TWithAttributes) owner);				break;
 			case LOCALVAR: 	fmx = dico.ensureFamixLocalVariable(bnd, name, (Method) owner);						break;
 			default:		fmx = null;
 		}
 
 		if (fmx != null) {
-			((TCanBeStub) fmx).setIsStub(false);
+			fmx.setIsStub(false);
 			if (options.withAnchors()) {
-				dico.addSourceAnchor((TSourceEntity) fmx, varDecl);
+				dico.addSourceAnchor(fmx, varDecl);
 			}
 		}
 

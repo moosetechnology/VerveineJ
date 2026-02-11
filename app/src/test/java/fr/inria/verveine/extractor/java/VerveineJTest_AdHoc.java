@@ -667,18 +667,6 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 				"src/test/resources/ad_hoc/InvokWithFullPath.java",
 				"src/test/resources/ad_hoc/DefaultConstructor.java"});
 
-		Collection<Method> l_meth = entitiesNamed( Method.class, EntityDictionary.INIT_BLOCK_NAME);
-		assertEquals(3, l_meth.size());
-		for (Method meth : l_meth) {
-			assertEquals(EntityDictionary.INIT_BLOCK_NAME+"()", meth.getSignature());
-			assertFalse(meth.getIsDead());
-
-		parse(new String[] {
-				"src/test/resources/ad_hoc/Card.java",
-				"src/test/resources/ad_hoc/Planet.java",
-				"src/test/resources/ad_hoc/InvokWithFullPath.java",
-				"src/test/resources/ad_hoc/DefaultConstructor.java"});
-
 		/* Card has:
 		 *	- 1 static initializer containing a field initialization, with 4 outgoing invocations.
 		 *  - 1 static initialization block, with 1 outgoing invocation.
@@ -709,8 +697,6 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 			}
 		}
 	}
-
-
 
 
 	@Test

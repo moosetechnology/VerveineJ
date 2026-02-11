@@ -2344,7 +2344,7 @@ public class EntityDictionary {
                     fmx = ensureFamixEntity(Method.class, bnd, name);
                 }
             }
-			
+
 			fmx.setSignature(signature);
 			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
 			ensureFamixEntityTyping(returnTypeBnd, fmx, ret);
@@ -2353,6 +2353,7 @@ public class EntityDictionary {
 
 		if (fmx != null) {
 			setMethodModifiers(fmx, modifiers);
+		}
 
         //If it has the #default keywork, we mark it as default implementation
         if (Modifier.isDefault(modifiers)) {
@@ -2367,6 +2368,7 @@ public class EntityDictionary {
 
 		return fmx;
 	}
+
 
 	/**
 	 * Creates or recovers the initializer method containing the attribute initializations of a type.
@@ -2405,14 +2407,16 @@ public class EntityDictionary {
 	}
 
 
-	public Initializer ensureImplicitConstructor(TWithMethods owner, String name) {
+	public Initializer ensureImplicitConstructor(TWithMethods owner, String name, Collection<String> parameterTypesNames) {
 		Initializer fmx = null;
 
 		if (owner != null) {
 			Optional<TMethod> existingInitializer = owner.getMethods().stream()
 					.filter(meth ->
 							((Method) meth).getIsInitializer() &&
-									((Method) meth).getIsConstructor() && meth.getNumberOfParameters().equals(0))
+									((Method) meth).getIsConstructor()
+									&& meth.getParameters().size() == parameterTypesNames.size()
+									&& (parameterTypesNames.stream().allMatch(parameterName -> meth.getSignature().contains(parameterName))) )
 					.findFirst();
 			if (existingInitializer.isPresent()) {
 				fmx = (Initializer) existingInitializer.get();
@@ -2423,6 +2427,7 @@ public class EntityDictionary {
 			fmx = ensureFamixEntity(Initializer.class, null, name);
 			fmx.setParentType(owner);
 			fmx.setSignature(name + "()");
+
 		}
 
 		return fmx;

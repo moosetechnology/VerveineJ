@@ -250,9 +250,8 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 				break;  // we recovered the INIT_BLOCK, no need to look for other declaration
 			}
 		}
-
 		if (hasInitBlock) {
-			ctxtPushInitializerMethod();
+			ctxtPushInitializerMethod(true, false);
 		}
 		return hasInitBlock;
 	}
@@ -299,7 +298,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * Recovers the correct initializer method, static or not.
 	 * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
-	private org.moosetechnology.model.famix.famixjavaentities.Initializer ctxtPushInitializerMethod(Boolean isStatic, Boolean isInitializationBlock) {
+	protected org.moosetechnology.model.famix.famixjavaentities.Initializer ctxtPushInitializerMethod(Boolean isStatic, Boolean isInitializationBlock) {
 		org.moosetechnology.model.famix.famixjavaentities.Initializer fmx = dico.ensureFamixInitializer((TWithMethods)context.topType(), isStatic, isInitializationBlock);
 		if (fmx != null) {
 			context.pushMethod(fmx);

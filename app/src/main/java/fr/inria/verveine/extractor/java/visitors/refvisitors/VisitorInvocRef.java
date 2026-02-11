@@ -13,6 +13,7 @@ import org.moosetechnology.model.famix.famixtraits.*;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -437,7 +438,11 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 
 			// Implicit constructor
 			if (owner != null && calledName.equals(owner.getName())) {
-				invoked = dico.ensureImplicitConstructor((TWithMethods) owner, calledName);
+				List<String> parameterTypesNames = new ArrayList<>();
+				if (calledBnd != null) {
+					parameterTypesNames = Arrays.stream(calledBnd.getParameterTypes()).map(ITypeBinding::getName).toList();
+				}
+				invoked = dico.ensureImplicitConstructor((TWithMethods) owner, calledName, parameterTypesNames );
 			} else {
 				// static method called on the class (or null receiver)
 				invoked = this.dico.ensureFamixMethod(actualCalledMethodBnd, calledName, unkwnArgs, /* retType */null,

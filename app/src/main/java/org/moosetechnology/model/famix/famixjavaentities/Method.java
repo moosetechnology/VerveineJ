@@ -565,7 +565,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "isClassSide")
     public Boolean getIsClassSide() {
-        return isClassSide;
+        return Objects.requireNonNullElse(isClassSide, false);
     }
 
     public void setIsClassSide(Boolean isClassSide) {

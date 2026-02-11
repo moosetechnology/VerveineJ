@@ -4,6 +4,8 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
+import fr.inria.verveine.extractor.java.EntityDictionary;
+import org.moosetechnology.model.famix.famixtraits.TType;
 
 import java.util.Objects;
 
@@ -17,8 +19,9 @@ public class Initializer extends Method  {
 
     @FameProperty(name = "isConstructor", derived = true)
     public Boolean getIsConstructor() {
+        TType declaredType = this.getDeclaredType();
         return (((Type) this.getParentType()).getName().equals(this.getName())
-                && this.getDeclaredType() == null);
+                && (declaredType == null || declaredType.getName().equals("void")));
     }
 
     @FameProperty(name = "isInitializationBlock")
