@@ -32,6 +32,7 @@ public class FamixJavaEntitiesModel {
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Import.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor.class);
+		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Initializer.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Inheritance.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Interface.class);
 		metamodel.with(org.moosetechnology.model.famix.famixjavaentities.Invocation.class);

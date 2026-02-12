@@ -4,7 +4,6 @@ package org.moosetechnology.model.famix.famixjavaentities;
 import ch.akuhn.fame.FameDescription;
 import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
-import fr.inria.verveine.extractor.java.EntityDictionary;
 import org.moosetechnology.model.famix.famixtraits.TType;
 
 import java.util.Objects;
