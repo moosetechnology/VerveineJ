@@ -114,12 +114,11 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
         Predicate<Initializer> isInstanceInitializationBlock = initializer -> initializer.getIsInitializationBlock() && !initializer.getIsClassSide();
 
         assertTrue(initializers.stream().anyMatch(isInstanceInitializationBlock));
-        Collection<Initializer> instanceBlocks = initializers.stream().filter(isInstanceInitializationBlock).toList();
 
+        Collection<Initializer> instanceBlocks = initializers.stream().filter(isInstanceInitializationBlock).toList();
         assertEquals(1, instanceBlocks.size());
 
-        Initializer initializationBlock = initializers.iterator().next();
-        System.out.println(((Class)initializationBlock.getParentType()).getName());
+        Initializer initializationBlock = instanceBlocks.iterator().next();
         assertEquals("ClassWithInitializers", (((Class)initializationBlock.getParentType()).getName()));
 
     }
