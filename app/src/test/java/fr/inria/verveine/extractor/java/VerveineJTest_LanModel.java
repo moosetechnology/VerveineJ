@@ -13,32 +13,17 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.lang.Exception;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.moosetechnology.model.famix.famixjavaentities.Access;
-import org.moosetechnology.model.famix.famixjavaentities.AnnotationInstance;
-import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
-import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixjavaentities.Comment;
-import org.moosetechnology.model.famix.famixjavaentities.Implementation;
-import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
-import org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor;
-import org.moosetechnology.model.famix.famixjavaentities.Inheritance;
-import org.moosetechnology.model.famix.famixjavaentities.Interface;
-import org.moosetechnology.model.famix.famixjavaentities.Invocation;
-import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
-import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
-import org.moosetechnology.model.famix.famixjavaentities.Parameter;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
-import org.moosetechnology.model.famix.famixjavaentities.PrimitiveType;
-import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TAnnotationInstance;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
@@ -414,16 +399,16 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 				n.getDeclaredType());
 
 		// constructors
-		Collection<Method> methods = entitiesOfType(Method.class);
-		assertFalse("No method found !", methods.isEmpty());
-		for (Method m : methods) {
-			if (m.getName().equals(((TNamedEntity) m.getParentType()).getName())) {
-				assertEquals("constructor", m.getKind());
+		Collection<Initializer> initializers = entitiesOfType(Initializer.class);
+		assertFalse("No initializer found !", initializers.isEmpty());
+
+		for (Initializer initializer : entitiesOfType(Initializer.class)) {
+			if (initializer.getName().equals(((TNamedEntity) initializer.getParentType()).getName())) {
+				assertTrue(initializer.getIsConstructor());
 			} else {
-				assertTrue((m.getKind() == null) || (!m.getKind().equals("constructor")));
+				assertTrue((initializer.getKind() == null) || (!initializer.getKind().equals("constructor")));
 			}
 		}
-
 	}
 
 	@Test
@@ -856,17 +841,18 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 		for (TMethod tm : clazz.getMethods()) {
 			Method m = (Method) tm;
 			if (m.getName().equals(EntityDictionary.INIT_BLOCK_NAME)) {
+				assertTrue(m.getIsPrivate());
 				assertFalse(m.getIsPublic());
 			} else {
 				assertTrue(m.getIsPublic());
+				assertFalse(m.getIsPrivate());
 			}
-			assertFalse(m.getIsPrivate());
 			assertFalse(m.getIsProtected());
 			// assertFalse(m.getIsFinal());
 			if (m.getName().equals("output")) {
 				assertTrue(m.getIsAbstract());
 			} else {
-				// assertFalse(m.getIsAbstract());
+				assertFalse(m.getIsAbstract());
 			}
 		}
 

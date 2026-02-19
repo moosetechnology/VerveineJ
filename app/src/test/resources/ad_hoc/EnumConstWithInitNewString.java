@@ -10,6 +10,9 @@ public enum EnumConstWithInitNewString {
               this.string = s;
        }
 
+       public void hook() {
+              string += "whatever";
+       }
 }
 
  
