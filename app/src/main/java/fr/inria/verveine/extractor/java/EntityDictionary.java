@@ -943,10 +943,19 @@ public class EntityDictionary {
 			return this.ensureFamixEnum(bnd, name, owner);
 		}
  
-		if ((bnd.isRawType() || bnd.isGenericType() || bnd.isCapture()) && !bnd.isInterface() ) {
+		if ((bnd.isRawType() || bnd.isGenericType()) && !bnd.isInterface() ) {
 			return this.ensureFamixClass(bnd.getErasure(), name, (TNamedEntity) owner, /*isGeneric*/true, modifiers);
 		}
-		
+
+		if (bnd.isCapture()) {
+			if (bnd.getErasure().isInterface()) {
+				return this.ensureFamixInterface(bnd.getErasure(), name, owner, /*isGeneric*/true, modifiers);
+			}
+			else {
+				return this.ensureFamixClass(bnd.getErasure(), name, (TNamedEntity) owner, /*isGeneric*/true, modifiers);
+			}
+		}
+
 		if (bnd.isAnnotation()) {
 			return this.ensureFamixAnnotationType(bnd, name, (ContainerEntity) owner);
 		}
@@ -1093,6 +1102,7 @@ public class EntityDictionary {
 			}
 		}
 
+		// ---------------- modifiers and super-classes
 		if (fmx!=null) {
 			// we just created it, or it was not bound so we make sure it has the right information in it
 			if (bnd != null) {
@@ -1119,7 +1129,7 @@ public class EntityDictionary {
 	/**
 	 * Returns a Famix Exception associated with the ITypeBinding.
 	 * The Entity is created if it does not exist.
-	 * @param name -- the name of the Famix Exception (MUST NOT be null, but this is not checked)
+	 * @param name -- the name of the Famix Exception
 	 * @param owner -- type defining the Exception (should not be null, but it will work if it is) 
 	 *
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
@@ -1207,7 +1217,7 @@ public class EntityDictionary {
 
 	/**
 	 * Returns a FAMIX Interface with the given <b>name</b>, creating it if it does not exist yet.
-	 * @param name -- the name of the FAMIX Method (MUST NOT be null, but this is not checked)
+	 * @param name -- the name of the FAMIX Method
 	 * @param owner -- type defining the method (should not be null, but it will work if it is) 
 	 * @return the FAMIX Class or null in case of a FAMIX error
 	 */
@@ -1281,6 +1291,7 @@ public class EntityDictionary {
 			}
 		}
 
+		// ---------------- modifiers and "super interfaces"
 		if (fmx!=null) {
 			// we just created it or it was not bound, so we make sure it has the right information in it
 			if (bnd != null) {
@@ -1294,6 +1305,10 @@ public class EntityDictionary {
 		return fmx;
 	}
 
+	/**
+	 * "Converts" (if needed) a TTYpe entity to be a TThrowable. Might involve removing the existing entity, recreating a new one and migrating
+	 * all the relationship of the former to the later
+	 */
 	public TThrowable asException(TType fmxType) {
 		if (fmxType instanceof Exception) {
 			return (Exception) fmxType;
@@ -1308,7 +1323,7 @@ public class EntityDictionary {
 		try {
 			key = entityToKey.get(fmxType);
 
-			/* Remove entity immediatly so that its key and name are not "reassigned" in the various cache dictionnaries
+			/* Remove entity immediately so that its key and name are not "reassigned" in the various cache dictionaries
 			 * the object still exists and its properties are still accessible */
 			removeEntity((NamedEntity) fmxType);
 
