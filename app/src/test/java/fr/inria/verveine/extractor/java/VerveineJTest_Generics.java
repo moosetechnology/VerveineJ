@@ -391,6 +391,20 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
         assertEquals(ParametricReference.class, ref.getClass());
     }
 
+    @Test
+    public void testSparqlListenerBug() {
+        Method meth = detectFamixElement(Method.class, "SparqlListener");
+        assertNotNull(meth);
+        assertEquals(3, meth.getOutgoingInvocations().size());
+        for (TInvocation inv : meth.getOutgoingInvocations()) {
+        	assertTrue(
+            	inv.getSignature().equals("isEmpty()") ||
+            	inv.getSignature().equals("emptyList()") ||
+            	inv.getSignature().equals("copyOf(delegates)")
+        	);
+        }
+    }
+
     // UTILITIES --------------------------------------------------
 
     /*

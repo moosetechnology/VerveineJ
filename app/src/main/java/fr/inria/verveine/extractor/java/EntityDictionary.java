@@ -942,8 +942,8 @@ public class EntityDictionary {
 		if (bnd.isEnum()) {
 			return this.ensureFamixEnum(bnd, name, owner);
 		}
-
-		if ((bnd.isRawType() || bnd.isGenericType()) && !bnd.isInterface() ) {
+ 
+		if ((bnd.isRawType() || bnd.isGenericType() || bnd.isCapture()) && !bnd.isInterface() ) {
 			return this.ensureFamixClass(bnd.getErasure(), name, (TNamedEntity) owner, /*isGeneric*/true, modifiers);
 		}
 		
