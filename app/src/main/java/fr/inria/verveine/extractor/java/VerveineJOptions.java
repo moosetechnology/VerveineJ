@@ -57,6 +57,29 @@ public class VerveineJOptions {
 	public static final String DEFAULT_CODE_VERSION = JavaCore.VERSION_9;
 
 	/**
+	 * List of java version option from java 1.1 to java 23 argument
+	 */
+	private static final Map<String, String> VERSION_MAP = new HashMap<>();
+
+	/**
+	 * Init list of java version option
+	 */
+	static {
+		// Olds versions of Java can be written 1.x or x
+		// While newer version can only be written x
+		for (String version : JavaCore.getAllVersions()) {
+			if (version.contains(".")) {
+				String shortV = version.substring(2);
+
+				VERSION_MAP.put("-" + version, version);
+				VERSION_MAP.put("-" + shortV, version);
+			} else {
+				VERSION_MAP.put("-" + version, version);
+			}
+		}
+	}
+
+	/**
 	 * Whether to output all local variables (even those with primitive type) or not (default is not).<br>
 	 * Note: allLocals => not classSummary
 	 */
@@ -121,7 +144,7 @@ public class VerveineJOptions {
 	protected boolean prettyPrint = false;
 
 	/**
-	 * with additional tracing for debugging 
+	 * with additional tracing for debugging
 	 */
 	protected boolean debugging;
 
@@ -129,7 +152,7 @@ public class VerveineJOptions {
 	 * Text of comments exported in the model instead of using source anchor
 	 */
 	protected boolean commentText;
-	
+
 	/**
 	 * Am I parsing a JDK?
 	 */
@@ -206,12 +229,12 @@ public class VerveineJOptions {
 	protected int setOption( String[] args, int i) throws IllegalArgumentException {
 		String arg = args[i].trim();
 		int argumentsTreated = 1;
-	
+
 		if (arg.equals("-h")) {
 			usage();
 			System.exit(0);
 		}
-		else if (arg.matches("-1\\.[1-7]") || arg.matches("-[1-7]")) {
+		else if (VERSION_MAP.containsKey(arg)) {
 			setCodeVersion(arg);
 		} else if (arg.equals("-alllocals")) {
 			allLocals = true;
@@ -253,7 +276,7 @@ public class VerveineJOptions {
 			parsingJdk = true;
 		}
 		else if (arg.equals("-debugging")) {
-				debugging = true;
+			debugging = true;
 		} else {
 			throw new IllegalArgumentException("** Unrecognized option: " + arg);
 		}
@@ -262,7 +285,7 @@ public class VerveineJOptions {
 	}
 
 	/**
-	 * Computes the path of all included jars 
+	 * Computes the path of all included jars
 	 */
 	protected String[] setOptionClassPath( String[] classPath, String[] args, int i) throws IllegalArgumentException {
 		if (args[i].equals("-autocp")) {
@@ -285,7 +308,7 @@ public class VerveineJOptions {
 			}
 			else {
 				throw new IllegalArgumentException("-cp requires a classPath");
-			}	
+			}
 		}
 		return classPath;
 	}
@@ -393,7 +416,7 @@ public class VerveineJOptions {
 		System.err.println("      [-autocp DIR] gather all jars in DIR and put them in the classpath");
 		System.err.println("      [-filecp FILE] gather all jars listed in FILE (absolute paths) and put them in the classpath");
 		System.err.println("      [-excludepath GLOBBINGEXPR] A globbing expression of file path to exclude from parsing");
-		System.err.println("      [-1.1 | -1 | -1.2 | -2 | ... | -1.7 | -7] specifies version of Java");
+		System.err.println("      [-1.1 | -1 | -1.2 | -2 | ... | -1.9 | -9 | -10 | -11 | ... ] specifies version of Java");
 		System.err.println("      [-jdkMode] option to ABSOLUTELY set if you are making a model of a JDK");
 		System.err.println("      <files-to-parse>|<dirs-to-parse> list of source files to parse or directories to search for source files");
 	}
@@ -403,22 +426,10 @@ public class VerveineJOptions {
 			System.err.println("Trying to set twice code versions: " + codeVers + " and " + arg);
 			usage();
 			throw new IllegalArgumentException();
-		} else if (arg.equals("-1.1") || arg.equals("-1")) {
-			codeVers = JavaCore.VERSION_1_1;
-		} else if (arg.equals("-1.2") || arg.equals("-2")) {
-			codeVers = JavaCore.VERSION_1_2;
-		} else if (arg.equals("-1.3") || arg.equals("-3")) {
-			codeVers = JavaCore.VERSION_1_3;
-		} else if (arg.equals("-1.4") || arg.equals("-4")) {
-			codeVers = JavaCore.VERSION_1_4;
-		} else if (arg.equals("-1.5") || arg.equals("-5")) {
-			codeVers = JavaCore.VERSION_1_5;
-		} else if (arg.equals("-1.6") || arg.equals("-6")) {
-			codeVers = JavaCore.VERSION_1_6;
-		} else if (arg.equals("-1.7") || arg.equals("-7")) {
-			codeVers = JavaCore.VERSION_1_7;
+		} else if(VERSION_MAP.containsKey(arg)){
+			codeVers = VERSION_MAP.get(arg);
 		}
-	
+
 	}
 
 	public String getOutputFileName() {
@@ -428,24 +439,24 @@ public class VerveineJOptions {
 	public void configureJDTParser(ASTParser jdtParser) {
 		// If I am parsing a JDK, jdt must not provide the VM's running libraries (=jdk used by VerveineJ at runtime)
 		boolean includeRunningVMBootclasspath = !parsingJdk;
-		
+
 		jdtParser.setEnvironment(classPathOptions, /*sourcepathEntries*/argPath.toArray(new String[0]), /*encodings*/null, includeRunningVMBootclasspath);
 		jdtParser.setResolveBindings(true);
 		/**
 		 *  Incremental parsing should not activate Binding recovery because using this option with incremental parsing
 		 * will result in lot of stubs in the model that would have been resolved later
-		 * */ 
+		 * */
 		if (!incrementalParsing) {
 			jdtParser.setBindingsRecovery(true);
 		}
 		jdtParser.setKind(ASTParser.K_COMPILATION_UNIT);
-		
+
 		Map<String, String> javaCoreOptions = JavaCore.getOptions();
 
 		javaCoreOptions.put(JavaCore.COMPILER_COMPLIANCE, codeVers);
 		javaCoreOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, codeVers);
 		javaCoreOptions.put(JavaCore.COMPILER_SOURCE, codeVers);
-	
+
 		jdtParser.setCompilerOptions(javaCoreOptions);
 
 	}
@@ -579,10 +590,10 @@ public class VerveineJOptions {
 
 	protected String[] sourceFilesToParse() {
 		ArrayList<String> sourceFiles = new ArrayList<String>();
-		
+
 		sourceFiles.addAll(argFiles);
 		collectJavaFiles(argPath, sourceFiles);
-	
+
 		return sourceFiles.toArray( new String[sourceFiles.size()] );
 	}
 
@@ -606,7 +617,7 @@ public class VerveineJOptions {
 	public boolean commentsAsText() {
 		return commentText;
 	}
-	
+
 	public boolean isParsingJdk() {
 		return parsingJdk;
 	}
