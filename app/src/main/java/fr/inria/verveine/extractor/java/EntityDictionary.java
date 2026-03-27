@@ -553,7 +553,7 @@ public class EntityDictionary {
 	 * @return the FamixReference
 	 */
 	public Reference addFamixReference(Method src, TType tgt, TAssociation prev, ITypeBinding referredTypeBnd) {
-		Reference ref;
+		Reference ref = null;
 		
 		if ( (src == null) || (tgt == null) ) {
 			return null;
@@ -567,12 +567,20 @@ public class EntityDictionary {
 			}
 		}
 
-		/* issue <href="https://github.com/moosetechnology/VerveineJ/issues/146">146</href> an expression like <code>char[].class</code> is a <code>Class</code>
-		 * gives referredTypeBnd.isParameterizedType() == true.
-		 * We test <code>tgt instanceof PrimitiveType</code> to avoid this case */
-		if (referredTypeBnd != null && referredTypeBnd.isParameterizedType() && ! (tgt instanceof PrimitiveType)) { // Needs checks and tests.
-			ref = (ParametricReference)buildFamixParametricAssociation(new ParametricReference(), referredTypeBnd.getErasure().getTypeParameters(), referredTypeBnd.getTypeArguments());
-		} else {
+		if (referredTypeBnd != null) {
+			if (referredTypeBnd.isParameterizedType()) {
+				ref = (ParametricReference)buildFamixParametricAssociation(new ParametricReference(), referredTypeBnd.getErasure().getTypeParameters(), referredTypeBnd.getTypeArguments());
+			}else if (referredTypeBnd.isArray())
+				ref = new ParametricReference();
+			
+				TTypeArgument typeArgument  = (TTypeArgument)ensureFamixType(referredTypeBnd.getElementType());
+				TypeParameter typeParameter = (TypeParameter) ((ParametricClass)tgt).getTypeParameters().iterator().next();
+
+				Concretization concretization = ensureFamixConcretization(typeArgument, typeParameter);
+				((ParametricReference)ref).addConcretization(concretization);
+		}
+
+		if (ref == null){
 			ref = new Reference();
 		}
 
