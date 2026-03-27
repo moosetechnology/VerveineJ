@@ -570,14 +570,15 @@ public class EntityDictionary {
 		if (referredTypeBnd != null) {
 			if (referredTypeBnd.isParameterizedType()) {
 				ref = (ParametricReference)buildFamixParametricAssociation(new ParametricReference(), referredTypeBnd.getErasure().getTypeParameters(), referredTypeBnd.getTypeArguments());
-			}else if (referredTypeBnd.isArray())
+			} else if (referredTypeBnd.isArray()) {
 				ref = new ParametricReference();
 			
 				TTypeArgument typeArgument  = (TTypeArgument)ensureFamixType(referredTypeBnd.getElementType());
-				TypeParameter typeParameter = (TypeParameter) ((ParametricClass)tgt).getTypeParameters().iterator().next();
+				TypeParameter typeParameter = (TypeParameter) ((TParametricEntity)tgt).getTypeParameters().iterator().next();
 
 				Concretization concretization = ensureFamixConcretization(typeArgument, typeParameter);
 				((ParametricReference)ref).addConcretization(concretization);
+			}
 		}
 
 		if (ref == null){

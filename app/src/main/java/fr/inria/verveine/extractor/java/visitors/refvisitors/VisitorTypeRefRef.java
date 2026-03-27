@@ -299,7 +299,14 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public boolean visit(TypeLiteral node) {
 		TType fmx = dico.referredType(node.getType(), (ContainerEntity) context.top(), true);
 		
-		addReference(node, fmx, node.getType().resolveBinding());
+		ITypeBinding binding = null;
+		if (node.getType().isArrayType()) {
+			binding = node.getType().resolveBinding();
+		}else {
+			binding = node.resolveTypeBinding();
+		}
+		
+		addReference(node, fmx, binding);
 		return(false);
 	}
 
@@ -313,7 +320,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		IBinding qualifierBinding = node.getQualifier().resolveBinding();
 
 		if ((qualifierBinding != null) && (qualifierBinding.getKind() == IBinding.TYPE)) {
-			TType fmx = referredType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top(), true);
+			TType fmx = dico.referredType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top());
 			addReference(node, fmx, (ITypeBinding) qualifierBinding);
 		}
 
