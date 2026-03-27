@@ -6,10 +6,14 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
+
+import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TPrimitiveType;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 import org.moosetechnology.model.famix.famixreplication.Replica;
 import org.moosetechnology.model.famix.famixtraits.TConcretization;
@@ -336,8 +340,6 @@ public class PrimitiveType extends Type implements TPrimitiveType, TTypeArgument
         if (typeContainer == null) return;
         typeContainer.getTypes().add(this);
     }
-
-
 
 }
 

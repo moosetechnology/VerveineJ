@@ -2277,7 +2277,7 @@ public class EntityDictionary {
 	 * @param owner -- type defining the method (should not be null, but it will work if it is)
 	 * @return the Famix Entity found or created. May return null if "bnd" is null or in case of a Famix error
 	 */
-	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, Type ret, TWithMethods owner, int modifiers) {
+	public Method ensureFamixMethod(IMethodBinding bnd, String name, Collection<String> paramTypes, TType ret, TWithMethods owner, int modifiers) {
 		Method fmx;
 		String signature;
 		boolean delayedRetTyp;
@@ -2321,17 +2321,11 @@ public class EntityDictionary {
                 // we need T to create the method and the method to create T ...
                 // so we need to test the situation and deal with it
                 retTypBnd = bnd.getReturnType();
-                if (retTypBnd != null) {
-                    if (retTypBnd.isArray()) {
-                        retTypBnd = retTypBnd.getElementType();
-                    }
-                }
-
                 if ( (retTypBnd != null) && retTypBnd.isTypeVariable() && (retTypBnd.getDeclaringMethod() == bnd) ) {
                     delayedRetTyp = true;
                 }
                 else {
-                    ret = this.ensureFamixType(retTypBnd,(TWithTypes) /*ctxt*/owner);
+                	ret = this.referredType(retTypBnd, fmx);
                 }
 			}
 		}
@@ -3055,7 +3049,7 @@ public class EntityDictionary {
 		if (typ == null) {
 			return null;
 		} else if (typ.resolveBinding() != null) {
-			return this.referredType(typ.resolveBinding(), ctxt, isClass);
+			return this.referredType(typ.resolveBinding(), ctxt);
 		}
 		// from here, we assume the owner is the context
 		else if (isClass && !isException) {
@@ -3079,7 +3073,7 @@ public class EntityDictionary {
 		}
 	}
 	
-	public TType referredType(ITypeBinding bnd, TNamedEntity ctxt, boolean isClass) {
+	public TType referredType(ITypeBinding bnd, TNamedEntity ctxt) {
 		TType fmxTyp = null;
 
 		if (bnd == null) {

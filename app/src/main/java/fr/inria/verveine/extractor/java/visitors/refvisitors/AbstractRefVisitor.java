@@ -55,7 +55,7 @@ public class AbstractRefVisitor extends GetVisitedEntityAbstractVisitor {
 
 	@Deprecated
 	protected TType referredType(ITypeBinding bnd, TNamedEntity ctxt, boolean isClass) {
-		return dico.referredType(bnd, ctxt, isClass);
+		return dico.referredType(bnd, ctxt);
 	}
 
 }

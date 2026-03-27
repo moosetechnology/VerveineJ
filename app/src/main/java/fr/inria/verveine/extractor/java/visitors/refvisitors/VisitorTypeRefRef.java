@@ -175,13 +175,13 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		if (fmx != null) {
 			if (! node.isConstructor()) {
 				ITypeBinding returnTypeBnd = (node.resolveBinding() == null) ? null : node.resolveBinding().getReturnType();
-				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, referredType(node.getReturnType2(), fmx, false));
+				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, dico.referredType(node.getReturnType2(), fmx, false));
 			}
 
 			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
 				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
 				if (fmxParam != null) {
-					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, referredType(param.getType(), fmx, false));
+					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, dico.referredType(param.getType(), fmx, false));
 				}
 			}
 
@@ -384,7 +384,14 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	private <T extends TWithTypes & TNamedEntity> boolean visitVariablesDeclaration(List<VariableDeclaration> fragments, Type declType) {
 		for (VariableDeclaration varDecl : fragments) {
-			TType declaredType = referredType(declType, (T) context.topType(), false);
+			
+			TType declaredType = null;
+			if (varDecl.getExtraDimensions() > 0) {
+				declaredType = dico.ensureParametricArrayClass();
+			} else {
+				declaredType = dico.referredType(declType, (T) context.topType(), false);
+			}
+			
 			setVariableDeclaredType( varDecl, declaredType);
 			varDecl.accept(this);
 		}
