@@ -461,7 +461,15 @@ public class EntityDictionary {
 		Iterator<ITypeBinding> concreteIterator = Arrays.asList(typeArguments).iterator();
 
 		while (concreteIterator.hasNext() && genericIterator.hasNext()) {
-			TTypeArgument typeArgument = (TTypeArgument)ensureFamixType(concreteIterator.next());
+			
+			TTypeArgument typeArgument;
+			try {
+				typeArgument = (TTypeArgument)ensureFamixType(concreteIterator.next());
+			} catch(ClassCastException e) {
+				
+				throw e;
+			}
+			
 			TypeParameter typeParameter = (TypeParameter)ensureFamixType(genericIterator.next());
 
 			Concretization concretization = ensureFamixConcretization(typeArgument, typeParameter);

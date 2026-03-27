@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.Exception;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import org.junit.Before;
@@ -403,6 +404,35 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
             	inv.getSignature().equals("copyOf(delegates)")
         	);
         }
+    }
+    
+    @Test
+    public void testConcretizePrimitiveArray(){
+    	
+    	Attribute attribute = detectFamixElement(Attribute.class, "attributeUsingPrimitiveArrayConcretization");
+    	
+    	Collection<TConcretization> concretizations = ((ParametricEntityTyping)attribute.getTyping()).getConcretizations();
+    	assertEquals(1, concretizations.size());
+    	
+    	TConcretization theConcretization = this.firstElt(concretizations);
+    	assertTrue(theConcretization.getTypeArgument() instanceof PrimitiveType);
+    	
+    	assertEquals("int", ((PrimitiveType) theConcretization.getTypeArgument()).getName());
+    }
+    
+    @Test
+    public void testConcretizePrimitiveArrayMixedWithRef(){
+    	
+    	Attribute attribute = detectFamixElement(Attribute.class, "attributeMixingPrimitiveArrayConcretizationWithRef");
+    	
+    	Collection<TConcretization> concretizations = ((ParametricEntityTyping)attribute.getTyping()).getConcretizations();
+    	assertEquals(2, concretizations.size());
+    	
+    	TConcretization theConcretization = this.elementAt(concretizations, 1);
+    	assertTrue(theConcretization.getTypeArgument() instanceof PrimitiveType);
+    	
+    	assertEquals("int", ((PrimitiveType) theConcretization.getTypeArgument()).getName());
+ 
     }
 
     // UTILITIES --------------------------------------------------

@@ -6,16 +6,20 @@ import ch.akuhn.fame.FamePackage;
 import ch.akuhn.fame.FameProperty;
 import ch.akuhn.fame.internal.MultivalueSet;
 import java.util.*;
+
+import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
 import org.moosetechnology.model.famix.famixtraits.TEntityTyping;
 import org.moosetechnology.model.famix.famixtraits.TPrimitiveType;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("PrimitiveType")
-public class PrimitiveType extends Type implements TPrimitiveType {
+public class PrimitiveType extends Type implements TPrimitiveType, TTypeArgument {
 
     private Collection<TReference> incomingReferences; 
 
@@ -30,6 +34,8 @@ public class PrimitiveType extends Type implements TPrimitiveType {
     private TSourceAnchor sourceAnchor;
     
     private TWithTypes typeContainer;
+
+	private Collection<TConcretization> outgoingConcretizations;
     
 
 
@@ -262,7 +268,57 @@ public class PrimitiveType extends Type implements TPrimitiveType {
         if (typeContainer == null) return;
         typeContainer.getTypes().add(this);
     }
+
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.setTypeArgument(null);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.setTypeArgument(PrimitiveType.this);
+                }
+            };
+        }
+        return outgoingConcretizations;
+    }
     
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
+    }                    
+    
+        
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
+    }   
+    
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+    
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }   
+                
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+    
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
+    }
+
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
+    }
 
 
 }
