@@ -158,6 +158,11 @@ public class VerveineJOptions {
 	 */
 	protected boolean parsingJdk = false;
 
+	/**
+	 * Option: Whether to put SourceAnchors in the entities and/or associations
+	 */
+	private boolean isStrict = false;
+
 	public VerveineJOptions() {
 		this.allLocals = false;
 		this.codeVers = null;
@@ -274,6 +279,9 @@ public class VerveineJOptions {
 		}
 		else if (arg.equals("-jdkMode")) {
 			parsingJdk = true;
+		}
+		else if (arg.equals("-strict")) {
+			isStrict = true;
 		}
 		else if (arg.equals("-debugging")) {
 			debugging = true;
@@ -624,6 +632,10 @@ public class VerveineJOptions {
 
 	public String getFileEncoding() {
 		return fileEncoding;
+	}
+	
+	public boolean isStrict() {
+		return isStrict;
 	}
 
 }
