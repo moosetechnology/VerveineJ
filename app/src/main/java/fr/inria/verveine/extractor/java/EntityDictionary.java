@@ -462,14 +462,7 @@ public class EntityDictionary {
 
 		while (concreteIterator.hasNext() && genericIterator.hasNext()) {
 			
-			TTypeArgument typeArgument;
-			try {
-				typeArgument = (TTypeArgument)ensureFamixType(concreteIterator.next());
-			} catch(ClassCastException e) {
-				
-				throw e;
-			}
-			
+			TTypeArgument typeArgument = (TTypeArgument)ensureFamixType(concreteIterator.next());			
 			TypeParameter typeParameter = (TypeParameter)ensureFamixType(genericIterator.next());
 
 			Concretization concretization = ensureFamixConcretization(typeArgument, typeParameter);
@@ -941,6 +934,7 @@ public class EntityDictionary {
 
 		if (bnd.isArray()) {
 			bnd = bnd.getElementType();
+			//return this.ensureFamixArrayOf(bnd);
 		}
 
 		if (bnd.isPrimitive()) {
@@ -1024,6 +1018,30 @@ public class EntityDictionary {
 			return isThrowable(bnd.getSuperclass());
 		}
 	}
+	
+	/***
+	 * Create an entity representing an array type.
+	 * This covers arrays to reference (Class[]) and primitive types (int[])
+	 * 
+	 * Array types are represented as Parametric types: 
+	 * 	Array<T> where T is any type
+	 *  For example, Array<Object> or Array<int>
+	 *   
+	 * Now, Array is not a proper class in the JDK.
+	 * In Java, arrays are objects of an anonymous class, subclass of Object.
+	 * For our purposes, we represent them by doing the following:
+	 *  - we create an artificial parametric class named Array, subclass of java.lang.Object
+	 *  - we create a concretization of that class, binding the type parameter to the array element type
+	 * 
+	 * @param bnd, a JDT resolved type
+	 * @return a concretization of Array<T> with T bound to the array element type
+	 */
+	//private Type ensureFamixArrayOf(ITypeBinding bnd) {
+//		ParametricClass arrayClass = this.ensureFamixParametricArrayClass();
+//		
+//		Concretization concretization = ensureFamixConcretization(arrayClass, bnd.getElementType());
+//		return concretization;
+//	}
 
 	/**
 	 * Returns a Famix Class associated with the ITypeBinding.
