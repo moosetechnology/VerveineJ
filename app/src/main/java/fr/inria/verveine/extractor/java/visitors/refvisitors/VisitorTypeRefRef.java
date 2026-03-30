@@ -175,7 +175,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		if (fmx != null) {
 			if (! node.isConstructor()) {
 				ITypeBinding returnTypeBnd = (node.resolveBinding() == null) ? null : node.resolveBinding().getReturnType();
-				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, dico.referredType(node.getReturnType2(), fmx, false));
+				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, dico.referredType(returnTypeBnd, fmx));
 			}
 
 			//Parameters are visited by super!

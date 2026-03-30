@@ -73,6 +73,14 @@ public class VerveineJTest_ArrayTypes extends VerveineJTest_Basic {
     }
     
     @Test
+    public void testArrayReturnTypeAtEndParameterIsBoundToObject() {
+    	Class objectClass = detectFamixElement(Class.class, "Object");
+        Method methodReturningArray = detectFamixElement(Method.class, "methodWithArrayReturn2");
+        
+        assertEquals(objectClass, ((ParametricEntityTyping)methodReturningArray.getTyping()).getConcretizations().iterator().next().getTypeArgument());
+    }
+    
+    @Test
     public void testArrayVarArgParameterTypeParameterIsBoundToObject() {
     	Class objectClass = detectFamixElement(Class.class, "Object");
     	Parameter methodReturningArray = detectFamixElement(Parameter.class, "varArgObjectArrayParameter");

@@ -20,6 +20,10 @@ public class WithArrayParameter {
 		return null;
 	}
 	
+	public Object methodWithArrayReturn2()[]{
+		return null;
+	}
+	
 	public void methodWithArrayLocal() {
 		Object[] objectArrayLocal = null;
 	}
