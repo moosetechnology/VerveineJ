@@ -64,4 +64,12 @@ public class VerveineJTest_ArrayTypes extends VerveineJTest_Basic {
         assertEquals(objectClass, ((ParametricEntityTyping)objectArrayParameter.getTyping()).getConcretizations().iterator().next().getTypeArgument());
     }
 
+    @Test
+    public void testArrayReturnTypeParameterIsBoundToObject() {
+    	Class objectClass = detectFamixElement(Class.class, "Object");
+        Method methodReturningArray = detectFamixElement(Method.class, "methodWithArrayReturn");
+        
+        assertEquals(objectClass, ((ParametricEntityTyping)methodReturningArray.getTyping()).getConcretizations().iterator().next().getTypeArgument());
+    }
+
 }

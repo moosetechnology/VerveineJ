@@ -6,4 +6,7 @@ public class WithArrayParameter {
 		
 	}
 	
+	public Object[] methodWithArrayReturn() {
+		return null;
+	}
 }
