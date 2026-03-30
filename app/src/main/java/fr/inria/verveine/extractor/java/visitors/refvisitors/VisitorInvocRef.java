@@ -647,7 +647,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if (NodeTypeChecker.isMethodInvocation(expr)) {
 			IMethodBinding callerBnd = ((MethodInvocation) expr).resolveMethodBinding();
 			if (callerBnd != null) {
-				return referredType(callerBnd.getReturnType(), (ContainerEntity) this.context.top(), true);
+				return dico.referredType(callerBnd.getReturnType(), (ContainerEntity) this.context.top());
 			} else {
 				return null;
 			}
