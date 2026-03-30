@@ -178,13 +178,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, dico.referredType(node.getReturnType2(), fmx, false));
 			}
 
-			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
-				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
-				if (fmxParam != null) {
-					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, dico.referredType(param.getType(), fmx, false));
-				}
-			}
-
+			//Parameters are visited by super!
 			return super.visit(node);
 		}
 
@@ -265,12 +259,14 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	 */
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
-		setVariableDeclaredType(
-			node, 
-			referredType(
-				node.getType(), 
-				(org.moosetechnology.model.famix.famixjavaentities.Type) context.topType(),
-				false));
+		TType declaredType = null;
+		if (node.getExtraDimensions() > 0) {
+			declaredType = dico.ensureParametricArrayClass();
+		}else {
+			declaredType = dico.referredType(node.getType().resolveBinding(), context.topType());
+		}
+			
+		setVariableDeclaredType(node, declaredType);
 		return true;
 	}
 

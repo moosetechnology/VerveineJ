@@ -25,7 +25,7 @@ public class VerveineJTest_ArrayTypes extends VerveineJTest_Basic {
     public void setUp() throws Exception {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
-        parser.configure(new String[] { "src/test/resources/arraytypes/WithArrayAttribute.java" });
+        parser.configure(new String[] { "src/test/resources/arraytypes/WithArrayAttribute.java", "src/test/resources/arraytypes/WithArrayParameter.java" });
         parser.parse();
     }
     
@@ -42,7 +42,7 @@ public class VerveineJTest_ArrayTypes extends VerveineJTest_Basic {
     @Test
     public void testArrayAttributeIsParametric() {
     	ParametricClass arrayClass = detectFamixElement(ParametricClass.class, "Array");
-        Attribute objectArray = detectFamixElement(Attribute.class, "objectArray");
+        Attribute objectArray = detectFamixElement(Attribute.class, "objectArrayAttribute");
         
         assertTrue(objectArray.getTyping() instanceof ParametricEntityTyping);
         assertEquals(arrayClass, objectArray.getTyping().getDeclaredType());
@@ -51,9 +51,17 @@ public class VerveineJTest_ArrayTypes extends VerveineJTest_Basic {
     @Test
     public void testArrayAttributeTypeParameterIsBoundToObject() {
     	Class objectClass = detectFamixElement(Class.class, "Object");
-        Attribute objectArray = detectFamixElement(Attribute.class, "objectArray");
+        Attribute objectArray = detectFamixElement(Attribute.class, "objectArrayAttribute");
         
         assertEquals(objectClass, ((ParametricEntityTyping)objectArray.getTyping()).getConcretizations().iterator().next().getTypeArgument());
+    }
+    
+    @Test
+    public void testArrayParameterTypeParameterIsBoundToObject() {
+    	Class objectClass = detectFamixElement(Class.class, "Object");
+        Parameter objectArrayParameter = detectFamixElement(Parameter.class, "objectArrayParameter");
+        
+        assertEquals(objectClass, ((ParametricEntityTyping)objectArrayParameter.getTyping()).getConcretizations().iterator().next().getTypeArgument());
     }
 
 }
