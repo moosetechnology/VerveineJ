@@ -11,40 +11,57 @@ import org.moosetechnology.model.famix.famixtraits.TPrimitiveType;
 import org.moosetechnology.model.famix.famixtraits.TReference;
 import org.moosetechnology.model.famix.famixtraits.TSourceAnchor;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
+import org.moosetechnology.model.famix.famixreplication.Replica;
+import org.moosetechnology.model.famix.famixtraits.TConcretization;
+import org.moosetechnology.model.famix.famixtraits.TTypeArgument;
 
 
 @FamePackage("Famix-Java-Entities")
 @FameDescription("PrimitiveType")
-public class PrimitiveType extends Type implements TPrimitiveType {
+public class PrimitiveType extends Type implements TPrimitiveType, TTypeArgument {
 
-    private Collection<TReference> incomingReferences; 
+    private Collection<TReference> incomingReferences;
 
-    private Collection<TEntityTyping> incomingTypings; 
+    private Collection<TEntityTyping> incomingTypings;
 
     private Boolean isStub;
-    
-    private String name;
-    
-    private Number numberOfLinesOfCode;
-    
-    private TSourceAnchor sourceAnchor;
-    
-    private TWithTypes typeContainer;
-    
 
+    private String name;
+
+    private Number numberOfLinesOfCode;
+
+    private Collection<TConcretization> outgoingConcretizations;
+
+    private TSourceAnchor sourceAnchor;
+
+    private TWithTypes typeContainer;
+
+
+
+    @FameProperty(name = "containsReplicas", derived = true)
+    public Boolean getContainsReplicas() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");
+    }
+
+    @FameProperty(name = "duplicationRate", derived = true)
+    public Number getDuplicationRate() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");
+    }
 
     @FameProperty(name = "fanIn", derived = true)
     public Number getFanIn() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "fanOut", derived = true)
     public Number getFanOut() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "incomingReferences", opposite = "referredEntity", derived = true)
     public Collection<TReference> getIncomingReferences() {
         if (incomingReferences == null) {
@@ -61,33 +78,33 @@ public class PrimitiveType extends Type implements TPrimitiveType {
         }
         return incomingReferences;
     }
-    
+
     public void setIncomingReferences(Collection<? extends TReference> incomingReferences) {
         this.getIncomingReferences().clear();
         this.getIncomingReferences().addAll(incomingReferences);
-    }                    
-    
-        
+    }
+
+
     public void addIncomingReferences(TReference one) {
         this.getIncomingReferences().add(one);
-    }   
-    
+    }
+
     public void addIncomingReferences(TReference one, TReference... many) {
         this.getIncomingReferences().add(one);
         for (TReference each : many)
             this.getIncomingReferences().add(each);
-    }   
-    
+    }
+
     public void addIncomingReferences(Iterable<? extends TReference> many) {
         for (TReference each : many)
             this.getIncomingReferences().add(each);
-    }   
-                
+    }
+
     public void addIncomingReferences(TReference[] many) {
         for (TReference each : many)
             this.getIncomingReferences().add(each);
     }
-    
+
     public int numberOfIncomingReferences() {
         return getIncomingReferences().size();
     }
@@ -112,33 +129,33 @@ public class PrimitiveType extends Type implements TPrimitiveType {
         }
         return incomingTypings;
     }
-    
+
     public void setIncomingTypings(Collection<? extends TEntityTyping> incomingTypings) {
         this.getIncomingTypings().clear();
         this.getIncomingTypings().addAll(incomingTypings);
-    }                    
-    
-        
+    }
+
+
     public void addIncomingTypings(TEntityTyping one) {
         this.getIncomingTypings().add(one);
-    }   
-    
+    }
+
     public void addIncomingTypings(TEntityTyping one, TEntityTyping... many) {
         this.getIncomingTypings().add(one);
         for (TEntityTyping each : many)
             this.getIncomingTypings().add(each);
-    }   
-    
+    }
+
     public void addIncomingTypings(Iterable<? extends TEntityTyping> many) {
         for (TEntityTyping each : many)
             this.getIncomingTypings().add(each);
-    }   
-                
+    }
+
     public void addIncomingTypings(TEntityTyping[] many) {
         for (TEntityTyping each : many)
             this.getIncomingTypings().add(each);
     }
-    
+
     public int numberOfIncomingTypings() {
         return getIncomingTypings().size();
     }
@@ -150,15 +167,15 @@ public class PrimitiveType extends Type implements TPrimitiveType {
     @FameProperty(name = "isDead", derived = true)
     public Boolean getIsDead() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "isRoot", derived = true)
     public Boolean getIsRoot() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "isStub")
     public Boolean getIsStub() {
         return isStub;
@@ -167,7 +184,7 @@ public class PrimitiveType extends Type implements TPrimitiveType {
     public void setIsStub(Boolean isStub) {
         this.isStub = isStub;
     }
-    
+
     @FameProperty(name = "name")
     public String getName() {
         return name;
@@ -182,37 +199,37 @@ public class PrimitiveType extends Type implements TPrimitiveType {
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "numberOfDeadChildren", derived = true)
     public Number getNumberOfDeadChildren() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "numberOfExternalClients", derived = true)
     public Number getNumberOfExternalClients() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "numberOfExternalProviders", derived = true)
     public Number getNumberOfExternalProviders() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "numberOfInternalClients", derived = true)
     public Number getNumberOfInternalClients() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "numberOfInternalProviders", derived = true)
     public Number getNumberOfInternalProviders() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "numberOfLinesOfCode")
     public Number getNumberOfLinesOfCode() {
         return numberOfLinesOfCode;
@@ -221,13 +238,70 @@ public class PrimitiveType extends Type implements TPrimitiveType {
     public void setNumberOfLinesOfCode(Number numberOfLinesOfCode) {
         this.numberOfLinesOfCode = numberOfLinesOfCode;
     }
-    
+
     @FameProperty(name = "numberOfLinesOfCodeWithMoreThanOneCharacter", derived = true)
     public Number getNumberOfLinesOfCodeWithMoreThanOneCharacter() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
+    @FameProperty(name = "outgoingConcretizations", opposite = "typeArgument", derived = true)
+    public Collection<TConcretization> getOutgoingConcretizations() {
+        if (outgoingConcretizations == null) {
+            outgoingConcretizations = new MultivalueSet<TConcretization>() {
+                @Override
+                protected void clearOpposite(TConcretization e) {
+                    e.setTypeArgument(null);
+                }
+                @Override
+                protected void setOpposite(TConcretization e) {
+                    e.setTypeArgument(PrimitiveType.this);
+                }
+            };
+        }
+        return outgoingConcretizations;
+    }
+
+    public void setOutgoingConcretizations(Collection<? extends TConcretization> outgoingConcretizations) {
+        this.getOutgoingConcretizations().clear();
+        this.getOutgoingConcretizations().addAll(outgoingConcretizations);
+    }
+
+
+    public void addOutgoingConcretizations(TConcretization one) {
+        this.getOutgoingConcretizations().add(one);
+    }
+
+    public void addOutgoingConcretizations(TConcretization one, TConcretization... many) {
+        this.getOutgoingConcretizations().add(one);
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+
+    public void addOutgoingConcretizations(Iterable<? extends TConcretization> many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+
+    public void addOutgoingConcretizations(TConcretization[] many) {
+        for (TConcretization each : many)
+            this.getOutgoingConcretizations().add(each);
+    }
+
+    public int numberOfOutgoingConcretizations() {
+        return getOutgoingConcretizations().size();
+    }
+
+    public boolean hasOutgoingConcretizations() {
+        return !getOutgoingConcretizations().isEmpty();
+    }
+
+    @FameProperty(name = "replicas", derived = true)
+    public Replica getReplicas() {
+        // TODO: this is a derived property, implement this method manually.
+        throw new UnsupportedOperationException("Not yet implemented!");
+    }
+
     @FameProperty(name = "sourceAnchor", opposite = "element", derived = true)
     public TSourceAnchor getSourceAnchor() {
         return sourceAnchor;
@@ -241,13 +315,13 @@ public class PrimitiveType extends Type implements TPrimitiveType {
             if (sourceAnchor != null) sourceAnchor.setElement(this);
         }
     }
-    
+
     @FameProperty(name = "sourceText", derived = true)
     public String getSourceText() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
-    
+
     @FameProperty(name = "typeContainer", opposite = "types", container = true)
     public TWithTypes getTypeContainer() {
         return typeContainer;
@@ -262,7 +336,7 @@ public class PrimitiveType extends Type implements TPrimitiveType {
         if (typeContainer == null) return;
         typeContainer.getTypes().add(this);
     }
-    
+
 
 
 }
