@@ -259,13 +259,9 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	 */
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
-		TType declaredType = null;
-		if (node.isVarargs() || node.getExtraDimensions() > 0) {
-			declaredType = dico.ensureParametricArrayClass();
-		}else {
-			declaredType = dico.referredType(node.getType().resolveBinding(), context.topType());
-		}
-		
+		int dimensions = node.getExtraDimensions();
+		if (node.isVarargs()) dimensions++;
+		TType declaredType = dico.referredType(node.getType().resolveBinding(), context.topType(), dimensions);
 		setVariableDeclaredType(node, declaredType);
 		return true;
 	}
@@ -389,17 +385,8 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	private <T extends TWithTypes & TNamedEntity> boolean visitVariablesDeclaration(List<VariableDeclaration> fragments, Type declType) {
 		for (VariableDeclaration varDecl : fragments) {
 			
-			TType declaredType = null;
-			if (varDecl.getExtraDimensions() > 0) {
-				declaredType = dico.ensureParametricArrayClass();
-			} else {
-				declaredType = dico.referredType(declType.resolveBinding(), (T) context.topType());
-			}
-			try {
+			TType declaredType = dico.referredType(declType.resolveBinding(), (T) context.topType(), varDecl.getExtraDimensions());
 			setVariableDeclaredType(varDecl, declaredType);
-			} catch (ClassCastException e) {
-				throw e;
-			}
 			varDecl.accept(this);
 		}
 		return false;

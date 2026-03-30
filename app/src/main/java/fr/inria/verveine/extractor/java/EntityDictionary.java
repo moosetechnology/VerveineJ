@@ -3083,6 +3083,10 @@ public class EntityDictionary {
 	}
 	
 	public TType referredType(ITypeBinding bnd, TNamedEntity ctxt) {
+		return this.referredType(bnd, ctxt, 0);
+	}
+	
+	public TType referredType(ITypeBinding bnd, TNamedEntity ctxt, int extraDimensions) {
 		TType fmxTyp = null;
 
 		if (bnd == null) {
@@ -3090,7 +3094,11 @@ public class EntityDictionary {
 		}
 
 		String name;
-		if (bnd.isArray()) {
+		//Three cases here:
+		// - the type binding knows it's an array
+		// - the binding is not declared as array, but it has dimensions > 0
+		// - the dimension is not in the type but in the variable declaration (thus extra)
+		if (bnd.isArray() || bnd.getDimensions() + extraDimensions > 0) {
 			// We treat array types as parametrized types Array<T>.
 			// This keeps the meta-model simple: a single way to model different concepts.
 			return this.ensureParametricArrayClass();
