@@ -393,10 +393,13 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 			if (varDecl.getExtraDimensions() > 0) {
 				declaredType = dico.ensureParametricArrayClass();
 			} else {
-				declaredType = dico.referredType(declType, (T) context.topType(), false);
+				declaredType = dico.referredType(declType.resolveBinding(), (T) context.topType());
 			}
-			
-			setVariableDeclaredType( varDecl, declaredType);
+			try {
+			setVariableDeclaredType(varDecl, declaredType);
+			} catch (ClassCastException e) {
+				throw e;
+			}
 			varDecl.accept(this);
 		}
 		return false;

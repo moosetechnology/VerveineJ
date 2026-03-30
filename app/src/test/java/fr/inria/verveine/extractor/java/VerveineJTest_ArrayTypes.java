@@ -79,4 +79,20 @@ public class VerveineJTest_ArrayTypes extends VerveineJTest_Basic {
         
         assertEquals(objectClass, ((ParametricEntityTyping)methodReturningArray.getTyping()).getConcretizations().iterator().next().getTypeArgument());
     }
+    
+    @Test
+    public void testArrayLocalTypeParameterIsBoundToObject() {
+    	Class objectClass = detectFamixElement(Class.class, "Object");
+    	LocalVariable methodReturningArray = detectFamixElement(LocalVariable.class, "objectArrayLocal");
+        
+        assertEquals(objectClass, ((ParametricEntityTyping)methodReturningArray.getTyping()).getConcretizations().iterator().next().getTypeArgument());
+    }
+    
+    @Test
+    public void testArrayInStaticInitializerTypeParameterIsBoundToObject() {
+    	Class objectClass = detectFamixElement(Class.class, "Object");
+    	LocalVariable methodReturningArray = detectFamixElement(LocalVariable.class, "objectArrayInStaticInitializer");
+        
+        assertEquals(objectClass, ((ParametricEntityTyping)methodReturningArray.getTyping()).getConcretizations().iterator().next().getTypeArgument());
+    }
 }
