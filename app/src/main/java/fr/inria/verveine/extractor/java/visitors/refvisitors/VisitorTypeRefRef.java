@@ -260,12 +260,12 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
 		TType declaredType = null;
-		if (node.getExtraDimensions() > 0) {
+		if (node.isVarargs() || node.getExtraDimensions() > 0) {
 			declaredType = dico.ensureParametricArrayClass();
 		}else {
 			declaredType = dico.referredType(node.getType().resolveBinding(), context.topType());
 		}
-			
+		
 		setVariableDeclaredType(node, declaredType);
 		return true;
 	}
