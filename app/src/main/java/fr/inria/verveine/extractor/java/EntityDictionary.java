@@ -1340,6 +1340,7 @@ public class EntityDictionary {
 				fmxException.addSuperInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSuperInheritances() ) );
 				fmxException.addSubInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSubInheritances() ) );
 			}
+			fmxException.setComments(new ArrayList<>( ((TWithComments) fmxType).getComments() ));
 			fmxException.setSourceAnchor(fmxType.getSourceAnchor());
 			fmxException.addIncomingTypings( new ArrayList<>( fmxType.getIncomingTypings() ) );
 			fmxException.addAnnotationInstances( new ArrayList<>( ((NamedEntity)fmxType).getAnnotationInstances() ) );
