@@ -1106,7 +1106,7 @@ public class EntityDictionary {
 		if (fmx!=null) {
 			// we just created it, or it was not bound so we make sure it has the right information in it
 			if (bnd != null) {
-				setClassModifiers(fmx, bnd.getDeclaredModifiers());
+				setClassModifiers(fmx, bnd.getDeclaredModifiers(), (TWithTypes) owner);
 			}
 
 			TAssociation lastAssoc = null;
@@ -1465,7 +1465,7 @@ public class EntityDictionary {
 		}
 
 		if (bnd != null) {
-			setVisibility(fmx, bnd.getModifiers());
+			setVisibility(fmx, bnd.getModifiers(), owner);
 		}
 
 		return fmx;
@@ -2459,28 +2459,28 @@ public class EntityDictionary {
 	}
 
 	public void setAttributeModifiers(Attribute fmx, int mod) {
-		setCommonModifiers(fmx, mod);
+		setCommonModifiers(fmx, mod, null);
 		fmx.setIsTransient(Modifier.isTransient(mod));
 		fmx.setIsVolatile(Modifier.isVolatile(mod));
 	}
 
 	public void setMethodModifiers(Method fmx, int mod) {
-		setCommonModifiers(fmx, mod);
+		setCommonModifiers(fmx, mod, (TWithTypes) fmx.getParentType());
 		fmx.setIsAbstract(Modifier.isAbstract(mod));
 		fmx.setIsSynchronized(Modifier.isSynchronized(mod));
 	}
 
-	public void setClassModifiers(Class fmx, int mod) {
-		setCommonModifiers(fmx, mod);
+	public void setClassModifiers(Class fmx, int mod, TWithTypes owner) {
+		setCommonModifiers(fmx, mod, null);
 		fmx.setIsAbstract(Modifier.isAbstract(mod));
 	}
 
 	public void setInterfaceModifiers(Interface fmx, int mod) {
-		setCommonModifiers(fmx, mod);
+		setCommonModifiers(fmx, mod, null);
 	}
 
-	private void setCommonModifiers(Entity fmx, int mod) {
-		setVisibility((THasVisibility)fmx, mod);
+	private void setCommonModifiers(Entity fmx, int mod, TWithTypes owner) {
+		setVisibility((THasVisibility)fmx, mod, owner);
 		((TCanBeClassSide)fmx).setIsClassSide(Modifier.isStatic(mod));
 		((TCanBeFinal)fmx).setIsFinal(Modifier.isFinal(mod));
 	}
@@ -2491,7 +2491,7 @@ public class EntityDictionary {
 	 * @param fmx -- the FamixNamedEntity
 	 * @param mod -- a description of the modifiers as understood by org.eclipse.jdt.core.dom.Modifier
 	 */
-	public void setVisibility(THasVisibility fmx, int mod) {
+	public void setVisibility(THasVisibility fmx, int mod, TWithTypes owner) {
 		if (Modifier.isPublic(mod)) {
 			fmx.setVisibility(MODIFIER_PUBLIC);
 		} else if (Modifier.isPrivate(mod)) {
@@ -2499,7 +2499,13 @@ public class EntityDictionary {
 		} else if (Modifier.isProtected(mod)) {
 			fmx.setVisibility(MODIFIER_PROTECTED);
 		} else {
-			fmx.setVisibility(MODIFIER_PACKAGE);
+			//Default visibility!
+			//If we are in an interface, default visibility is public, otherwise package.
+			if (owner instanceof Interface) {
+				fmx.setVisibility(MODIFIER_PUBLIC);
+			} else {
+				fmx.setVisibility(MODIFIER_PACKAGE);
+			}
 		}
 	}
 

@@ -10,7 +10,7 @@ public interface Collection {
 	abstract int explicitAbstractMethod();
 
 	// Method with body! 
-	public default int methodWithBody() {
+	default int methodWithBody() {
 		return 0;
 	}
 }
