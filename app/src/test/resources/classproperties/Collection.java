@@ -4,6 +4,13 @@ package classproperties;
 public interface Collection {
 
 	//Just an abstract method here 
-	int size();
-    
+	int implicitAbstractMethod();
+	
+	//Just an abstract method here, but explicit 
+	abstract int explicitAbstractMethod();
+
+	// Method with body! 
+	public default int methodWithBody() {
+		return 0;
+	}
 }
