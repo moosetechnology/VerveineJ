@@ -2426,19 +2426,6 @@ public class EntityDictionary {
 	public Initializer ensureImplicitConstructor(TWithMethods owner, String name, Collection<String> parameterTypesNames) {
 		Initializer fmx = null;
 
-		if (owner != null) {
-			Optional<TMethod> existingInitializer = owner.getMethods().stream()
-					.filter(meth ->
-							((Method) meth).getIsInitializer() &&
-									((Method) meth).getIsConstructor()
-									&& meth.getParameters().size() == parameterTypesNames.size()
-									&& (parameterTypesNames.stream().allMatch(parameterName -> meth.getSignature().contains(parameterName))) )
-					.findFirst();
-			if (existingInitializer.isPresent()) {
-				fmx = (Initializer) existingInitializer.get();
-			}
-		}
-
 		if (fmx == null) {
 			fmx = ensureFamixEntity(Initializer.class, null, name);
 			fmx.setParentType(owner);
