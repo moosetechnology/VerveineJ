@@ -6,10 +6,12 @@ import fr.inria.verveine.extractor.java.utils.EntityStack;
 import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 import org.eclipse.jdt.core.dom.*;
+import org.eclipse.jdt.core.dom.Initializer;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
@@ -226,12 +228,12 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * Initializer ::=
 	 *      [ static ] Block
 	 */
-	public Method visitInitializer(Initializer node) {
-		return ctxtPushInitializerMethod();
+	public org.moosetechnology.model.famix.famixjavaentities.Initializer visitInitializer(Initializer node) {
+		return ctxtPushInitializerMethod(Modifier.isStatic(node.getModifiers()), true);
 	}
 
 	public void endVisitInitializer(Initializer node) {
-		if ( (context.top() instanceof Method) && ( context.top().getName().equals(EntityDictionary.INIT_BLOCK_NAME)) ) {
+		if ( (context.top() instanceof org.moosetechnology.model.famix.famixjavaentities.Initializer) ) {
 			this.context.pop();
 		}
 		super.endVisit(node);
@@ -243,13 +245,13 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 		for (Expression expr : (List<Expression>)node.arguments()) {
 			if (expr != null) {
+				ctxtPushInitializerMethod(true,false); // EnumConstants are static.
 				hasInitBlock = true;
 				break;  // we recovered the INIT_BLOCK, no need to look for other declaration
 			}
 		}
-
 		if (hasInitBlock) {
-			ctxtPushInitializerMethod();
+			ctxtPushInitializerMethod(true, false);
 		}
 		return hasInitBlock;
 	}
@@ -272,69 +274,36 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
     @SuppressWarnings("unchecked")
     public boolean hasInitBlock(FieldDeclaration node) {
         boolean hasInitBlock = false;
-        for (VariableDeclaration vardecl : (List<VariableDeclaration>)node.fragments() ) {
-            if (vardecl.getInitializer() != null) {
-                visitClassMemberInitializer(vardecl.getInitializer());
+        for (var variableDeclaration : (List<VariableDeclaration>)node.fragments() ) {
+            if (variableDeclaration.getInitializer() != null) {
+				ctxtPushInitializerMethod(Modifier.isStatic(node.getModifiers()), false);
                 hasInitBlock = true;
-                break;  // we recovered the INIT_BLOCK, no need to look for other declarations
+                break;  // We recovered the correct initializer, no need to look for other fragments
             }
         }
         return hasInitBlock;
     }
 
+	@SuppressWarnings("unchecked")
 	public void endVisitFieldDeclaration(FieldDeclaration node) {
-		for (VariableDeclaration vardecl : (List<VariableDeclaration>)node.fragments() ) {
-			if (vardecl.getInitializer() != null) {
-				context.pop();  // pops the EntityDictionary.INIT_BLOCK_NAME method
+		for (var variableDeclaration : (List<VariableDeclaration>)node.fragments() ) {
+			if (variableDeclaration.getInitializer() != null) {
+				context.pop();  // Pops the initializer
 				break;
 			}
 		}
 	}
 
 	/**
-	 * Handles initialization part for FieldDeclaration and EnumConstantDeclaration
-	 *
-	 * VariableDeclarationFragment ::=
-	 *     Identifier { Dimension } [ = Expression ]
-	 */
-	private Method visitClassMemberInitializer(Expression initializingExpr) {
-		return ctxtPushInitializerMethod();
-	}
-
-	/**
-	 * Recovers the fake method: {@link EntityDictionary#INIT_BLOCK_NAME}
-	 *
+	 * Recovers the correct initializer method, static or not.
 	 * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
-	protected Method ctxtPushInitializerMethod() {
-		TType owner = context.topType();
-		Method fmx = recoverInitializerMethod((TWithMethods)owner);
-		if (fmx == null) {
-			fmx = dico.ensureFamixMethod(null, EntityDictionary.INIT_BLOCK_NAME, /*paramTypes*/new ArrayList<>(), /*returnType*/null, (TWithMethods) owner, EntityDictionary.UNKNOWN_MODIFIERS);
-		}
+	protected org.moosetechnology.model.famix.famixjavaentities.Initializer ctxtPushInitializerMethod(Boolean isStatic, Boolean isInitializationBlock) {
+		org.moosetechnology.model.famix.famixjavaentities.Initializer fmx = dico.ensureFamixInitializer((TWithMethods)context.topType(), isStatic, isInitializationBlock);
 		if (fmx != null) {
 			context.pushMethod(fmx);
 		}
-
 		return fmx;
-	}
-
-	/**
-	 * Special method to recover the <Initializer> method of a class.
-	 * Cannot do it with ensureFamixMethod because we have no binding, no parameter, no return type
-	 * on which ensureFamixMethod relies
-	 */
-	private Method recoverInitializerMethod(TWithMethods owner) {
-		Method ret = null;
-		if (owner != null) {
-			for (TMethod meth : owner.getMethods()) {
-				if (meth.getName().equals(EntityDictionary.INIT_BLOCK_NAME)) {
-					ret = (Method) meth;
-					break;
-				}
-			}
-		}
-		return ret;
 	}
 
 	public AnnotationTypeAttribute visitAnnotationTypeMemberDeclaration(AnnotationTypeMemberDeclaration node) {

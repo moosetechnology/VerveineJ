@@ -111,10 +111,9 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
         
-    @FameProperty(name = "isClassInitializer", derived = true)
-    public Boolean getIsClassInitializer() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+    @FameProperty(name = "isInitializer", derived = true)
+    public Boolean getIsInitializer() {
+        return false;
     }
     
     @FameProperty(name = "isImplementing", derived = true)
@@ -557,7 +556,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
 
     @FameProperty(name = "isAbstract")
     public Boolean getIsAbstract() {
-        return isAbstract;
+        return Objects.requireNonNullElse(isAbstract, false);
     }
 
     public void setIsAbstract(Boolean isAbstract) {
@@ -566,7 +565,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "isClassSide")
     public Boolean getIsClassSide() {
-        return isClassSide;
+        return Objects.requireNonNullElse(isClassSide, false);
     }
 
     public void setIsClassSide(Boolean isClassSide) {
@@ -581,8 +580,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "isConstructor", derived = true)
     public Boolean getIsConstructor() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return false;
     }
     
     @FameProperty(name = "isDead", derived = true)
@@ -738,11 +736,11 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
         // TODO: this is a derived property, implement this method manually.
         throw new UnsupportedOperationException("Not yet implemented!");  
     }
-    
-    @FameProperty(name = "numberOfChildren", derived = true)
-    public Number getNumberOfChildren() {
+
+    @FameProperty(name = "numberOfContainedEntities", derived = true)
+    public Number getNumberOfContainedEntities() {
         // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
     
     @FameProperty(name = "numberOfComments", derived = true)
@@ -804,8 +802,7 @@ public class Method extends ContainerEntity implements TCanBeAbstract, TCanBeCla
     
     @FameProperty(name = "numberOfParameters", derived = true)
     public Number getNumberOfParameters() {
-        // TODO: this is a derived property, implement this method manually.
-        throw new UnsupportedOperationException("Not yet implemented!");  
+        return getParameters().size();
     }
     
     @FameProperty(name = "numberOfStatements")

@@ -2,6 +2,7 @@ package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Initializer;
 import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
@@ -29,10 +30,9 @@ public class VerveineJTest_Ser extends VerveineJTest_Basic {
         assertEquals(11, myServiceImplClass.getMethods().size());
 
         for (TMethod tm : myServiceImplClass.getMethods()) {
-            Method m = (Method) tm;
-            if (!((m.getName().equals("<Initializer>") || (m.getKind() != null && m.getKind().equals("constructor")))))
-                assertEquals(1, m.getDeclaredExceptions().size());
-        
+            if (!((Method) tm).getIsInitializer()) {
+                assertEquals(1, ((Method) tm).getDeclaredExceptions().size());
+            }
         }        
     }
 

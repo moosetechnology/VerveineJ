@@ -7,44 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
-import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
-import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
-import org.eclipse.jdt.core.dom.AssertStatement;
-import org.eclipse.jdt.core.dom.Assignment;
-import org.eclipse.jdt.core.dom.Block;
-import org.eclipse.jdt.core.dom.CatchClause;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ConstructorInvocation;
-import org.eclipse.jdt.core.dom.ContinueStatement;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
-import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
-import org.eclipse.jdt.core.dom.EnumDeclaration;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ExpressionStatement;
-import org.eclipse.jdt.core.dom.FieldDeclaration;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IMethodBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.Initializer;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
-import org.eclipse.jdt.core.dom.SuperConstructorInvocation;
-import org.eclipse.jdt.core.dom.SwitchCase;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.SynchronizedStatement;
-import org.eclipse.jdt.core.dom.ThrowStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.eclipse.jdt.core.dom.TypeLiteral;
-import org.eclipse.jdt.core.dom.TypeParameter;
-import org.eclipse.jdt.core.dom.VariableDeclaration;
-import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
-import org.eclipse.jdt.core.dom.WhileStatement;
+import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationType;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationTypeAttribute;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
@@ -101,9 +64,9 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
 
 		@SuppressWarnings("unchecked")
-		List<TypeParameter> tparams = (List<TypeParameter>) node.typeParameters();
+		List<TypeParameter> typeParameters = (List<TypeParameter>) node.typeParameters();
 
-		// may be could use this.refereredType instead of dico.ensureFamixClass ?
+		// may be could use this.referredType instead of dico.ensureFamixClass ?
 		org.moosetechnology.model.famix.famixtraits.TType fmx;
 		if (bnd.isInterface()) {
 			fmx = dico.ensureFamixInterface(
@@ -111,7 +74,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 				/*name*/node.getName().getIdentifier(), 
 				(TWithTypes) 
 				/*owner*/context.top(), 
-				/*isGeneric*/tparams.size()>0, 
+				/*isGeneric*/typeParameters.size()>0,
 				node.getModifiers());
 		} else if (dico.isThrowable(bnd)) {
 			fmx = dico.ensureFamixException(
@@ -119,22 +82,22 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 				/*name*/node.getName().getIdentifier(), 
 				(TWithTypes) 
 				/*owner*/context.top(), 
-				/*isGeneric*/tparams.size()>0, 
+				/*isGeneric*/typeParameters.size()>0,
 				node.getModifiers());
 		} else {
 			fmx = dico.ensureFamixClass(
 					bnd, 
 					/*name*/node.getName().getIdentifier(), 
 					/*owner*/context.top(), 
-					/*isGeneric*/tparams.size()>0, 
+					/*isGeneric*/typeParameters.size()>0,
 					node.getModifiers());
 		}
 		if (fmx != null) {
 			Util.recursivelySetIsStub(fmx, false);
 
-			// if it is a generic and some parameterizedTypes were created for it
+			// if it is a generic and some parameterizedTypes were created for it,
 			// they are marked as stub which is not right
-			if (tparams.size() > 0) {
+			if (typeParameters.size() > 0) {
 				for (ParametricClass candidate : dico.getEntityByName(ParametricClass.class,
 						node.getName().getIdentifier())) {
 					candidate.setIsStub(false);
@@ -281,7 +244,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
      *  Also includes ConstructorDeclaration (same thing without return type)
      *
 	 * Local type: same as {@link VisitorClassMethodDef#visit(ClassInstanceCreation)}, 
-	 * we create it even if it is a local method because their are too many ways it can access external things
+	 * we create it even if it is a local method because there are too many ways it can access external things
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -305,10 +268,6 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 			// fmx.setBodyHash(this.computeHashForMethodBody(node));
 
 			this.context.pushMethod(fmx);
-			
-			if (node.isConstructor()) {
-				fmx.setKind(EntityDictionary.CONSTRUCTOR_KIND_MARKER);
-			}
 
 			if (options.withAnchors()) {
 				dico.addSourceAnchor(fmx, node);
@@ -353,7 +312,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	public boolean visit(Initializer node) {
 		//		System.err.println("TRACE, Visiting Initializer: ");
 
-		Method fmx = (Method) createInitBlock();
+		Method fmx = (Method) createInitBlock(Modifier.isStatic(node.getModifiers()), true);
 		// init-block don't have return type so no need to create a reference from this class to the "declared return type" class when classSummary is TRUE
 		// also no parameters specified here, so no references to create either
 
@@ -385,7 +344,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	public boolean visit(EnumConstantDeclaration node) {
 		for (Expression expr : (List<Expression>)node.arguments()) {
 			if (expr != null) {
-				createInitBlock();
+				createInitBlock(true , false); // Enum Constants are static
 				break;  // we created the INIT_BLOCK, no need to look for other declaration that would only ensure the same creation
 			}
 		}
@@ -401,9 +360,9 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	@Override
 	public boolean visit(FieldDeclaration node) {
 		boolean hasInitBlock = false;
-		for (VariableDeclaration vardecl : (List<VariableDeclaration>)node.fragments() ) {
-			if (vardecl.getInitializer() != null) {
-				createInitBlock();
+		for (VariableDeclaration varDecl : (List<VariableDeclaration>)node.fragments() ) {
+			if (varDecl.getInitializer() != null) {
+				createInitBlock(Modifier.isStatic(node.getModifiers()), false);
 				hasInitBlock = true;
 				break;  // we created the INIT_BLOCK, no need to look for other declaration that would only ensure the same creation
 			}
@@ -420,7 +379,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 //		System.err.println("TRACE, Visiting AnnotationTypeMemberDeclaration: "+node.getName().getIdentifier());
 		IMethodBinding bnd = node.resolveBinding();
 
-		// note"Annotatin members looks like methods but they are closer to attributes
+		// note"Annotation members looks like methods, but they are closer to attributes
 		AnnotationTypeAttribute fmx = dico.ensureFamixAnnotationTypeAttribute(bnd, node.getName().getIdentifier(), (AnnotationType) context.topType());
 		if (fmx != null) {
 			fmx.setIsStub(false);
@@ -577,36 +536,35 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
      *
      * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
-	protected TMethod createInitBlock() {
+	protected TMethod createInitBlock(Boolean isStatic, Boolean isInitializationBlock) {
 		// putting field's initialization code in an INIT_BLOCK_NAME method
 		Method ctxtMeth = (Method) this.context.topMethod();
-		if (ctxtMeth != null && !ctxtMeth.getName().equals(EntityDictionary.INIT_BLOCK_NAME)) {
+		if (ctxtMeth != null && !ctxtMeth.getIsInitializer() && ctxtMeth.getIsClassSide() != isStatic) {
 			ctxtMeth = null;
 		} else {
 			if (ctxtMeth != null && ctxtMeth.getParentType() != context.topType()) {
-				/* apparently we are in a field initialization, in an (anonymous class) which is created as another field initialization:
+				/* We are in a field initialization in an anonymous class created in another field initialization.
+				 * In this example, we are in the declaration of aField2:
 				 * class Class1 {
-				 *   Class2 aField1 = new Class2() {
-				 *     Class3 aField2 = xyz;
-				 *   }}
+				 * 	class Class2 {}
+				 *  Class2 aField1 = new Class2() {
+				 * 		Class3 aField2 = xyz;
+				 *   }
+				 * }
+				 *
+				 * This means we have to create the Initializer of the inner class (in the example above, Class2::<Initializer>).
 				 */
 				ctxtMeth = null;
 			}
 		}
 		if (ctxtMeth == null) {
-			ctxtMeth = dico.ensureFamixMethod(
-					(IMethodBinding) null,
-					EntityDictionary.INIT_BLOCK_NAME,
-					new ArrayList<String>(),
-					/*returnType*/null,
-					(TWithMethods) context.topType(),
-					/*modifiers*/EntityDictionary.UNKNOWN_MODIFIERS);
+			ctxtMeth = dico.ensureFamixInitializer(
+					(TWithMethods) context.topType(), isStatic, isInitializationBlock);
 			ctxtMeth.setIsStub(false);
 			ctxtMeth.setIsDead(false);
 			// initialization block doesn't have return type so no need to create a reference from its class to the "declared return type" class when classSummary is TRUE
 			pushInitBlockMethod(ctxtMeth);
 		}
-
 		return ctxtMeth;
 	}
 
@@ -627,8 +585,8 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	}
 
 	protected void closeOptionalInitBlock() {
-		TMethod ctxtMeth = this.context.topMethod();
-		if ((ctxtMeth != null) && (ctxtMeth.getName().equals(EntityDictionary.INIT_BLOCK_NAME))) {
+		Method ctxtMeth = (Method)this.context.topMethod();
+		if ((ctxtMeth != null) && ctxtMeth.getIsInitializer() && !ctxtMeth.getIsConstructor()) {
 			closeMethodDeclaration();
 		}
 	}

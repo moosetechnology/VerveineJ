@@ -71,7 +71,6 @@ public class VerveineJTest_Annotations extends VerveineJTest_Basic {
                 assertEquals(1, annInst.getAttributes().size());
                 AnnotationInstanceAttribute getValInst = (AnnotationInstanceAttribute) firstElt(annInst.getAttributes());
                 assertSame(getAtt, getValInst.getAnnotationTypeAttribute());
-
             }
             else if (((TNamedEntity)meth).getName().startsWith("set")) {
                 assertEquals(1, annInstances.size());

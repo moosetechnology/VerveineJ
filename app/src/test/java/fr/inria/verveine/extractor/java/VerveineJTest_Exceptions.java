@@ -2,14 +2,14 @@ package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 
 import static org.junit.Assert.*;
-
-import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
 
@@ -17,7 +17,7 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
      * @throws java.lang.Exception
      */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws java.lang.Exception {
         parser = new VerveineJParser();
         repo = parser.getFamixRepo();
         parser.configure( new String[] {"src/test/resources/exceptions"});
@@ -163,5 +163,41 @@ public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
         assertEquals(1,throwerMethod.getThrownExceptions().size());
         assertEquals("Throwable", ((TNamedEntity)firstElt(throwerMethod.getThrownExceptions())).getName() );
     }
-
+    
+    @Test
+    public void testLoadExceptionWithoutThrow() {
+        parser = new VerveineJParser();
+        repo = parser.getFamixRepo();
+        
+        //If we load in JDK mode, RuntimeException is not available and we do not realize that this is an exception!
+        parser.configure( new String[] { "-jdkMode", "-1.7",
+        		"src/test/resources/exceptions/OurRuntimeException.java" });
+        parser.parse();
+        
+        //The exception is not throwable!
+        assertNull(detectFamixElement(Exception.class, "OurRuntimeException"));
+        //But a normal class
+        assertNotNull(detectFamixElement(Class.class, "OurRuntimeException"));
+    }
+    
+    @Test
+    public void testTransformNormalClassToException() {
+        parser = new VerveineJParser();
+        repo = parser.getFamixRepo();
+        
+        //We parse first the exception, then the client.
+        parser.configure( new String[] {
+        		"-jdkMode", "-1.7",
+        		"src/test/resources/exceptions/OurRuntimeException.java",
+        		"src/test/resources/exceptions/OurRuntimeExceptionThrower.java" });
+        parser.parse();
+        
+        Exception e = detectFamixElement(Exception.class, "OurRuntimeException");
+        //Now the exception should be a throwable!
+        assertNotNull(e);
+        
+        //And the comments should be transferred
+        assertTrue(e.hasComments());
+        assertEquals(e, e.getComments().iterator().next().getCommentedEntity());
+    }
 }
