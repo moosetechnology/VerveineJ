@@ -157,6 +157,14 @@ public class VerveineJOptions {
 	 * Am I parsing a JDK?
 	 */
 	protected boolean parsingJdk = false;
+	
+	/**
+	 * Path to system library for JDT to use 
+	 * (for Java version <= 8 <=> path to rt.jar)
+	 * (for Java version > 8 <=> path to jrt-fs.jar? have not try so to verify in practice)
+	 */
+	protected String pathToSystemLibrary;
+	
 
 	/**
 	 * Option: Whether to put SourceAnchors in the entities and/or associations
@@ -272,6 +280,13 @@ public class VerveineJOptions {
 				argumentsTreated++;
 			} else {
 				throw new IllegalArgumentException("-o requires a filename");
+			}
+		} else if (arg.equals("-sysLibPath")) {
+			if (i < args.length) {
+				pathToSystemLibrary = args[i+1].trim();
+				argumentsTreated++;
+			} else {
+				throw new IllegalArgumentException("-sysLibPath requires a filename");
 			}
 		} else if (arg.equals("-i")) {
 			incrementalParsing = true;
@@ -426,6 +441,8 @@ public class VerveineJOptions {
 		System.err.println("      [-excludepath GLOBBINGEXPR] A globbing expression of file path to exclude from parsing");
 		System.err.println("      [-1.1 | -1 | -1.2 | -2 | ... | -1.9 | -9 | -10 | -11 | ... ] specifies version of Java");
 		System.err.println("      [-jdkMode] option to ABSOLUTELY set if you are making a model of a JDK");
+		System.err.println("      [-sysLibPath <path-to-runtime-jar>] path to the system library for JDT to resolve native Java binding in the parsed code");
+		System.err.println("      									  By default, JDT will collect the library used to execute VVJ (unless the option -jdkMode is active).");
 		System.err.println("      <files-to-parse>|<dirs-to-parse> list of source files to parse or directories to search for source files");
 	}
 
@@ -445,10 +462,19 @@ public class VerveineJOptions {
 	}
 
 	public void configureJDTParser(ASTParser jdtParser) {
-		// If I am parsing a JDK, jdt must not provide the VM's running libraries (=jdk used by VerveineJ at runtime)
-		boolean includeRunningVMBootclasspath = !parsingJdk;
-
-		jdtParser.setEnvironment(classPathOptions, /*sourcepathEntries*/argPath.toArray(new String[0]), /*encodings*/null, includeRunningVMBootclasspath);
+		// If I am parsing a JDK or providing the system library,
+		// JDT must not fetch the VM's running libraries (=JRE used by VerveineJ at runtime)
+		boolean includeRunningVMBootclasspath = !(parsingJdk || pathToSystemLibrary != null);
+		
+		if (pathToSystemLibrary != null) {
+			List<String> deps = new ArrayList<String>();
+			deps.add(pathToSystemLibrary);
+			classPathOptions = addToClassPath(classPathOptions, deps);
+		}
+		
+		String[] sourcePathEntries = argPath.toArray(new String[0]);
+		
+		jdtParser.setEnvironment(classPathOptions, /*sourcepathEntries*/sourcePathEntries, /*encodings*/null, includeRunningVMBootclasspath);
 		jdtParser.setResolveBindings(true);
 		/**
 		 *  Incremental parsing should not activate Binding recovery because using this option with incremental parsing
@@ -465,6 +491,10 @@ public class VerveineJOptions {
 		javaCoreOptions.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, codeVers);
 		javaCoreOptions.put(JavaCore.COMPILER_SOURCE, codeVers);
 
+    // Not absolutely sure it is necessary
+			if (pathToSystemLibrary != null)
+				javaCoreOptions.put(JavaCore.COMPILER_PB_ENABLE_PREVIEW_FEATURES, JavaCore.DISABLED);
+    
 		jdtParser.setCompilerOptions(javaCoreOptions);
 
 	}
