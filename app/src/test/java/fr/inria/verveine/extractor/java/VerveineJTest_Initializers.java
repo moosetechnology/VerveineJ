@@ -6,6 +6,7 @@ import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import java.lang.Exception;
 import java.util.Collection;
@@ -42,7 +43,7 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
     	parse("src/test/resources/initializers");
     	
         Collection<Initializer> initializers = entitiesOfType(Initializer.class);
-        assertEquals(13, initializers.size());
+        assertEquals(16, initializers.size());
     }
 
     @Test
@@ -59,9 +60,11 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
             ClassWithInitializers(String)
             ClassWithInitializers(Boolean)
         In class InnerClass (in ClassWithInnerClass): 1, the implicit constructor.
+        MyClass()
+        Object() default constructor
         */
 
-        assertEquals(6, constructors.size());
+        assertEquals(8, constructors.size());
 
         for (Initializer constructor : constructors) {
             assertEquals(((Type)constructor.getParentType()).getName(), constructor.getName());
