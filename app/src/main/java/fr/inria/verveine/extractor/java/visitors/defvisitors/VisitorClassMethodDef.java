@@ -275,6 +275,10 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
 			if (node.getBody() != null) {
 				context.setTopMethodCyclo(1);
+			} else {
+				// In interfaces you don't need to explicitly define the method as abstract
+				// However, if they don't have a body, they are!
+				fmx.setIsAbstract(true);
 			}
 			return super.visit(node);
 		} else {
