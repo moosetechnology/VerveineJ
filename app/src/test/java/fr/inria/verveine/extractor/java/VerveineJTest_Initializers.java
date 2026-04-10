@@ -10,70 +10,46 @@ import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import java.lang.Exception;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.function.Predicate;
 
 import static org.junit.Assert.*;
 
 public class VerveineJTest_Initializers extends VerveineJTest_Basic {
 
-    @Before
-    public void setUp() throws Exception {
-        parser = new VerveineJParser();
-        repo = parser.getFamixRepo();
-        parser.configure( new String[] {"src/test/resources/initializers"});
-        parser.parse();
-    }
+   	private void parse(String path) {
+   		parse(new String[] {path});
+	}
 
+	private void parse(String[] args) {
+		parser = new VerveineJParser();
+        repo = parser.getFamixRepo();
+		parser.configure( args);
+        parser.parse();
+	}
 
     @Test
     public void testNumberOfMethods() {
+    	
+    	parse("src/test/resources/initializers");
+    	
         Collection<Method> methods = entitiesOfType(Method.class);
-        /*
-		_Anonymous(InnerClass)._Anonymous(InnerClass)() isStatic:false isInitializationBlock: false
-		ClassWithInitializers.ClassWithInitializers(Boolean) isStatic:false isInitializationBlock: false
-		ClassWithInitializers.<Initializer>() isStatic:true isInitializationBlock: true
-		ClassWithInitializers.initializeFromStaticAttributeDefinition() isStatic:true 
-		_Anonymous(InnerClass).<Initializer>() isStatic:false isInitializationBlock: false
-		ClassWithInitializers.<Initializer>() isStatic:false isInitializationBlock: false
-		ClassWithInitializers.initializeFromInstantiationBlock() isStatic:false 
-		ClassWithInitializers.ClassWithInitializers() isStatic:false isInitializationBlock: false
-		ClassWithInitializers.initializeFromSecondInstantiationBlock() isStatic:false 
-		ClassWithInitializers.initializeFromConstructor() isStatic:false 
-		SuperclassWithImplicitConstructor.SuperclassWithImplicitConstructor() isStatic:false isInitializationBlock: false
-		ClassWithInitializers.initializeFromStaticInitializationBlock2() isStatic:true 
-		SuperclassWithConstructor.SuperclassWithConstructor() isStatic:false isInitializationBlock: false
-		SuperclassWithConstructor.<Initializer>() isStatic:false isInitializationBlock: false
-		ClassWithInnerClass.<Initializer>() isStatic:false isInitializationBlock: false
-		MyClassUserInInitializer.<Initializer>() isStatic:true isInitializationBlock: false
-		ClassWithInitializers.<Initializer>() isStatic:false isInitializationBlock: true
-		SuperclassWithConstructor.initializeFromSuperAttributeDefinition() isStatic:false 
-		ClassWithInitializers.ClassWithInitializers(String) isStatic:false isInitializationBlock: false
-		Object.Object() isStatic:false isInitializationBlock: false
-		ClassWithInitializers.<Initializer>() isStatic:true isInitializationBlock: false
-		ClassWithInitializers.initializeFromAttributeDefinition() isStatic:false 
-		ClassWithInitializers.initializeFromStaticInitializationBlock() isStatic:true 
-		MyClass.MyClass() isStatic:false isInitializationBlock: false
-         */
-        for (TMethod m : methods) {
-        	System.out.print(((TNamedEntity)m.getParentType()).getName() + "." + m.getSignature() + " isStatic:" + ((Method) m).getIsClassSide());
-            if (((Method) m).getIsInitializer()) {
-            	System.out.println(" isInitializationBlock: " + ((Initializer) m).getIsInitializationBlock());
-            } else {
-            	System.out.println(" ");
-            }
-        }
 
-        assertEquals(24,methods.size());
+        assertEquals(25,methods.size());
     }
 
     @Test
     public void testNumberOfInitializers() {
+    	parse("src/test/resources/initializers");
+    	
         Collection<Initializer> initializers = entitiesOfType(Initializer.class);
         assertEquals(16, initializers.size());
     }
 
     @Test
     public void testConstructors() {
+    	parse("src/test/resources/initializers");
+    	
         Collection<Initializer> constructors = entitiesOfType(Initializer.class).stream().filter(Initializer::getIsConstructor).toList();
 
          /*
@@ -98,6 +74,7 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
 
     @Test
     public void testInstanceInitializationBlocks() {
+    	parse("src/test/resources/initializers");
 
         Collection<Initializer> initializers = entitiesOfType(Initializer.class);
         Predicate<Initializer> isInstanceInitializationBlock = initializer -> initializer.getIsInitializationBlock() && !initializer.getIsClassSide();
@@ -114,6 +91,7 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
 
     @Test
     public void testStaticInitializationBlock() {
+    	parse("src/test/resources/initializers");
 
         Collection<Initializer> initializers = entitiesOfType(Initializer.class);
 
@@ -130,6 +108,8 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
 
     @Test
     public void testClassWithInnerClass() {
+    	parse("src/test/resources/initializers");
+    	
         Class classWithInnerClass = detectFamixElement(Class.class, "ClassWithInnerClass");
         assertNotNull(classWithInnerClass);
 
@@ -148,6 +128,8 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
 
     @Test
     public void testInnerClass() {
+    	parse("src/test/resources/initializers");
+    	
         Class innerClass = detectFamixElement(Class.class, "_Anonymous(InnerClass)");
         assertNotNull(innerClass);
 
@@ -167,17 +149,47 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
     
     @Test
     public void testInitializerOfClassUsedInStaticInitializer() {
-    	parser = new VerveineJParser();
-        repo = parser.getFamixRepo();
-        parser.configure( new String[] {
+    	parse(new String[] {
         		"src/test/resources/initializers/MyClassUserInInitializer.java",
         		"src/test/resources/initializers/MyClass.java"
         		});
-        parser.parse();
         
         PrimitiveType voidType = detectFamixElement(PrimitiveType.class, "void");
         Initializer initializer = (Initializer)detectFamixElement(Class.class, "MyClass").getMethods().iterator().next();
         assertEquals(voidType, initializer.getTyping().getDeclaredType());
     }
+    
+    @Test
+    public void testNotConfusingConstructorsWhenParsingInitializerFirst() {
+    	parse(new String[] {
+        		"src/test/resources/initializers/MyClassUserInInitializer.java",
+        		"src/test/resources/initializers/MyClassUser.java",
+        		"src/test/resources/initializers/MyClass.java"
+        		});
+        
+        Collection<TMethod> methods = detectFamixElement(Class.class, "MyClass").getMethods();
+        
+        Initializer firstConstructor = (Initializer) methods.stream().filter(m -> m.getNumberOfParameters().equals(0)).findFirst().get();
+        Initializer secondConstructor = (Initializer) methods.stream().filter(m -> m.getNumberOfParameters().equals(1)).findFirst().get();
+        
+        assertEquals(1, firstConstructor.getIncomingInvocations().size());
+        assertEquals(1, secondConstructor.getIncomingInvocations().size());
+    }
+    
+    @Test
+    public void testNotConfusingConstructorsWhenParsingInitializerSecond() {
+    	parse(new String[] {
+        		"src/test/resources/initializers/MyClassUser.java",
+        		"src/test/resources/initializers/MyClassUserInInitializer.java",
+        		"src/test/resources/initializers/MyClass.java"
+        		});
 
+        Collection<TMethod> methods = detectFamixElement(Class.class, "MyClass").getMethods();
+
+        Initializer firstConstructor = (Initializer) methods.stream().filter(m -> m.getNumberOfParameters().equals(0)).findFirst().get();
+        Initializer secondConstructor = (Initializer) methods.stream().filter(m -> m.getNumberOfParameters().equals(1)).findFirst().get();
+        
+        assertEquals(1, firstConstructor.getIncomingInvocations().size());
+        assertEquals(1, secondConstructor.getIncomingInvocations().size());
+    }
 }
