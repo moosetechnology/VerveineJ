@@ -2280,7 +2280,7 @@ public class EntityDictionary {
 	}
 
 	/**
-	 * Returns a Famix Method associated with the IMethodBinding. The Entity is created if it does not exist.
+	 * Returns a Famix Method associated with the IMethodBinding.
 	 * The Entity is created if it does not exist.
 	 * @param name -- the name of the Famix Method (MUST NOT be null, but this is not checked)
 	 * @param ret -- Famix Type returned by the method (ideally should only be null in case of a constructor, but will accept it in any case)
@@ -2444,7 +2444,7 @@ public class EntityDictionary {
 	}
 
 
-	public Initializer ensureImplicitConstructor(TWithMethods owner, String name, Collection<String> parameterTypesNames) {
+	public Initializer ensureImplicitConstructor(IMethodBinding binding, TWithMethods owner, String name, Collection<String> parameterTypesNames) {
 		Initializer fmx = null;
 
 		if (owner != null) {
@@ -2461,10 +2461,17 @@ public class EntityDictionary {
 		}
 
 		if (fmx == null) {
-			fmx = ensureFamixEntity(Initializer.class, null, name);
-			fmx.setParentType(owner);
-			fmx.setSignature(name + "()");
-
+			int modifiers = (binding != null) ? binding.getModifiers() : EntityDictionary.UNKNOWN_MODIFIERS;
+			if (binding == null) {
+				// OK! Binding is null, this is the default constructor!!
+				// It has no source code :)
+				fmx = ensureFamixEntity(Initializer.class, null, name);
+				fmx.setParentType(owner);
+				fmx.setSignature(name + "()");				
+			} else {
+				// But, if we have the binding, that means the constructor exists. Let's just go the normal way
+				fmx = (Initializer) this.ensureFamixMethod(binding, name, parameterTypesNames, /*ret type*/null, owner, modifiers);
+			}
 		}
 
 		return fmx;

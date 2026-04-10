@@ -6,6 +6,7 @@ import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
+import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import java.lang.Exception;
 import java.util.Collection;
@@ -28,61 +29,47 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
     public void testNumberOfMethods() {
         Collection<Method> methods = entitiesOfType(Method.class);
         /*
-        In class SuperClassWithImplicitConstructor: 1
-            SuperClassWithImplicitConstructor(), the implicit constructor
-
-        In class SuperclassWithConstructor: 3
-            <Initializer>
-            SuperclassWithConstructor()
-            initializeFromSuperAttributeDefinition()
-
-        In class ClassWithInitializers: 14
-            - Initializers (4):
-                Static <Initializer> = Static attribute definitions
-                Static initialization block
-                <Initializer> = Attribute definition
-                Initialization block
-            - Constructors (3):
-                ClassWithInitializers()
-                ClassWithInitializers(String)
-                ClassWithInitializers(Boolean)
-            - Methods (7):
-                initializeFromStaticAttributeDefinition()
-                initializeFromStaticInitializationBlock()
-                initializeFromStaticInitializationBlock2()
-                initializeFromAttributeDefinition()
-                initializeFromInstantiationBlock()
-                initializeFromSecondInstantiationBlock()
-                initializeFromConstructor()
-
-        In ClassWithInnerClass: 1
-            <Initializer>
-
-        In class _Anonymous(InnerClass) (in ClassWithInnerClass): 2
-            <Initializer>
-            ClassWithInnerClass(), the implicit constructor
-
+		_Anonymous(InnerClass)._Anonymous(InnerClass)() isStatic:false isInitializationBlock: false
+		ClassWithInitializers.ClassWithInitializers(Boolean) isStatic:false isInitializationBlock: false
+		ClassWithInitializers.<Initializer>() isStatic:true isInitializationBlock: true
+		ClassWithInitializers.initializeFromStaticAttributeDefinition() isStatic:true 
+		_Anonymous(InnerClass).<Initializer>() isStatic:false isInitializationBlock: false
+		ClassWithInitializers.<Initializer>() isStatic:false isInitializationBlock: false
+		ClassWithInitializers.initializeFromInstantiationBlock() isStatic:false 
+		ClassWithInitializers.ClassWithInitializers() isStatic:false isInitializationBlock: false
+		ClassWithInitializers.initializeFromSecondInstantiationBlock() isStatic:false 
+		ClassWithInitializers.initializeFromConstructor() isStatic:false 
+		SuperclassWithImplicitConstructor.SuperclassWithImplicitConstructor() isStatic:false isInitializationBlock: false
+		ClassWithInitializers.initializeFromStaticInitializationBlock2() isStatic:true 
+		SuperclassWithConstructor.SuperclassWithConstructor() isStatic:false isInitializationBlock: false
+		SuperclassWithConstructor.<Initializer>() isStatic:false isInitializationBlock: false
+		ClassWithInnerClass.<Initializer>() isStatic:false isInitializationBlock: false
+		MyClassUserInInitializer.<Initializer>() isStatic:true isInitializationBlock: false
+		ClassWithInitializers.<Initializer>() isStatic:false isInitializationBlock: true
+		SuperclassWithConstructor.initializeFromSuperAttributeDefinition() isStatic:false 
+		ClassWithInitializers.ClassWithInitializers(String) isStatic:false isInitializationBlock: false
+		Object.Object() isStatic:false isInitializationBlock: false
+		ClassWithInitializers.<Initializer>() isStatic:true isInitializationBlock: false
+		ClassWithInitializers.initializeFromAttributeDefinition() isStatic:false 
+		ClassWithInitializers.initializeFromStaticInitializationBlock() isStatic:true 
+		MyClass.MyClass() isStatic:false isInitializationBlock: false
          */
-        for (Class c : entitiesOfType(Class.class)) {
-            if(!c.getIsStub()) {
-                System.out.println(c.getName());
-                for (TMethod m : c.getMethods()) {
-                    System.out.print("    " + m.getName() + " isStatic:" + ((Method) m).getIsClassSide());
-                    if (((Method) m).getIsInitializer()) {
-                        System.out.println(" isInitializationBlock: " + ((Initializer) m).getIsInitializationBlock());
-                    } else {
-                        System.out.println(" ");
-                    }
-                }
+        for (TMethod m : methods) {
+        	System.out.print(((TNamedEntity)m.getParentType()).getName() + "." + m.getSignature() + " isStatic:" + ((Method) m).getIsClassSide());
+            if (((Method) m).getIsInitializer()) {
+            	System.out.println(" isInitializationBlock: " + ((Initializer) m).getIsInitializationBlock());
+            } else {
+            	System.out.println(" ");
             }
-        };
-        assertEquals(21,methods.size());
+        }
+
+        assertEquals(24,methods.size());
     }
 
     @Test
     public void testNumberOfInitializers() {
         Collection<Initializer> initializers = entitiesOfType(Initializer.class);
-        assertEquals(13, initializers.size());
+        assertEquals(16, initializers.size());
     }
 
     @Test
@@ -97,9 +84,11 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
             ClassWithInitializers(String)
             ClassWithInitializers(Boolean)
         In class InnerClass (in ClassWithInnerClass): 1, the implicit constructor.
+        MyClass()
+        Object() default constructor
         */
 
-        assertEquals(6, constructors.size());
+        assertEquals(8, constructors.size());
 
         for (Initializer constructor : constructors) {
             assertEquals(((Type)constructor.getParentType()).getName(), constructor.getName());
@@ -174,6 +163,21 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
         assertEquals(1, initializer.getAccesses().size());
         var foundAttribute = firstElt(firstElt(initializer.getAccesses()).getCandidates());
         assertEquals(firstElt(innerClass.getAttributes()), foundAttribute);
+    }
+    
+    @Test
+    public void testInitializerOfClassUsedInStaticInitializer() {
+    	parser = new VerveineJParser();
+        repo = parser.getFamixRepo();
+        parser.configure( new String[] {
+        		"src/test/resources/initializers/MyClassUserInInitializer.java",
+        		"src/test/resources/initializers/MyClass.java"
+        		});
+        parser.parse();
+        
+        PrimitiveType voidType = detectFamixElement(PrimitiveType.class, "void");
+        Initializer initializer = (Initializer)detectFamixElement(Class.class, "MyClass").getMethods().iterator().next();
+        assertEquals(voidType, initializer.getTyping().getDeclaredType());
     }
 
 }
