@@ -143,12 +143,15 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * The body of an anonymous class declaration appears within a ClassInstanceCreation<br>
 	 * See also field {@link GetVisitedEntityAbstractVisitor#anonymousSuperTypeName}
 	 */
-	protected org.moosetechnology.model.famix.famixjavaentities.Class visitAnonymousClassDeclaration(AnonymousClassDeclaration node) {
-		org.moosetechnology.model.famix.famixjavaentities.Class fmx;
+	protected org.moosetechnology.model.famix.famixjavaentities.Type visitAnonymousClassDeclaration(AnonymousClassDeclaration node) {
+		org.moosetechnology.model.famix.famixjavaentities.Type fmx;
 
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
-
-		fmx = this.dico.getFamixClass(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+		if(bnd.isEnum()){
+			fmx = this.dico.getFamixEnum(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+		} else{
+			fmx = this.dico.getFamixClass(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+		}
 		if (fmx != null) {
 			this.context.pushType(fmx);
 		}

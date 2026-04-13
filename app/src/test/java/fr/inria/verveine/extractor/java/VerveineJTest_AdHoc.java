@@ -527,7 +527,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testEnumAsVariableType() {
-		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Class card = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Card");
 		assertNotNull(card);
@@ -990,7 +990,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
     *    Issue: https://github.com/moosetechnology/VerveineJ/issues/184
     *    Regression test ensuring that Enum values defining methods have the typing information right for parameters.
      */
-    public void testEnumValuesHaveTheRightTypingOfMethodParamaters() {
+    public void testEnumValuesHaveTheRightTypingOfMethodParameters() {
         parse(new String[]{"src/test/resources/ad_hoc/Operation.java"});
 
         Collection<Method> methods = entitiesNamed(Method.class, "apply");
@@ -1006,6 +1006,43 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
         }
     }
+
+    @Test
+    public void testEnumValueParentEnum() {
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		Enum numberEnum = detectFamixElement(Enum.class,"Number");
+		EnumValue zero = detectFamixElement(EnumValue.class,"ZERO");
+		assertNotNull(zero);
+		assertSame(numberEnum, zero.getParentEnum());
+
+		EnumValue one = detectFamixElement(EnumValue.class,"ONE");
+		assertNotNull(one);
+		assertSame(numberEnum, one.getParentEnum());
+
+		EnumValue two = detectFamixElement(EnumValue.class,"TWO");
+		assertNotNull(two);
+		assertSame(numberEnum, two.getParentEnum());
+    }
+
+	@Test
+	public void testEnumValueWithMethodsHasADeclaredType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		EnumValue zero = detectFamixElement(EnumValue.class,"ZERO");
+		assertNotNull(zero.getDeclaredType());
+	}
+
+	@Test
+	public void testAnonymousInterface(){
+		//Check that anonymous entities created from interfaces are Anonymous classes
+		parse(new String[]{"src/test/resources/ad_hoc/InterfaceWithAnonymous.java"});
+
+		Class clazz = detectFamixElement(Class.class,"_Anonymous(InterfaceWithAnonymous)");
+		assertNotNull(clazz);
+	}
+
+
 }
 
 
