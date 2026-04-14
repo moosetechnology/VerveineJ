@@ -148,7 +148,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
 		if(bnd.isEnum()){
-			fmx = this.dico.getFamixEnum(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+			fmx = this.dico.getFamixEnum(bnd, Util.stringForAnonymousEnum(bnd.getDeclaringMember().getName(),context.top().getName()), /*owner*/(ContainerEntity) context.top());
 		} else{
 			fmx = this.dico.getFamixClass(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
 		}

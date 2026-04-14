@@ -136,7 +136,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
         int modifiers = (bnd != null) ? bnd.getModifiers() : EntityDictionary.UNKNOWN_MODIFIERS;
         if (bnd.isEnum()) {
             Enum famixEnum = (Enum) context.topType();
-            fmx = this.dico.ensureFamixEnum(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context),/*owner*/famixEnum);
+            fmx = this.dico.ensureFamixEnum(bnd, Util.stringForAnonymousEnum(bnd.getDeclaringMember().getName(),famixEnum.getName()),/*owner*/famixEnum);
             EnumValue enumValue = this.dico.ensureFamixEnumValue((IVariableBinding) bnd.getDeclaringMember(), bnd.getDeclaringMember().getName(), famixEnum);
             this.dico.ensureFamixEntityTyping(bnd,enumValue,fmx);
         } else {

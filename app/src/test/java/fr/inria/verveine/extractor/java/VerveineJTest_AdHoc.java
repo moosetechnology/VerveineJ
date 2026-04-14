@@ -1007,6 +1007,15 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
         }
     }
 
+	@Test
+	public void testAnonymousInterface() {
+		//Check that anonymous entities created from interfaces are Anonymous classes
+		parse(new String[]{"src/test/resources/ad_hoc/InterfaceWithAnonymous.java"});
+
+		Class clazz = detectFamixElement(Class.class, "_Anonymous(InterfaceWithAnonymous)");
+		assertNotNull(clazz);
+	}
+
     @Test
     public void testEnumValueParentEnum() {
 		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
@@ -1031,16 +1040,28 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 		EnumValue zero = detectFamixElement(EnumValue.class,"ZERO");
 		assertNotNull(zero.getDeclaredType());
+
+		Enum zeroClass = detectFamixElement(Enum.class,"ZERO(Number)");
+		assertNotNull(zeroClass);
+
+		assertSame(zeroClass,zero.getDeclaredType());
 	}
 
 	@Test
-	public void testAnonymousInterface(){
-		//Check that anonymous entities created from interfaces are Anonymous classes
-		parse(new String[]{"src/test/resources/ad_hoc/InterfaceWithAnonymous.java"});
+	public void testEnumMethodDeclaredInAnonymousEnumHasCorrectParentType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
 
-		Class clazz = detectFamixElement(Class.class,"_Anonymous(InterfaceWithAnonymous)");
-		assertNotNull(clazz);
+		Enum zeroClass = detectFamixElement(Enum.class,"ZERO(Number)");
+		assertNotNull(zeroClass);
+
+		Method addMethod = (Method) firstElt(zeroClass.getMethods());
+		assertNotNull(addMethod);
+
+		assertEquals("add", addMethod.getName());
+		assertSame(zeroClass,addMethod.getParentType());
+		assertEquals("Override", ((AnnotationType) firstElt(addMethod.getAnnotationInstances()).getAnnotationType()).getName());
 	}
+
 
 
 }

@@ -27,6 +27,14 @@ public class Util {
 		return EntityDictionary.ANONYMOUS_NAME_PREFIX + "(" +anonSuperTypeName+")";
 	}
 
+
+	/**
+	 * helper to "normalize" an "anonymous" Enum name
+	 */
+	public static String stringForAnonymousEnum(String enumValueName, String superEnumName) {
+		return enumValueName + "(" + superEnumName + ")";
+	}
+
 	/**
 	 * Helper to compute the name of a JDT Type
 	 */

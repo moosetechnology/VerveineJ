@@ -55,7 +55,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 		Type fmx;
 		TWithInheritances fmxIn;
 		if(bnd.isEnum()){
-			org.moosetechnology.model.famix.famixjavaentities.Enum famixEnum = this.dico.getFamixEnum(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+			org.moosetechnology.model.famix.famixjavaentities.Enum famixEnum = this.dico.getFamixEnum(bnd, Util.stringForAnonymousEnum(bnd.getDeclaringMember().getName(),context.top().getName()), /*owner*/(ContainerEntity) context.top());
 			fmx = famixEnum;
 			fmxIn = famixEnum;
 		} else{
