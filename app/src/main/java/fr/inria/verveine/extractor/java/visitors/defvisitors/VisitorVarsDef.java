@@ -195,11 +195,6 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 		return super.visit(node);
 	}
 
-	@Override
-	public void endVisit(EnumConstantDeclaration node) {
-		context.popType();
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(FieldDeclaration node) {

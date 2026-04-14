@@ -159,7 +159,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	}
 
 	protected void endVisitAnonymousClassDeclaration(AnonymousClassDeclaration node) {
-		if (context.top() instanceof org.moosetechnology.model.famix.famixjavaentities.Class) {
+		if (context.top() instanceof org.moosetechnology.model.famix.famixjavaentities.Type) {
 			context.pop();
 		}
 		if (!anonymousSuperTypeName.empty()) {
