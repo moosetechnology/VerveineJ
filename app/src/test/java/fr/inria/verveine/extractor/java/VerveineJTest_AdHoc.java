@@ -1032,6 +1032,10 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		EnumValue two = detectFamixElement(EnumValue.class,"TWO");
 		assertNotNull(two);
 		assertSame(numberEnum, two.getParentEnum());
+
+		EnumValue three = detectFamixElement(EnumValue.class,"THREE");
+		assertNotNull(three);
+		assertSame(numberEnum, three.getParentEnum());
     }
 
 	@Test
@@ -1062,7 +1066,21 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals("Override", ((AnnotationType) firstElt(addMethod.getAnnotationInstances()).getAnnotationType()).getName());
 	}
 
+	@Test
+	public void testEnumAttributeDeclaredInAnonymousEnumHasCorrectParentType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
 
+		Enum oneClass = detectFamixElement(Enum.class,"ONE(Number)");
+		assertNotNull(oneClass);
+
+		Attribute value2 = (Attribute) firstElt(oneClass.getAttributes());
+		assertNotNull(value2);
+
+		assertEquals("value2", value2.getName());
+		assertSame(oneClass,value2.getParentType());
+
+		assertEquals(0, oneClass.getMethods().size()); // Doesn't have an initializer
+	}
 
 }
 

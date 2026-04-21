@@ -1,3 +1,5 @@
+package ad_hoc;
+
 public enum Number {
     ZERO(0) {
         @Override
@@ -5,11 +7,11 @@ public enum Number {
             return i;
         }
     },
-    ONE(1) //{
-        //private int value2;
-    //}
-    ,
-    TWO(2);
+    ONE(1) {
+        private int value2;
+    },
+    TWO(2){ private int value2 = 2;},
+    THREE(3);
 
     private int value;
 

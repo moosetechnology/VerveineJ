@@ -320,23 +320,6 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean visit(EnumConstantDeclaration node) {
-        for (Expression expr : (List<Expression>) node.arguments()) {
-            if (expr != null) {
-                createInitBlock(true, false); // Enum Constants are static
-                break;  // we created the INIT_BLOCK, no need to look for other declaration that would only ensure the same creation
-            }
-        }
-        return super.visit(node);
-
-    }
-
-    public void endVisit(EnumConstantDeclaration node) {
-        closeOptionalInitBlock();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
     public boolean visit(FieldDeclaration node) {
         boolean hasInitBlock = false;
         for (VariableDeclaration varDecl : (List<VariableDeclaration>) node.fragments()) {
