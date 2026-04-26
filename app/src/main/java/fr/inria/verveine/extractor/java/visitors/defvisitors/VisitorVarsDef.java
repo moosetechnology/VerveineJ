@@ -191,7 +191,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public boolean visit(EnumConstantDeclaration node) {
-		EnumValue ev = dico.ensureFamixEnumValue(node.resolveVariable(), node.getName().getIdentifier(), /*owner*/(Enum)context.topType());
+	EnumValue ev = dico.ensureFamixEnumValue(node.resolveVariable(), node.getName().getIdentifier(), /*owner*/(Enum)context.topType());
 		ev.setIsStub(false);
 		return super.visit(node);
 	}
