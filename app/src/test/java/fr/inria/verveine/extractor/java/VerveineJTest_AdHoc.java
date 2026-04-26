@@ -552,6 +552,19 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	}
 
 	@Test
+	/** @see <a href="https://github.com/moosetechnology/VerveineJ/issues/221">Issue: 221</a>
+	 */
+	public void testAccessInCase() {
+		parse(new String[]{"src/test/resources/ad_hoc/Interface.java", "src/test/resources/ad_hoc/InterfaceAttributeReferencer.java"});
+
+		Collection<Reference> references = entitiesOfType(Reference.class);
+		assertEquals( 1, references.size());
+
+		Collection<Access> accesses = entitiesOfType(Access.class); 
+		assertEquals(1, accesses.size());
+	}
+
+	@Test
 	public void testEnumAccess() {
 		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
