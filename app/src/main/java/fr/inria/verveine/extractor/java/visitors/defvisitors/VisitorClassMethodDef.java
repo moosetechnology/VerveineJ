@@ -275,6 +275,10 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
 			if (node.getBody() != null) {
 				context.setTopMethodCyclo(1);
+			} else {
+				// In interfaces you don't need to explicitly define the method as abstract
+				// However, if they don't have a body, they are!
+				fmx.setIsAbstract(true);
 			}
 			return super.visit(node);
 		} else {
@@ -310,8 +314,6 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
      */
     @Override
 	public boolean visit(Initializer node) {
-		//		System.err.println("TRACE, Visiting Initializer: ");
-
 		Method fmx = (Method) createInitBlock(Modifier.isStatic(node.getModifiers()), true);
 		// init-block don't have return type so no need to create a reference from this class to the "declared return type" class when classSummary is TRUE
 		// also no parameters specified here, so no references to create either

@@ -442,7 +442,8 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 				if (calledBnd != null) {
 					parameterTypesNames = Arrays.stream(calledBnd.getParameterTypes()).map(ITypeBinding::getName).toList();
 				}
-				invoked = dico.ensureImplicitConstructor((TWithMethods) owner, calledName, parameterTypesNames );
+				
+				invoked = dico.ensureImplicitConstructor(calledBnd, (TWithMethods) owner, calledName, parameterTypesNames );
 			} else {
 				// static method called on the class (or null receiver)
 				invoked = this.dico.ensureFamixMethod(actualCalledMethodBnd, calledName, unkwnArgs, /* retType */null,
@@ -647,7 +648,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if (NodeTypeChecker.isMethodInvocation(expr)) {
 			IMethodBinding callerBnd = ((MethodInvocation) expr).resolveMethodBinding();
 			if (callerBnd != null) {
-				return referredType(callerBnd.getReturnType(), (ContainerEntity) this.context.top(), true);
+				return dico.referredType(callerBnd.getReturnType(), (ContainerEntity) this.context.top());
 			} else {
 				return null;
 			}

@@ -81,9 +81,12 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	public void testCharTypeReference() {
 		parse(new String[] {"src/test/resources/ad_hoc/CharTypeReference.java"});
 
+		TType charType = detectFamixElement(PrimitiveType.class, "char");
+		
 		assertEquals(1, entitiesOfType(Reference.class).size());
 		Reference ref = firstElt(entitiesOfType(Reference.class));
-		assertEquals("char", ((TNamedEntity) ref.getReferredEntity()).getName());
+		assertEquals("Array", ((TNamedEntity) ref.getReferredEntity()).getName());
+		assertEquals(charType, this.firstElt(((ParametricReference) ref).getConcretizations()).getTypeArgument());
 	}
 
 
@@ -381,9 +384,11 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
 
 		// Classes are : Bla, Object, String, ArrayList, Arrays, AbstractList, AbstractCollection, TYPE_VAR_NAME
-		assertEquals(7, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); 
+		// AND, String[], which is represented as => Array<String>
+		assertEquals(8, entitiesOfType(org.moosetechnology.model.famix.famixjavaentities.Class.class).size()); 
 		// Parametric classes are : ArrayList, AbstractList, AbstractCollection
-		assertEquals(3, entitiesOfType(ParametricClass.class).size()); 
+		// AND, String[], which is represented as => Array<String>
+		assertEquals(4, entitiesOfType(ParametricClass.class).size()); 
 		
 		// compute all interfaces used by the 3 types String, ArrayList, Arrays
 		Set<java.lang.Class<?>> allInterfaces = new HashSet<>();

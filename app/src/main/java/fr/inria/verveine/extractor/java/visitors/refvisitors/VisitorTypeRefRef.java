@@ -175,16 +175,10 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		if (fmx != null) {
 			if (! node.isConstructor()) {
 				ITypeBinding returnTypeBnd = (node.resolveBinding() == null) ? null : node.resolveBinding().getReturnType();
-				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, referredType(node.getReturnType2(), fmx, false));
+				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, dico.referredType(returnTypeBnd, fmx));
 			}
 
-			for (SingleVariableDeclaration param : (List<SingleVariableDeclaration>) node.parameters()) {
-				TTypedEntity fmxParam = (TTypedEntity) dico.getEntityByKey(param.resolveBinding());
-				if (fmxParam != null) {
-					dico.ensureFamixEntityTyping(param.resolveBinding().getType(), fmxParam, referredType(param.getType(), fmx, false));
-				}
-			}
-
+			//Parameters are visited by super!
 			return super.visit(node);
 		}
 
@@ -265,12 +259,10 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	 */
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
-		setVariableDeclaredType(
-			node, 
-			referredType(
-				node.getType(), 
-				(org.moosetechnology.model.famix.famixjavaentities.Type) context.topType(),
-				false));
+		int dimensions = node.getExtraDimensions();
+		if (node.isVarargs()) dimensions++;
+		TType declaredType = dico.referredType(node.getType().resolveBinding(), context.topType(), dimensions);
+		setVariableDeclaredType(node, declaredType);
 		return true;
 	}
 
@@ -297,8 +289,16 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(TypeLiteral node) {
-		TType fmx = referredType(node.getType(), (ContainerEntity) context.top(), true);
-		addReference(node, fmx, node.resolveTypeBinding());
+		TType fmx = dico.referredType(node.getType().resolveBinding(), (ContainerEntity) context.top());
+		
+		ITypeBinding binding = null;
+		if (node.getType().isArrayType()) {
+			binding = node.getType().resolveBinding();
+		}else {
+			binding = node.resolveTypeBinding();
+		}
+		
+		addReference(node, fmx, binding);
 		return(false);
 	}
 
@@ -312,7 +312,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 		IBinding qualifierBinding = node.getQualifier().resolveBinding();
 
 		if ((qualifierBinding != null) && (qualifierBinding.getKind() == IBinding.TYPE)) {
-			TType fmx = referredType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top(), true);
+			TType fmx = dico.referredType((ITypeBinding)qualifierBinding, (TNamedEntity) context.top());
 			addReference(node, fmx, (ITypeBinding) qualifierBinding);
 		}
 
@@ -384,8 +384,9 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	@SuppressWarnings("unchecked")
 	private <T extends TWithTypes & TNamedEntity> boolean visitVariablesDeclaration(List<VariableDeclaration> fragments, Type declType) {
 		for (VariableDeclaration varDecl : fragments) {
-			TType declaredType = referredType(declType, (T) context.topType(), false);
-			setVariableDeclaredType( varDecl, declaredType);
+			
+			TType declaredType = dico.referredType(declType.resolveBinding(), (T) context.topType(), varDecl.getExtraDimensions());
+			setVariableDeclaredType(varDecl, declaredType);
 			varDecl.accept(this);
 		}
 		return false;

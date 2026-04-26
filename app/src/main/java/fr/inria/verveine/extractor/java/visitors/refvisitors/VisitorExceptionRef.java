@@ -127,7 +127,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
         if (meth != null) {
             TThrowable excepFmx = null;
             if ( NodeTypeChecker.isSimpleType(excepClass) || NodeTypeChecker.isQualifiedType(excepClass) ) {
-                excepFmx = dico.asException(referredType(excepClass, meth, true, true));
+                excepFmx = dico.asException(dico.referredType(excepClass, meth, true, true));
             }
             if (excepFmx != null) {
             	dico.createFamixCaughtException(meth, excepFmx);

@@ -364,5 +364,21 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		};
 		assertThrows(IllegalArgumentException.class, () -> parser.configure(args));
 	}
+	
+	@Test
+	public void testStrictModeIsFalseByDefault() {
+		VerveineJOptions options = new VerveineJOptions();
+		assertFalse(options.isStrict());
+	}
 
+	@Test
+	public void testStrictModeTrueWhenSet() {
+		String[] args = new String[] {
+				"-strict"
+			};
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(args);
+		assertTrue(options.isStrict());
+	}
+	
 }
