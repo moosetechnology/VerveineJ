@@ -150,8 +150,15 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	@Override
 	public boolean visit(EnumDeclaration node) {
 		if (visitEnumDeclaration( node) != null) {
-            // no need to visit node.enumConstants() in this visitor
-            visitNodeList(node.bodyDeclarations());
+			// Bypasses standard enumConstants traversal to prevent accessor generation on the constants themselves.
+			// Explicitly delegates to anonymous class declarations (if any) to capture accesses inside the anonymous class.
+			for (EnumConstantDeclaration enumCons : (List<EnumConstantDeclaration>) node.enumConstants()) {
+				AnonymousClassDeclaration anonymousClassDeclaration = enumCons.getAnonymousClassDeclaration();
+				if (anonymousClassDeclaration != null) {
+					anonymousClassDeclaration.accept(this);
+				}
+			}
+			visitNodeList(node.bodyDeclarations());
         }
 		return false;
 	}
@@ -485,7 +492,6 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 
 	@Override
 	public boolean visit(SimpleName node) {
-        //System.err.println("visit(SimpleName)");
         IBinding bnd = node.resolveBinding();
         if ( (bnd != null) && (bnd.getKind() == IBinding.VARIABLE) && (context.topMethod() != null) ) {
             // could be a variable, a field, an enumValue, ...

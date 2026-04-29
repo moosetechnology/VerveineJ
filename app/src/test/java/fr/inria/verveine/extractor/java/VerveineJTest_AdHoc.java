@@ -26,8 +26,6 @@ import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
 
-import javax.smartcardio.Card;
-
 /**
  * @author Nicolas Anquetil
  * @since November 25, 2010
@@ -1080,6 +1078,44 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertSame(oneClass,value2.getParentType());
 
 		assertEquals(0, oneClass.getMethods().size()); // Doesn't have an initializer
+	}
+
+	@Test
+	public void testEnumAttributeDefinedInAnonymousEnumHasCorrectParentType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		Enum twoEnum = detectFamixElement(Enum.class,"TWO(Number)");
+		assertNotNull(twoEnum);
+
+		Attribute value2 = (Attribute) firstElt(twoEnum.getAttributes());
+		assertNotNull(value2);
+
+		assertEquals("value2", value2.getName());
+		assertSame(twoEnum,value2.getParentType());
+
+		assertEquals(1, twoEnum.getMethods().size()); // Has an initializer
+		Initializer initializer = (Initializer) firstElt(twoEnum.getMethods());
+		assertEquals("<Initializer>", initializer.getName());
+		assertFalse(initializer.getIsClassSide());
+		assertEquals(1, initializer.numberOfAccesses());
+
+	}
+
+	@Test
+	public void testAnonymousClassWithAttributeDefinition(){
+		parse(new String[]{"src/test/resources/ad_hoc/AnonymousWithAccess.java"});
+
+		Class ownerClass = detectFamixElement(Class.class,"AnonymousWithAccess");
+		assertNotNull(ownerClass);
+
+		Method initializer = (Method) firstElt(ownerClass.getMethods());
+		assertNotNull(initializer);
+
+		Class anonymousClass = (Class) firstElt(initializer.getTypes());
+		assertNotNull(anonymousClass);
+
+		Method anonymousClassInitializer = (Method) anonymousClass.getMethods().stream().filter((m) -> ((Method) m).getName().equals("<Initializer>") ).findFirst().get();
+		assertEquals(1,anonymousClassInitializer.numberOfAccesses());
 	}
 
 }
