@@ -423,7 +423,9 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(SwitchCase node) {
-        visitIfNotNull( node.getExpression());
+		for ( Expression expr : (List<Expression>)node.expressions()) {
+			expr.accept(this);
+		}
         return false;
 	}
 

@@ -3,9 +3,11 @@ package fr.inria.verveine.extractor.java;
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixjavaentities.Reference;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 public class VerveineJTest_ReferenceInstanceOf extends VerveineJTest_Basic {
 
@@ -25,16 +27,17 @@ public class VerveineJTest_ReferenceInstanceOf extends VerveineJTest_Basic {
 
     @Test
     public void testReferenceToString() {
-        parse(new String[]{"-alllocals", "-anchor", "assoc", "src/test/resources/instanceOf"});
+        parse(new String[]{"src/test/resources/instanceOf"});
         Class stringClass = detectFamixElement( Class.class, "String");
         // From Calculated Expression "hello" and from TypeLiteral String.class
-        assertEquals (stringClass.getIncomingReferences().size(), 2);
+        assertEquals (2 ,stringClass.getIncomingReferences().size());
     }
 
     @Test
     public void testExistingException() {
-        parse(new String[]{"-alllocals", "-anchor", "assoc", "src/test/resources/instanceOf"});
-        org.moosetechnology.model.famix.famixjavaentities.Exception exception = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class , "SeditException");
+        parse(new String[]{"src/test/resources/instanceOf"});
+        org.moosetechnology.model.famix.famixjavaentities.Exception exception =
+            detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Exception.class , "SeditException");
         // From Calculated Expression "hello" and from TypeLiteral String.class
         assertNotNull(exception);
     }
