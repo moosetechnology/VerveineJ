@@ -2,23 +2,13 @@ package comments;
 
 public class CommentInInnerClass {
 	
-	Merge(Mappings lm){
+	public class InnerClass {
+		/**
+		 * inner class javadoc comment
+		 */
+		//	int someMethod(){ }
 	}
 	
-	
-	public class MyList extends ArrayList<String>> {
-	
-	/**
-	 * inner class javadoc comment
-	 */
-//	int method(){
-//		somme line comment
-//	}
-	
-}
-	
-	
-	public void otherMethod(){
-	}
+	public void otherMethod(){ }
 	
 }

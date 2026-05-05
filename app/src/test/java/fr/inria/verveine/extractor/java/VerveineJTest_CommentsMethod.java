@@ -146,15 +146,14 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
         }
     }
 
-    @Ignore
     @Test
     public void testSourceInnerClassComment() {
         parse(new String[] { "src/test/resources/comments/CommentInInnerClass.java" });
 
-        Class clazz = detectFamixElement(Class.class, "MyList");
+        Class clazz = detectFamixElement(Class.class, "InnerClass");
         assertNotNull(clazz);
 
-        assertEquals(4, clazz.getComments().size());
+        assertEquals(2, clazz.getComments().size());
 
         Method mth = detectFamixElement(Method.class, "otherMethod");
         assertNotNull(mth);
