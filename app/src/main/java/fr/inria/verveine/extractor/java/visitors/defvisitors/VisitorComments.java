@@ -124,6 +124,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(TypeDeclaration node) {
+		assignCommentsInside(node, (TWithComments) context.topType());
 		classMemberDeclarations = false;
 		endVisitTypeDeclaration(node);
 	}
@@ -142,6 +143,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(AnonymousClassDeclaration node) {
+		assignCommentsInside(node, (TWithComments) context.topType());
 		classMemberDeclarations = false;
 		endVisitAnonymousClassDeclaration( node);
 	}
@@ -158,6 +160,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(EnumDeclaration node) {
+		assignCommentsInside(node, (TWithComments) context.topType());
 		classMemberDeclarations = false;
 		endVisitEnumDeclaration( node);
 	}
@@ -174,6 +177,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(AnnotationTypeDeclaration node) {
+		assignCommentsInside(node, (TWithComments) context.topType());
 		classMemberDeclarations = false;
 		endVisitAnnotationTypeDeclaration(node);
 	}
@@ -213,6 +217,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(Initializer node) {
+		assignCommentsInside(node, (TWithComments) context.topMethod());
 		classMemberDeclarations = true;
 		endVisitInitializer(node);
 	}

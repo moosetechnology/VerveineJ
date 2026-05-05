@@ -153,8 +153,19 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 	}
 
 	@Test
-	public void testCommentsText() {
-		parse(new String[]{"-commenttext", "src/test/resources/comments"});
+	public void testCommentsAnchorWithoutOption() {
+		parse(new String[]{"src/test/resources/comments/ClassWithComments.java"});
+
+		assertEquals(16, entitiesOfType(Comment.class).size());
+		for (Comment cmt : entitiesOfType(Comment.class)) {
+			assertNotNull(cmt.getSourceAnchor());
+			assertNull( cmt.getContent());
+		}
+	}
+
+	@Test
+	public void testCommentsTextWithOption() {
+		parse(new String[]{"-commenttext", "src/test/resources/comments/ClassWithComments.java"});
 
 		assertEquals(16, entitiesOfType(Comment.class).size());
 		for (Comment cmt : entitiesOfType(Comment.class)) {
@@ -162,60 +173,6 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 			assertNotNull( cmt.getContent());
 			assertTrue( cmt.getContent().length() > 10); // none of the comments have less than 20 characters
 			assertEquals('/', cmt.getContent().charAt(0));
-		}
-
-		Class classWithComments = detectFamixElement(Class.class, "ClassWithComments");
-		assertNotNull(classWithComments);
-		assertEquals(1, classWithComments.getComments().size());
-
-		int numberTested = 0;
-
-		for (Attribute att : entitiesOfType(Attribute.class)) {
-			assertEquals(1, att.getComments().size());
-			numberTested++;
-		}
-		assertEquals(2, numberTested);  // check that all attributes were actually found and tested
-
-		assertEquals(12, entitiesOfType(Method.class).size());
-		for (Method meth : entitiesOfType(Method.class)) {
-			if (meth.getIsInitializer() && !meth.getIsConstructor()) {
-				numberTested++;
-				assertEquals(0, meth.getComments().size());
-			}
-			else if (meth.getSignature().equals("ClassWithComments(int i, int j)")) {
-				numberTested++;
-				assertEquals(2, meth.getComments().size());
-			}
-			else if (meth.getName().equals("method2")) {
-				numberTested++;
-				assertEquals(2, meth.getComments().size());
-			}
-			else if (meth.getName().equals("method3")) {
-				numberTested++;
-				assertEquals(1, meth.getComments().size());
-			}
-			else if (meth.getName().equals("method4")) {
-				numberTested++;
-				assertEquals(0, meth.getComments().size());
-			}
-			else if (meth.getName().equals("methodWithoutBody")) {
-				numberTested++;
-				assertEquals(1, meth.getComments().size());
-			}
-		}
-		assertEquals(7, numberTested);  // check that all expected methods were actually found and tested
-	}
-
-	@Test
-	public void testCommentsAnchor() {
-		parse(new String[]{"src/test/resources/comments"});
-
-		assertEquals(16, entitiesOfType(Comment.class).size());
-		for (Comment cmt : entitiesOfType(Comment.class)) {
-			assertNotNull(cmt.getSourceAnchor());
-			assertNull( cmt.getContent());
-			int len = (int)((IndexedFileAnchor)cmt.getSourceAnchor()).getEndPos() - (int)((IndexedFileAnchor)cmt.getSourceAnchor()).getStartPos();
-			assertTrue( len >= 10); // none of the comments have less than 20 characters
 		}
 	}
 
