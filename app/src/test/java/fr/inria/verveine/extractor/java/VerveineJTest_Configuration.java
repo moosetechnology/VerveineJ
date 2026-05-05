@@ -154,7 +154,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test
 	public void testCommentsText() {
-		parse(new String[]{"-commenttext", "src/test/resources/comments"});
+		parse(new String[]{"-commenttext", "src/test/resources/comments/ClassWithComments.java"});
 
 		assertEquals(16, entitiesOfType(Comment.class).size());
 		for (Comment cmt : entitiesOfType(Comment.class)) {
@@ -208,7 +208,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 
 	@Test
 	public void testCommentsAnchor() {
-		parse(new String[]{"src/test/resources/comments"});
+		parse(new String[]{"src/test/resources/comments/ClassWithComments.java"});
 
 		assertEquals(16, entitiesOfType(Comment.class).size());
 		for (Comment cmt : entitiesOfType(Comment.class)) {
