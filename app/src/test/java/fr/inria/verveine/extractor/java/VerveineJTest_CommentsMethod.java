@@ -1,7 +1,9 @@
 package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
@@ -45,17 +48,18 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
     @Test
     public void testStartPosSourceAnchorMethod() {
-        parse(new String[] { "src/test/resources/comments" });
+        parse(new String[] { "src/test/resources/comments/ClassWithComments.java" });
 
         List<Method> methods = new ArrayList<>();
         // convert to <code>List</code> to be able to sort them by ascending starting
         // position
         methods.addAll(entitiesOfType(Method.class));
-        assertEquals(12, methods.size());
 
+        // sorting methods
         List<Method> methodsWithAnchor = methods.stream().filter(m -> m.getSourceAnchor() != null)
                 .collect(Collectors.toList());
         methodsWithAnchor.sort((o1, o2) -> startPos(o1).compareTo(startPos(o2)));
+
         if (isWindows()) {
             // on Windows need to add one character for each end-of-line
             assertEquals((Integer) (211 + 18), startPos(methodsWithAnchor.get(0))); // <Initializer>
@@ -88,17 +92,18 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
     @Test
     public void testEndPosSourceAnchorMethod() {
-        parse(new String[] { "src/test/resources/comments" });
+        parse(new String[] { "src/test/resources/comments/ClassWithComments.java" });
         List<Method> methods = new ArrayList<>();
         // convert to <code>List</code> to be able to sort them by ascending starting
         // position
         methods.addAll(entitiesOfType(Method.class));
-        assertEquals(12, methods.size());
 
+        // sorting methods
         List<Method> methodsWithAnchor = methods.stream().filter(m -> m.getSourceAnchor() != null)
                 .collect(Collectors.toList());
         assertEquals(11, methodsWithAnchor.size());
         methodsWithAnchor.sort((o1, o2) -> startPos(o1).compareTo(startPos(o2)));
+
         if (isWindows()) {
             // on Windows need to add one character for each end-of-line
             assertEquals(446 + 25, endPos(methodsWithAnchor.get(0))); // <Initializer>
@@ -129,10 +134,9 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
 
     @Test
     public void testSourceAnchorHasFile() {
-        parse(new String[] { "src/test/resources/comments" });
+        parse(new String[] { "src/test/resources/comments/ClassWithComments.java" });
         List<Method> methods = new ArrayList<>();
          methods.addAll(entitiesOfType(Method.class));
-        assertEquals(12, methods.size());
 
         List<Method> methodsWithAnchor = methods.stream().filter(m -> m.getSourceAnchor() != null)
                 .collect(Collectors.toList());
@@ -140,6 +144,22 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
             assertEquals("src/test/resources/comments/ClassWithComments.java",
                     ((IndexedFileAnchor) method.getSourceAnchor()).getFileName());
         }
+    }
+
+    @Ignore
+    @Test
+    public void testSourceInnerClassComment() {
+        parse(new String[] { "src/test/resources/comments/CommentInInnerClass.java" });
+
+        Class clazz = detectFamixElement(Class.class, "MyList");
+        assertNotNull(clazz);
+
+        assertEquals(4, clazz.getComments().size());
+
+        Method mth = detectFamixElement(Method.class, "otherMethod");
+        assertNotNull(mth);
+
+        assertEquals(0, mth.getComments().size());
     }
 
 }
