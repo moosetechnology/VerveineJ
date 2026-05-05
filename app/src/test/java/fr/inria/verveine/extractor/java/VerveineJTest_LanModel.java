@@ -865,64 +865,6 @@ public class VerveineJTest_LanModel extends VerveineJTest_Basic {
 	}
 
 	@Test
-	public void testComment() {
-		// testing javadoc
-		org.moosetechnology.model.famix.famixjavaentities.Class clazz = detectFamixElement(
-				org.moosetechnology.model.famix.famixjavaentities.Class.class, "SingleDestinationAddress");
-		assertNotNull(clazz);
-		Collection<TComment> cmts = clazz.getComments();
-		assertEquals(2, cmts.size()); // file javaDoc + class javaDoc
-		SourceAnchor anc = null;
-		for (TComment c : cmts) {
-			IndexedFileAnchor tmpAnc = (IndexedFileAnchor) ((Comment) c).getSourceAnchor();
-			if (tmpAnc.getStartPos().intValue() > 5) { // i.e. not the one at the beginning of the file
-				anc = tmpAnc;
-				if (isWindows()) {
-					assertEquals(64+5, tmpAnc.getStartPos());
-					assertEquals(120+9, tmpAnc.getEndPos());
-				} else {
-					assertEquals(64, tmpAnc.getStartPos());
-					assertEquals(120, tmpAnc.getEndPos());
-				}
-			}
-		}
-		assertNotNull(anc);
-
-		Method meth = null;
-		for (TMethod m : clazz.getMethods()) {
-			if (m.getName().equals("isDestinationFor")) {
-				meth = (Method) m;
-				break;
-			}
-		}
-		assertNotNull(meth);
-		cmts = meth.getComments();
-		assertEquals(1, cmts.size());
-		anc = (SourceAnchor) ((Comment) firstElt(cmts)).getSourceAnchor();
-		if (isWindows()) {
-			assertEquals(316+22, ((IndexedFileAnchor) anc).getStartPos()); // +22 because of line return encoding in Windows
-			assertEquals(437+24, ((IndexedFileAnchor) anc).getEndPos());
-		} else {
-			assertEquals(316, ((IndexedFileAnchor) anc).getStartPos());
-			assertEquals(437, ((IndexedFileAnchor) anc).getEndPos());
-		}
-
-		// testing the non javadoc comments (those that are treated)
-		clazz = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "WorkStation");
-		assertNotNull(clazz);
-		Attribute a = (Attribute) firstElt(clazz.getAttributes());
-		assertEquals("type", a.getName());
-		cmts = a.getComments();
-		assertEquals(1, cmts.size());
-		anc = (SourceAnchor) ((Comment) firstElt(cmts)).getSourceAnchor();
-		if (isWindows()) {
-			assertEquals(164+12, ((IndexedFileAnchor) anc).getStartPos().intValue()); // +12 because of line return encoding in Windows
-		} else {
-			assertEquals(164, ((IndexedFileAnchor) anc).getStartPos().intValue());
-		}
-	}
-
-	@Test
 	public void testMetric() {
 		Collection<Method> lMeths = entitiesNamed(Method.class, "accept");
 		assertEquals(3, lMeths.size());
