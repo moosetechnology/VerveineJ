@@ -7,6 +7,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
+import org.moosetechnology.model.famix.famixtraits.TParameter;
 
 import static org.junit.Assert.*;
 
@@ -58,6 +59,21 @@ public class VerveineJTest_Ser extends VerveineJTest_Basic {
         for (TImplementation interface1 : launcherClass.getInterfaceImplementations()) {
             assertEquals(((Interface) interface1.getMyInterface()).getName(), "WebMvcConfigurer");
         }
+    }
+
+    /*
+     *  Regression test. A parameter in a method declared in an interface was missing its typing information
+     */
+    @Test
+    public void testMissingParameter() {
+
+        Method setEntiteMethod = detectFamixElement(Method.class, "setEntite");
+
+        assertEquals(1, setEntiteMethod.numberOfParameters());
+            for (TParameter parameter : setEntiteMethod.getParameters()) {
+                assertNotNull(parameter.getTyping());
+                assertEquals("Entite", parameter.getTyping().getDeclaredType().getName());
+            }
     }
 
 

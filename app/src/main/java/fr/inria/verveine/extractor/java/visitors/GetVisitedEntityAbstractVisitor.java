@@ -59,6 +59,28 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		this.anonymousSuperTypeName = new Stack<>();
 	}
 
+    /**
+     * I am here in order to do some error management.
+     * If the node should be visited, I execute myself the #accept0 to get the control and I execute it with a try/catch.
+     * This allows to not stop the visit if an error happens in a node.
+     * I return false in the end to ensure the accpet0 is not executed a second time by my superclass.
+     */
+    @Override
+    public boolean preVisit2(ASTNode node) {
+        // Visit only in the preVisit2 says to visit.
+        if (super.preVisit2(node)){
+            try {
+                // We need to use reflection because the visibility is not public :( Bad Java, bad!
+                java.lang.reflect.Method m = node.getClass().getDeclaredMethod("accept0", ASTVisitor.class);
+                m.setAccessible(true);
+                m.invoke(node, this);
+            } catch (Throwable t) {
+                t.printStackTrace(); //In the future we should probably build an error report but until then, we simply print the error.
+            }
+        }
+        return false; //Return false to not visit a second time
+    }
+
 	// a generic visit method for node lists
     protected void visitNodeList(List<ASTNode> list) {
         for (ASTNode child : list) {

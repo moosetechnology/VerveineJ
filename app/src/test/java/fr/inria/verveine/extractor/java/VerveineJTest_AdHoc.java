@@ -1019,6 +1019,21 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
         }
     }
+
+    @Test
+    /**
+     * Regression test of a typing info missing on a parameter.
+     * Cyril: This was due to another error and I proposed to catch the errors, print them but keep the visit going on the rest of the AST.
+     */
+    public void testRegressionTestOfMissingTypingInfoOnAParameter() {
+        parse(new String[]{"src/test/resources/ad_hoc/MissingParameter.java"});
+
+        Method handleText = firstEntityNamed(Method.class, "handleText");
+
+        assertEquals(1, handleText.getParameters().size());
+        assertNotNull(handleText.getParameters().iterator().next().getTyping());
+        assertEquals("String", handleText.getParameters().iterator().next().getTyping().getDeclaredType().getName());
+    }
 }
 
 
