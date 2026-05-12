@@ -1019,6 +1019,34 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
         }
     }
+
+	@Test
+	public void testNativeMethodIsNotAbstract(){
+		parse(new String[]{"src/test/resources/ad_hoc/NativeExample.java"});
+
+		Class clazz = detectFamixElement(Class.class, "NativeExample");
+		assertNotNull(clazz);
+
+		Method nativeMethod = (Method) firstElt(clazz.getMethods());
+		assertNotNull(nativeMethod);
+
+		assertFalse(nativeMethod.getIsAbstract());
+	}
+
+	@Test
+	public void testNativeMethodOverride(){
+		parse(new String[]{"src/test/resources/ad_hoc/NativeExample.java"});
+
+		Class clazz = detectFamixElement(Class.class, "NotNativeExample");
+		assertNotNull(clazz);
+
+		Method notNativeMethod = (Method) firstElt(clazz.getMethods());
+		assertNotNull(notNativeMethod);
+
+		// Not abstract and is an override
+		assertFalse(notNativeMethod.getIsAbstract());
+		assertFalse(notNativeMethod.getAnnotationInstances().stream().anyMatch((annotation) -> annotation.toString().equals("Override")));
+	}
 }
 
 
