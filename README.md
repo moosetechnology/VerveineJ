@@ -25,7 +25,7 @@ docker run -v <full/path/toSource>:/src [-v <full/path/toDependency>:/dependency
 
 The resulting model file (.json or .mse) is in \<full/path/toSource\>.
 
-Otherwise, on the command line, download the jar of the latest release and the command is
+Otherwise, on the command line, download the jar of the [latest release](https://github.com/moosetechnology/VerveineJ/releases/) and the command is
 
 ```sh
 java -jar VerveineJ-v1.0.0.jar -format json -autocp <dependency/folder> <src/folder> 
