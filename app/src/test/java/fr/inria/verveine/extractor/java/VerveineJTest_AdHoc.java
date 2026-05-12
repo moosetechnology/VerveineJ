@@ -26,8 +26,6 @@ import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
 
-import javax.smartcardio.Card;
-
 /**
  * @author Nicolas Anquetil
  * @since November 25, 2010
@@ -527,7 +525,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
 	@Test
 	public void testEnumAsVariableType() {
-		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
+		parse(new String[]{"src/test/resources/ad_hoc/Card.java"});
 
 		org.moosetechnology.model.famix.famixjavaentities.Class card = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Card");
 		assertNotNull(card);
@@ -1003,7 +1001,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
     *    Issue: https://github.com/moosetechnology/VerveineJ/issues/184
     *    Regression test ensuring that Enum values defining methods have the typing information right for parameters.
      */
-    public void testEnumValuesHaveTheRightTypingOfMethodParamaters() {
+    public void testEnumValuesHaveTheRightTypingOfMethodParameters() {
         parse(new String[]{"src/test/resources/ad_hoc/Operation.java"});
 
         Collection<Method> methods = entitiesNamed(Method.class, "apply");
@@ -1019,6 +1017,120 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 
         }
     }
+
+	@Test
+	public void testAnonymousInterface() {
+		//Check that anonymous entities created from interfaces are Anonymous classes
+		parse(new String[]{"src/test/resources/ad_hoc/InterfaceWithAnonymous.java"});
+
+		Class clazz = detectFamixElement(Class.class, "_Anonymous(InterfaceWithAnonymous)");
+		assertNotNull(clazz);
+	}
+
+    @Test
+    public void testEnumValueParentEnum() {
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		Enum numberEnum = detectFamixElement(Enum.class,"Number");
+		EnumValue zero = detectFamixElement(EnumValue.class,"ZERO");
+		assertNotNull(zero);
+		assertSame(numberEnum, zero.getParentEnum());
+
+		EnumValue one = detectFamixElement(EnumValue.class,"ONE");
+		assertNotNull(one);
+		assertSame(numberEnum, one.getParentEnum());
+
+		EnumValue two = detectFamixElement(EnumValue.class,"TWO");
+		assertNotNull(two);
+		assertSame(numberEnum, two.getParentEnum());
+
+		EnumValue three = detectFamixElement(EnumValue.class,"THREE");
+		assertNotNull(three);
+		assertSame(numberEnum, three.getParentEnum());
+    }
+
+	@Test
+	public void testEnumValueWithMethodsHasADeclaredType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		EnumValue zero = detectFamixElement(EnumValue.class,"ZERO");
+		assertNotNull(zero.getDeclaredType());
+
+		Enum zeroClass = detectFamixElement(Enum.class,"ZERO(Number)");
+		assertNotNull(zeroClass);
+
+		assertSame(zeroClass,zero.getDeclaredType());
+	}
+
+	@Test
+	public void testEnumMethodDeclaredInAnonymousEnumHasCorrectParentType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		Enum zeroClass = detectFamixElement(Enum.class,"ZERO(Number)");
+		assertNotNull(zeroClass);
+
+		Method addMethod = (Method) firstElt(zeroClass.getMethods());
+		assertNotNull(addMethod);
+
+		assertEquals("add", addMethod.getName());
+		assertSame(zeroClass,addMethod.getParentType());
+		assertEquals("Override", ((AnnotationType) firstElt(addMethod.getAnnotationInstances()).getAnnotationType()).getName());
+	}
+
+	@Test
+	public void testEnumAttributeDeclaredInAnonymousEnumHasCorrectParentType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		Enum oneClass = detectFamixElement(Enum.class,"ONE(Number)");
+		assertNotNull(oneClass);
+
+		Attribute value2 = (Attribute) firstElt(oneClass.getAttributes());
+		assertNotNull(value2);
+
+		assertEquals("value2", value2.getName());
+		assertSame(oneClass,value2.getParentType());
+
+		assertEquals(0, oneClass.getMethods().size()); // Doesn't have an initializer
+	}
+
+	@Test
+	public void testEnumAttributeDefinedInAnonymousEnumHasCorrectParentType(){
+		parse(new String[]{"src/test/resources/ad_hoc/Number.java"});
+
+		Enum twoEnum = detectFamixElement(Enum.class,"TWO(Number)");
+		assertNotNull(twoEnum);
+
+		Attribute value2 = (Attribute) firstElt(twoEnum.getAttributes());
+		assertNotNull(value2);
+
+		assertEquals("value2", value2.getName());
+		assertSame(twoEnum,value2.getParentType());
+
+		assertEquals(1, twoEnum.getMethods().size()); // Has an initializer
+		Initializer initializer = (Initializer) firstElt(twoEnum.getMethods());
+		assertEquals("<Initializer>", initializer.getName());
+		assertFalse(initializer.getIsClassSide());
+		assertEquals(1, initializer.numberOfAccesses());
+
+	}
+
+	@Test
+	public void testAnonymousClassWithAttributeDefinition(){
+		parse(new String[]{"src/test/resources/ad_hoc/AnonymousWithAccess.java"});
+
+		Class ownerClass = detectFamixElement(Class.class,"AnonymousWithAccess");
+		assertNotNull(ownerClass);
+
+		Method initializer = (Method) firstElt(ownerClass.getMethods());
+		assertNotNull(initializer);
+
+		Class anonymousClass = (Class) firstElt(initializer.getTypes());
+		assertNotNull(anonymousClass);
+
+		Method anonymousClassInitializer = (Method) anonymousClass.getMethods().stream().filter((m) -> ((Method) m).getName().equals("<Initializer>") ).findFirst().get();
+		assertEquals(1,anonymousClassInitializer.numberOfAccesses());
+	}
+
 }
 
 

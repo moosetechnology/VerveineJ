@@ -51,10 +51,21 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		// ITypeBinding bnd = node.resolveBinding();
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
-		org.moosetechnology.model.famix.famixjavaentities.Class fmx = this.dico.getFamixClass(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+
+		Type fmx;
+		TWithInheritances fmxIn;
+		if(bnd.isEnum()){
+			org.moosetechnology.model.famix.famixjavaentities.Enum famixEnum = this.dico.getFamixEnum(bnd, Util.stringForAnonymousEnum(bnd.getDeclaringMember().getName(),context.top().getName()), /*owner*/(ContainerEntity) context.top());
+			fmx = famixEnum;
+			fmxIn = famixEnum;
+		} else{
+			org.moosetechnology.model.famix.famixjavaentities.Class famixClass = this.dico.getFamixClass(bnd, Util.stringForAnonymousName(getAnonymousSuperTypeName(), context), /*owner*/(ContainerEntity) context.top());
+			fmx = famixClass;
+			fmxIn = famixClass;
+		}
 
 		if ((fmx != null) && (bnd != null)) {
-			ensureInheritances(bnd, fmx);
+			ensureInheritances(bnd, fmxIn);
 
 			this.context.pushType(fmx);
 			return super.visit(node);

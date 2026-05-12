@@ -8,9 +8,7 @@ import org.eclipse.jdt.core.dom.*;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Enum;
-import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
 import org.moosetechnology.model.famix.famixtraits.TWithAttributes;
 
@@ -78,6 +76,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 	public void endVisit(AnonymousClassDeclaration node) {
 		endVisitAnonymousClassDeclaration( node);
 	}
+
 
 	@Override
 	public boolean visit(EnumDeclaration node) {
@@ -191,7 +190,7 @@ public class VisitorVarsDef extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public boolean visit(EnumConstantDeclaration node) {
-	EnumValue ev = dico.ensureFamixEnumValue(node.resolveVariable(), node.getName().getIdentifier(), /*owner*/(Enum)context.topType());
+		EnumValue ev = dico.ensureFamixEnumValue(node.resolveVariable(), node.getName().getIdentifier(), /*owner*/(Enum) context.topType());
 		ev.setIsStub(false);
 		return super.visit(node);
 	}
