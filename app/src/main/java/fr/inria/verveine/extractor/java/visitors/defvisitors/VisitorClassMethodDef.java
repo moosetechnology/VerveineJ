@@ -275,7 +275,9 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
 			if (node.getBody() != null) {
 				context.setTopMethodCyclo(1);
-			} else {
+			} else if(!Modifier.isNative(node.getModifiers())) {
+				// If the method is native then it is not abstract, as it has a concrete implementation in C/C++
+
 				// In interfaces you don't need to explicitly define the method as abstract
 				// However, if they don't have a body, they are!
 				fmx.setIsAbstract(true);
