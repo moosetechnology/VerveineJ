@@ -2365,7 +2365,9 @@ public class EntityDictionary {
 		}
 
 		if (fmx == null) {
-			if(bnd != null && bnd.isGenericMethod()) {
+			if (bnd != null && bnd.isConstructor()) {
+				fmx = ensureFamixEntity(Initializer.class, bnd.getMethodDeclaration(), name);
+			} else if(bnd != null && bnd.isGenericMethod()) {
 				fmx = ensureFamixEntity(ParametricMethod.class, bnd, name);
 				for(ITypeBinding param: bnd.getTypeParameters()) {
 					TypeParameter fmxParam = this.ensureFamixTypeParameter(param, null, fmx);
@@ -2375,12 +2377,8 @@ public class EntityDictionary {
 			} else if (bnd != null && bnd.isParameterizedMethod()) {
 				fmx = this.ensureFamixMethod(bnd.getMethodDeclaration());
 			} else {
-                if (bnd != null && bnd.isConstructor()) {
-                    fmx = ensureFamixEntity(Initializer.class, bnd, name);
-                } else {
-                    fmx = ensureFamixEntity(Method.class, bnd, name);
-                }
-            }
+				fmx = ensureFamixEntity(Method.class, bnd, name);
+			}
 
 			fmx.setSignature(signature);
 			ITypeBinding returnTypeBnd = (bnd == null) ? null : bnd.getReturnType();
@@ -2456,8 +2454,30 @@ public class EntityDictionary {
 				fmx.setParentType(owner);
 				fmx.setSignature(name + "()");				
 			} else {
-				// But, if we have the binding, that means the constructor exists. Let's just go the normal way
-				fmx = (Initializer) this.ensureFamixMethod(binding, name, parameterTypesNames, /*ret type*/null, owner, modifiers);
+				IMethodBinding constructorBinding = binding.getMethodDeclaration();
+				TNamedEntity existing = getEntityByKey(constructorBinding);
+				if (existing instanceof Initializer initializer) {
+					fmx = initializer;
+				} else {
+					fmx = createFamixEntity(Initializer.class, name);
+					if (constructorBinding != null) {
+						mapEntityToKey(constructorBinding, fmx);
+					}
+				}
+				String signature = name + "(";
+				if (parameterTypesNames != null) {
+					signature += signatureParamsFromStringCollection(parameterTypesNames);
+				} else {
+					signature += signatureParamsFromBinding(binding);
+				}
+				signature += ")";
+				fmx.setParentType(owner);
+				fmx.setSignature(signature);
+				if (fmx.getTyping() == null) {
+					ITypeBinding returnTypeBnd = binding.getReturnType();
+					ensureFamixEntityTyping(returnTypeBnd, fmx, referredType(returnTypeBnd, fmx));
+				}
+				setMethodModifiers(fmx, modifiers);
 			}
 		}
 

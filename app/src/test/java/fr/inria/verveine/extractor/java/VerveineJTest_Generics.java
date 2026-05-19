@@ -176,6 +176,20 @@ public class VerveineJTest_Generics extends VerveineJTest_Basic {
     }
 
     @Test
+    public void testParametricConstructorInvocationTargetsInitializer() {
+        Method holder = detectFamixElement(Method.class, "holder");
+        assertNotNull(holder);
+        assertEquals(1, holder.numberOfOutgoingInvocations());
+
+        TInvocation invocation = firstElt(holder.getOutgoingInvocations());
+        Method constructor = (Method) firstElt(invocation.getCandidates());
+
+        assertEquals(Initializer.class, constructor.getClass());
+        assertEquals("GenericHolder", constructor.getName());
+        assertEquals(0, entitiesNamed(ParametricMethod.class, "GenericHolder").size());
+    }
+
+    @Test
     public void testTypeParameterAsConcreteType() {
         ParametricClass classB = firstEntityNamed(ParametricClass.class, "B");
         assertNotNull(classB);
