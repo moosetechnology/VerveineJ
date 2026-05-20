@@ -2432,7 +2432,6 @@ public class EntityDictionary {
 
 		if (fmx == null) {
 			fmx = createFamixEntity(Initializer.class, INIT_BLOCK_NAME);
-			fmx.setName(INIT_BLOCK_NAME);
 			fmx.setSignature(INIT_BLOCK_NAME + "()" );
 			fmx.setVisibility(MODIFIER_PRIVATE);
 			fmx.setParentType(owner);
