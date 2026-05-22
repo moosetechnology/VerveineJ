@@ -60,6 +60,13 @@ It is possible to run the tests and generate a jacoco test report with
 ./gradlew app:jacocoTestReport
 ```
 
+### AI contributions
+
+AI contributions are accepted on some conditions:
+- All such contributions must be clearly identified as being made by AI
+- All such contributions must be reviewed by a human (A carbon based life form ["Why is All Life Carbon Based, Not Silicon?"](https://www.youtube.com/watch?v=kAFC4RY1cKQ))
+- The reviewer is taking responsibility for accepting the change (just like if they had made the contribution themselves)
+
 ### Build a fat jar excecutable
 
 You can build the project and produce a fat jar with
