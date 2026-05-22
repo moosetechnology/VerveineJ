@@ -47,6 +47,20 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
     }
 
     @Test
+    public void testCreatedInitializerIsInRepository() {
+        parser = new VerveineJParser();
+        repo = parser.getFamixRepo();
+        EntityDictionary dico = new EntityDictionary(repo);
+        Class owner = new Class();
+        owner.setName("ClassWithInitializer");
+        repo.add(owner);
+
+        Initializer initializer = dico.ensureFamixInitializer(owner, false, false);
+
+        assertTrue(repo.getElements().contains(initializer));
+    }
+
+    @Test
     public void testConstructors() {
     	parse("src/test/resources/initializers");
     	
