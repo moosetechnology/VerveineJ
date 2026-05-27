@@ -609,7 +609,7 @@ public class EntityDictionary {
 		Invocation invocation;
 		if (invokedBnd != null && invokedBnd.isParameterizedMethod()) {
 			invocation = (ParametricInvocation)buildFamixParametricAssociation(new ParametricInvocation(), invokedBnd.getMethodDeclaration().getTypeParameters(), invokedBnd.getTypeArguments());
-		} else if ( invokedBnd != null && invokedBnd.isConstructor() && invokedBnd.getMethodDeclaration().getDeclaringClass().isGenericType()) {
+		} else if ( invokedBnd != null && isConstructorBinding(invokedBnd) && invokedBnd.getMethodDeclaration().getDeclaringClass().isGenericType()) {
 			invocation = (ParametricInvocation)buildFamixParametricAssociation(new ParametricInvocation(), invokedBnd.getMethodDeclaration().getDeclaringClass().getTypeParameters(), invokedBnd.getDeclaringClass().getTypeArguments());
 		} else {
 			invocation = new Invocation();
@@ -2002,7 +2002,7 @@ public class EntityDictionary {
 
 			// and still for method, must also check the return type
 			if (bnd != null) {
-				if (bnd.isConstructor()) {
+				if (isConstructorBinding(bnd)) {
 					if ( ((Method) candidate).getDeclaredType() != null ) {
 						return false;
 					}
@@ -2042,6 +2042,19 @@ public class EntityDictionary {
 		} else {
 			return false;
 		}
+	}
+
+	/** testing that a method binding is for a constructor
+	 * There is a special case for "diamond constructors" (eg: <code>new HashSet<>()</code>)
+	 */
+	protected boolean isConstructorBinding(IMethodBinding bnd) {
+		if (bnd.isConstructor()) {
+			return true;
+		}
+		if ( bnd.getName().equals("<factory>") ) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -2365,7 +2378,7 @@ public class EntityDictionary {
 		}
 
 		if (fmx == null) {
-			if(bnd != null && bnd.isGenericMethod()) {
+			if(bnd != null && bnd.isGenericMethod() && !isConstructorBinding(bnd)) {
 				fmx = ensureFamixEntity(ParametricMethod.class, bnd, name);
 				for(ITypeBinding param: bnd.getTypeParameters()) {
 					TypeParameter fmxParam = this.ensureFamixTypeParameter(param, null, fmx);
@@ -2375,7 +2388,7 @@ public class EntityDictionary {
 			} else if (bnd != null && bnd.isParameterizedMethod()) {
 				fmx = this.ensureFamixMethod(bnd.getMethodDeclaration());
 			} else {
-                if (bnd != null && bnd.isConstructor()) {
+                if (bnd != null && isConstructorBinding(bnd)) {
                     fmx = ensureFamixEntity(Initializer.class, bnd, name);
                 } else {
                     fmx = ensureFamixEntity(Method.class, bnd, name);

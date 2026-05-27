@@ -1,19 +1,20 @@
 package fr.inria.verveine.extractor.java;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.moosetechnology.model.famix.famixjavaentities.*;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
-import org.moosetechnology.model.famix.famixtraits.TInvocation;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
-import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import java.lang.Exception;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.function.Predicate;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Attribute;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixjavaentities.Initializer;
+import org.moosetechnology.model.famix.famixjavaentities.Method;
+import org.moosetechnology.model.famix.famixjavaentities.PrimitiveType;
+import org.moosetechnology.model.famix.famixjavaentities.Type;
+import org.moosetechnology.model.famix.famixtraits.TMethod;
 
 public class VerveineJTest_Initializers extends VerveineJTest_Basic {
 
@@ -35,7 +36,7 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
     	
         Collection<Method> methods = entitiesOfType(Method.class);
 
-        assertEquals(25,methods.size());
+        assertEquals(28, methods.size());
     }
 
     @Test
@@ -43,7 +44,15 @@ public class VerveineJTest_Initializers extends VerveineJTest_Basic {
     	parse("src/test/resources/initializers");
     	
         Collection<Initializer> initializers = entitiesOfType(Initializer.class);
-        assertEquals(16, initializers.size());
+        assertEquals(17, initializers.size());
+    }
+
+    @Test
+    public void testImplicitGenericInitializer() {
+    	parse("src/test/resources/initializers/ImplicitGenericConstructor.java");
+    	
+        Collection<Initializer> initializers = entitiesOfType(Initializer.class);
+        assertEquals(1, initializers.size());
     }
 
     @Test
