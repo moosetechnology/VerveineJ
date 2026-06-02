@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -231,7 +232,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		if (classMemberDeclarations) {
+		if (classMemberDeclarations && node.getParent() instanceof FieldDeclaration) {
 			TWithComments fmx = dico.getFamixAttribute(node.resolveBinding(), node.getName().getIdentifier(), (TWithAttributes) context.topType());
 			if ( ! ((TCanBeStub) fmx).getIsStub() ) {
 				// if it is a stub, it might have been created by the getFamixAttribute just above
