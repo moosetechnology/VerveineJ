@@ -259,4 +259,15 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
         assertEquals("Nested enum should receive its Javadoc comment", 1, nestedEnum.getComments().size());
     }
 
+    @Test
+    public void testFieldInitializerLambdaLocalCommentIsPreservedWithoutAttributeComment() {
+        parse(new String[] { "src/test/resources/comments/FieldInitializerLambdaLocal.java" });
+
+        Attribute task = detectFamixElement(Attribute.class, "task");
+
+        assertNotNull(task);
+        assertEquals(1, entitiesOfType(Comment.class).size());
+        assertEquals(0, task.getComments().size());
+    }
+
 }
