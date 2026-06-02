@@ -257,6 +257,21 @@ public class EntityDictionary {
 	}
 
 	/**
+	 * Returns the Famix Entity associated to the given key if it is an instance of the given Famix class.
+	 * This avoids recovering a binding as another kind of entity than the one requested.
+	 * @param key -- the key
+	 * @param fmxClass -- the expected Famix class
+	 * @return the Famix Entity associated to the binding or null if not found or not an instance of <b>fmxClass</b>
+	 */
+	protected <T extends TNamedEntity> T getEntityByKey(IBinding key, java.lang.Class<T> fmxClass) {
+		TNamedEntity fmx = getEntityByKey(key);
+		if (fmxClass.isInstance(fmx)) {
+			return fmxClass.cast(fmx);
+		}
+		return null;
+	}
+
+	/**
 	 * Returns the key associated to a Famix Entity.
 	 * @param e -- the Named entity
 	 * @return the key associated to this entity or null if none
@@ -320,7 +335,7 @@ public class EntityDictionary {
 		 */
 
 		if (bnd != null) {
-			fmx = (T) getEntityByKey(bnd);
+			fmx = getEntityByKey(bnd, fmxClass);
 			if (fmx != null) {
 				return fmx;
 			}
@@ -329,8 +344,7 @@ public class EntityDictionary {
 		// else
 		fmx = createFamixEntity(fmxClass, name);
 		if ( (bnd != null) && (fmx != null) ) {
-			keyToEntity.put(bnd, fmx);
-			entityToKey.put(fmx, bnd);
+			mapEntityToKey(bnd, fmx);
 		}
 		
 		return fmx;
@@ -1066,7 +1080,7 @@ public class EntityDictionary {
 		}
 
 		// ---------------- to avoid useless computations if we can
-		fmx = (Class) getEntityByKey(bnd);
+		fmx = getEntityByKey(bnd, Class.class);
 		if (fmx != null) {
 			return fmx;
 		}
@@ -1262,7 +1276,7 @@ public class EntityDictionary {
 		}
 
 		// ---------------- to avoid useless computations if we can
-		fmx = (Interface) getEntityByKey(bnd);
+		fmx = getEntityByKey(bnd, Interface.class);
 		if (fmx != null) {
 			return fmx;
 		}
