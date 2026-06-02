@@ -248,4 +248,15 @@ public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
         assertEquals(0, mth.getComments().size());
     }
 
+    @Test
+    public void testAnnotationMemberContextIsPoppedBeforeNestedEnum() {
+        parse(new String[] { "src/test/resources/comments/AnnotationWithNestedEnum.java" });
+
+        org.moosetechnology.model.famix.famixjavaentities.Enum nestedEnum =
+                detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Enum.class, "Feature");
+
+        assertNotNull("Nested enum should be modeled", nestedEnum);
+        assertEquals("Nested enum should receive its Javadoc comment", 1, nestedEnum.getComments().size());
+    }
+
 }

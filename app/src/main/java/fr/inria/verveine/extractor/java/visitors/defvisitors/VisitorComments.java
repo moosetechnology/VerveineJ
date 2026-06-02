@@ -200,12 +200,19 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 		endVisitMethodDeclaration(node);
 	}
 
+	@Override
 	public boolean visit(AnnotationTypeMemberDeclaration node) {
 		AnnotationTypeAttribute fmx = visitAnnotationTypeMemberDeclaration( node);
 
 		assignCommentsBefore(node, node.getJavadoc(), fmx);
 
 		return super.visit(node);
+	}
+
+	@Override
+	public void endVisit(AnnotationTypeMemberDeclaration node) {
+		this.context.popAnnotationMember();
+		super.endVisit(node);
 	}
 
 	@Override
