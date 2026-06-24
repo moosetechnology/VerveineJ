@@ -1047,6 +1047,20 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertFalse(notNativeMethod.getIsAbstract());
 		assertFalse(notNativeMethod.getAnnotationInstances().stream().anyMatch((annotation) -> annotation.toString().equals("Override")));
 	}
+	
+	/* Here are some tests to fix stubs duplications*/
+	@Test
+	public void testAbstractMapStubIsNotDuplicated(){
+		//the minimal list of files given by VVJ validator
+		parse(new String[]{
+			"src/test/resources/stub_test/abstract_map_bug/ReferenceMap.java",
+	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java",
+	        "src/test/resources/stub_test/abstract_map_bug/TestSynchronizedBuffer.java"
+	    });
+		Collection<Class> abstractMaps = entitiesNamed(Class.class, "AbstractMap");
+		//we should have one single stub
+		assertEquals(1,abstractMaps.size());
+	}
 }
 
 
