@@ -1053,11 +1053,18 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	public void testAbstractMapStubIsNotDuplicated(){
 		//the minimal list of files given by VVJ validator
 		parse(new String[]{
+			"-jdkMode", "-1.7",
 			"src/test/resources/stub_test/abstract_map_bug/ReferenceMap.java",
 	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java",
 	        "src/test/resources/stub_test/abstract_map_bug/TestSynchronizedBuffer.java"
 	    });
 		Collection<Class> abstractMaps = entitiesNamed(Class.class, "AbstractMap");
+		
+		//checking for stubs
+		if (!abstractMaps.isEmpty()) {
+			assertTrue("We should have stubs", abstractMaps.iterator().next().getIsStub());
+		}
+		
 		//we should have one single stub
 		assertEquals(1,abstractMaps.size());
 	}
