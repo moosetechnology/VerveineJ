@@ -1055,8 +1055,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		parse(new String[]{
 			"-jdkMode", "-1.7",
 			"src/test/resources/stub_test/abstract_map_bug/ReferenceMap.java",
-	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java",
-	        "src/test/resources/stub_test/abstract_map_bug/TestSynchronizedBuffer.java"
+	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java"
 	    });
 		Collection<Class> abstractMaps = entitiesNamed(Class.class, "AbstractMap");
 		
