@@ -1,7 +1,7 @@
-package same_name_stub;
+package same_name_stubs;
 
 public class UseSameName{
 	// we creating stubs in two subpackages
-	public same_name_stub.packageA.SameName variableA;
-	public same_name_stub.packageB.SameName variableB;
+	public same_name_stubs.packageA.SameName variableA;
+	public same_name_stubs.packageB.SameName variableB;
 }
