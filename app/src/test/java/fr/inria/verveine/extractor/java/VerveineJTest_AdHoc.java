@@ -1067,6 +1067,10 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		//we should have one single stub
 		assertEquals(1,abstractMaps.size());
 	}
-}
+	
+	@Test
+	public void testAbstractMapStubIsConservedIfCreatedInDifferentPackage(){
+	
+	}
 
 
