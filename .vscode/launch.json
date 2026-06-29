@@ -3,17 +3,6 @@
   "configurations": [
     {
       "type": "java",
-      "name": "VerveineJ debug duplicated stub",
-      "request": "launch",
-      "mainClass": "fr.inria.verveine.extractor.java.VerveineJMain",
-      "args": [
-        "/home/niwix/windows_to_linux/VerveineJ/app/src/test/resources/stub_test"
-      ],
-      "console": "internalConsole",
-      "projectName": "app"
-    },
-    {
-      "type": "java",
       "name": "VerveineJ User run",
       "request": "launch",
       "mainClass": "fr.inria.verveine.extractor.java.VerveineJMain",
