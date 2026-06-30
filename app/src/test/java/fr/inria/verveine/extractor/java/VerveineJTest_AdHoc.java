@@ -1069,8 +1069,32 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	}
 	
 	@Test
-	public void testAbstractMapStubIsConservedIfCreatedInDifferentPackage(){
-	
+	public void testSameNameStubsWithDifferentPackagesShouldNotBeMerged() {
+		parse(new String[] { 
+			"-jdkMode", "-1.7", 
+			"src/test/resources/stub_test/same_name_stubs/UseSameNameStubs.java"
+		});
+		
+		Collection<Class> sameNameStubs = entitiesNamed(Class.class, "SameName");
+		boolean foundPackageA = false;
+		boolean foundPackageB = false;
+		
+		assertEquals(2,sameNameStubs.size());
+		
+		//checking we have the 2 stubs in the 2 packages
+		for (Class stub : sameNameStubs) {
+			assertTrue(stub.getIsStub());
+			
+			String packageName = ((TNamedEntity)stub.getTypeContainer()).getName();
+
+			//we should find our 2 packages
+			if(packageName.equals("packageA")) foundPackageA = true;
+			if(packageName.equals("packageB")) foundPackageB = true;	
+		}
+		
+		assertTrue(foundPackageA);
+		assertTrue(foundPackageB);
 	}
+}
 
 
