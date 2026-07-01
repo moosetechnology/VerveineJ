@@ -2524,9 +2524,14 @@ public class EntityDictionary {
 	 * Creates or recovers a stub Famix Method
 	 * @param name of the method
 	 * @return the Famix Method
+	 * @throws IllegalStateException if strict mod is activated and we try to generate a stub
 	 */
 	public Method ensureFamixStubMethod(String name) {
-		return ensureFamixMethod(null, name, /*paramType*/null, /*returnType*/null, ensureFamixClassStubOwner(), /*modifiers*/0);
+		// // when strict mod is activated, we do not create stubs
+		if (this.options != null && this.options.isStrict()) {
+			throw new IllegalStateException("Strict mod: We can't create the stub '" + name + "' when strict mod is activated");
+		}
+		return ensureFamixMethod(null, name, /* paramType */null, /* returnType */null, ensureFamixClassStubOwner(),/* modifiers */0);
 	}
 
 	public void setAttributeModifiers(Attribute fmx, int mod) {
