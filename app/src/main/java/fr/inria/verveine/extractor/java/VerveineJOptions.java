@@ -478,9 +478,10 @@ public class VerveineJOptions {
 		jdtParser.setResolveBindings(true);
 		/**
 		 *  Incremental parsing should not activate Binding recovery because using this option with incremental parsing
-		 * will result in lot of stubs in the model that would have been resolved later
+		 * will result in lot of stubs in the model that would have been resolved later 
+		 * In strict mode, we also disable binding recovery to force failure on missing types/methods.
 		 * */
-		if (!incrementalParsing) {
+		if (!incrementalParsing && !isStrict) {
 			jdtParser.setBindingsRecovery(true);
 		}
 		jdtParser.setKind(ASTParser.K_COMPILATION_UNIT);
