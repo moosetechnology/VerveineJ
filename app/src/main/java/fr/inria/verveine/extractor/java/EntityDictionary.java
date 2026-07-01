@@ -858,14 +858,15 @@ public class EntityDictionary {
 	 * Creates or recovers the Famix Class that will own all stub methods (for which the real owner is unknown)
 	 *
 	 * @return a Famix class
+	 * @throws IllegalStateException if strict mod is activated and we try to generate a stub
 	 */
-	public Class ensureFamixClassStubOwner() throws IllegalStateException {
+	public Class ensureFamixClassStubOwner() {
 
 		// when strict mod is activated, we do not create stub container
-		if(this.options != null && this.options.isStrict()) {
+		if (this.options != null && this.options.isStrict()) {
 			throw new IllegalStateException("Strict mod: We can't create stubs when strict mod is activated");
 		}
-		
+
 		Class fmx = ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
 		if (fmx != null) {
 			fmx.setTypeContainer(ensureFamixPackageDefault());
