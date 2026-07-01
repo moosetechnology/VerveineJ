@@ -113,6 +113,11 @@ public class EntityDictionary {
 	 * Another dictionary to map a name to FAMIX Entities with this name
 	 */
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
+	
+	/**
+	 * The options passed to VerveineJ
+	 */
+	protected VerveineJOptions options;
 
 	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
@@ -132,6 +137,7 @@ public class EntityDictionary {
 		public ImplicitVariable super_iv;
 	}
 	
+	
 	/**
 	 * Result of utility methods for checking matching between two entities
 	 */
@@ -145,6 +151,23 @@ public class EntityDictionary {
 	 */
 	public EntityDictionary(Repository famixRepo) {
 			this.famixRepo = famixRepo;
+			
+			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
+			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
+			this.nameToEntity = new Hashtable<String,Collection<TNamedEntity>>();
+			this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
+			
+			if (! this.famixRepo.isEmpty()) {
+				recoverExistingRepository();
+			}
+		}
+	
+	/** Constructor taking a FAMIX repository and the options of VerveineJ
+	 * @param famixRepo
+	 */
+	public EntityDictionary(Repository famixRepo, VerveineJOptions options) {
+			this.famixRepo = famixRepo;
+			this.options = options;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
