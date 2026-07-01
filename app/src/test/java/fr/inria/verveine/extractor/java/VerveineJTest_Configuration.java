@@ -322,6 +322,8 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertThrows(IllegalArgumentException.class, () -> parser.configure(args));
 	}
 	
+	/*Here are some tests for the VerveineJ's strict mod*/
+	
 	@Test
 	public void testStrictModeIsFalseByDefault() {
 		VerveineJOptions options = new VerveineJOptions();
@@ -338,4 +340,15 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertTrue(options.isStrict());
 	}
 	
+	@Test
+	public void testEnsureFamixClassStubOwnerThrowsExceptionWhenStrictModIsActivated() {
+		String[] args = new String[] { "-strict" };
+
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(args);
+		
+		//with strict mod, create a stub should raise an exception
+		EntityDictionary dictionary = new EntityDictionary(repo,options);
+		assertThrows(IllegalStateException.class, () -> dictionary.ensureFamixClassStubOwner());
+	}
 }
