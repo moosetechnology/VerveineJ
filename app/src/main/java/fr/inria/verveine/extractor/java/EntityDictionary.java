@@ -859,12 +859,18 @@ public class EntityDictionary {
 	 *
 	 * @return a Famix class
 	 */
-	public Class ensureFamixClassStubOwner() {
-		Class fmx =  ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
-		if (fmx != null) {
-			fmx.setTypeContainer( ensureFamixPackageDefault());
+	public Class ensureFamixClassStubOwner() throws IllegalStateException {
+
+		// when strict mod is activated, we do not create stub container
+		if(this.options != null && this.options.isStrict()) {
+			throw new IllegalStateException("Strict mod: We can't create stubs when strict mod is activated");
 		}
-		ensureFamixInheritance(ensureFamixClassObject(), fmx, /*prev*/null, null);
+		
+		Class fmx = ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
+		if (fmx != null) {
+			fmx.setTypeContainer(ensureFamixPackageDefault());
+		}
+		ensureFamixInheritance(ensureFamixClassObject(), fmx, /* prev */null, null);
 
 		return fmx;
 	}
