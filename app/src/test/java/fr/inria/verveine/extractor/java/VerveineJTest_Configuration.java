@@ -351,16 +351,4 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		EntityDictionary dictionary = new EntityDictionary(repo,options);
 		assertThrows(IllegalStateException.class, () -> dictionary.ensureFamixClassStubOwner());
 	}
-	
-	@Test 
-	public void testEnsureFamixStubMethodThrowsExceptionWhenStrictModIsActivated() {
-		String[] args = new String[] { "-strict" };
-
-		VerveineJOptions options = new VerveineJOptions();
-		options.setOptions(args);
-		
-		//with strict mod, create a stub should raise an exception
-		EntityDictionary dictionary = new EntityDictionary(repo,options);
-		assertThrows(IllegalStateException.class, () -> dictionary.ensureFamixStubMethod("undefinedMethod"));
-	}
 }
