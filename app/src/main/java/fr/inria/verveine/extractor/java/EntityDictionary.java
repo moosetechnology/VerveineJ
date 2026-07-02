@@ -50,6 +50,7 @@ import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 import ch.akuhn.fame.Repository;
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 
@@ -862,9 +863,9 @@ public class EntityDictionary {
 	 */
 	public Class ensureFamixClassStubOwner() {
 
-		// when strict mod is activated, we do not create stub container
+		// when strict mode is activated, we do not create stub container
 		if (this.options != null && this.options.isStrict()) {
-			throw new IllegalStateException("Strict mod: We can't create stubs when strict mod is activated");
+			throw new VerveineJStrictModeException("Strict mode: We can't create stubs when strict mod is activated");
 		}
 
 		Class fmx = ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
@@ -2529,7 +2530,7 @@ public class EntityDictionary {
 	public Method ensureFamixStubMethod(String name) {
 		// // when strict mod is activated, we do not create stubs
 		if (this.options != null && this.options.isStrict()) {
-			throw new IllegalStateException("Strict mod: We can't create the stub '" + name + "' when strict mod is activated");
+			throw new VerveineJStrictModeException("Strict mode: We can't create the stub '" + name + "' when strict mod is activated");
 		}
 		return ensureFamixMethod(null, name, /* paramType */null, /* returnType */null, ensureFamixClassStubOwner(),/* modifiers */0);
 	}
