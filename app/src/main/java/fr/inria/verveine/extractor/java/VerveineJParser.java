@@ -2,6 +2,7 @@ package fr.inria.verveine.extractor.java;
 
 import ch.akuhn.fame.Repository;
 import ch.akuhn.fame.internal.RepositoryVisitor.UnknownElementError;
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
 import fr.inria.verveine.extractor.java.utils.Util;
 
 import org.eclipse.jdt.core.dom.AST;
@@ -78,9 +79,17 @@ public class VerveineJParser {
 					/*bindingKeys*/new String[0],
 					/*requestor*/req,
 					/*monitor*/null);
+			
+			/*detect hided exceptions*/
+			if(options.isStrict() && req.getStrictModeError() != null) {
+				throw req.getStrictModeError();
+			}
 		} catch (java.lang.IllegalStateException e) {
 			System.out.println("VerveineJ could not launch parser");
 			e.printStackTrace();
+		} catch (VerveineJStrictModeException e) {
+			System.out.println("Interrupting parser: " + e.getMessage());
+			throw e;
 		}
 
 		this.compressPackagesNames();
