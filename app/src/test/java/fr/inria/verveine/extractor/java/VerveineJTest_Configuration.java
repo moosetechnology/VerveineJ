@@ -7,6 +7,8 @@ import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
+
 //import junit.framework.Assert;
 
 import java.io.File;
@@ -349,7 +351,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		
 		//with strict mod, create a stub should raise an exception
 		EntityDictionary dictionary = new EntityDictionary(repo,options);
-		assertThrows(IllegalStateException.class, () -> dictionary.ensureFamixClassStubOwner());
+		assertThrows(VerveineJStrictModeException.class, () -> dictionary.ensureFamixClassStubOwner());
 	}
 	
 	@Test 
@@ -361,7 +363,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		
 		//with strict mod, create a stub should raise an exception
 		EntityDictionary dictionary = new EntityDictionary(repo,options);
-		assertThrows(IllegalStateException.class, () -> dictionary.ensureFamixStubMethod("undefinedMethod"));
+		assertThrows(VerveineJStrictModeException.class, () -> dictionary.ensureFamixStubMethod("undefinedMethod"));
 	}
 	
 	@Test 
@@ -383,7 +385,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 	
 	@Test
 	public void testParserStopsOnMissingDependencyWhenStrictModIsActivated() {
-		assertThrows(IllegalStateException.class, () -> {
+		assertThrows(VerveineJStrictModeException.class, () -> {
 			parse(new String[] { "-strict", "src/test/resources/strict_mode/MissingDependency.java" });
 		});
 	}
