@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 import ch.akuhn.fame.Repository;
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorClassMethodDef;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorComments;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorPackageDef;
@@ -19,6 +20,8 @@ public class FamixRequestor extends FileASTRequestor {
 	protected EntityDictionary famixDictionnary;
 
 	protected VerveineJOptions options;
+	
+	private VerveineJStrictModeException strictModeError = null;
 	
 	/**
 	 * Maps the arguments (file names or dir names) to their absolute path (well actually it is the other way around)
@@ -32,6 +35,14 @@ public class FamixRequestor extends FileASTRequestor {
 		this.options = options;
 		initFileMaps(options);
 		this.famixDictionnary = new EntityDictionary(famixRepo,options);
+	}
+	
+	/**
+	 * Getter for the strict mode error
+	 * @return the strict mode error
+	 */
+	public VerveineJStrictModeException getStrictModeError() {
+		return strictModeError;
 	}
 
 	protected void initFileMaps(VerveineJOptions options) {
