@@ -59,10 +59,6 @@ public class FamixRequestor extends FileASTRequestor {
 	}
 
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
-		// if we already got an error, we stop the execution
-		if (options.isStrict() && strictModeError != null) {
-			return;
-		}
 		String path = relativePath(sourceFilePath);
 		System.out.println("Processing file: " + path);
 
