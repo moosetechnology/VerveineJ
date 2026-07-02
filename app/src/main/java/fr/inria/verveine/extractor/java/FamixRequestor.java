@@ -59,6 +59,10 @@ public class FamixRequestor extends FileASTRequestor {
 	}
 
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
+		// if we already got an error, we stop the execution
+		if (options.isStrict() && strictModeError != null) {
+			return;
+		}
 		String path = relativePath(sourceFilePath);
 		System.out.println("Processing file: " + path);
 
@@ -66,7 +70,7 @@ public class FamixRequestor extends FileASTRequestor {
 		try {
 			ast.accept(new VisitorPackageDef(famixDictionnary, options));
 			ast.accept(new VisitorClassMethodDef(famixDictionnary, options));
-			
+
 			ast.accept(new VisitorVarsDef(famixDictionnary, options));
 			ast.accept(new VisitorComments(famixDictionnary, options));
 
@@ -77,15 +81,19 @@ public class FamixRequestor extends FileASTRequestor {
 			ast.accept(new VisitorAnnotationRef(famixDictionnary, options));
 			ast.accept(new VisitorExceptionRef(famixDictionnary, options));
 
-		} catch (Exception err) {
-			
-			if (options.isStrict())
-			{
+		} catch (VerveineJStrictModeException err) {
+			if (options.isStrict()) {
+				this.strictModeError = err;
 				throw err;
 			}
-			
-			err.printStackTrace();
-			System.err.println("*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
+			logForVisitorError(err, path);
+
+		} catch (Exception err) {
+			if (options.isStrict()) {
+				this.strictModeError = new VerveineJStrictModeException("Error of parsing when using strict mode");
+				throw this.strictModeError;
+			}
+			logForVisitorError(err, path);
 		}
 	}
 
@@ -141,5 +149,16 @@ public class FamixRequestor extends FileASTRequestor {
 				file = file.getParentFile();
 		}
 		return fullPath;
+	}
+	
+	/**
+	 * Utilitary method to print the stack trace
+	 * @param err the error 
+	 * @param path the path
+	 */
+	private void logForVisitorError(Exception err, String path) {
+		err.printStackTrace();
+		System.err.println(
+				"*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
 	}
 }
