@@ -380,4 +380,11 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertEquals(EntityDictionary.STUB_METHOD_CONTAINER_NAME,stubClass.getName());
 		assertEquals("undefinedMethod",stubMethod.getName());
 	}
+	
+	@Test
+	public void testParserStopsOnMissingDependencyWhenStrictModIsActivated() {
+		assertThrows(IllegalStateException.class, () -> {
+			parse(new String[] { "-strict", "src/test/resources/strict_mode/MissingDependency.java" });
+		});
+	}
 }
