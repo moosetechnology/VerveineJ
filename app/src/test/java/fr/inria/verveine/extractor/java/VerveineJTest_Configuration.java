@@ -408,4 +408,11 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertFalse(options.isBindingRecoveryActivated());
 	}
 	
+	@Test
+	public void testBindingRecoveryDeactivatedInStrictMode() {
+		// we are in strict mode	
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(new String[]{"-strict"}); 
+		assertFalse(options.isBindingRecoveryActivated());
+	}
 }
