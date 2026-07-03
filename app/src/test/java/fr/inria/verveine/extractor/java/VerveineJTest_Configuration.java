@@ -400,4 +400,12 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertTrue(options.isBindingRecoveryActivated());
 	}
 	
+	@Test
+	public void testBindingRecoveryDeactivatedInIncrementalMode() {
+		// we are in incremental mode	
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(new String[]{"-i"}); 
+		assertFalse(options.isBindingRecoveryActivated());
+	}
+	
 }
