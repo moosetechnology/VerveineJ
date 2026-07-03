@@ -481,7 +481,7 @@ public class VerveineJOptions {
 		 * will result in lot of stubs in the model that would have been resolved later 
 		 * In strict mode, we also disable binding recovery to force failure on missing types/methods.
 		 * */
-		if (!incrementalParsing && !isStrict) {
+		if (isBindingRecoveryActivated()) {
 			jdtParser.setBindingsRecovery(true);
 		}
 		jdtParser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -668,5 +668,14 @@ public class VerveineJOptions {
 	public boolean isStrict() {
 		return isStrict;
 	}
-
+	
+	/**
+	 * Define if the recovery binding should be activated
+	 * This option is activated by default but:
+	 * disabled when incremental mode is on (to not have fake stubs) and
+	 * when strict mode is on (to crash of dependency problems).
+	 */
+	public boolean isBindingRecoveryActivated() {
+		return !incrementalParsing && !isStrict;
+	}
 }
