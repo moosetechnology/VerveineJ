@@ -389,4 +389,15 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 			parse(new String[] { "-strict", "src/test/resources/strict_mode/MissingDependency.java" });
 		});
 	}
+	
+	/*some test about recovery binding*/
+	
+	@Test
+	public void testBindingRecoveryActivatedByDefault() {
+		// we are not in strict mode , and not in incremental mode	
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(new String[]{}); 
+		assertTrue(options.isBindingRecoveryActivated());
+	}
+	
 }
