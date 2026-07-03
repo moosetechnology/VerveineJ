@@ -676,6 +676,7 @@ public class VerveineJOptions {
 	 * when strict mode is on (to crash of dependency problems).
 	 */
 	public boolean isBindingRecoveryActivated() {
-		return !incrementalParsing && !isStrict;
+		/* TODO see if the binding recovery mode should be unabled with strict mode	*/
+		return !incrementalParsing /*&& !isStrict*/;
 	}
 }
