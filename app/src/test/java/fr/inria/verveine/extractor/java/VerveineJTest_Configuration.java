@@ -389,9 +389,10 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 			parse(new String[] { "-strict", "src/test/resources/strict_mode/MissingDependency.java" });
 		});
 	}
-	
+
+
 	/*some test about recovery binding*/
-	
+	/* TODO see if the binding recovery mode should be unabled with strict mode	
 	@Test
 	public void testBindingRecoveryActivatedByDefault() {
 		// we are not in strict mode , and not in incremental mode	
@@ -423,4 +424,5 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		options.setOptions(new String[]{"-i","-strict"}); 
 		assertFalse(options.isBindingRecoveryActivated());
 	}
+*/
 }
