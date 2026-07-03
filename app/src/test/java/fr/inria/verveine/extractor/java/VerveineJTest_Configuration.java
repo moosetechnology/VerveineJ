@@ -415,4 +415,12 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		options.setOptions(new String[]{"-strict"}); 
 		assertFalse(options.isBindingRecoveryActivated());
 	}
+	
+	@Test
+	public void testBindingRecoveryDeactivatedInStrictModeAndIncrementalMode() {
+		// we are in strict mode	
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(new String[]{"-i","-strict"}); 
+		assertFalse(options.isBindingRecoveryActivated());
+	}
 }
