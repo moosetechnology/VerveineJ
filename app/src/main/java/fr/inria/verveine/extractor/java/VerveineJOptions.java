@@ -54,7 +54,7 @@ public class VerveineJOptions {
 	 */
 	public final static String JSON_OUTPUT_FORMAT = "JSON";
 
-	public static final String DEFAULT_CODE_VERSION = JavaCore.VERSION_9;
+	public static final String DEFAULT_CODE_VERSION = JavaCore.VERSION_23;
 
 	/**
 	 * List of java version option from java 1.1 to java 23 argument
