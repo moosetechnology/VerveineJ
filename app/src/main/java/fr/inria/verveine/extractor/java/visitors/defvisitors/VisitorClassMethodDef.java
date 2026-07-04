@@ -169,20 +169,17 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	 */
 	@Override
 	public boolean visit(RecordDeclaration node) {
+		//System.err.println("TRACE, Visiting RecordDeclaration: "+node.getName().getIdentifier());
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
-System.err.println("TRACE, Visiting RecordDeclaration: "+node.getName().getIdentifier());
+
 		@SuppressWarnings("unchecked")
 		List<TypeParameter> typeParameters = (List<TypeParameter>) node.typeParameters();
 
-		org.moosetechnology.model.famix.famixjavaentities.Class fmx = dico.ensureFamixClass(
-				bnd,
-				/*name*/node.getName().getIdentifier(),
-				/*owner*/context.top(),
-				/*isGeneric*/typeParameters.size()>0,
-				node.getModifiers());
+		org.moosetechnology.model.famix.famixjavaentities.Class fmx = dico.ensureFamixClass( bnd, /*name*/node.getName().getIdentifier(), /*owner*/context.top(), /*isGeneric*/typeParameters.size()>0, node.getModifiers());
 
 		if (fmx != null) {
 			Util.recursivelySetIsStub(fmx, false);
+			fmx.setIsFinal(true);
 
 			// if it is a generic and some parameterizedTypes were created for it,
 			// they are marked as stub which is not right
@@ -191,6 +188,11 @@ System.err.println("TRACE, Visiting RecordDeclaration: "+node.getName().getIdent
 						node.getName().getIdentifier())) {
 					candidate.setIsStub(false);
 				}
+			}
+
+			// create the default members for a record declaration: getters
+			for (SingleVariableDeclaration field : (List<SingleVariableDeclaration>)node.recordComponents()) {
+				dico.ensureFamixMethod(/*bnd*/null, /*name*/field.getName().getIdentifier(), /*paramTypes*/null, /*retType*/null, /*owner*/fmx, /*modifiers*/0);
 			}
 
 			this.context.pushType(fmx);
@@ -348,7 +350,7 @@ System.err.println("TRACE, Visiting RecordDeclaration: "+node.getName().getIdent
 				node.getName().getIdentifier(), 
 				paramTypes, 
 				/*returnType*/null, 
-				(TWithMethods) /*owner*/context.topType(), 
+				/*owner*/(TWithMethods)context.topType(), 
 				node.getModifiers());
 
 		if (fmx != null) {

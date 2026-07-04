@@ -102,7 +102,7 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 	 * Can only be a class or interface declaration
 	 * Local type: see comment of visit(ClassInstanceCreation node)
 	 */
-	protected TType visitTypeDeclaration(TypeDeclaration node) {
+	protected TType visitTypeDeclaration(AbstractTypeDeclaration node) {
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
 		TType fmx;
 		if(bnd.isInterface()) {
@@ -118,11 +118,12 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		return fmx;
 	}
 
-	protected void endVisitTypeDeclaration(TypeDeclaration node) {
+	protected void endVisitTypeDeclaration(AbstractTypeDeclaration node) {
 		if (context.topType() instanceof org.moosetechnology.model.famix.famixjavaentities.Class || context.topType() instanceof Interface || context.topType() instanceof Exception) {
 			context.pop();
 		}
-		super.endVisit(node);
+		// Note: There is no super.endVisit(AbstractTypeDeclaration) ?!
+		super.endVisit( (TypeDeclaration)node);
 	}
 
 	/**
