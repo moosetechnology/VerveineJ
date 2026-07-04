@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
  * @since November 25, 2010
  *
  */
-public class VerveineJTest_JWSBasic extends VerveineJTest_Basic {
+public class VerveineJTest_JWSBasic extends VerveineJTestAbstract {
 
 	@Test
 	public void testBelongsTo() {

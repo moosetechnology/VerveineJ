@@ -26,14 +26,13 @@ import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
 
-import javax.smartcardio.Card;
 
 /**
  * @author Nicolas Anquetil
  * @since November 25, 2010
  *
  */
-public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
+public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 
 	protected VerveineJParser parser;
 
@@ -369,7 +368,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	@Test
 	public void testImplicitVarType() {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
-
+		/* 2026-07-04: VerveineJ now declares the inferred type for implicit variables...
 		Type varType = detectFamixElement(Type.class, EntityDictionary.IMPLICIT_VAR_TYPE_NAME);
 		assertNotNull(varType);
 
@@ -377,6 +376,11 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, incomingTypings.size());
 
 		assertEquals("str", ((TNamedEntity)firstElt(incomingTypings).getTypedEntity()).getName());
+		*/
+		LocalVariable var = detectFamixElement(LocalVariable.class, "str");
+		assertNotNull(var);
+		assertNotNull( var.getDeclaredType());
+		assertEquals("String", ((TNamedEntity) var.getDeclaredType()).getName());
 	}
 
 	@Test

@@ -17,7 +17,7 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class VerveineJTest_Configuration extends VerveineJTest_Basic {
+public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 
 	private static final String OTHER_JSON_FILE = "other_output.json";
 	private static final String MSE_OUTPUT_FILE = "output.mse";

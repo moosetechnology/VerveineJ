@@ -12,7 +12,7 @@ import java.io.File;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class VerveineJTest_ClassRef extends VerveineJTest_Basic {
+public class VerveineJTest_ClassRef extends VerveineJTestAbstract {
 
     /**
      * @throws Exception

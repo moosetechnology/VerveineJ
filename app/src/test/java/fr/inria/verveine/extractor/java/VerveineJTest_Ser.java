@@ -10,7 +10,7 @@ import org.moosetechnology.model.famix.famixtraits.TMethod;
 
 import static org.junit.Assert.*;
 
-public class VerveineJTest_Ser extends VerveineJTest_Basic {
+public class VerveineJTest_Ser extends VerveineJTestAbstract {
 
     /**
      * @throws java.lang.Exception
