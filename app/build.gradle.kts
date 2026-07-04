@@ -9,7 +9,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
     jacoco
-    id("com.gradleup.shadow") version "8.3.3"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 
 repositories {
@@ -35,7 +35,7 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("org.moosetechnology:fame-java:v1.0.5")
-    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.41.0")
+    implementation("org.eclipse.jdt:org.eclipse.jdt.core:3.46.0")
     implementation("commons-codec:commons-codec:1.13")
 
     implementation(fileTree("lib") { include("*.jar") })
@@ -44,7 +44,7 @@ dependencies {
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
