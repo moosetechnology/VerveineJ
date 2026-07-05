@@ -190,11 +190,6 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 				}
 			}
 
-			// create the default members for a record declaration: getters
-			for (SingleVariableDeclaration field : (List<SingleVariableDeclaration>)node.recordComponents()) {
-				dico.ensureFamixMethod(/*bnd*/null, /*name*/field.getName().getIdentifier(), /*paramTypes*/null, /*retType*/null, /*owner*/fmx, /*modifiers*/0);
-			}
-
 			this.context.pushType(fmx);
 
 			if (options.withAnchors()) {
@@ -377,16 +372,6 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 			this.context.pushMethod(null);
 			return false;
 		}
-	}
-
-	private String computeHashForMethodBody(MethodDeclaration node) {
-		Block body = node.getBody();
-		if ( (body == null) || (md5 == null) ) {
-            return "0";
-        }
-        byte[] bytes = node.getBody().toString().replaceAll("\\r|\\n|\\t", "").getBytes();
-
-       return DigestUtils.md5Hex(bytes).toUpperCase();
 	}
 
 	@Override
@@ -625,8 +610,18 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
 	// UTILITY METHODS
 
+	private String computeHashForMethodBody(MethodDeclaration node) {
+		Block body = node.getBody();
+		if ( (body == null) || (md5 == null) ) {
+            return "0";
+        }
+        byte[] bytes = node.getBody().toString().replaceAll("\\r|\\n|\\t", "").getBytes();
+
+       return DigestUtils.md5Hex(bytes).toUpperCase();
+	}
+
     /**
-     * REnsures the creation of the fake method: {@link EntityDictionary#INIT_BLOCK_NAME}
+     * Ensures the creation of the fake method: {@link EntityDictionary#INIT_BLOCK_NAME}
      *
      * Used in the case of instance/class initializer and initializing expressions of FieldDeclarations and EnumConstantDeclarations
 	 */
