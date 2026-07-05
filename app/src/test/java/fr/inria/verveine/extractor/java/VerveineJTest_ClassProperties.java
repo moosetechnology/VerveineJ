@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 
-public class VerveineJTest_ClassProperties extends VerveineJTest_Basic {
+public class VerveineJTest_ClassProperties extends VerveineJTestAbstract {
 
 	@Test
 	public void testImplicitAbstractInterfaceMethodIsAbstract() {

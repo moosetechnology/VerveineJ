@@ -54,12 +54,15 @@ public class Util {
 		}
 	}
 
-	public static  <T extends TCanBeStub & TNamedEntity> void recursivelySetIsStub(T fmx, boolean b) {
+	/**
+	 * sets <code>fmx</code> isStub property to <code>isStub</code> and goes up recusively to all parent entities
+	 */
+	public static  <T extends TCanBeStub & TNamedEntity> void recursivelySetIsStub(T fmx, boolean isStub) {
 		TCanBeStub owner;
-		fmx.setIsStub(b);
+		fmx.setIsStub(isStub);
 		owner = getOwner(fmx);
-		if ((owner != null) && (owner.getIsStub() != b)) {
-			recursivelySetIsStub((T) owner, b);
+		if ((owner != null) && (owner.getIsStub() != isStub)) {
+			recursivelySetIsStub((T) owner, isStub);
 		}
 
 	}

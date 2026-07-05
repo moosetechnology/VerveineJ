@@ -11,7 +11,7 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class VerveineJTest_ImplicitVarBinding extends VerveineJTest_Basic {
+public class VerveineJTest_ImplicitVarBinding extends VerveineJTestAbstract {
 
     private Method mth1;
     private Method mth2;

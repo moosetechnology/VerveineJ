@@ -16,7 +16,7 @@ import org.moosetechnology.model.famix.famixjavaentities.PrimitiveType;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 
-public class VerveineJTest_Initializers extends VerveineJTest_Basic {
+public class VerveineJTest_Initializers extends VerveineJTestAbstract {
 
    	private void parse(String path) {
    		parse(new String[] {path});

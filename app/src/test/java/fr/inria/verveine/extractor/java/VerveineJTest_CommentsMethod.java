@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
+public class VerveineJTest_CommentsMethod extends VerveineJTestAbstract {
 
     /**
      * @throws Exception

@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * It also defines common tests that we may want to use in sub-classes
  * @author anquetil
  */
-public abstract class VerveineJTest_Basic {
+public abstract class VerveineJTestAbstract {
 
 	protected static final String DEFAULT_OUTPUT_FILE = "output.json";
 

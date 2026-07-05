@@ -15,7 +15,7 @@ import org.moosetechnology.model.famix.famixtraits.TInvocable;
 import org.moosetechnology.model.famix.famixtraits.TInvocation;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 
-public class VerveineJTest_JDKImport extends VerveineJTest_Basic {
+public class VerveineJTest_JDKImport extends VerveineJTestAbstract {
 
 	@Before
 	public void setUp() throws Exception {

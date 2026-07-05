@@ -4,14 +4,8 @@ import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 
-import org.apache.commons.math3.random.CorrelatedRandomVectorGenerator;
 import org.eclipse.jdt.core.dom.*;
-import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
-import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
-import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
-import org.moosetechnology.model.famix.famixtraits.TParametricEntity;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 

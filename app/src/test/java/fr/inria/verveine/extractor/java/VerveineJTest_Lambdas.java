@@ -12,7 +12,7 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class VerveineJTest_Lambdas extends VerveineJTest_Basic {
+public class VerveineJTest_Lambdas extends VerveineJTestAbstract {
 
     /**
      * @throws java.lang.Exception
