@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import java.io.File;
@@ -15,7 +14,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 public class VerveineJTest_JavaNewFeature extends VerveineJTestAbstract {
 
@@ -45,29 +43,16 @@ public class VerveineJTest_JavaNewFeature extends VerveineJTestAbstract {
      }
 
     @Test
-    public void testRecordsHasGetterMethods() {
+    public void testRecordConstructor() {
 		parse(new String[] {"src/test/resources/java_new_features/ARecord.java"});
 
         Class clazz = detectFamixElement(Class.class, "ARecord");
         assertNotNull(clazz);
 
-        assertEquals(3, clazz.numberOfMethods());  // getters for the 2 attributes + constructor
-        for (TMethod method : clazz.getMethods()) {
-
-            switch (method.getName()) {
-                case "name":
-                    assertTrue( ((Method) method).getIsStub());
-                    break;
-                case "address":
-                    assertTrue( ((Method) method).getIsStub());
-                    break;
-                case "ARecord":
-                     assertFalse( ((Method) method).getIsStub());
-                   break;
-                default:
-                    fail("Unexpected method " + method.getName());
-            }
-        }
+        assertEquals(1, clazz.numberOfMethods());
+        Method constructor = (Method) firstElt( clazz.getMethods());
+        assertEquals("ARecord", constructor.getName());
+        assertFalse( ((Method) constructor).getIsStub());
     }
 
     @Test
