@@ -4,6 +4,7 @@ import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
+import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
@@ -69,7 +70,7 @@ import java.util.List;
  * But many other things are also SimpleName nodes (ex: name of an invoked method)
  * So we need to differentiate them. The choice has been made to do this in the parent nodes of the SimpleName nodes
  */
-public class VisitorAccessRef extends AbstractRefVisitor {
+public class VisitorAccessRef extends GetVisitedEntityAbstractVisitor {
 
 	/**
 	 * Whether a variable access is lhs (write) or not

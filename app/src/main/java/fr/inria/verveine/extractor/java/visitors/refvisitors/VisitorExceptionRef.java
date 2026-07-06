@@ -15,12 +15,13 @@ import org.moosetechnology.model.famix.famixtraits.TTypedEntity;
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
+import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 
 /** A visitor to record exceptions declared/thrown/caught.<br>
  * It is simpler than the other ref visitors because we only need to worry about methods
  * @author anquetil
  */
-public class VisitorExceptionRef extends AbstractRefVisitor {
+public class VisitorExceptionRef extends GetVisitedEntityAbstractVisitor {
 
     public VisitorExceptionRef(EntityDictionary dico, VerveineJOptions options) {
         super(dico, options);
@@ -62,7 +63,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 		Method fmx = visitMethodDeclaration(node);
 		if (fmx != null) {
 		    for (Type excep : (List<Type>) node.thrownExceptionTypes()) {
-		    	TThrowable excepFmx =  dico.asException(this.referredType(excep, (ContainerEntity) context.topType(), true, true));
+		    	TThrowable excepFmx =  dico.asException(dico.referredType(excep, (ContainerEntity) context.topType(), true, true));
 		    	dico.createFamixDeclaredException(fmx,excepFmx);
             }
 			return super.visit(node);
@@ -95,7 +96,7 @@ public class VisitorExceptionRef extends AbstractRefVisitor {
 
         exceptTypeBnd = node.getExpression().resolveTypeBinding();
         if ( (exceptTypeBnd != null) && (! exceptTypeBnd.getQualifiedName().equals("java.lang.Object")) ) {
-        	thrownExceptionType = this.referredType(exceptTypeBnd, (TNamedEntity) context.topType(), true);
+        	thrownExceptionType = dico.referredType(exceptTypeBnd, (TNamedEntity) context.topType());
         }
 
         if (thrownExceptionType == null) {

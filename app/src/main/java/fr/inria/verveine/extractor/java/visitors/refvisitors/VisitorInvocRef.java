@@ -5,6 +5,8 @@ import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
 import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
+import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
+
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.*;
@@ -17,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class VisitorInvocRef extends AbstractRefVisitor {
+public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 
 	/**
 	 * Useful to keep the FamixType created in the specific case of "new
@@ -97,11 +99,11 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			typName = fmx.getName();
 		} else {
 			Type clazz = node.getType();
-			fmx = referredType(clazz, (ContainerEntity) context.top(), true);
+			fmx = dico.referredType(clazz, (ContainerEntity) context.top(), true);
 
 			// create an invocation to the constructor
 			if (fmx == null) {
-				typName = findTypeName(clazz);
+				typName = dico.findTypeName(clazz);
 			} else {
 				typName = fmx.getName();
 			}
@@ -636,7 +638,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		// ((type)expr).msg()
 		if (NodeTypeChecker.isCastExpression(expr)) {
 			Type tcast = ((CastExpression) expr).getType();
-			return referredType(tcast, (ContainerEntity) this.context.top(), true);
+			return dico.referredType(tcast, (ContainerEntity) this.context.top(), true);
 		}
 
 		// new Class().msg()
@@ -669,7 +671,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		else if (NodeTypeChecker.isSuperMethodInvocation(expr)) {
 			IMethodBinding superBnd = ((SuperMethodInvocation) expr).resolveMethodBinding();
 			if (superBnd != null) {
-				return this.referredType(superBnd.getReturnType(), (ContainerEntity) context.topType(), true);
+				return dico.referredType(superBnd.getReturnType(), (ContainerEntity) context.topType());
 			} else {
 				return null;
 			}
