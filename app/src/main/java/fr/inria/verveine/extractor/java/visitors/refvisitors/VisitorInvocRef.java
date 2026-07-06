@@ -269,6 +269,14 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 		return super.visit(node);
 	}
 
+	public boolean visit(ExpressionMethodReference node) {
+		IMethodBinding bnd = node.resolveMethodBinding();
+		Expression callingExpr = node.getExpression();
+
+		methodInvocation(bnd, node.getName().getFullyQualifiedName(),null, getInvokedMethodOwner(callingExpr, null), null);
+		return super.visit(node);
+	}
+
 	@SuppressWarnings("unchecked")
 	public boolean visit(SuperMethodInvocation node) {
 		//System.err.println("visit(SuperMethodInvocation) ");
@@ -665,6 +673,11 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 		else if (NodeTypeChecker.isStringLiteral(expr)) {
 			return dico.ensureFamixType(/* binding */null, "String", dico.ensureFamixPackageJavaLang(null),
 					/* context */null, EntityDictionary.UNKNOWN_MODIFIERS); // creating FamixClass java.lang.String
+		}
+
+		// this.msg() occurs for example with a MethodReference: 'this::msg'
+		else if (NodeTypeChecker.isThisExpression(expr)) {
+			return context.topType();
 		}
 
 		// super.msg1().msg()
