@@ -190,7 +190,7 @@ public abstract class VerveineJTestAbstract {
     }
 
 	protected <T> T firstElt(Collection<T> coll) {
-		return coll.iterator().next();
+		return elementAt(coll, 0);
 	}
 	
 	protected <T> T elementAt(Collection<T> coll, int pos) {
