@@ -246,19 +246,6 @@ public class VerveineJTest_CommentsMethod extends VerveineJTestAbstract {
     }
 
     @Test
-    public void testClassCommentCloseToConstructor() {
-        parse(new String[] { "src/test/resources/comments/ClassCommentCloseToConstructor.java" });
-
-        Method mth = detectFamixElement(Method.class, "ClassCommentCloseToConstructor");
-        assertNotNull(mth);
-        assertNull(mth.getComments());
-
-        Collection<Comment> cmts = entitiesOfType(Comment.class);
-        assertEquals(1, cmts.size());
-        assertEquals( Class.class, firstElt(cmts).getCommentedEntity().getClass());
-     }
-
-    @Test
     public void testAnnotationMemberContextIsPoppedBeforeNestedEnum() {
         parse(new String[] { "src/test/resources/comments/AnnotationWithNestedEnum.java" });
 

@@ -4,11 +4,13 @@ package fr.inria.verveine.extractor.java;
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixjavaentities.Comment;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import java.io.File;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -73,6 +75,23 @@ public class VerveineJTest_JavaNewFeature extends VerveineJTestAbstract {
             assertTrue( "Attribute " + entityName + " is not final", ((org.moosetechnology.model.famix.famixjavaentities.Attribute) att).getIsFinal());
         }
     }
+
+    @Test
+    public void testRecordComment() {
+        parse(new String[] { "src/test/resources/java_new_features/ARecord.java" });
+
+        Collection<Comment> cmts = entitiesOfType(Comment.class);
+        assertEquals(1, cmts.size());
+        assertEquals( Class.class, firstElt(cmts).getCommentedEntity().getClass());
+
+        Class clazz = detectFamixElement(Class.class, "ARecord");
+        assertNotNull(clazz);
+        assertEquals(1, clazz.getComments().size());
+
+        Method mth = detectFamixElement(Method.class, "ARecord");
+        assertNotNull(mth);
+        assertEquals(0, mth.getComments().size());
+     }
 
     @Test
     public void testColonColonCreatesInvocation() {
