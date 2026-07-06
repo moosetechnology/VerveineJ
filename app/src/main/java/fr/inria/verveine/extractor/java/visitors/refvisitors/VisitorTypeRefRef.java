@@ -10,8 +10,9 @@ import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
+import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 
-public class VisitorTypeRefRef extends AbstractRefVisitor {
+public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 
     /**
      * Global variable indicating whether a name could be a typeReference
@@ -213,7 +214,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	}
 
 	public boolean visit(InstanceofExpression node) {
-		TType fmx = referredType(node.getRightOperand(), (ContainerEntity) context.top(), true);
+		TType fmx = dico.referredType(node.getRightOperand(), (ContainerEntity) context.top(), true);
 		addReference( node, fmx, node.resolveTypeBinding());
 		return super.visit(node);
 	}
@@ -346,7 +347,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	    if (this.searchTypeRef) {
 			IBinding bnd = node.resolveBinding();
 			if ((bnd != null) && (bnd.getKind() == IBinding.TYPE)) {
-				org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referredType((ITypeBinding) bnd, (ContainerEntity) context.top(), !((ITypeBinding) bnd).isEnum());
+				org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) dico.referredType((ITypeBinding) bnd, (ContainerEntity) context.top());
 				Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference(), (ITypeBinding) bnd);
 				context.setLastReference(ref);
 				if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {
@@ -367,7 +368,7 @@ public class VisitorTypeRefRef extends AbstractRefVisitor {
 	public boolean visit(CastExpression node) {
 		ITypeBinding bnd = node.getType().resolveBinding();
 		if (bnd != null) {
-			org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) referredType(bnd, null, !bnd.isEnum());
+			org.moosetechnology.model.famix.famixtraits.TType referred = (org.moosetechnology.model.famix.famixtraits.TType) dico.referredType(bnd, null);
 			Reference ref = dico.addFamixReference((Method) context.top(), referred, context.getLastReference(), bnd);
 			context.setLastReference(ref);
 			if ((options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) && (ref != null) ) {

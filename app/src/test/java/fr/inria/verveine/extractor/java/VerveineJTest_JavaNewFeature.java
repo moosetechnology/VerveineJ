@@ -74,4 +74,13 @@ public class VerveineJTest_JavaNewFeature extends VerveineJTestAbstract {
         }
     }
 
+    @Test
+    public void testColonColonCreatesInvocation() {
+		parse(new String[] {"src/test/resources/java_new_features/ColonColon.java"});
+
+        Method meth = detectFamixElement(Method.class, "printIt");
+        assertNotNull(meth);
+        assertEquals(1, meth.getIncomingInvocations().size());
+    }
+
 }

@@ -5,6 +5,8 @@ import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
 import fr.inria.verveine.extractor.java.utils.StubBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
+import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
+
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.*;
@@ -17,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class VisitorInvocRef extends AbstractRefVisitor {
+public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 
 	/**
 	 * Useful to keep the FamixType created in the specific case of "new
@@ -97,11 +99,11 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			typName = fmx.getName();
 		} else {
 			Type clazz = node.getType();
-			fmx = referredType(clazz, (ContainerEntity) context.top(), true);
+			fmx = dico.referredType(clazz, (ContainerEntity) context.top(), true);
 
 			// create an invocation to the constructor
 			if (fmx == null) {
-				typName = findTypeName(clazz);
+				typName = dico.findTypeName(clazz);
 			} else {
 				typName = fmx.getName();
 			}
@@ -264,6 +266,14 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 			dico.addSourceAnchor(lastInvocation, node);
 		}
 
+		return super.visit(node);
+	}
+
+	public boolean visit(ExpressionMethodReference node) {
+		IMethodBinding bnd = node.resolveMethodBinding();
+		Expression callingExpr = node.getExpression();
+
+		methodInvocation(bnd, node.getName().getFullyQualifiedName(),null, getInvokedMethodOwner(callingExpr, null), null);
 		return super.visit(node);
 	}
 
@@ -636,7 +646,7 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 		// ((type)expr).msg()
 		if (NodeTypeChecker.isCastExpression(expr)) {
 			Type tcast = ((CastExpression) expr).getType();
-			return referredType(tcast, (ContainerEntity) this.context.top(), true);
+			return dico.referredType(tcast, (ContainerEntity) this.context.top(), true);
 		}
 
 		// new Class().msg()
@@ -665,11 +675,16 @@ public class VisitorInvocRef extends AbstractRefVisitor {
 					/* context */null, EntityDictionary.UNKNOWN_MODIFIERS); // creating FamixClass java.lang.String
 		}
 
+		// this.msg() occurs for example with a MethodReference: 'this::msg'
+		else if (NodeTypeChecker.isThisExpression(expr)) {
+			return context.topType();
+		}
+
 		// super.msg1().msg()
 		else if (NodeTypeChecker.isSuperMethodInvocation(expr)) {
 			IMethodBinding superBnd = ((SuperMethodInvocation) expr).resolveMethodBinding();
 			if (superBnd != null) {
-				return this.referredType(superBnd.getReturnType(), (ContainerEntity) context.topType(), true);
+				return dico.referredType(superBnd.getReturnType(), (ContainerEntity) context.topType());
 			} else {
 				return null;
 			}
