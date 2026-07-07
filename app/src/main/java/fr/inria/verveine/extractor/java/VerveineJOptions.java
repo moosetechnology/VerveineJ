@@ -452,6 +452,7 @@ public class VerveineJOptions {
 		System.err.println("      [-sysLibPath <path-to-runtime-jar>] path to the system library for JDT to resolve native Java binding in the parsed code");
 		System.err.println("      									  By default, JDT will collect the library used to execute VVJ (unless the option -jdkMode is active).");
 		System.err.println("      <files-to-parse>|<dirs-to-parse> list of source files to parse or directories to search for source files");
+		System.err.println("      [-strict] option to fail and throw an exception if a binding can't be resolved");
 		System.err.println("      [-classifyStubs] groups all generated stubs into a specific 'Missing' package instead of the default one");
 	}
 
