@@ -356,4 +356,10 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertTrue(options.isClassifyStubs());
 	}
 	
+	@Test 
+	public void testStubsAreClassifiedInMissingPackageWhenClassifyPackageOptionIsActivated() {
+		parse(new String[] { "-classifyStubs", "src/test/resources/missing_depencies/MissingDependency.java"});
+		Class stubContainer = detectFamixElement(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(EntityDictionary.MISSING_PCKG_NAME, ((TNamedEntity) stubContainer.getTypeContainer()).getName());
+	}
 }
