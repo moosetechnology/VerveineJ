@@ -116,6 +116,11 @@ public class EntityDictionary {
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
 
 	/**
+	 * The options passed to VerveineJ
+	 */
+	protected VerveineJOptions options;
+	
+	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
 	 * or may have the same binding as their associated type so they can't be kept easily in {@link #keyToEntity}
@@ -146,6 +151,23 @@ public class EntityDictionary {
 	 */
 	public EntityDictionary(Repository famixRepo) {
 			this.famixRepo = famixRepo;
+			
+			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
+			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
+			this.nameToEntity = new Hashtable<String,Collection<TNamedEntity>>();
+			this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
+			
+			if (! this.famixRepo.isEmpty()) {
+				recoverExistingRepository();
+			}
+		}
+	
+	/** Constructor taking a FAMIX repository and the options of VerveineJ
+	 * @param famixRepo
+	 */
+	public EntityDictionary(Repository famixRepo, VerveineJOptions options) {
+			this.famixRepo = famixRepo;
+			this.options = options;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
