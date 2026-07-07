@@ -170,6 +170,11 @@ public class VerveineJOptions {
 	 * Option: Whether to put SourceAnchors in the entities and/or associations
 	 */
 	private boolean isStrict = false;
+	
+	/**
+	 * Option: Used to gather generated stubs in a specific package "Missing"
+	 */
+	private boolean classifyStubs = false;
 
 	public VerveineJOptions() {
 		this.allLocals = false;
@@ -666,6 +671,10 @@ public class VerveineJOptions {
 	
 	public boolean isStrict() {
 		return isStrict;
+	}
+	
+	public boolean isClassifyStubs() {
+		return classifyStubs;
 	}
 
 }
