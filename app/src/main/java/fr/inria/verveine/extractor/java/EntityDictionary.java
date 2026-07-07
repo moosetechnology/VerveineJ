@@ -68,6 +68,7 @@ public class EntityDictionary {
 	public static final String SOURCE_FILENAME_PROPERTY = "verveine-source-filename";
 
 	public static final String DEFAULT_PCKG_NAME = "<Default Package>";
+	public static final String MISSING_PCKG_NAME= "<Missing>";
 	public static final String STUB_METHOD_CONTAINER_NAME = "<StubMethodContainer>";
 	public static final String THIS_NAME = "this";
 	public static final String SUPER_NAME = "super";
@@ -908,6 +909,14 @@ public class EntityDictionary {
 	 */
 	public Package ensureFamixPackageDefault() {
         return ensureFamixUniqEntity(Package.class, null, DEFAULT_PCKG_NAME);
+	}
+	
+	/**
+	 * Create or recovers a special Famix Package to gather all weird stubs
+	 * @return a Famix Namespace
+	 */
+	public Package ensureFamixPackageMissing( ) {
+		return ensureFamixUniqEntity(Package.class, null, MISSING_PCKG_NAME);
 	}
 
 	/**
