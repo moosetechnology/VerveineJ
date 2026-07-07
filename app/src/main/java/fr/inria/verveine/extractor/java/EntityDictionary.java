@@ -866,7 +866,9 @@ public class EntityDictionary {
 			if(this.options != null && this.options.isClassifyStubs()) {
 				fmx.setTypeContainer(ensureFamixPackageMissing());
 			}
-			fmx.setTypeContainer( ensureFamixPackageDefault());
+			else {
+				fmx.setTypeContainer( ensureFamixPackageDefault());
+			}
 		}
 		ensureFamixInheritance(ensureFamixClassObject(), fmx, /*prev*/null, null);
 
