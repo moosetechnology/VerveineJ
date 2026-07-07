@@ -303,6 +303,9 @@ public class VerveineJOptions {
 		else if (arg.equals("-strict")) {
 			isStrict = true;
 		}
+		else if (arg.equals("-classifyStubs")) {
+			classifyStubs = true;
+		}
 		else if (arg.equals("-debugging")) {
 			debugging = true;
 		} else {
