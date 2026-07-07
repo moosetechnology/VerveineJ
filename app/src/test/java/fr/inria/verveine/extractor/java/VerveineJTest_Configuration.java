@@ -338,4 +338,22 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertTrue(options.isStrict());
 	}
 	
+	/*classify stub mode*/
+	
+	@Test
+	public void testClassifyStubModeIsFalseByDefault() {
+		VerveineJOptions options = new VerveineJOptions();
+		assertFalse(options.isClassifyStubs());
+	}
+
+	@Test
+	public void testClassifyStubsModeTrueWhenSet() {
+		String[] args = new String[] {
+				"-classifyStubs"
+			};
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(args);
+		assertTrue(options.isClassifyStubs());
+	}
+	
 }
