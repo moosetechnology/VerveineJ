@@ -1,4 +1,4 @@
-package strict_mode;
+package missing_dependencies;
 
 public class MissingDependency {
     public void callUnknown() {

@@ -386,7 +386,7 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 	@Test
 	public void testParserStopsOnMissingDependencyWhenStrictModIsActivated() {
 		assertThrows(VerveineJStrictModeException.class, () -> {
-			parse(new String[] { "-strict", "src/test/resources/strict_mode/MissingDependency.java" });
+			parse(new String[] { "-strict", "src/test/resources/missing_dependencies/MissingDependency.java" });
 		});
 	}
 
