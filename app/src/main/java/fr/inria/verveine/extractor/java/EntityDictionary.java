@@ -2,7 +2,6 @@ package fr.inria.verveine.extractor.java;
 
 import java.util.*;
 
-import org.apache.commons.math3.genetics.FixedElapsedTime;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.IBinding;
