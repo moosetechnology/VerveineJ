@@ -2,6 +2,7 @@ package fr.inria.verveine.extractor.java;
 
 import java.util.*;
 
+import org.apache.commons.math3.genetics.FixedElapsedTime;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
 import org.eclipse.jdt.core.dom.IBinding;
@@ -862,6 +863,9 @@ public class EntityDictionary {
 	public Class ensureFamixClassStubOwner() {
 		Class fmx =  ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
 		if (fmx != null) {
+			if(this.options != null && this.options.isClassifyStubs()) {
+				fmx.setTypeContainer(ensureFamixPackageMissing());
+			}
 			fmx.setTypeContainer( ensureFamixPackageDefault());
 		}
 		ensureFamixInheritance(ensureFamixClassObject(), fmx, /*prev*/null, null);
