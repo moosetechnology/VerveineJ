@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.Initializer;
 import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
+import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
@@ -118,12 +119,35 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		return fmx;
 	}
 
-	protected void endVisitTypeDeclaration(AbstractTypeDeclaration node) {
-		if (context.topType() instanceof org.moosetechnology.model.famix.famixjavaentities.Class || context.topType() instanceof Interface || context.topType() instanceof Exception) {
+	protected void endVisitTypeDeclaration(AnnotationTypeDeclaration node) {
+		this.endVisitAbstractTypeDeclaration(node);
+		super.endVisit(node);
+	}
+
+	protected void endVisitTypeDeclaration(EnumDeclaration node) {
+		this.endVisitAbstractTypeDeclaration(node);
+		super.endVisit(node);
+	}
+
+	protected void endVisitTypeDeclaration(ImplicitTypeDeclaration node) {
+		this.endVisitAbstractTypeDeclaration(node);
+		super.endVisit(node);
+	}
+
+	protected void endVisitTypeDeclaration(RecordDeclaration node) {
+		this.endVisitAbstractTypeDeclaration(node);
+		super.endVisit(node);
+	}
+
+	protected void endVisitTypeDeclaration(TypeDeclaration node) {
+		this.endVisitAbstractTypeDeclaration(node);
+		super.endVisit(node);
+	}
+
+	protected void endVisitAbstractTypeDeclaration(AbstractTypeDeclaration node) {
+		if (context.top() instanceof Type) {
 			context.pop();
 		}
-		// Note: There is no super.endVisit(AbstractTypeDeclaration) ?!
-		super.endVisit( (TypeDeclaration)node);
 	}
 
 	/**
