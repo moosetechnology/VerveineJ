@@ -71,13 +71,13 @@ public class FamixRequestor extends FileASTRequestor {
 			if (options.isStrict()) {
 				throw err;
 			}
-			logForVisitorError(err, path);
+			logError(err, path);
 
 		} catch (Exception err) {
 			if (options.isStrict()) {
 				throw new VerveineJStrictModeException("Error of parsing when using strict mode");
 			}
-			logForVisitorError(err, path);
+			logError(err, path);
 		}
 	}
 
@@ -140,7 +140,7 @@ public class FamixRequestor extends FileASTRequestor {
 	 * @param err the error 
 	 * @param path the path
 	 */
-	private void logForVisitorError(Exception err, String path) {
+	private void logError(Exception err, String path) {
 		err.printStackTrace();
 		System.err.println(
 				"*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
