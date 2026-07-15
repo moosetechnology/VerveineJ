@@ -21,8 +21,6 @@ public class FamixRequestor extends FileASTRequestor {
 
 	protected VerveineJOptions options;
 	
-	private VerveineJStrictModeException strictModeError = null;
-	
 	/**
 	 * Maps the arguments (file names or dir names) to their absolute path (well actually it is the other way around)
 	 */
@@ -35,14 +33,6 @@ public class FamixRequestor extends FileASTRequestor {
 		this.options = options;
 		initFileMaps(options);
 		this.famixDictionnary = new EntityDictionary(famixRepo,options);
-	}
-	
-	/**
-	 * Getter for the strict mode error
-	 * @return the strict mode error
-	 */
-	public VerveineJStrictModeException getStrictModeError() {
-		return strictModeError;
 	}
 
 	protected void initFileMaps(VerveineJOptions options) {
