@@ -80,10 +80,6 @@ public class VerveineJParser {
 					/*requestor*/req,
 					/*monitor*/null);
 			
-			/*detect hided exceptions*/
-			if(options.isStrict() && req.getStrictModeError() != null) {
-				throw req.getStrictModeError();
-			}
 		} catch (java.lang.IllegalStateException e) {
 			System.out.println("VerveineJ could not launch parser");
 			e.printStackTrace();
