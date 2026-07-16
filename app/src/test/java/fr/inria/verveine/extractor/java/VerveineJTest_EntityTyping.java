@@ -34,7 +34,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 	@Test
 	public void testArrayListConstructorEntityTypingShouldNotBeDupplicatedWithVoid() {
 		parse(new String[] { "src/test/resources/entity_typing/FastArrayList.java",
-				"src/test/resources/entity_typing/PriorityQueue.java",
+				"src/test/resources/entity_typing/Unmodifiable.java",
 				"src/test/resources/entity_typing/StaticBucketMap.java" });
 
 		// looking for java.util.ArrayList.ArrayList() duplication in all classes
