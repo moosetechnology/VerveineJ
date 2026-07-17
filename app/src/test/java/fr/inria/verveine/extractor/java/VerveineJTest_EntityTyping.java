@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,39 +35,34 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 	@Test
 	public void testArrayListConstructorEntityTypingShouldNotBeDupplicatedWithVoid() {
-		parse(new String[] { "src/test/resources/entity_typing/FastArrayList.java",
-				"src/test/resources/entity_typing/Unmodifiable.java",
-				"src/test/resources/entity_typing/StaticBucketMap.java" });
+		parse(new String[] { 
+				"src/test/resources/entity_typing/StaticBucketMap.java",
+				"src/test/resources/entity_typing/FastArrayList.java",
+				"src/test/resources/entity_typing/Unmodifiable.java"
+		 });
 
-		// looking for java.util.ArrayList.ArrayList() duplication in all classes
-		Method arrayListConstructor = null;
-		int voidTypingCount = 0;
+		int voidCount = 0;
 		String target = "ArrayList";
-		String targetMethod = "ArrayList()";
-		String targetType = "void";
+		String targetSignature = "ArrayList()";
+		List<Method> targetMethods = new ArrayList<Method>();
 		
-
-		//Get the arrayList constructor
+		//get the targetted methods
 		for (Method method : entitiesOfType(Method.class)) {
-
-			String methodName = method.getName();
-			String className = method.getSignature();
-
-			// Array list constructor spotted
-			if ((methodName.equals(target)) && className.equals(targetMethod)) {
-				arrayListConstructor = method;
-				break;
-			} 
+			if (target.equals(method.getName()) && targetSignature.equals(method.getSignature())) {
+				targetMethods.add(method);
+			}
 		}
 
-		assertNotNull(arrayListConstructor);
-		
-		for(EntityTyping typing : entitiesOfType(EntityTyping.class)) {
-			if(typing.getTypedEntity() == arrayListConstructor && typing.getDeclaredType() != null && targetType.equals(typing.getDeclaredType().getName())){
-				voidTypingCount++;
+		//get the types and look for void
+		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
+			if (typing.getDeclaredType() != null && "void".equals(typing.getDeclaredType().getName())) {
+				if (targetMethods.contains(typing.getTypedEntity())) {
+					voidCount++;
+				}
 			}
 		}
 		
-		assertEquals(1, voidTypingCount);
+		// We should not have any duplication of entity typing on void
+		assertEquals(1, voidCount);
 	}
 }
