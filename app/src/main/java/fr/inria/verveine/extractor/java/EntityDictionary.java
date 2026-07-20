@@ -114,11 +114,11 @@ public class EntityDictionary {
 	 * Another dictionary to map a name to FAMIX Entities with this name
 	 */
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
-
+	
 	/**
-	 * The options passed to VerveineJ
+	 * The options of VerveineJ to use the missing package
 	 */
-	protected VerveineJOptions options;
+	protected boolean useMissingPackage;
 	
 	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
@@ -162,12 +162,13 @@ public class EntityDictionary {
 			}
 		}
 	
-	/** Constructor taking a FAMIX repository and the options of VerveineJ
+	/** Constructor taking a FAMIX repository and a boolean to use missing package
 	 * @param famixRepo
+	 * @param useMissingPackage true if the option useMissingPackage is used, false otherwise
 	 */
-	public EntityDictionary(Repository famixRepo, VerveineJOptions options) {
+	public EntityDictionary(Repository famixRepo, boolean useMissingPackage) {
 			this.famixRepo = famixRepo;
-			this.options = options;
+			this.useMissingPackage = useMissingPackage;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
