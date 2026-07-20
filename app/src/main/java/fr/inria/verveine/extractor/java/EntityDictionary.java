@@ -140,12 +140,34 @@ public class EntityDictionary {
 		MATCH, UNDECIDED, FAIL;
 	}
 
+	/**
+	 * Option: If true, create stubs without package into a "Missing" package
+	 */
+	protected boolean useMissingPackage;
 
 	/** Constructor taking a FAMIX repository
 	 * @param famixRepo
 	 */
 	public EntityDictionary(Repository famixRepo) {
 			this.famixRepo = famixRepo;
+			
+			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
+			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
+			this.nameToEntity = new Hashtable<String,Collection<TNamedEntity>>();
+			this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
+			
+			if (! this.famixRepo.isEmpty()) {
+				recoverExistingRepository();
+			}
+		}
+	
+	/** Constructor taking a FAMIX repository and the useMissingPackage option
+	 * @param famixRepo
+	 * @param useMissingPackage
+	 */
+	public EntityDictionary(Repository famixRepo, boolean useMissingPackage) {
+			this.famixRepo = famixRepo;
+			this.useMissingPackage = useMissingPackage;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
