@@ -116,11 +116,6 @@ public class EntityDictionary {
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
 	
 	/**
-	 * The options of VerveineJ to use the missing package
-	 */
-	protected boolean useMissingPackage;
-	
-	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
 	 * or may have the same binding as their associated type so they can't be kept easily in {@link #keyToEntity}
@@ -151,24 +146,6 @@ public class EntityDictionary {
 	 */
 	public EntityDictionary(Repository famixRepo) {
 			this.famixRepo = famixRepo;
-			
-			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
-			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
-			this.nameToEntity = new Hashtable<String,Collection<TNamedEntity>>();
-			this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
-			
-			if (! this.famixRepo.isEmpty()) {
-				recoverExistingRepository();
-			}
-		}
-	
-	/** Constructor taking a FAMIX repository and a boolean to use missing package
-	 * @param famixRepo
-	 * @param useMissingPackage true if the option useMissingPackage is used, false otherwise
-	 */
-	public EntityDictionary(Repository famixRepo, boolean useMissingPackage) {
-			this.famixRepo = famixRepo;
-			this.useMissingPackage = useMissingPackage;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
