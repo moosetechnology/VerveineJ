@@ -172,7 +172,7 @@ public class VerveineJOptions {
 	private boolean isStrict = false;
 	
 	/**
-	 * Option: Used to gather generated stubs in a specific package "Missing"
+	 * Option: If true, create stubs without package into a "Missing" package
 	 */
 	private boolean classifyStubs = false;
 
