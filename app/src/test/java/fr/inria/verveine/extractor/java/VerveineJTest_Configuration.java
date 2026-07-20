@@ -338,27 +338,27 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertTrue(options.isStrict());
 	}
 	
-	/*classify stub mode*/
+	/*useMissingPackage mode*/
 	
 	@Test
-	public void testClassifyStubModeIsFalseByDefault() {
+	public void testUseMissingPackageModeIsFalseByDefault() {
 		VerveineJOptions options = new VerveineJOptions();
-		assertFalse(options.isClassifyStubs());
+		assertFalse(options.isUseMissingPackage());
 	}
 
 	@Test
-	public void testClassifyStubsModeTrueWhenSet() {
+	public void testUseMissingPackageModeTrueWhenSet() {
 		String[] args = new String[] {
-				"-classifyStubs"
+				"-useMissingPackage"
 			};
 		VerveineJOptions options = new VerveineJOptions();
 		options.setOptions(args);
-		assertTrue(options.isClassifyStubs());
+		assertTrue(options.isUseMissingPackage());
 	}
 	
 	@Test 
-	public void testStubsAreClassifiedInMissingPackageWhenClassifyPackageOptionIsActivated() {
-		parse(new String[] { "-classifyStubs", "src/test/resources/missing_dependencies/MissingDependency.java"});
+	public void testStubsAreClassifiedInMissingPackageWhenUseMissingPackageOptionIsActivated() {
+		parse(new String[] { "-useMissingPackage", "src/test/resources/missing_dependencies/MissingDependency.java"});
 		Class stubContainer = detectFamixElement(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
 		assertEquals(EntityDictionary.MISSING_PCKG_NAME, ((TNamedEntity) stubContainer.getTypeContainer()).getName());
 	}

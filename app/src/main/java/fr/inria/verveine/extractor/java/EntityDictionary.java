@@ -862,8 +862,8 @@ public class EntityDictionary {
 	public Class ensureFamixClassStubOwner() {
 		Class fmx =  ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
 		if (fmx != null) {
-			/*if the option isClassifyStubs is activated, we put all the stubs with unknown packages in a package `Missing` that will regroup them in a same place*/
-			if(this.options != null && this.options.isClassifyStubs()) {
+			/*if the option `useMissingPackage` is activated, we put all the stubs with unknown packages in a package `Missing` that will regroup them in a same place*/
+			if(this.options != null && this.options.isUseMissingPackage()) {
 				fmx.setTypeContainer(ensureFamixPackageMissing());
 			}
 			/*otherwise we put them in the default package*/
