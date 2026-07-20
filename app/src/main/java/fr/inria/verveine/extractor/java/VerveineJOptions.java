@@ -174,7 +174,7 @@ public class VerveineJOptions {
 	/**
 	 * Option: If true, create stubs without package into a "Missing" package
 	 */
-	private boolean classifyStubs = false;
+	private boolean useMissingPackage = false;
 
 	public VerveineJOptions() {
 		this.allLocals = false;
