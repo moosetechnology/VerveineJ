@@ -941,7 +941,8 @@ public class EntityDictionary {
 	}
 	
 	/**
-	 * Create or recovers a special Famix Package to gather all weird stubs
+	 * Returns an artificial Package to contain stubs with an unknown package.
+	 * Always returns the same package. Create it lazily if not existing.
 	 * @return a Famix Namespace
 	 */
 	public Package ensureFamixPackageMissing( ) {
