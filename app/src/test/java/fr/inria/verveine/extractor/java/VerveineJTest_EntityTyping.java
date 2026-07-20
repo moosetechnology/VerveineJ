@@ -36,8 +36,8 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 	@Test
 	public void testArrayListConstructorEntityTypingShouldNotBeDupplicatedWithVoid() {
 		parse(new String[] { 
-				"src/test/resources/entity_typing/StaticBucketMap.java",
-				"src/test/resources/entity_typing/FastArrayList.java"
+				"src/test/resources/entity_typing/ArrayListInstantiator.java",
+				"src/test/resources/entity_typing/ArrayListExtender.java"
 		 });
 
 		int voidCount = 0;
