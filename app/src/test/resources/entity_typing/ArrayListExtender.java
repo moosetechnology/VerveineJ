@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
-public class FastArrayList extends ArrayList {
+public class ArrayListExtender extends ArrayList {
 	protected ArrayList list = null;
 
-	public FastArrayList() {
+	public ArrayListExtender() {
 		super();
 		this.list = new ArrayList();
 	}
