@@ -2282,6 +2282,12 @@ public class EntityDictionary {
 			return CheckResult.FAIL;
 		}
 		else if (getEntityKey(candidate) != null) {
+			//we check if the both bindings are linked to the same entity
+			IBinding candidateBinding = getEntityKey(candidate);
+			if(candidateBinding.getKey().equals(key.getKey())) {
+				return CheckResult.MATCH;
+			}
+			
 			// candidate already bound, and not to this binding
 			return CheckResult.FAIL;
 		}
