@@ -127,4 +127,34 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		assertEquals(3, targetMethods.size());
 	}
 	
+	@Test
+	public void testOverriddenMethodsAreNotUnified() {
+		parse(new String[] { 
+				"src/test/resources/entity_typing/OverloadedMethods.java",
+				"src/test/resources/entity_typing/OverridingMethods.java"
+		 });
+
+		String targetMethod = "doSomething";
+		String targetMethodSignature = "doSomething()";
+		List<Method> targetMethods = new ArrayList<Method>();
+		
+		// get the targeted methods
+		for (Method method : entitiesOfType(Method.class)) {
+			if (targetMethod.equals(method.getName()) && targetMethodSignature.equals(method.getSignature())) {
+				targetMethods.add(method);
+			}
+		}
+
+		//we have 2 doSomething without parameters
+		assertEquals(2, targetMethods.size());
+		
+		// check that we have they doSomething() in the class and the superclass
+		//should not have the same parent
+		Method method1 = targetMethods.get(0);
+		Method method2 = targetMethods.get(1);
+		
+		assertNotNull(method1.getParentType());
+		assertNotNull(method2.getParentType());
+		assertFalse(method1.getParentType().equals(method2.getParentType()));
+	}
 }
