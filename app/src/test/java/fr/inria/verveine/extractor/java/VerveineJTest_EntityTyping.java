@@ -38,24 +38,22 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 	@Test
 	public void testArrayListConstructorEntityTypingShouldNotBeDupplicatedWithVoid() {
-		parse(new String[] { 
-				"src/test/resources/entity_typing/ArrayListInstantiator.java",
-				"src/test/resources/entity_typing/ArrayListExtender.java"
-		 });
+		parse(new String[] { "src/test/resources/entity_typing/ArrayListInstantiator.java",
+				"src/test/resources/entity_typing/ArrayListExtender.java" });
 
 		int voidCount = 0;
 		String target = "ArrayList";
 		String targetSignature = "ArrayList()";
 		List<Method> targetMethods = new ArrayList<Method>();
-		
-		//get the targeted methods
+
+		// get the targeted methods
 		for (Method method : entitiesOfType(Method.class)) {
 			if (target.equals(method.getName()) && targetSignature.equals(method.getSignature())) {
 				targetMethods.add(method);
 			}
 		}
 
-		//get the types and look for void
+		// get the types and look for void
 		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
 			if (typing.getDeclaredType() != null && "void".equals(typing.getDeclaredType().getName())) {
 				if (targetMethods.contains(typing.getTypedEntity())) {
@@ -63,24 +61,22 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 				}
 			}
 		}
-		
+
 		// We should not have any duplication of entity typing on void
 		assertEquals(1, voidCount);
 	}
-	
+
 	@Test
 	public void testNoUnificationForSameNameInDifferentPackages() {
-		parse(new String[] { 
-				"src/test/resources/entity_typing/packageA/SameName.java",
-				"src/test/resources/entity_typing/packageB/SameName.java"
-		 });
+		parse(new String[] { "src/test/resources/entity_typing/packageA/SameName.java",
+				"src/test/resources/entity_typing/packageB/SameName.java" });
 
 		String targetClass = "SameName";
 		String targetMethod = "doSomething";
 		String targetMethodSignature = "doSomething()";
 		List<Class> targetClasses = new ArrayList<Class>();
 		List<Method> targetMethods = new ArrayList<Method>();
-		
+
 		// get the targetted classes
 		for (Class actualClass : entitiesOfType(Class.class)) {
 			if (targetClass.equals(actualClass.getName())) {
@@ -102,42 +98,38 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		// check that they belong to different packages
 		Class class1 = targetClasses.get(0);
 		Class class2 = targetClasses.get(1);
-		
+
 		assertNotNull(class1.getTypeContainer());
 		assertNotNull(class2.getTypeContainer());
 		assertFalse(class1.getTypeContainer().equals(class2.getTypeContainer()));
 	}
-	
-	@Test 
+
+	@Test
 	public void testOveloadedMethodsAreNotUnified() {
-		parse(new String[] { 
-				"src/test/resources/entity_typing/OverloadedMethods.java"
-		 });
-		
+		parse(new String[] { "src/test/resources/entity_typing/OverloadedMethods.java" });
+
 		String targetMethod = "doSomething";
 		List<Method> targetMethods = new ArrayList<Method>();
-		
+
 		// get the targeted methods
 		for (Method method : entitiesOfType(Method.class)) {
 			if (targetMethod.equals(method.getName())) {
 				targetMethods.add(method);
 			}
 		}
-		//we should have 3 methods (not an unification case)
+		// we should have 3 methods (not an unification case)
 		assertEquals(3, targetMethods.size());
 	}
-	
+
 	@Test
 	public void testOverriddenMethodsAreNotUnified() {
-		parse(new String[] { 
-				"src/test/resources/entity_typing/OverloadedMethods.java",
-				"src/test/resources/entity_typing/OverridingMethods.java"
-		 });
+		parse(new String[] { "src/test/resources/entity_typing/OverloadedMethods.java",
+				"src/test/resources/entity_typing/OverridingMethods.java" });
 
 		String targetMethod = "doSomething";
 		String targetMethodSignature = "doSomething()";
 		List<Method> targetMethods = new ArrayList<Method>();
-		
+
 		// get the targeted methods
 		for (Method method : entitiesOfType(Method.class)) {
 			if (targetMethod.equals(method.getName()) && targetMethodSignature.equals(method.getSignature())) {
@@ -145,14 +137,14 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 			}
 		}
 
-		//we have 2 doSomething without parameters
+		// we have 2 doSomething without parameters
 		assertEquals(2, targetMethods.size());
-		
+
 		// check that we have they doSomething() in the class and the superclass
-		//should not have the same parent
+		// should not have the same parent
 		Method method1 = targetMethods.get(0);
 		Method method2 = targetMethods.get(1);
-		
+
 		assertNotNull(method1.getParentType());
 		assertNotNull(method2.getParentType());
 		assertFalse(method1.getParentType().equals(method2.getParentType()));
