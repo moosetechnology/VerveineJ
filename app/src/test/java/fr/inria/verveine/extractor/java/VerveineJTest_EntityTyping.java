@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.internal.compiler.lookup.MethodScope;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		String targetSignature = "ArrayList()";
 		List<Method> targetMethods = new ArrayList<Method>();
 		
-		//get the targetted methods
+		//get the targeted methods
 		for (Method method : entitiesOfType(Method.class)) {
 			if (target.equals(method.getName()) && targetSignature.equals(method.getSignature())) {
 				targetMethods.add(method);
@@ -87,7 +88,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 			}
 		}
 
-		// get the targetted methods
+		// get the targeted methods
 		for (Method method : entitiesOfType(Method.class)) {
 			if (targetMethod.equals(method.getName()) && targetMethodSignature.equals(method.getSignature())) {
 				targetMethods.add(method);
@@ -106,4 +107,24 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		assertNotNull(class2.getTypeContainer());
 		assertFalse(class1.getTypeContainer().equals(class2.getTypeContainer()));
 	}
+	
+	@Test 
+	public void testOveloadedMethodsAreNotUnified() {
+		parse(new String[] { 
+				"src/test/resources/entity_typing/OverloadedMethods.java"
+		 });
+		
+		String targetMethod = "doSomething";
+		List<Method> targetMethods = new ArrayList<Method>();
+		
+		// get the targeted methods
+		for (Method method : entitiesOfType(Method.class)) {
+			if (targetMethod.equals(method.getName())) {
+				targetMethods.add(method);
+			}
+		}
+		//we should have 3 methods (not an unification case)
+		assertEquals(3, targetMethods.size());
+	}
+	
 }
