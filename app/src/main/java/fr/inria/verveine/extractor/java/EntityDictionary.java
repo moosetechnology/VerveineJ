@@ -2321,7 +2321,11 @@ public class EntityDictionary {
 			return CheckResult.FAIL;
 		}
 		else if (getEntityKey(candidate) != null) {
-			// candidate already bound, and not to this binding
+			//if candidate is a stub, we accept multiple recovery binding
+			//this code will be upgraded with the possibility to add manually code to entities
+			if (candidate instanceof TCanBeStub && ((TCanBeStub) candidate).getIsStub()) {
+				return CheckResult.UNDECIDED;
+			}
 			return CheckResult.FAIL;
 		}
 		else {

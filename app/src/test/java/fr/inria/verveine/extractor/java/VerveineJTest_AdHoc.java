@@ -1051,6 +1051,52 @@ public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 		assertFalse(notNativeMethod.getIsAbstract());
 		assertFalse(notNativeMethod.getAnnotationInstances().stream().anyMatch((annotation) -> annotation.toString().equals("Override")));
 	}
+	
+	/* Here are some tests to fix stubs duplications*/
+	@Test
+	public void testAbstractMapStubIsNotDuplicated(){
+		//the minimal list of files given by VVJ validator
+		parse(new String[]{
+			"src/test/resources/stub_test/abstract_map_bug/ReferenceMap.java",
+	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java"
+	    });
+		Collection<Class> abstractMaps = entitiesNamed(Class.class, "AbstractMap");
+		
+		//checking for stubs
+		if (!abstractMaps.isEmpty()) {
+			assertTrue("We should have stubs", abstractMaps.iterator().next().getIsStub());
+		}
+		
+		//we should have one single stub
+		assertEquals(1,abstractMaps.size());
+	}
+	
+	@Test
+	public void testSameNameStubsWithDifferentPackagesShouldNotBeMerged() {
+		parse(new String[] { 
+			"src/test/resources/stub_test/same_name_stubs/UseSameNameStubs.java"
+		});
+		
+		Collection<Class> sameNameStubs = entitiesNamed(Class.class, "SameName");
+		boolean foundPackageA = false;
+		boolean foundPackageB = false;
+		
+		assertEquals(2,sameNameStubs.size());
+		
+		//checking we have the 2 stubs in the 2 packages
+		for (Class stub : sameNameStubs) {
+			assertTrue(stub.getIsStub());
+			
+			String packageName = ((TNamedEntity)stub.getTypeContainer()).getName();
+
+			//we should find our 2 packages
+			if(packageName.equals("packageA")) foundPackageA = true;
+			if(packageName.equals("packageB")) foundPackageB = true;	
+		}
+		
+		assertTrue(foundPackageA);
+		assertTrue(foundPackageB);
+	}
 }
 
 
