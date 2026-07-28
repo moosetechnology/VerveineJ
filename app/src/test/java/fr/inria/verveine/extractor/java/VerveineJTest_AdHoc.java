@@ -1053,7 +1053,6 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	public void testAbstractMapStubIsNotDuplicated(){
 		//the minimal list of files given by VVJ validator
 		parse(new String[]{
-			"-jdkMode", "-1.7",
 			"src/test/resources/stub_test/abstract_map_bug/ReferenceMap.java",
 	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java"
 	    });
@@ -1071,7 +1070,6 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	@Test
 	public void testSameNameStubsWithDifferentPackagesShouldNotBeMerged() {
 		parse(new String[] { 
-			"-jdkMode", "-1.7", 
 			"src/test/resources/stub_test/same_name_stubs/UseSameNameStubs.java"
 		});
 		
