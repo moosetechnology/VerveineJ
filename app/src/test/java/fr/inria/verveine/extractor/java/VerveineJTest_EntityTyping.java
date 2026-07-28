@@ -35,5 +35,29 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		parser.exportModel(DEFAULT_OUTPUT_FILE);
 	}
 
+	@Test
+	public void testStubConstructorEntityTypingShouldNotBeDuplicatedWithVoid() {
+		parse(new String[] { "src/test/resources/entity_typing/Raster.java" });
 
+		int voidCount = 0;
+		String target = "DataBufferUShort";
+		List<Method> targetConstructors = new ArrayList<Method>();
+
+		// get the targeted methods
+		for (Method method : entitiesOfType(Method.class)) {
+			if (target.equals(method.getName())) {
+				targetConstructors.add(method);
+			}
+		}
+
+		// get the types and look for void
+		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
+			if (typing.getDeclaredType() != null && "void".equals(typing.getDeclaredType().getName())) {
+				if (targetConstructors.contains(typing.getTypedEntity())) {
+					voidCount++;
+				}
+			}
+		}
+		assertEquals(voidCount, targetConstructors.size());
+	}
 }
