@@ -338,4 +338,43 @@ public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 		assertTrue(options.isStrict());
 	}
 	
+	/*useMissingPackage mode*/
+	
+	@Test
+	public void testUseMissingPackageModeIsFalseByDefault() {
+		VerveineJOptions options = new VerveineJOptions();
+		assertFalse(options.isUseMissingPackage());
+	}
+
+	@Test
+	public void testUseMissingPackageModeTrueWhenSet() {
+		String[] args = new String[] {
+				"-useMissingPackage"
+			};
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(args);
+		assertTrue(options.isUseMissingPackage());
+	}
+	
+	@Test 
+	public void testStubsAreClassifiedInMissingPackageWhenUseMissingPackageOptionIsActivated() {
+		parse(new String[] { "-useMissingPackage", "src/test/resources/missing_dependencies/MissingDependency.java"});
+		Class stubContainer = detectFamixElement(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(EntityDictionary.MISSING_PCKG_NAME, ((TNamedEntity) stubContainer.getTypeContainer()).getName());
+	}
+	
+	@Test 
+	public void testStubsAreClassifiedInDefaultPackageWhenUseMissingPackageOptionIsDeactivated() {
+		//we don't use the option useMissingPackage here
+		parse(new String[] {"src/test/resources/missing_dependencies/MissingDependency.java"});
+		Class stubContainer = detectFamixElement(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(EntityDictionary.DEFAULT_PCKG_NAME, ((TNamedEntity) stubContainer.getTypeContainer()).getName());
+	}
+	
+	@Test 
+	public void testNoDuplicatedStubContainersAreCreated() {
+		parse(new String[] { "-useMissingPackage", "src/test/resources/missing_dependencies/MissingDependency.java"});
+		Collection<Class> stubContainers = entitiesNamed(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(1, stubContainers.size());
+	}
 }
