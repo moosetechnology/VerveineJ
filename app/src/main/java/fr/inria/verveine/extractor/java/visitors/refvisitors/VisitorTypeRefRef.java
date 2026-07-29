@@ -174,11 +174,6 @@ public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 	public boolean visit(MethodDeclaration node) {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
-			if (! node.isConstructor()) {
-				ITypeBinding returnTypeBnd = (node.resolveBinding() == null) ? null : node.resolveBinding().getReturnType();
-				dico.ensureFamixEntityTyping(returnTypeBnd, fmx, dico.referredType(returnTypeBnd, fmx));
-			}
-
 			//Parameters are visited by super!
 			return super.visit(node);
 		}
