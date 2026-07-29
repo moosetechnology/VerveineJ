@@ -37,7 +37,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 	@Test
 	public void testStubConstructorEntityTypingShouldNotBeDuplicatedWithVoid() {
-		parse(new String[] { "src/test/resources/entity_typing/Raster.java" });
+		parse(new String[] { "src/test/resources/entity_typing/ZipOutputStream.java"});
 
 		int voidCount = 0;
 		String target = "DataBufferUShort";
