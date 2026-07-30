@@ -3,6 +3,7 @@ package fr.inria.verveine.extractor.java;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -154,4 +155,21 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		assertEquals(1, totalIntTyping);
 		assertEquals(1, totalStringTyping);
 	}
+	
+	@Test
+	public void testConstructorsDoNotHaveDeclaredType() {
+		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
+
+		int constructorCount = 0;
+		
+		for (Method method : entitiesOfType(Method.class)) {
+			//get constructor
+			if(method.getIsConstructor()) {
+				constructorCount++;
+				assertEquals("void", method.getDeclaredType().getName());
+			}
+		}
+		assertTrue(constructorCount >= 1);
+	}
+	
 }
