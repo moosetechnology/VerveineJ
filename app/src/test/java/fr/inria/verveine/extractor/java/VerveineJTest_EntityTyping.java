@@ -38,9 +38,8 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 	}
 
 	/*
-	 * These tests are here due to some bug in VVJ that create 2 EntityTyping on
-	 * methods with void type a normal one, and a bugged one that just type null
-	 * with a void type
+	 * These tests are here due to some bug in VVJ that create 2 EntityTyping on methods with void return type.
+	 * A normal one that type well the entity, and a bugged one that just link null and void
 	 */
 	@Test
 	public void testEntityTypingDontHaveNullTypedEntity() {
