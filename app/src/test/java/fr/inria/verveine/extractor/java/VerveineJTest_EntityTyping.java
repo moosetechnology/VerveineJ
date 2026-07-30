@@ -9,14 +9,12 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ForkJoinPool;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.Class;
 
 public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
@@ -62,7 +60,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		// we should not have null entities linked to void
 		assertEquals(0, nullEntityCount);
 	}
-	
+
 	@Test
 	public void testEntityTypingDontHaveNullTypedEntityOnPrimitiveTypes() {
 		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
@@ -75,7 +73,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 				nullEntityCount++;
 			}
 		}
-		
+
 		// we should not have null entities linked to void
 		assertEquals(0, nullEntityCount);
 	}
@@ -114,7 +112,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		assertEquals(3, totalVoidTyping);
 
 	}
-	
+
 	@Test
 	public void testEntityTypingForNonVoidMethodsAreCorrectlyLinked() {
 		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
@@ -127,12 +125,14 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
 			if (typing.getDeclaredType() != null) {
 				String typeName = typing.getDeclaredType().getName();
-				
+
 				// get string and int
 				if ("String".equals(typeName) || "int".equals(typeName)) {
-					
-					if ("String".equals(typeName)) totalStringTyping++;
-					if ("int".equals(typeName)) totalIntTyping++;
+
+					if ("String".equals(typeName))
+						totalStringTyping++;
+					if ("int".equals(typeName))
+						totalIntTyping++;
 
 					// null entities
 					if (typing.getTypedEntity() == null) {
@@ -155,21 +155,21 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		assertEquals(1, totalIntTyping);
 		assertEquals(1, totalStringTyping);
 	}
-	
+
 	@Test
 	public void testConstructorsDoNotHaveDeclaredType() {
 		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
 
 		int constructorCount = 0;
-		
+
 		for (Method method : entitiesOfType(Method.class)) {
-			//get constructor
-			if(method.getIsConstructor()) {
+			// get constructor
+			if (method.getIsConstructor()) {
 				constructorCount++;
 				assertEquals("void", method.getDeclaredType().getName());
 			}
 		}
 		assertTrue(constructorCount >= 1);
 	}
-	
+
 }
