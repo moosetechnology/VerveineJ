@@ -62,9 +62,9 @@ public class VerveineJTest_JWSBasic extends VerveineJTestAbstract {
 
 	@Test
 	public void testEntitiesNumber() {
-		assertEquals(3 + (2*3) , entitiesOfType(AnnotationType.class).size()); // @WebService, @SOAPBinding, @WebMethod
-		// JDT returns unresolved annotations: @Session, @WLHttpTransport each time they are encountered
-		// And multiply them each time it is uncountered (so 3 times 2 annotations)
+		// @WebService, @SOAPBinding, @WebMethod
+		// JDT returns unresolved annotations: @Session, @WLHttpTransport
+		assertEquals(3 + 2 , entitiesOfType(AnnotationType.class).size()); 
 	}
 
 	@Test

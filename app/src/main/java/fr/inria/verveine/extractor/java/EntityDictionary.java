@@ -2321,11 +2321,18 @@ public class EntityDictionary {
 			return CheckResult.FAIL;
 		}
 		else if (getEntityKey(candidate) != null) {
+			//we check if the both bindings are linked to the same entity
+			IBinding candidateBinding = getEntityKey(candidate);
+			if(candidateBinding.getKey().equals(key.getKey())) {
+				return CheckResult.MATCH;
+			}
+			
 			//if candidate is a stub, we accept multiple recovery binding
 			//this code will be upgraded with the possibility to add manually code to entities
 			if (candidate instanceof TCanBeStub && ((TCanBeStub) candidate).getIsStub()) {
 				return CheckResult.UNDECIDED;
 			}
+      
 			return CheckResult.FAIL;
 		}
 		else {
