@@ -39,48 +39,12 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 	/*
 	 * These tests are here due to some bug in VVJ that creates 2 EntityTyping on
 	 * methods with void return type. A normal one that type well the entity, and a
-	 * bugged one that just link null and void We also test the fix on primitives
-	 * types
+	 * bugged one that just link null and void We also test the fixes on primitives types
 	 */
-	@Test
-	public void testEntityTypingDontHaveNullTypedEntityOnVoidType() {
-		parse(new String[] { "src/test/resources/entity_typing/PhantomVoidTyping.java" });
-
-		int nullEntityCount = 0;
-
-		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
-			// if type is void
-			if (typing.getDeclaredType() != null && "void".equals(typing.getDeclaredType().getName())) {
-				if (typing.getTypedEntity() == null) {
-					nullEntityCount++;
-				}
-			}
-		}
-
-		// we should not have null entities linked to void
-		assertEquals(0, nullEntityCount);
-	}
-
-	@Test
-	public void testEntityTypingDontHaveNullTypedEntityOnPrimitiveTypes() {
-		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
-
-		int nullEntityCount = 0;
-
-		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
-			// check primitives types
-			if (typing.getTypedEntity() == null) {
-				nullEntityCount++;
-			}
-		}
-
-		// we should not have null entities linked to void
-		assertEquals(0, nullEntityCount);
-	}
 
 	@Test
 	public void testEntityTypingForVoidMethodsAreCorrectlyLinked() {
-		parse(new String[] { "src/test/resources/entity_typing/PhantomVoidTyping.java" });
+		parse(new String[] { "src/test/resources/entity_typing/VoidTyping.java" });
 
 		int totalVoidTyping = 0;
 		int nullEntityCount = 0;
@@ -115,7 +79,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 	@Test
 	public void testEntityTypingForNonVoidMethodsAreCorrectlyLinked() {
-		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
+		parse(new String[] { "src/test/resources/entity_typing/MethodTyping.java" });
 
 		int totalStringTyping = 0;
 		int totalIntTyping = 0;
@@ -158,7 +122,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 	@Test
 	public void testConstructorsDoNotHaveDeclaredType() {
-		parse(new String[] { "src/test/resources/entity_typing/PhantomMethodTyping.java" });
+		parse(new String[] { "src/test/resources/entity_typing/MethodTyping.java" });
 
 		int constructorCount = 0;
 
