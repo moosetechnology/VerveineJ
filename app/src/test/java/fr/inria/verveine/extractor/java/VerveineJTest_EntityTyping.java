@@ -141,7 +141,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 		// get the types and look for void
 		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
-			if (typing.getDeclaredType() != null && "void".equals(typing.getDeclaredType().getName())) {
+			if ("void".equals(typing.getDeclaredType().getName())) {
 				if (targetMethods.contains(typing.getTypedEntity())) {
 					voidCount++;
 				}
@@ -210,7 +210,7 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 	@Test
 	public void testOverriddenMethodsAreNotUnified() {
 		parse(new String[] { "src/test/resources/entity_typing/OverloadedMethods.java",
-				"src/test/resources/entity_typing/OverridingMethods.java" });
+							 "src/test/resources/entity_typing/OverridingMethods.java" });
 
 		String targetMethod = "doSomething";
 		String targetMethodSignature = "doSomething()";
