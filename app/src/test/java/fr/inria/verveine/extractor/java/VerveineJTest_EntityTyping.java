@@ -47,35 +47,29 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		parse(new String[] { "src/test/resources/entity_typing/VoidTyping.java" });
 
 		int totalVoidTyping = 0;
-		int nullEntityCount = 0;
 		List<String> typedMethodName = new ArrayList<String>();
 
 		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
 			// if type is void
-			if (typing.getDeclaredType() != null && "void".equals(typing.getDeclaredType().getName())) {
-				totalVoidTyping++;
-
-				// null entities
-				if (typing.getTypedEntity() == null) {
-					nullEntityCount++;
-				}
-
+			if ("void".equals(typing.getDeclaredType().getName())) {
 				// well typed entity
-				else if (typing.getTypedEntity() instanceof Method) {
+				if (typing.getTypedEntity() instanceof Method) {
 					typedMethodName.add(((Method) typing.getTypedEntity()).getName());
+					totalVoidTyping++;
 				}
 			}
 		}
-		// 0 phantoms and 3 entity typing(void) for the 3 methods
-		assertEquals(0, nullEntityCount);
-
+		
+		//we received the typing
 		assertTrue(typedMethodName.contains("myVoidMethod"));
 		assertTrue(typedMethodName.contains("myVoidMethod2"));
 		assertTrue(typedMethodName.contains("myVoidMethod3"));
 
+		//3 methods, 3 typing + regression test
 		assertEquals(3, totalVoidTyping);
-
+		assertEquals(3, entitiesOfType(EntityTyping.class).size());
 	}
+	
 
 	@Test
 	public void testEntityTypingForNonVoidMethodsAreCorrectlyLinked() {
