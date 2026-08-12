@@ -117,6 +117,11 @@ public class EntityDictionary {
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
 	
 	/**
+	 * The options passed to VerveineJ
+	 */
+	protected VerveineJOptions options;
+	
+	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
 	 * or may have the same binding as their associated type so they can't be kept easily in {@link #keyToEntity}
