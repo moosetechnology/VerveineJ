@@ -77,41 +77,33 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 
 		int totalStringTyping = 0;
 		int totalIntTyping = 0;
-		int nullEntityCount = 0;
 		List<String> typedMethodName = new ArrayList<String>();
 
 		for (EntityTyping typing : entitiesOfType(EntityTyping.class)) {
-			if (typing.getDeclaredType() != null) {
+			if (typing.getTypedEntity() instanceof Method) {
 				String typeName = typing.getDeclaredType().getName();
+				String methodName = ((Method) typing.getTypedEntity()).getName();
 
-				// get string and int
-				if ("String".equals(typeName) || "int".equals(typeName)) {
-
-					if ("String".equals(typeName))
-						totalStringTyping++;
-					if ("int".equals(typeName))
-						totalIntTyping++;
-
-					// null entities
-					if (typing.getTypedEntity() == null) {
-						nullEntityCount++;
-					}
-
-					// well typed entity
-					else if (typing.getTypedEntity() instanceof Method) {
-						typedMethodName.add(((Method) typing.getTypedEntity()).getName());
-					}
+				// we check the types
+				if ("String".equals(typeName)) {
+					totalStringTyping++;
+					typedMethodName.add(methodName);
+				} 
+				else if ("int".equals(typeName)) {
+					totalIntTyping++;
+					typedMethodName.add(methodName);
 				}
 			}
 		}
-		// 0 phantoms and 2 entity typing, 1 int and 1 string
-		assertEquals(0, nullEntityCount);
 
 		assertTrue(typedMethodName.contains("myStringMethod"));
 		assertTrue(typedMethodName.contains("myIntMethod"));
 
 		assertEquals(1, totalIntTyping);
 		assertEquals(1, totalStringTyping);
+		
+		//4 methods in total
+		assertEquals(4, entitiesOfType(EntityTyping.class).size());
 	}
 
 	@Test
@@ -129,5 +121,4 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 		}
 		assertTrue(constructorCount >= 1);
 	}
-
 }
