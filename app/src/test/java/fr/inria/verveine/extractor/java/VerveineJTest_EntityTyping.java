@@ -3,14 +3,12 @@ package fr.inria.verveine.extractor.java;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.internal.compiler.lookup.MethodScope;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -122,6 +120,8 @@ public class VerveineJTest_EntityTyping extends VerveineJTestAbstract {
 			}
 		}
 		assertTrue(constructorCount >= 1);
+	}
+	
 	@Test
 	public void testArrayListConstructorEntityTypingShouldNotBeDupplicatedWithVoid() {
 		parse(new String[] { "src/test/resources/entity_typing/ArrayListInstantiator.java",
