@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class VerveineJTest_ReferenceInstanceOf extends VerveineJTest_Basic {
+public class VerveineJTest_ReferenceInstanceOf extends VerveineJTestAbstract {
 
     /**
      * @throws Exception

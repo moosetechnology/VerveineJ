@@ -11,7 +11,7 @@ import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
 import static org.junit.Assert.*;
 
-public class VerveineJTest_Exceptions extends VerveineJTest_Basic {
+public class VerveineJTest_Exceptions extends VerveineJTestAbstract {
 
     /**
      * @throws java.lang.Exception

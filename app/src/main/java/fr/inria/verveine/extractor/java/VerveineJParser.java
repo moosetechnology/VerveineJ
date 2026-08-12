@@ -51,6 +51,7 @@ public class VerveineJParser {
 
 
 		options = new VerveineJOptions();
+		// note that Java version also depends on VerveineJOptions.DEFAULT_CODE_VERSION
 		jdtParser = ASTParser.newParser(AST.JLS23);
 	}
 

@@ -41,7 +41,7 @@ import org.moosetechnology.model.famix.famixtraits.TParameter;
  * @since May 28, 2010
  *
  */
-public class VerveineJTest_LanModel extends VerveineJTest_Basic {
+public class VerveineJTest_LanModel extends VerveineJTestAbstract {
 
 	private static final String A_CLASS_NAME = "--aClassName--";
 

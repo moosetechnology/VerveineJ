@@ -26,14 +26,13 @@ import org.moosetechnology.model.famix.famixtraits.*;
 
 import fr.inria.verveine.extractor.java.utils.Util;
 
-import javax.smartcardio.Card;
 
 /**
  * @author Nicolas Anquetil
  * @since November 25, 2010
  *
  */
-public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
+public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 
 	protected VerveineJParser parser;
 
@@ -369,7 +368,7 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 	@Test
 	public void testImplicitVarType() {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
-
+		/* 2026-07-04: VerveineJ now declares the inferred type for implicit variables...
 		Type varType = detectFamixElement(Type.class, EntityDictionary.IMPLICIT_VAR_TYPE_NAME);
 		assertNotNull(varType);
 
@@ -377,6 +376,11 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		assertEquals(1, incomingTypings.size());
 
 		assertEquals("str", ((TNamedEntity)firstElt(incomingTypings).getTypedEntity()).getName());
+		*/
+		LocalVariable var = detectFamixElement(LocalVariable.class, "str");
+		assertNotNull(var);
+		assertNotNull( var.getDeclaredType());
+		assertEquals("String", ((TNamedEntity) var.getDeclaredType()).getName());
 	}
 
 	@Test
@@ -1046,6 +1050,52 @@ public class VerveineJTest_AdHoc extends VerveineJTest_Basic {
 		// Not abstract and is an override
 		assertFalse(notNativeMethod.getIsAbstract());
 		assertFalse(notNativeMethod.getAnnotationInstances().stream().anyMatch((annotation) -> annotation.toString().equals("Override")));
+	}
+	
+	/* Here are some tests to fix stubs duplications*/
+	@Test
+	public void testAbstractMapStubIsNotDuplicated(){
+		//the minimal list of files given by VVJ validator
+		parse(new String[]{
+			"src/test/resources/stub_test/abstract_map_bug/ReferenceMap.java",
+	        "src/test/resources/stub_test/abstract_map_bug/BeanMap.java"
+	    });
+		Collection<Class> abstractMaps = entitiesNamed(Class.class, "AbstractMap");
+		
+		//checking for stubs
+		if (!abstractMaps.isEmpty()) {
+			assertTrue("We should have stubs", abstractMaps.iterator().next().getIsStub());
+		}
+		
+		//we should have one single stub
+		assertEquals(1,abstractMaps.size());
+	}
+	
+	@Test
+	public void testSameNameStubsWithDifferentPackagesShouldNotBeMerged() {
+		parse(new String[] { 
+			"src/test/resources/stub_test/same_name_stubs/UseSameNameStubs.java"
+		});
+		
+		Collection<Class> sameNameStubs = entitiesNamed(Class.class, "SameName");
+		boolean foundPackageA = false;
+		boolean foundPackageB = false;
+		
+		assertEquals(2,sameNameStubs.size());
+		
+		//checking we have the 2 stubs in the 2 packages
+		for (Class stub : sameNameStubs) {
+			assertTrue(stub.getIsStub());
+			
+			String packageName = ((TNamedEntity)stub.getTypeContainer()).getName();
+
+			//we should find our 2 packages
+			if(packageName.equals("packageA")) foundPackageA = true;
+			if(packageName.equals("packageB")) foundPackageB = true;	
+		}
+		
+		assertTrue(foundPackageA);
+		assertTrue(foundPackageB);
 	}
 }
 

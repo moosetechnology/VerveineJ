@@ -11,7 +11,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricInterface;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
-public class VerveineJTest_TypeRecovery extends VerveineJTest_Basic {
+public class VerveineJTest_TypeRecovery extends VerveineJTestAbstract {
 
     @Before
     public void setUp() throws Exception {

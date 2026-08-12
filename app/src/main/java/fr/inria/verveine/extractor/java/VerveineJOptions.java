@@ -54,7 +54,7 @@ public class VerveineJOptions {
 	 */
 	public final static String JSON_OUTPUT_FORMAT = "JSON";
 
-	public static final String DEFAULT_CODE_VERSION = JavaCore.VERSION_9;
+	public static final String DEFAULT_CODE_VERSION = JavaCore.VERSION_23;
 
 	/**
 	 * List of java version option from java 1.1 to java 23 argument
@@ -170,6 +170,11 @@ public class VerveineJOptions {
 	 * Option: Whether to put SourceAnchors in the entities and/or associations
 	 */
 	private boolean isStrict = false;
+	
+	/**
+	 * Option: If true, create stubs without package into a "Missing" package
+	 */
+	private boolean useMissingPackage = false;
 
 	public VerveineJOptions() {
 		this.allLocals = false;
@@ -297,6 +302,9 @@ public class VerveineJOptions {
 		}
 		else if (arg.equals("-strict")) {
 			isStrict = true;
+		}
+		else if (arg.equals("-useMissingPackage")) {
+			useMissingPackage = true;
 		}
 		else if (arg.equals("-debugging")) {
 			debugging = true;
@@ -444,6 +452,8 @@ public class VerveineJOptions {
 		System.err.println("      [-sysLibPath <path-to-runtime-jar>] path to the system library for JDT to resolve native Java binding in the parsed code");
 		System.err.println("      									  By default, JDT will collect the library used to execute VVJ (unless the option -jdkMode is active).");
 		System.err.println("      <files-to-parse>|<dirs-to-parse> list of source files to parse or directories to search for source files");
+		System.err.println("      [-strict] If true, fail with an exception as soon as an error happens");
+		System.err.println("      [-useMissingPackage] If true, create stubs without package into a `Missing package` ");
 	}
 
 	protected void setCodeVersion(String arg) {
@@ -669,14 +679,8 @@ public class VerveineJOptions {
 		return isStrict;
 	}
 	
-	/**
-	 * Define if the recovery binding should be activated
-	 * This option is activated by default but:
-	 * disabled when incremental mode is on (to not have fake stubs) and
-	 * when strict mode is on (to crash of dependency problems).
-	 */
-	public boolean isBindingRecoveryActivated() {
-		/* TODO see if the binding recovery mode should be unabled with strict mode	*/
-		return !incrementalParsing /*&& !isStrict*/;
+	public boolean isUseMissingPackage() {
+		return useMissingPackage;
 	}
+
 }

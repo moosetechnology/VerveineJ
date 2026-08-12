@@ -69,6 +69,7 @@ public class EntityDictionary {
 	public static final String SOURCE_FILENAME_PROPERTY = "verveine-source-filename";
 
 	public static final String DEFAULT_PCKG_NAME = "<Default Package>";
+	public static final String MISSING_PCKG_NAME= "<Missing Package>";
 	public static final String STUB_METHOD_CONTAINER_NAME = "<StubMethodContainer>";
 	public static final String THIS_NAME = "this";
 	public static final String SUPER_NAME = "super";
@@ -116,11 +117,6 @@ public class EntityDictionary {
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
 	
 	/**
-	 * The options passed to VerveineJ
-	 */
-	protected VerveineJOptions options;
-
-	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
 	 * or may have the same binding as their associated type so they can't be kept easily in {@link #keyToEntity}
@@ -146,6 +142,10 @@ public class EntityDictionary {
 		MATCH, UNDECIDED, FAIL;
 	}
 
+	/**
+	 * Option: If true, create stubs without package into a "Missing" package
+	 */
+	protected boolean useMissingPackage;
 
 	/** Constructor taking a FAMIX repository
 	 * @param famixRepo
@@ -163,12 +163,13 @@ public class EntityDictionary {
 			}
 		}
 	
-	/** Constructor taking a FAMIX repository and the options of VerveineJ
+	/** Constructor taking a FAMIX repository and the useMissingPackage option
 	 * @param famixRepo
+	 * @param useMissingPackage
 	 */
-	public EntityDictionary(Repository famixRepo, VerveineJOptions options) {
+	public EntityDictionary(Repository famixRepo, boolean useMissingPackage) {
 			this.famixRepo = famixRepo;
-			this.options = options;
+			this.useMissingPackage = useMissingPackage;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
@@ -870,7 +871,14 @@ public class EntityDictionary {
 
 		Class fmx = ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
 		if (fmx != null) {
-			fmx.setTypeContainer(ensureFamixPackageDefault());
+			/*if the option `useMissingPackage` is activated, we put all the stubs with unknown packages in a package `Missing*/
+			if(this.useMissingPackage) {
+				fmx.setTypeContainer(ensureFamixPackageMissing());
+			}
+			/*otherwise we put them in the default package*/
+			else {
+				fmx.setTypeContainer( ensureFamixPackageDefault());
+			}
 		}
 		ensureFamixInheritance(ensureFamixClassObject(), fmx, /* prev */null, null);
 
@@ -939,6 +947,15 @@ public class EntityDictionary {
 	 */
 	public Package ensureFamixPackageDefault() {
         return ensureFamixUniqEntity(Package.class, null, DEFAULT_PCKG_NAME);
+	}
+	
+	/**
+	 * Returns an artificial Package to contain stubs with an unknown package.
+	 * Always returns the same package. Create it lazily if not existing.
+	 * @return a Famix Namespace
+	 */
+	public Package ensureFamixPackageMissing( ) {
+		return ensureFamixUniqEntity(Package.class, null, MISSING_PCKG_NAME);
 	}
 
 	/**
@@ -2313,7 +2330,18 @@ public class EntityDictionary {
 			return CheckResult.FAIL;
 		}
 		else if (getEntityKey(candidate) != null) {
-			// candidate already bound, and not to this binding
+			//we check if the both bindings are linked to the same entity
+			IBinding candidateBinding = getEntityKey(candidate);
+			if(candidateBinding.getKey().equals(key.getKey())) {
+				return CheckResult.MATCH;
+			}
+			
+			//if candidate is a stub, we accept multiple recovery binding
+			//this code will be upgraded with the possibility to add manually code to entities
+			if (candidate instanceof TCanBeStub && ((TCanBeStub) candidate).getIsStub()) {
+				return CheckResult.UNDECIDED;
+			}
+      
 			return CheckResult.FAIL;
 		}
 		else {

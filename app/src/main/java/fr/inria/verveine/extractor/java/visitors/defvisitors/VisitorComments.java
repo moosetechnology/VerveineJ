@@ -20,6 +20,7 @@ import org.eclipse.jdt.core.dom.FieldDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.RecordDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
 import org.moosetechnology.model.famix.famixjavaentities.AnnotationTypeAttribute;
@@ -125,6 +126,23 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(TypeDeclaration node) {
+		assignCommentsInside(node, (TWithComments) context.topType());
+		classMemberDeclarations = false;
+		endVisitTypeDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(RecordDeclaration node) {
+		TWithComments fmx = (TWithComments) visitTypeDeclaration(node);
+
+		assignCommentsBefore(node, node.getJavadoc(), fmx);
+		classMemberDeclarations = true;
+
+		return super.visit(node);
+	}
+
+	@Override
+	public void endVisit(RecordDeclaration node) {
 		assignCommentsInside(node, (TWithComments) context.topType());
 		classMemberDeclarations = false;
 		endVisitTypeDeclaration(node);

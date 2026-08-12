@@ -15,7 +15,7 @@ import org.moosetechnology.model.famix.famixjavaentities.*;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.*;
 
-public class VerveineJTest_Generics extends VerveineJTest_Basic {
+public class VerveineJTest_Generics extends VerveineJTestAbstract {
 
     /**
      * Array of all the java classes that are directly used in the Generics

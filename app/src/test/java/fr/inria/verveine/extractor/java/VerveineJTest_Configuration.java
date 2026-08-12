@@ -19,7 +19,7 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-public class VerveineJTest_Configuration extends VerveineJTest_Basic {
+public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 
 	private static final String OTHER_JSON_FILE = "other_output.json";
 	private static final String MSE_OUTPUT_FILE = "output.mse";
@@ -342,87 +342,43 @@ public class VerveineJTest_Configuration extends VerveineJTest_Basic {
 		assertTrue(options.isStrict());
 	}
 	
+	/*useMissingPackage mode*/
+	
 	@Test
-	public void testEnsureFamixClassStubOwnerThrowsExceptionWhenStrictModIsActivated() {
-		String[] args = new String[] { "-strict" };
+	public void testUseMissingPackageModeIsFalseByDefault() {
+		VerveineJOptions options = new VerveineJOptions();
+		assertFalse(options.isUseMissingPackage());
+	}
 
+	@Test
+	public void testUseMissingPackageModeTrueWhenSet() {
+		String[] args = new String[] {
+				"-useMissingPackage"
+			};
 		VerveineJOptions options = new VerveineJOptions();
 		options.setOptions(args);
-		
-		//with strict mod, create a stub should raise an exception
-		EntityDictionary dictionary = new EntityDictionary(repo,options);
-		assertThrows(VerveineJStrictModeException.class, () -> dictionary.ensureFamixClassStubOwner());
+		assertTrue(options.isUseMissingPackage());
 	}
 	
 	@Test 
-	public void testEnsureFamixStubMethodThrowsExceptionWhenStrictModIsActivated() {
-		String[] args = new String[] { "-strict" };
-
-		VerveineJOptions options = new VerveineJOptions();
-		options.setOptions(args);
-		
-		//with strict mod, create a stub should raise an exception
-		EntityDictionary dictionary = new EntityDictionary(repo,options);
-		assertThrows(VerveineJStrictModeException.class, () -> dictionary.ensureFamixStubMethod("undefinedMethod"));
+	public void testStubsAreClassifiedInMissingPackageWhenUseMissingPackageOptionIsActivated() {
+		parse(new String[] { "-useMissingPackage", "src/test/resources/missing_dependencies/MissingDependency.java"});
+		Class stubContainer = detectFamixElement(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(EntityDictionary.MISSING_PCKG_NAME, ((TNamedEntity) stubContainer.getTypeContainer()).getName());
 	}
 	
 	@Test 
-	public void testStubCreationStillWorkingWithoutStrictMod() {
-		VerveineJOptions options = new VerveineJOptions();
-		
-		EntityDictionary dictionary = new EntityDictionary(repo,options);
-		
-		Class stubClass = dictionary.ensureFamixClassStubOwner();
-		Method stubMethod = dictionary.ensureFamixStubMethod("undefinedMethod");
-		
-		//without strict mod, we can create stubs
-		assertNotNull(stubClass);
-		assertNotNull(stubMethod);
-		
-		assertEquals(EntityDictionary.STUB_METHOD_CONTAINER_NAME,stubClass.getName());
-		assertEquals("undefinedMethod",stubMethod.getName());
+	public void testStubsAreClassifiedInDefaultPackageWhenUseMissingPackageOptionIsDeactivated() {
+		//we don't use the option useMissingPackage here
+		parse(new String[] {"src/test/resources/missing_dependencies/MissingDependency.java"});
+		Class stubContainer = detectFamixElement(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(EntityDictionary.DEFAULT_PCKG_NAME, ((TNamedEntity) stubContainer.getTypeContainer()).getName());
 	}
 	
-	@Test
-	public void testParserStopsOnMissingDependencyWhenStrictModIsActivated() {
-		assertThrows(VerveineJStrictModeException.class, () -> {
-			parse(new String[] { "-strict", "src/test/resources/missing_dependencies/MissingDependency.java" });
-		});
+	@Test 
+	public void testNoDuplicatedStubContainersAreCreated() {
+		parse(new String[] { "-useMissingPackage", "src/test/resources/missing_dependencies/MissingDependency.java"});
+		Collection<Class> stubContainers = entitiesNamed(Class.class, EntityDictionary.STUB_METHOD_CONTAINER_NAME);
+		assertEquals(1, stubContainers.size());
 	}
-
-
-	/*some test about recovery binding*/
-	/* TODO see if the binding recovery mode should be unabled with strict mode	
-	@Test
-	public void testBindingRecoveryActivatedByDefault() {
-		// we are not in strict mode , and not in incremental mode	
-		VerveineJOptions options = new VerveineJOptions();
-		options.setOptions(new String[]{}); 
-		assertTrue(options.isBindingRecoveryActivated());
-	}
-	
-	@Test
-	public void testBindingRecoveryDeactivatedInIncrementalMode() {
-		// we are in incremental mode	
-		VerveineJOptions options = new VerveineJOptions();
-		options.setOptions(new String[]{"-i"}); 
-		assertFalse(options.isBindingRecoveryActivated());
-	}
-	
-	@Test
-	public void testBindingRecoveryDeactivatedInStrictMode() {
-		// we are in strict mode	
-		VerveineJOptions options = new VerveineJOptions();
-		options.setOptions(new String[]{"-strict"}); 
-		assertFalse(options.isBindingRecoveryActivated());
-	}
-	
-	@Test
-	public void testBindingRecoveryDeactivatedInStrictModeAndIncrementalMode() {
-		// we are in strict mode	
-		VerveineJOptions options = new VerveineJOptions();
-		options.setOptions(new String[]{"-i","-strict"}); 
-		assertFalse(options.isBindingRecoveryActivated());
-	}
-*/
 }

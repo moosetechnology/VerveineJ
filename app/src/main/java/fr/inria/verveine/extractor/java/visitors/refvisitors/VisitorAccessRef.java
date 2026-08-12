@@ -4,6 +4,7 @@ import fr.inria.verveine.extractor.java.EntityDictionary;
 import fr.inria.verveine.extractor.java.VerveineJOptions;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import fr.inria.verveine.extractor.java.utils.NodeTypeChecker;
+import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
@@ -33,6 +34,7 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.QualifiedName;
+import org.eclipse.jdt.core.dom.RecordDeclaration;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
@@ -54,6 +56,7 @@ import org.moosetechnology.model.famix.famixjavaentities.LocalVariable;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Parameter;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
+import org.moosetechnology.model.famix.famixtraits.TAttribute;
 import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 import org.moosetechnology.model.famix.famixtraits.TStructuralEntity;
@@ -67,7 +70,7 @@ import java.util.List;
  * But many other things are also SimpleName nodes (ex: name of an invoked method)
  * So we need to differentiate them. The choice has been made to do this in the parent nodes of the SimpleName nodes
  */
-public class VisitorAccessRef extends AbstractRefVisitor {
+public class VisitorAccessRef extends GetVisitedEntityAbstractVisitor {
 
 	/**
 	 * Whether a variable access is lhs (write) or not
@@ -79,6 +82,12 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 	 * This is needed because Lambdas parameters are currently considered as local variables whereas JDT (rightly) reports them as parameters
 	 */
 	private int inLambda = 0;
+
+	/**
+	 * This variable indicates that the current class declaration is actually a record declaration
+	 * FIXME Temporary workaround because there is no FamixJavaRecord and we use FamixJavaClass
+	 */
+	private boolean declarationIsRecord = false;
 
 	public VisitorAccessRef(EntityDictionary dico, VerveineJOptions options) {
 		super(dico, options);
@@ -98,18 +107,36 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		endVisitCompilationUnit(node);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		if (visitTypeDeclaration( node) != null) {
-            visitNodeList(node.bodyDeclarations());
+			return super.visit(node);
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	@Override
 	public void endVisit(TypeDeclaration node) {
 		endVisitTypeDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(RecordDeclaration node) {
+		//System.err.println("TRACE, Visiting RecordDeclaration: "+node.getName().getIdentifier());
+		if (visitTypeDeclaration( node) != null) {
+			declarationIsRecord = true;
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(RecordDeclaration node) {
+		declarationIsRecord = false;
+
+		super.endVisit(node);
 	}
 
 	@Override
@@ -536,7 +563,12 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		if (bnd.isEnumConstant()) {
 			accessed = dico.ensureFamixEnumValue(bnd, name, (Enum) owner);
 		} else if (bnd.isField()) {
-			accessed = dico.ensureFamixAttribute(bnd, name, typ, (TWithAttributes) owner);
+			if (declarationIsRecord) {
+				accessed = findRecordField( name);
+			}
+			else {
+				accessed = dico.ensureFamixAttribute(bnd, name, typ, (TWithAttributes) owner);
+			}
 			if ((accessed != null) && (((Attribute) accessed).getParentType() == null)
 					&& (((Attribute) accessed).getName().equals("length"))) {
 				// special case: length attribute of arrays in Java
@@ -553,6 +585,18 @@ public class VisitorAccessRef extends AbstractRefVisitor {
 		createAccess(accessor, accessed, inAssignmentLHS);
 
 		return accessed;
+	}
+
+	/** finding the FamixJavaAttribute with <code>name</code>
+	 * this is necessary because in JDT (version 3.46.0) the binding for the declaration of a RecordComponent is different from the binding of the record Field used
+	 */
+	private TStructuralEntity findRecordField(String name) {
+		for (TStructuralEntity entity : ((org.moosetechnology.model.famix.famixjavaentities.Class)context.topType()).getAttributes()) {
+			if (entity.getName().equals(name)) {
+				return entity;
+			}
+		}
+		return null;
 	}
 
 	/**

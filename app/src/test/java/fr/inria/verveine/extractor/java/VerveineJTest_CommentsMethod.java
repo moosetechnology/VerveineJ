@@ -1,16 +1,12 @@
 package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Attribute;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Comment;
 import org.moosetechnology.model.famix.famixjavaentities.IndexedFileAnchor;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
-import org.moosetechnology.model.famix.famixjavaentities.SourceAnchor;
-import org.moosetechnology.model.famix.famixtraits.TComment;
-import org.moosetechnology.model.famix.famixtraits.TMethod;
 import org.moosetechnology.model.famix.famixtraits.TSourceEntity;
 
 import java.util.ArrayList;
@@ -20,8 +16,9 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
-public class VerveineJTest_CommentsMethod extends VerveineJTest_Basic {
+public class VerveineJTest_CommentsMethod extends VerveineJTestAbstract {
 
     /**
      * @throws Exception
