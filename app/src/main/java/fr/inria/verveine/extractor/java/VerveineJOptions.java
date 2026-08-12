@@ -678,6 +678,10 @@ public class VerveineJOptions {
 	public boolean isStrict() {
 		return isStrict;
 	}
+
+	public boolean isBindingRecoveryActivated() {
+		return !incrementalParsing;
+	}
 	
 	public boolean isUseMissingPackage() {
 		return useMissingPackage;
