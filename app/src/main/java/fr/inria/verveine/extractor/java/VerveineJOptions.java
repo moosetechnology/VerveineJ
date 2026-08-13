@@ -488,9 +488,9 @@ public class VerveineJOptions {
 		jdtParser.setResolveBindings(true);
 		/**
 		 *  Incremental parsing should not activate Binding recovery because using this option with incremental parsing
-		 * will result in lot of stubs in the model that would have been resolved later
+		 * will result in lot of stubs in the model that would have been resolved later 
 		 * */
-		if (!incrementalParsing) {
+		if (isBindingRecoveryActivated()) {
 			jdtParser.setBindingsRecovery(true);
 		}
 		jdtParser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -676,6 +676,10 @@ public class VerveineJOptions {
 	
 	public boolean isStrict() {
 		return isStrict;
+	}
+
+	public boolean isBindingRecoveryActivated() {
+		return !incrementalParsing;
 	}
 	
 	public boolean isUseMissingPackage() {

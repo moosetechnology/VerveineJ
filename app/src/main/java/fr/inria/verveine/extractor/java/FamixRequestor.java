@@ -9,6 +9,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 import ch.akuhn.fame.Repository;
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorClassMethodDef;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorComments;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorPackageDef;
@@ -31,7 +32,7 @@ public class FamixRequestor extends FileASTRequestor {
 
 		this.options = options;
 		initFileMaps(options);
-		this.famixDictionnary = new EntityDictionary(famixRepo,options.isUseMissingPackage());
+		this.famixDictionnary = new EntityDictionary(famixRepo,options.isUseMissingPackage(),options.isStrict());
 	}
 
 	protected void initFileMaps(VerveineJOptions options) {
@@ -55,7 +56,7 @@ public class FamixRequestor extends FileASTRequestor {
 		try {
 			ast.accept(new VisitorPackageDef(famixDictionnary, options));
 			ast.accept(new VisitorClassMethodDef(famixDictionnary, options));
-			
+
 			ast.accept(new VisitorVarsDef(famixDictionnary, options));
 			ast.accept(new VisitorComments(famixDictionnary, options));
 
@@ -66,15 +67,17 @@ public class FamixRequestor extends FileASTRequestor {
 			ast.accept(new VisitorAnnotationRef(famixDictionnary, options));
 			ast.accept(new VisitorExceptionRef(famixDictionnary, options));
 
-		} catch (Exception err) {
-			
-			if (options.isStrict())
-			{
+		} catch (VerveineJStrictModeException err) {
+			if (options.isStrict()) {
 				throw err;
 			}
-			
-			err.printStackTrace();
-			System.err.println("*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
+			logError(err, path);
+
+		} catch (Exception err) {
+			if (options.isStrict()) {
+				throw new VerveineJStrictModeException("Error of parsing when using strict mode",err);
+			}
+			logError(err, path);
 		}
 	}
 
@@ -130,5 +133,16 @@ public class FamixRequestor extends FileASTRequestor {
 				file = file.getParentFile();
 		}
 		return fullPath;
+	}
+	
+	/**
+	 * Utilitary method to print the stack trace
+	 * @param err the error 
+	 * @param path the path
+	 */
+	private void logError(Exception err, String path) {
+		err.printStackTrace();
+		System.err.println(
+				"*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
 	}
 }

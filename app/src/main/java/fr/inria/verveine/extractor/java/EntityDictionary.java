@@ -50,6 +50,7 @@ import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
 import ch.akuhn.fame.Repository;
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import fr.inria.verveine.extractor.java.utils.Util;
 
@@ -116,6 +117,16 @@ public class EntityDictionary {
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
 	
 	/**
+	 * Option: If true, create stubs without package into a "Missing" package
+	 */
+	protected boolean useMissingPackage;
+	
+	/**
+	 * Option: If true, strict mode stop the creation of unresolved entities
+	 */
+	protected boolean isStrict;
+	
+	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
 	 * Because they are implicit, they may not have a binding provided by the parser,
 	 * or may have the same binding as their associated type so they can't be kept easily in {@link #keyToEntity}
@@ -133,6 +144,7 @@ public class EntityDictionary {
 		public ImplicitVariable super_iv;
 	}
 	
+	
 	/**
 	 * Result of utility methods for checking matching between two entities
 	 */
@@ -140,10 +152,6 @@ public class EntityDictionary {
 		MATCH, UNDECIDED, FAIL;
 	}
 
-	/**
-	 * Option: If true, create stubs without package into a "Missing" package
-	 */
-	protected boolean useMissingPackage;
 
 	/** Constructor taking a FAMIX repository
 	 * @param famixRepo
@@ -163,11 +171,13 @@ public class EntityDictionary {
 	
 	/** Constructor taking a FAMIX repository and the useMissingPackage option
 	 * @param famixRepo
-	 * @param useMissingPackage
+	 * @param useMissingPackage If true, create stubs without package into a "Missing" package
+	 * @param isStrict If true, strict mode stop the creation of unresolved entities
 	 */
-	public EntityDictionary(Repository famixRepo, boolean useMissingPackage) {
+	public EntityDictionary(Repository famixRepo, boolean useMissingPackage, boolean isStrict) {
 			this.famixRepo = famixRepo;
 			this.useMissingPackage = useMissingPackage;
+			this.isStrict = isStrict;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
@@ -858,9 +868,17 @@ public class EntityDictionary {
 	 * Creates or recovers the Famix Class that will own all stub methods (for which the real owner is unknown)
 	 *
 	 * @return a Famix class
+	 * @throws VerveineJStrictModeException if strict mode is activated and we try to generate a stub for unresolved entities
 	 */
 	public Class ensureFamixClassStubOwner() {
-		Class fmx =  ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
+
+		// when strict mode is activated, we do not create the universal container for unresolved entities
+		if (this.isStrict) {
+			throw new VerveineJStrictModeException("Strict mode: Can't create the universal container: ("
+					+ STUB_METHOD_CONTAINER_NAME + "). All entities must have a valid owner.");
+		}
+
+		Class fmx = ensureFamixUniqEntity(Class.class, null, STUB_METHOD_CONTAINER_NAME);
 		if (fmx != null) {
 			/*if the option `useMissingPackage` is activated, we put all the stubs with unknown packages in a package `Missing*/
 			if(this.useMissingPackage) {
@@ -871,7 +889,7 @@ public class EntityDictionary {
 				fmx.setTypeContainer( ensureFamixPackageDefault());
 			}
 		}
-		ensureFamixInheritance(ensureFamixClassObject(), fmx, /*prev*/null, null);
+		ensureFamixInheritance(ensureFamixClassObject(), fmx, /* prev */null, null);
 
 		return fmx;
 	}
@@ -2544,9 +2562,14 @@ public class EntityDictionary {
 	 * Creates or recovers a stub Famix Method
 	 * @param name of the method
 	 * @return the Famix Method
+	 * @throws VerveineJStrictModeException if strict mode is activated and we try to generate a stub
 	 */
 	public Method ensureFamixStubMethod(String name) {
-		return ensureFamixMethod(null, name, /*paramType*/null, /*returnType*/null, ensureFamixClassStubOwner(), /*modifiers*/0);
+		// // when strict mode is activated, we do not create stubs from unresolved methods
+		if (this.isStrict) {
+			throw new VerveineJStrictModeException("Strict mode: We can't create the unresolved stub methods'" + name + "' without owner");
+		}
+		return ensureFamixMethod(null, name, /* paramType */null, /* returnType */null, ensureFamixClassStubOwner(),/* modifiers */0);
 	}
 
 	public void setAttributeModifiers(Attribute fmx, int mod) {

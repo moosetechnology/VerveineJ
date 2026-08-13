@@ -17,6 +17,8 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
+import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
+
 public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 
 	private static final String OTHER_JSON_FILE = "other_output.json";
@@ -336,6 +338,24 @@ public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 		VerveineJOptions options = new VerveineJOptions();
 		options.setOptions(args);
 		assertTrue(options.isStrict());
+	}
+	
+	@Test
+	public void testStrictModeDontKillLegitimateStubs() {
+		//file with non missing dependencies
+		parse(new String[] {"-strict", "src/test/resources/missing_dependencies/AllDependenciesAreOK.java"});
+
+		Class stringClass = detectFamixElement(Class.class, "String");
+		assertNotNull(stringClass);
+		assertTrue(stringClass.getIsStub());
+	}
+	
+	@Test 
+	public void testStrictModeThrowsExceptionOnUnresolvedEntities() {
+		//file with missing dependencies
+		assertThrows(VerveineJStrictModeException.class, () -> {
+			parse(new String[] { "-strict", "src/test/resources/missing_dependencies/MissingDependency.java" });
+		});
 	}
 	
 	/*useMissingPackage mode*/
