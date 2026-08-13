@@ -7,8 +7,6 @@ import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixtraits.TAccess;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
-import fr.inria.verveine.extractor.java.Exceptions.VerveineJStrictModeException;
-
 //import junit.framework.Assert;
 
 import java.io.File;
