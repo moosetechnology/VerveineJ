@@ -350,6 +350,14 @@ public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 		assertTrue(stringClass.getIsStub());
 	}
 	
+	@Test 
+	public void testStrictModeThrowsExceptionOnUnresolvedEntities() {
+		//file with missing dependencies
+		assertThrows(VerveineJStrictModeException.class, () -> {
+			parse(new String[] { "-strict", "src/test/resources/missing_dependencies/MissingDependency.java" });
+		});
+	}
+	
 	/*useMissingPackage mode*/
 	
 	@Test
