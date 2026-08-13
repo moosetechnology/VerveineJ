@@ -2558,7 +2558,7 @@ public class EntityDictionary {
 	 * Creates or recovers a stub Famix Method
 	 * @param name of the method
 	 * @return the Famix Method
-	 * @throws IllegalStateException if strict mod is activated and we try to generate a stub
+	 * @throws VerveineJStrictModeException if strict mode is activated and we try to generate a stub
 	 */
 	public Method ensureFamixStubMethod(String name) {
 		// // when strict mod is activated, we do not create stubs
