@@ -119,7 +119,7 @@ public class EntityDictionary {
 	/**
 	 * The options passed to VerveineJ
 	 */
-	protected VerveineJOptions options;
+	protected VerveineJOptions options = new VerveineJOptions();
 	
 	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
@@ -870,7 +870,7 @@ public class EntityDictionary {
 	public Class ensureFamixClassStubOwner() {
 
 		// when strict mode is activated, we do not create stub container
-		if (this.options != null && this.options.isStrict()) {
+		if (this.options.isStrict()) {
 			throw new VerveineJStrictModeException("Strict mode: We can't create stubs when strict mod is activated");
 		}
 
@@ -2562,7 +2562,7 @@ public class EntityDictionary {
 	 */
 	public Method ensureFamixStubMethod(String name) {
 		// // when strict mod is activated, we do not create stubs
-		if (this.options != null && this.options.isStrict()) {
+		if (this.options.isStrict()) {
 			throw new VerveineJStrictModeException("Strict mode: We can't create the stub '" + name + "' when strict mod is activated");
 		}
 		return ensureFamixMethod(null, name, /* paramType */null, /* returnType */null, ensureFamixClassStubOwner(),/* modifiers */0);
