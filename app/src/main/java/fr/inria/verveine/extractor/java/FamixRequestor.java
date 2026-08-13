@@ -75,7 +75,7 @@ public class FamixRequestor extends FileASTRequestor {
 
 		} catch (Exception err) {
 			if (options.isStrict()) {
-				throw new VerveineJStrictModeException("Error of parsing when using strict mode");
+				throw new VerveineJStrictModeException("Error of parsing when using strict mode",err);
 			}
 			logError(err, path);
 		}
