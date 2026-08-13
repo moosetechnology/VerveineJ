@@ -117,9 +117,14 @@ public class EntityDictionary {
 	protected Map<String,Collection<TNamedEntity>> nameToEntity;
 	
 	/**
-	 * The options passed to VerveineJ
+	 * Option: If true, create stubs without package into a "Missing" package
 	 */
-	protected VerveineJOptions options = new VerveineJOptions();
+	protected boolean useMissingPackage;
+	
+	/**
+	 * Option: If true, strict mode stop the creation of unresolved entities
+	 */
+	protected boolean isStrict;
 	
 	/**
 	 * Yet another dictionary for implicit variables ('self' and 'super')
@@ -147,10 +152,6 @@ public class EntityDictionary {
 		MATCH, UNDECIDED, FAIL;
 	}
 
-	/**
-	 * Option: If true, create stubs without package into a "Missing" package
-	 */
-	protected boolean useMissingPackage;
 
 	/** Constructor taking a FAMIX repository
 	 * @param famixRepo
@@ -170,11 +171,13 @@ public class EntityDictionary {
 	
 	/** Constructor taking a FAMIX repository and the useMissingPackage option
 	 * @param famixRepo
-	 * @param useMissingPackage
+	 * @param useMissingPackage If true, create stubs without package into a "Missing" package
+	 * @param isStrict If true, strict mode stop the creation of unresolved entities
 	 */
-	public EntityDictionary(Repository famixRepo, boolean useMissingPackage) {
+	public EntityDictionary(Repository famixRepo, boolean useMissingPackage, boolean isStrict) {
 			this.famixRepo = famixRepo;
 			this.useMissingPackage = useMissingPackage;
+			this.isStrict = isStrict;
 			
 			this.keyToEntity = new Hashtable<IBinding,TNamedEntity>();
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
@@ -870,7 +873,7 @@ public class EntityDictionary {
 	public Class ensureFamixClassStubOwner() {
 
 		// when strict mode is activated, we do not create the universal container for unresolved entities
-		if (this.options.isStrict()) {
+		if (this.isStrict) {
 			throw new VerveineJStrictModeException("Strict mode: Can't create the universal container: ("
 					+ STUB_METHOD_CONTAINER_NAME + "). All entities must have a valid owner.");
 		}
@@ -2562,8 +2565,8 @@ public class EntityDictionary {
 	 * @throws VerveineJStrictModeException if strict mode is activated and we try to generate a stub
 	 */
 	public Method ensureFamixStubMethod(String name) {
-		// // when strict mod is activated, we do not create stubs
-		if (this.options.isStrict()) {
+		// // when strict mode is activated, we do not create stubs from unresolved methods
+		if (this.isStrict) {
 			throw new VerveineJStrictModeException("Strict mode: We can't create the unresolved stub methods'" + name + "' without owner");
 		}
 		return ensureFamixMethod(null, name, /* paramType */null, /* returnType */null, ensureFamixClassStubOwner(),/* modifiers */0);

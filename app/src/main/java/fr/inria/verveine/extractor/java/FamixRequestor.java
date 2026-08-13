@@ -32,7 +32,7 @@ public class FamixRequestor extends FileASTRequestor {
 
 		this.options = options;
 		initFileMaps(options);
-		this.famixDictionnary = new EntityDictionary(famixRepo,options.isUseMissingPackage());
+		this.famixDictionnary = new EntityDictionary(famixRepo,options.isUseMissingPackage(),options.isStrict());
 	}
 
 	protected void initFileMaps(VerveineJOptions options) {
