@@ -324,8 +324,6 @@ public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 		assertThrows(IllegalArgumentException.class, () -> parser.configure(args));
 	}
 	
-	/*Here are some tests for the VerveineJ's strict mod*/
-	
 	@Test
 	public void testStrictModeIsFalseByDefault() {
 		VerveineJOptions options = new VerveineJOptions();
