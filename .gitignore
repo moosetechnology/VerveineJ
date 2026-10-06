@@ -20,4 +20,4 @@ app/.classpath
 gradle.properties
 
 # MooseCI report
-.moose-ci/
+**/.moose-ci/
