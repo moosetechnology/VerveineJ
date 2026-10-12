@@ -1,6 +1,8 @@
 package fr.inria.verveine.extractor.java;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ArrayType;
@@ -60,6 +62,7 @@ import fr.inria.verveine.extractor.java.utils.Util;
  * @author anquetil
  */
 public class EntityDictionary {
+	private static final Logger LOGGER = Logger.getLogger(EntityDictionary.class.getName());
 
 	/**
 	 * A property added to CompilationUnits to record the name of the source file they belong to.
@@ -191,7 +194,7 @@ public class EntityDictionary {
 			try {
 				mapEntityToName(ent.getName(), ent);
 			} catch (java.lang.Exception e) {
-				System.err.println("Error recovering entity " + ent.getName() + " from repository " + famixRepo);
+				LOGGER.log(Level.WARNING, "Error recovering entity " + ent.getName() + " from repository " + famixRepo, e);
 			};
 			// for the Exception to be raised, the return value must be tested
 			try { if (((TCanBeStub) ent).getIsStub()) {} }
@@ -320,8 +323,7 @@ public class EntityDictionary {
 		try {
 			fmx = fmxClass.getDeclaredConstructor().newInstance();
 		} catch (java.lang.Exception e) {
-			System.err.println("Unexpected error, could not create a FAMIX entity: "+e.getMessage());
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, "Unexpected error, could not create a FAMIX entity", e);
 		}
 		
 		if (fmx != null) {

@@ -168,7 +168,7 @@ public class VerveineJParser {
 		try {
 			exportModel(new FileOutputStream(outputFile));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, e, () -> "Could not open output file " + outputFile);
 		}
 	}
 
@@ -193,8 +193,10 @@ public class VerveineJParser {
 					famixRepo.exportMSE(writer);
 				}
 				catch (UnknownElementError err) {
-            		System.err.println("** UnknownElementException while exporting Famix repository.\n" +
-            				"  This might happen when an entity inside the repository refers to an entity outside the repository\n");
+					LOGGER.warning("""
+							** UnknownElementException while exporting Famix repository.
+							  This might happen when an entity inside the repository refers to an entity outside the repository
+							""");
             		if (options.withDebug()) {
             			Util.traceUnknownElementError(err);
             		}

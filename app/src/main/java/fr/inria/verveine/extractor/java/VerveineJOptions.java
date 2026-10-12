@@ -6,9 +6,12 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class VerveineJOptions {
+	private static final Logger LOGGER = Logger.getLogger(VerveineJOptions.class.getName());
 
 	/**
 	 * Possible options for SourceAnchors: no source anchor, only entities [default], entities and associations
@@ -197,7 +200,7 @@ public class VerveineJOptions {
 			try {
 				i += setOption(args, i);
 			} catch (IllegalArgumentException e) {
-				System.err.println(e.getMessage());
+				LOGGER.warning(e.getMessage());
 				usage();
 				throw e;
 			}
@@ -205,7 +208,7 @@ public class VerveineJOptions {
 
 		if (JSON_OUTPUT_FORMAT.equalsIgnoreCase(outputFormat) && (incrementalParsing) ) {
 			IllegalArgumentException illegalArgumentException = new IllegalArgumentException("-i option requires mse format.");
-			System.err.println(illegalArgumentException.getMessage());
+			LOGGER.warning(illegalArgumentException.getMessage());
 			usage();
 			throw illegalArgumentException;
 		}
@@ -407,21 +410,17 @@ public class VerveineJOptions {
 	 * @return the collection of jar paths
 	 */
 	protected List<String> readAllJars(String filename) {
-		List<String> tmpPath = new ArrayList<String>();
-		try {
-			BufferedReader fcp = new BufferedReader(new FileReader(filename));
+		List<String> tmpPath = new ArrayList<>();
+		try (BufferedReader fcp = new BufferedReader(new FileReader(filename))) {
 			String jarname = fcp.readLine();
 			while (jarname != null) {
 				tmpPath.add(jarname);
 				jarname = fcp.readLine();
 			}
-			fcp.close();
 		} catch (FileNotFoundException e) {
-			System.err.println("** Error classpath file " + filename + " not found");
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, e, () -> "** Error classpath file " + filename + " not found");
 		} catch (IOException e) {
-			System.err.println("** Error reading classpath file: " + filename);
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, e, () -> "** Error reading classpath file: " + filename);
 		}
 		return tmpPath;
 	}
@@ -458,7 +457,7 @@ public class VerveineJOptions {
 
 	protected void setCodeVersion(String arg) {
 		if (codeVers != null) {
-			System.err.println("Trying to set twice code versions: " + codeVers + " and " + arg);
+			LOGGER.warning(() -> "Trying to set twice code versions: " + codeVers + " and " + arg);
 			usage();
 			throw new IllegalArgumentException();
 		} else if(VERSION_MAP.containsKey(arg)){
@@ -678,7 +677,7 @@ public class VerveineJOptions {
 		for (Pattern filter : excludeMatchers) {
 			String absolutePath = f.getAbsolutePath();
 			if (filter.matcher(absolutePath).matches()) {
-				System.out.println("Excluded file: " + absolutePath);
+				LOGGER.info(() -> "Excluded file: " + absolutePath);
 				return;
 			}
 		}

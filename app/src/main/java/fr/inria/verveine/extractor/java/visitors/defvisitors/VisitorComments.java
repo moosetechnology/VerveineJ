@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
@@ -60,6 +62,7 @@ import fr.inria.verveine.extractor.java.visitors.GetVisitedEntityAbstractVisitor
  * @author anquetil
  */
 public class VisitorComments extends GetVisitedEntityAbstractVisitor {
+	private static final Logger LOGGER = Logger.getLogger(VisitorComments.class.getName());
 
 	/**
 	 * list of all comments in the compilation unit
@@ -342,7 +345,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 			this.lastPositionRead = 0;
 		} catch (FileNotFoundException|UnsupportedEncodingException e) {
-			System.err.println("Not able to read comments from "+currentFilename);
+			LOGGER.log(Level.WARNING, e, () -> "Not able to read comments from " + currentFilename);
 		}
 
 	}
@@ -361,7 +364,7 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 			int ret = openedFile.read( buffer, /*offset in buffer*/0, lenghtToRead);
 
 			if (ret < lenghtToRead) {
-				System.err.println("missing bytes in "+ currentFilename + ", read " + ret + " instead of " + lenghtToRead);
+				LOGGER.warning(() -> "missing bytes in " + currentFilename + ", read " + ret + " instead of " + lenghtToRead);
 				return "";
 			}
 			lastPositionRead = start + ret;
