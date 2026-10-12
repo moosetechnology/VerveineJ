@@ -552,7 +552,7 @@ public class EntityDictionary {
 		
 		Implementation implementation;
 		if (supBnd != null && supBnd.isParameterizedType()) { // Needs checks and tests.
-			implementation = (ParametricImplementation)buildFamixParametricAssociation(new ParametricImplementation(), supBnd.getErasure().getTypeParameters(), supBnd.getTypeArguments());
+			implementation = new ParametricImplementation();
 		} else {
 			implementation = new Implementation();
 		}
@@ -561,6 +561,10 @@ public class EntityDictionary {
 		implementation.setMyInterface(myInterface);
 		chainPrevNext(prev, implementation);
 		famixRepoAdd(implementation);
+		if (implementation instanceof ParametricImplementation) {
+			buildFamixParametricAssociation((ParametricImplementation) implementation,
+					supBnd.getErasure().getTypeParameters(), supBnd.getTypeArguments());
+		}
 		return implementation;
 	}
 
