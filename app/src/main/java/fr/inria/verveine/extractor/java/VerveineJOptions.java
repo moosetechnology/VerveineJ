@@ -482,7 +482,7 @@ public class VerveineJOptions {
 			classPathOptions = addToClassPath(classPathOptions, deps);
 		}
 		
-		String[] sourcePathEntries = argPath.toArray(new String[0]);
+		String[] sourcePathEntries = sourcePathEntries();
 		
 		jdtParser.setEnvironment(classPathOptions, /*sourcepathEntries*/sourcePathEntries, /*encodings*/null, includeRunningVMBootclasspath);
 		jdtParser.setResolveBindings(true);
@@ -507,6 +507,61 @@ public class VerveineJOptions {
     
 		jdtParser.setCompilerOptions(javaCoreOptions);
 
+	}
+
+	protected String[] sourcePathEntries() {
+		List<String> sourcePathEntries = new ArrayList<>();
+		for (String path : argPath) {
+			sourcePathEntries.add(sourcePathEntryFor(path));
+		}
+		return sourcePathEntries.toArray(new String[0]);
+	}
+
+	protected String sourcePathEntryFor(String path) {
+		File moduleContainer = moduleContainerFor(new File(path));
+		if (moduleContainer == null) {
+			return path;
+		}
+		return moduleContainer.getPath();
+	}
+
+	private File moduleContainerFor(File moduleRoot) {
+		if (!new File(moduleRoot, "module-info.java").isFile()) {
+			return null;
+		}
+
+		File flatModuleContainer = moduleRoot.getParentFile();
+		if (containsModuleRoots(flatModuleContainer, "")) {
+			return flatModuleContainer;
+		}
+
+		File shareDirectory = moduleRoot.getParentFile();
+		if (shareDirectory == null || !shareDirectory.getName().equals("share")) {
+			return null;
+		}
+		File moduleDirectory = shareDirectory.getParentFile();
+		if (moduleDirectory == null || !moduleRoot.getName().equals("classes")) {
+			return null;
+		}
+		File sourceRoot = moduleDirectory.getParentFile();
+		return containsModuleRoots(sourceRoot, "share" + File.separator + "classes") ? sourceRoot : null;
+	}
+
+	private boolean containsModuleRoots(File sourceRoot, String moduleInfoRelativePath) {
+		if (sourceRoot == null) {
+			return false;
+		}
+		File[] children = sourceRoot.listFiles(File::isDirectory);
+		if (children == null) {
+			return false;
+		}
+		int moduleRootCount = 0;
+		for (File child : children) {
+			if (new File(child, moduleInfoRelativePath + (moduleInfoRelativePath.isEmpty() ? "" : File.separator) + "module-info.java").isFile()) {
+				moduleRootCount++;
+			}
+		}
+		return moduleRootCount > 1;
 	}
 
 

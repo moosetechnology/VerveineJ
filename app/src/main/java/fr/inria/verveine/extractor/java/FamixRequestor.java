@@ -25,6 +25,7 @@ public class FamixRequestor extends FileASTRequestor {
 	 */
 	protected Map<String, String> dirMap;
 	protected Map<String, String> fileMap;
+	protected int acceptedAstCount;
 
 	public FamixRequestor(Repository famixRepo, VerveineJOptions options) {
 		super();
@@ -48,6 +49,7 @@ public class FamixRequestor extends FileASTRequestor {
 	}
 
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
+		acceptedAstCount++;
 		String path = relativePath(sourceFilePath);
 		System.out.println("Processing file: " + path);
 
@@ -76,6 +78,10 @@ public class FamixRequestor extends FileASTRequestor {
 			err.printStackTrace();
 			System.err.println("*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
 		}
+	}
+
+	public int getAcceptedAstCount() {
+		return acceptedAstCount;
 	}
 
 	private String getVisitorName(Exception err, String path) {
