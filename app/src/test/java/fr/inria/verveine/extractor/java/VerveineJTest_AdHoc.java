@@ -148,6 +148,27 @@ public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 		assertEquals(6, lire.getOutgoingInvocations().size());
 	}
 
+	@Test
+	public void testInvocationOfOwnMethodWithUnresolvedTypes() {
+		parse(new String[]{"src/test/resources/ad_hoc/OwnMethodInvocation.java"});
+
+		Method isEmpty = entitiesNamed(Method.class, "isEmpty").stream()
+				.filter(candidate -> ((TNamedEntity) candidate.getParentType()).getName().equals("OwnMethodInvocation"))
+				.findFirst()
+				.orElse(null);
+		assertNotNull(isEmpty);
+		Invocation invocation = isEmpty.getOutgoingInvocations().stream()
+				.map(Invocation.class::cast)
+				.filter(candidate -> candidate.getSignature().equals("getData()"))
+				.findFirst()
+				.orElse(null);
+		assertNotNull(invocation);
+		assertEquals(1, invocation.getCandidates().size());
+		Method getData = (Method) firstElt(invocation.getCandidates());
+		assertEquals("getData", getData.getName());
+		assertFalse(getData.getIsStub());
+	}
+
 	@ Test
 	public void testConstructorInvocations() {
 		parse(new String[] {
@@ -214,6 +235,21 @@ public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 		assertEquals( 3, aMethod.numberOfOutgoingInvocations());
 		/* new DefaultConstructor(); x.methodWithInstanceScope(); new JFrame(...); */
 		assertEquals(0, aMethod.numberOfOutgoingReferences());
+	}
+
+	@Test
+	public void testNoReferenceOnNewInArgument() {
+		parse(new String[] {"src/test/resources/ad_hoc/NewArgument.java"});
+
+		Method method = detectFamixElement(Method.class, "method");
+		assertEquals(0, method.numberOfOutgoingReferences());
+		assertEquals(2, method.numberOfOutgoingInvocations());
+		Collection<String> signatures = method.getOutgoingInvocations().stream()
+				.map(Invocation.class::cast)
+				.map(Invocation::getSignature)
+				.toList();
+		assertTrue(signatures.contains("NewArgument()"));
+		assertTrue(signatures.contains("consume(new NewArgument())"));
 	}
 
 	@ Test

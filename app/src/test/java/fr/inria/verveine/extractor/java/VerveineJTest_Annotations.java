@@ -53,6 +53,15 @@ public class VerveineJTest_Annotations extends VerveineJTestAbstract {
     }
 
     @Test
+    public void testAnnotationOnInterface() {
+        Interface service = detectFamixElement(Interface.class, "IUniteService");
+        assertNotNull(service);
+        assertEquals(1, service.getAnnotationInstances().size());
+        AnnotationInstance annotation = (AnnotationInstance) firstElt(service.getAnnotationInstances());
+        assertEquals("RemoteServiceRelativePath", ((TNamedEntity) annotation.getAnnotationType()).getName());
+    }
+
+    @Test
     public void testMethodAnnotation() {
         org.moosetechnology.model.famix.famixjavaentities.Class book = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Book");
         Collection<TMethod> bookMethods = book.getMethods();

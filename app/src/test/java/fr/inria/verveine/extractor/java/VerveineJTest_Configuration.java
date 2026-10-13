@@ -138,6 +138,36 @@ public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 	}
 
 	@Test
+	public void testAlllocalsKeepsControlFlowVariableTypes() {
+		parse(new String[] {"-alllocals", "src/test/resources/ad_hoc/ControlFlowVariables.java"});
+
+		LocalVariable index = detectFamixElement(LocalVariable.class, "i");
+		LocalVariable exception = detectFamixElement(LocalVariable.class, "e");
+		assertNotNull(index.getDeclaredType());
+		assertNotNull(exception.getDeclaredType());
+		assertEquals("int", index.getDeclaredType().getName());
+		assertEquals("Exception", exception.getDeclaredType().getName());
+	}
+
+	@Test
+	public void testUnresolvedTypeStubsAreContainedByPackage() {
+		parse(new String[] {"src/test/resources/missing_dependencies/UnresolvedTypes.java"});
+
+		boolean foundList = false;
+		boolean foundArrayList = false;
+		for (Type type : entitiesOfType(Type.class)) {
+			if (type.getName().equals("List") || type.getName().equals("ArrayList")) {
+				assertTrue(type.getIsStub());
+				assertEquals(org.moosetechnology.model.famix.famixjavaentities.Package.class, type.getTypeContainer().getClass());
+				foundList |= type.getName().equals("List");
+				foundArrayList |= type.getName().equals("ArrayList");
+			}
+		}
+		assertTrue(foundList);
+		assertTrue(foundArrayList);
+	}
+
+	@Test
 	public void testEncodingUTF8() {
 		parser.configure(new String[]{"-encoding", "UTF-8", "src/test/resources/comments"});
 	}
