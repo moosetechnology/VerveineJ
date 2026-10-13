@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
@@ -145,7 +146,8 @@ public class VisitorExceptionRef extends GetVisitedEntityAbstractVisitor {
 		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(bnd);
 		if (fmx != null) {
             ITypeBinding declaredTypeBinding = (bnd == null) ? null : bnd.getType();
-            dico.ensureFamixEntityTyping(declaredTypeBinding, fmx, fmxException);
+			EntityTyping typing = dico.ensureFamixEntityTyping(declaredTypeBinding, fmx, fmxException);
+			addAssociationSourceAnchor(typing, varDecl.getType());
 		}
 	}
 
