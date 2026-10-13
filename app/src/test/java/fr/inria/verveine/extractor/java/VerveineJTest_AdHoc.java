@@ -316,7 +316,7 @@ public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 	        	}
 	        }
 		assertNotNull(dico);
-		assertEquals(8, dico.getMethods().size());
+		assertEquals(9, dico.getMethods().size());
 		assertEquals(3, dico.getAttributes().size());
 
 		for (TAttribute ta : dico.getAttributes()) {
