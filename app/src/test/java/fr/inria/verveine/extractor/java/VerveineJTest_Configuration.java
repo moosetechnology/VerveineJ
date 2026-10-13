@@ -153,6 +153,60 @@ public class VerveineJTest_Configuration extends VerveineJTestAbstract {
 	}
 
 	@Test
+	public void testModuleRootUsesParentAsJDTSourcePath() {
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(new String[]{"src/test/resources/modules/flat/module.one"});
+
+		assertArrayEquals(
+				new String[]{"src/test/resources/modules/flat"},
+				options.sourcePathEntries());
+
+		parse(new String[]{"src/test/resources/modules/flat/module.one"});
+		assertNotNull(detectFamixElement(Class.class, "One"));
+	}
+
+	@Test
+	public void testOpenJDKModuleRootUsesModulesDirectoryAsJDTSourcePath() {
+		VerveineJOptions options = new VerveineJOptions();
+		options.setOptions(new String[]{"src/test/resources/modules/openjdk-src/java.one/share/classes"});
+
+		assertArrayEquals(
+				new String[]{"src/test/resources/modules/openjdk-src"},
+				options.sourcePathEntries());
+
+		parse(new String[]{"src/test/resources/modules/openjdk-src/java.one/share/classes"});
+		assertNotNull(detectFamixElement(Class.class, "OpenJDKOne"));
+	}
+
+	@Test
+	public void testParseFailsWhenJDTAcceptsNoSelectedSources() {
+		parser.configure(new String[]{"src/test/resources/modules/flat/module.one/example/one/One.java"});
+		FamixRequestor requestor = new FamixRequestor(repo, parser.options);
+
+		assertThrows(
+				IllegalStateException.class,
+				() -> parser.verifyJDTParsedSources(new String[]{"Selected.java"}, requestor));
+	}
+
+	@Test
+	public void testLenientParseExportsAcceptedASTsAfterJDTFailure() {
+		parser.configure(new String[]{"src/test/resources/modules/flat/module.one/example/one/One.java"});
+		FamixRequestor requestor = new FamixRequestor(repo, parser.options);
+		requestor.acceptedAstCount = 1;
+
+		parser.handleJDTFailure(new String[]{"Selected.java"}, requestor, new IllegalStateException("JDT failure"));
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void testStrictParseFailsAfterJDTFailure() {
+		parser.configure(new String[]{"-strict", "src/test/resources/modules/flat/module.one/example/one/One.java"});
+		FamixRequestor requestor = new FamixRequestor(repo, parser.options);
+		requestor.acceptedAstCount = 1;
+
+		parser.handleJDTFailure(new String[]{"Selected.java"}, requestor, new IllegalStateException("JDT failure"));
+	}
+
+	@Test
 	public void testCommentsAnchorWithoutOption() {
 		parse(new String[]{"src/test/resources/comments/ClassWithComments.java"});
 

@@ -19,6 +19,8 @@ import org.moosetechnology.model.famix.tagging.TaggingModel;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A batch parser inspired from org.eclipse.jdt.internal.compiler.batch.Main (JDT-3.6)
@@ -27,6 +29,7 @@ import java.util.Collection;
  */
 
 public class VerveineJParser {
+	private static final Logger LOGGER = Logger.getLogger(VerveineJParser.class.getName());
 
 	public VerveineJOptions options;
 
@@ -70,21 +73,40 @@ public class VerveineJParser {
 		}
 
 		FamixRequestor req = new FamixRequestor(getFamixRepo(), options);
+		String[] sourceFiles = options.sourceFilesToParse();
 
 		Util.metamodel = this.getFamixRepo().getMetamodel();
 		try {
 			jdtParser.createASTs(
-					options.sourceFilesToParse(),
+					sourceFiles,
 					/*encodings*/null,
 					/*bindingKeys*/new String[0],
 					/*requestor*/req,
 					/*monitor*/null);
-		} catch (java.lang.IllegalStateException e) {
-			System.out.println("VerveineJ could not launch parser");
-			e.printStackTrace();
+		} catch (IllegalStateException error) {
+			handleJDTFailure(sourceFiles, req, error);
 		}
 
+		verifyJDTParsedSources(sourceFiles, req);
+
 		this.compressPackagesNames();
+	}
+
+	protected void verifyJDTParsedSources(String[] sourceFiles, FamixRequestor requestor) {
+		if (sourceFiles.length > 0 && requestor.getAcceptedAstCount() == 0) {
+			throw new IllegalStateException("JDT did not parse any of the " + sourceFiles.length + " selected Java source files");
+		}
+	}
+
+	protected void handleJDTFailure(String[] sourceFiles, FamixRequestor requestor, IllegalStateException error) {
+		if (requestor.getAcceptedAstCount() == 0) {
+			throw new IllegalStateException("JDT failed before parsing any of the " + sourceFiles.length + " selected Java source files", error);
+		}
+		if (options.isStrict()) {
+			throw error;
+		}
+		LOGGER.log(Level.WARNING, "*** JDT stopped after parsing {0} source files; exporting a partial model", requestor.getAcceptedAstCount());
+		LOGGER.log(Level.WARNING, "JDT parser failure", error);
 	}
 
 	/**
@@ -146,7 +168,7 @@ public class VerveineJParser {
 		try {
 			exportModel(new FileOutputStream(outputFile));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			LOGGER.log(Level.WARNING, e, () -> "Could not open output file " + outputFile);
 		}
 	}
 
@@ -171,8 +193,10 @@ public class VerveineJParser {
 					famixRepo.exportMSE(writer);
 				}
 				catch (UnknownElementError err) {
-            		System.err.println("** UnknownElementException while exporting Famix repository.\n" +
-            				"  This might happen when an entity inside the repository refers to an entity outside the repository\n");
+					LOGGER.warning("""
+							** UnknownElementException while exporting Famix repository.
+							  This might happen when an entity inside the repository refers to an entity outside the repository
+							""");
             		if (options.withDebug()) {
             			Util.traceUnknownElementError(err);
             		}

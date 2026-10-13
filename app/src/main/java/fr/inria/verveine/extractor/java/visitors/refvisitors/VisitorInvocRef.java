@@ -18,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
+	private static final Logger LOGGER = Logger.getLogger(VisitorInvocRef.class.getName());
 
 	/**
 	 * Useful to keep the FamixType created in the specific case of "new
@@ -628,7 +630,7 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 		}
 
 		// ... OTHER POSSIBLE EXPRESSIONS ?
-		System.err.println("WARNING: Unexpected receiver expression: " + expr.getClass().getName()
+		LOGGER.warning(() -> "Unexpected receiver expression: " + expr.getClass().getName()
 				+ " (method called is " + expr.getClass().getName() + ".aMethod(...))");
 		return null;
 	}

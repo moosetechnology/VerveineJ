@@ -628,7 +628,7 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 	protected TMethod createInitBlock(Boolean isStatic, Boolean isInitializationBlock) {
 		// putting field's initialization code in an INIT_BLOCK_NAME method
 		Method ctxtMeth = (Method) this.context.topMethod();
-		if (ctxtMeth != null && !ctxtMeth.getIsInitializer() && ctxtMeth.getIsClassSide() != isStatic) {
+		if (ctxtMeth != null && !ctxtMeth.getIsInitializer() && !ctxtMeth.getIsClassSide().equals(isStatic)) {
 			ctxtMeth = null;
 		} else {
 			if (ctxtMeth != null && ctxtMeth.getParentType() != context.topType()) {

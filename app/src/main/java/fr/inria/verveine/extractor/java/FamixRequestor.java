@@ -3,6 +3,8 @@ package fr.inria.verveine.extractor.java;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import fr.inria.verveine.extractor.java.visitors.refvisitors.*;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -15,6 +17,7 @@ import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorPackageDef;
 import fr.inria.verveine.extractor.java.visitors.defvisitors.VisitorVarsDef;
 
 public class FamixRequestor extends FileASTRequestor {
+	private static final Logger LOGGER = Logger.getLogger(FamixRequestor.class.getName());
 
 	protected EntityDictionary famixDictionnary;
 
@@ -25,6 +28,7 @@ public class FamixRequestor extends FileASTRequestor {
 	 */
 	protected Map<String, String> dirMap;
 	protected Map<String, String> fileMap;
+	protected int acceptedAstCount;
 
 	public FamixRequestor(Repository famixRepo, VerveineJOptions options) {
 		super();
@@ -48,8 +52,9 @@ public class FamixRequestor extends FileASTRequestor {
 	}
 
 	public void acceptAST(String sourceFilePath, CompilationUnit ast) {
+		acceptedAstCount++;
 		String path = relativePath(sourceFilePath);
-		System.out.println("Processing file: " + path);
+		LOGGER.info(() -> "Processing file: " + path);
 
 		ast.setProperty(EntityDictionary.SOURCE_FILENAME_PROPERTY, path);
 		try {
@@ -73,9 +78,12 @@ public class FamixRequestor extends FileASTRequestor {
 				throw err;
 			}
 			
-			err.printStackTrace();
-			System.err.println("*** " + getVisitorName(err, path) + " got exception: '" + err + "' while processing file: " + path);
+			LOGGER.log(Level.WARNING, err, () -> "*** " + getVisitorName(err, path) + " got exception while processing file: " + path);
 		}
+	}
+
+	public int getAcceptedAstCount() {
+		return acceptedAstCount;
 	}
 
 	private String getVisitorName(Exception err, String path) {

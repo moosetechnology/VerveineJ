@@ -165,6 +165,18 @@ public class VerveineJTest_Generics extends VerveineJTestAbstract {
     }
 
     @Test
+    public void testStringComparableImplementation() {
+        Class implementingClass = detectFamixElement(Class.class, "ClassWithStringComparable");
+        assertNotNull(implementingClass);
+
+        TImplementation implementation = firstElt(implementingClass.getInterfaceImplementations());
+        assertSame(ParametricImplementation.class, implementation.getClass());
+        assertEquals("Comparable", ((TNamedEntity) implementation.getMyInterface()).getName());
+        assertEquals("String", ((TNamedEntity) firstElt(((ParametricImplementation) implementation)
+                .getConcretizations()).getTypeArgument()).getName());
+    }
+
+    @Test
     public void testParametricInvocation() {
         ParametricMethod parametricMethod = firstEntityNamed(ParametricMethod.class, "parametricMethod");
         assertNotNull(parametricMethod);
