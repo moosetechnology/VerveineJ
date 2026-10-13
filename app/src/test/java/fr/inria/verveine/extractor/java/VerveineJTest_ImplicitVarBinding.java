@@ -3,9 +3,11 @@ package fr.inria.verveine.extractor.java;
 import fr.inria.verveine.extractor.java.utils.ImplicitVarBinding;
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.ImplicitVariable;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
+import org.moosetechnology.model.famix.famixtraits.TInvocation;
 
 import java.util.Collection;
 
@@ -44,6 +46,44 @@ public class VerveineJTest_ImplicitVarBinding extends VerveineJTestAbstract {
 	@Test
 	public void testSefDiffSuper() {
 		assertNotEquals(getImplicitVar(mth1, EntityDictionary.THIS_NAME), getImplicitVar(mth1, EntityDictionary.SUPER_NAME));
+	}
+
+	@Test
+	public void testImplicitVariableProperties() {
+		VerveineJParser parser = new VerveineJParser();
+		repo = parser.getFamixRepo();
+		parser.configure(new String[] { "src/test/resources/ad_hoc/ImplicitVariableProperties.java" });
+		parser.parse();
+
+		Class child = detectFamixElement(Class.class, "ImplicitVariableChild");
+		Class parent = detectFamixElement(Class.class, "ImplicitVariableParent");
+		Method method = detectFamixElement(Method.class, "method");
+		ImplicitVariable thisVariable = null;
+		ImplicitVariable superVariable = null;
+		for (ImplicitVariable variable : entitiesOfType(ImplicitVariable.class)) {
+			if (variable.getParentBehaviouralEntity() == method) {
+				if (EntityDictionary.THIS_NAME.equals(variable.getName())) {
+					thisVariable = variable;
+				} else if (EntityDictionary.SUPER_NAME.equals(variable.getName())) {
+					superVariable = variable;
+				}
+			}
+		}
+
+		assertNotNull(thisVariable);
+		assertNotNull(superVariable);
+		assertFalse(thisVariable.getIsStub());
+		assertFalse(superVariable.getIsStub());
+		assertSame(child, thisVariable.getDeclaredType());
+		assertSame(child, superVariable.getDeclaredType());
+
+		for (TInvocation invocation : method.getOutgoingInvocations()) {
+			if (invocation.getReceiver() == superVariable) {
+				assertSame(parent, ((Method) firstElt(invocation.getCandidates())).getParentType());
+				return;
+			}
+		}
+		fail("No invocation on super");
 	}
 
 	@Test

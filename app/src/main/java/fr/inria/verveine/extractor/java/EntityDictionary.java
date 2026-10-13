@@ -2808,6 +2808,12 @@ public class EntityDictionary {
 		ImplicitVariable fmx;
 		fmx = ensureFamixEntity(ImplicitVariable.class, key, name);
 		fmx.setParentBehaviouralEntity(tMethod);
+		fmx.setIsStub(tMethod.getIsStub());
+		if (fmx.getTyping() == null) {
+			ensureFamixEntityTyping(null, fmx, type);
+		} else {
+			fmx.getTyping().setDeclaredType(type);
+		}
 		return fmx;
 	}
 

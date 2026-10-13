@@ -37,10 +37,10 @@ public class VerveineJTest_Inner extends VerveineJTestAbstract {
     public void testNumberOfClass() {
         parse(new String[] {"src/test/resources/inner"});
         Collection<Class> classes = entitiesOfType(Class.class);
-        assertEquals(11, classes.size()); // See the addtion of stubs and non-stubs class
+        assertEquals(10, classes.size()); // See the addition of stubs and non-stub classes
         assertEquals(4, entitiesOfType(Interface.class).size()); // Serializable, Comparable<T>, Constable, ConstantDesc. Previously Comparable<Long> but we do not represent it anymore.
         // Number of stubs
-        assertEquals(7, classes.stream().filter(aClass -> aClass.getIsStub()).toArray().length); 
+        assertEquals(6, classes.stream().filter(aClass -> aClass.getIsStub()).toArray().length);
         assertEquals(4, classes.stream().filter(aClass -> !aClass.getIsStub()).toArray().length); // InnerClass, _Anonymous(Patate), _Anonymous(Canard), Aclass
         assertEquals(2, classes.stream().filter(aClass -> !aClass.getIsStub() && aClass.getName().contains("Anonymous")).toArray().length); // _Anonymous(Patate), _Anonymous(Canard)
     }
