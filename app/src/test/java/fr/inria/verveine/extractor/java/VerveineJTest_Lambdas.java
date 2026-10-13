@@ -84,6 +84,7 @@ public class VerveineJTest_Lambdas extends VerveineJTestAbstract {
         assertNotNull(col);
         assertNotNull(found);
         assertNotNull(t);
+        assertEquals("Object", t.getDeclaredType().getName());
     }
 
     @Test
@@ -137,7 +138,8 @@ public class VerveineJTest_Lambdas extends VerveineJTestAbstract {
                 assertEquals("ExistingClass",localVar.getDeclaredType().getName() );
             }
             else if (localVar.getName().equals("t")) {
-                assertNull(localVar.getDeclaredType());
+                assertNotNull(localVar.getDeclaredType());
+                assertEquals("int", localVar.getDeclaredType().getName());
             }
             else {
                 fail("Unknown local variable:" + localVar.getName());
