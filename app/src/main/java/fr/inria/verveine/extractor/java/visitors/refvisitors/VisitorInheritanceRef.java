@@ -10,9 +10,13 @@ import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixtraits.TAssociation;
+import org.moosetechnology.model.famix.famixtraits.TCanImplement;
+import org.moosetechnology.model.famix.famixtraits.TImplementation;
 import org.moosetechnology.model.famix.famixtraits.TType;
 import org.moosetechnology.model.famix.famixtraits.TWithInheritances;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
+
+import java.util.List;
 
 /** A visitor to record inheritance relationships.<br>
  * It is simpler than the other ref visitors
@@ -29,6 +33,7 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 		ITypeBinding bnd = node.resolveBinding();
 		if ((fmx != null) && (bnd != null)) {
 			ensureInheritances(bnd, fmx);
+			addInheritanceAndImplementationSourceAnchors(node, fmx);
 
 			return super.visit(node);
 		} else {
@@ -167,5 +172,37 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 
 		// --------------- interfaces
 		dico.ensureImplementedInterfaces(bnd, (TType)fmx, null, lastInheritance);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addInheritanceAndImplementationSourceAnchors(TypeDeclaration node, TWithInheritances fmx) {
+		addInheritanceSourceAnchor(fmx, node.getSuperclassType());
+		for (org.eclipse.jdt.core.dom.Type superInterface : (List<org.eclipse.jdt.core.dom.Type>) node.superInterfaceTypes()) {
+			addInheritanceSourceAnchor(fmx, superInterface);
+			if (fmx instanceof TCanImplement) {
+				addImplementationSourceAnchor((TCanImplement) fmx, superInterface);
+			}
+		}
+	}
+
+	private void addInheritanceSourceAnchor(TWithInheritances subclass, org.eclipse.jdt.core.dom.Type superclassNode) {
+		if (superclassNode == null) {
+			return;
+		}
+		TType superclass = dico.ensureFamixType(superclassNode.resolveBinding());
+		for (org.moosetechnology.model.famix.famixtraits.TInheritance inheritance : subclass.getSuperInheritances()) {
+			if (inheritance.getSuperclass() == superclass) {
+				addAssociationSourceAnchor(inheritance, superclassNode);
+			}
+		}
+	}
+
+	private void addImplementationSourceAnchor(TCanImplement implementingClass, org.eclipse.jdt.core.dom.Type interfaceNode) {
+		TType implementedInterface = dico.ensureFamixType(interfaceNode.resolveBinding());
+		for (TImplementation implementation : implementingClass.getInterfaceImplementations()) {
+			if (implementation.getMyInterface() == implementedInterface) {
+				addAssociationSourceAnchor(implementation, interfaceNode);
+			}
+		}
 	}
 }

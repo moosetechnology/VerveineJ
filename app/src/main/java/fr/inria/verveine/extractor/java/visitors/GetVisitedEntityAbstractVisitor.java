@@ -12,6 +12,7 @@ import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Package;
 import org.moosetechnology.model.famix.famixjavaentities.Type;
 import org.moosetechnology.model.famix.famixtraits.TType;
+import org.moosetechnology.model.famix.famixtraits.TAssociation;
 import org.moosetechnology.model.famix.famixtraits.TWithMethods;
 import org.moosetechnology.model.famix.famixtraits.TWithTypes;
 
@@ -64,6 +65,12 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
             child.accept(this);
         }
     }
+
+	protected void addAssociationSourceAnchor(TAssociation association, ASTNode node) {
+		if (association != null && node != null && options.withAnchors(VerveineJOptions.AnchorOptions.assoc)) {
+			dico.addSourceAnchor(association, node);
+		}
+	}
 
 	// two visit methods never used
 

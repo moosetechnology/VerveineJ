@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.*;
 import org.moosetechnology.model.famix.famixjavaentities.ContainerEntity;
+import org.moosetechnology.model.famix.famixjavaentities.EntityTyping;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Reference;
 import org.moosetechnology.model.famix.famixtraits.*;
@@ -174,6 +175,7 @@ public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 	public boolean visit(MethodDeclaration node) {
 		Method fmx = visitMethodDeclaration( node);
 		if (fmx != null) {
+			addAssociationSourceAnchor(fmx.getTyping(), node.getReturnType2());
 			//Parameters are visited by super!
 			return super.visit(node);
 		}
@@ -258,7 +260,7 @@ public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 		int dimensions = node.getExtraDimensions();
 		if (node.isVarargs()) dimensions++;
 		TType declaredType = dico.referredType(node.getType().resolveBinding(), context.topType(), dimensions);
-		setVariableDeclaredType(node, declaredType);
+		setVariableDeclaredType(node, declaredType, node.getType());
 		return true;
 	}
 
@@ -382,16 +384,17 @@ public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 		for (VariableDeclaration varDecl : fragments) {
 			
 			TType declaredType = dico.referredType(declType.resolveBinding(), (T) context.topType(), varDecl.getExtraDimensions());
-			setVariableDeclaredType(varDecl, declaredType);
+			setVariableDeclaredType(varDecl, declaredType, declType);
 			varDecl.accept(this);
 		}
 		return false;
 	}
 
-	protected void setVariableDeclaredType(VariableDeclaration var, TType varTyp) {
+	protected void setVariableDeclaredType(VariableDeclaration var, TType varTyp, Type typeNode) {
 		TTypedEntity fmx = (TTypedEntity) dico.getEntityByKey(var.resolveBinding());
 		if (fmx != null) {
-			dico.ensureFamixEntityTyping(var.resolveBinding().getType(), fmx, varTyp);
+			EntityTyping typing = dico.ensureFamixEntityTyping(var.resolveBinding().getType(), fmx, varTyp);
+			addAssociationSourceAnchor(typing, typeNode);
 		}
 	}
 
