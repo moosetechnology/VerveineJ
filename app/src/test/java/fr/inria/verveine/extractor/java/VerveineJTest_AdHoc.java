@@ -420,6 +420,23 @@ public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 	}
 
 	@Test
+	public void testInferredLocalVariableType() {
+		parse(new String[]{"src/test/resources/ad_hoc/InferredLocalVariableType.java"});
+
+		LocalVariable text = detectFamixElement(LocalVariable.class, "text");
+		assertNotNull(text);
+		assertEquals("String", ((TNamedEntity) text.getDeclaredType()).getName());
+		assertTrue(entitiesNamed(Type.class, EntityDictionary.IMPLICIT_VAR_TYPE_NAME).isEmpty());
+
+		Method example = detectFamixElement(Method.class, "example");
+		assertNotNull(example);
+		Invocation invocation = (Invocation) firstElt(example.getOutgoingInvocations());
+		assertSame(text, invocation.getReceiver());
+		Method length = (Method) firstElt(invocation.getCandidates());
+		assertEquals("String", ((TNamedEntity) length.getParentType()).getName());
+	}
+
+	@Test
 	public void testArrayListMatthias() {
 		parse(new String[]{"src/test/resources/ad_hoc/Bla.java"});
 
