@@ -1046,15 +1046,16 @@ public class EntityDictionary {
 			return this.ensureFamixAnnotationType(bnd, name, (ContainerEntity) owner);
 		}
 
+		// Recovered bindings omit generic metadata but may later be resolved as parameterized types.
 		if (bnd.isInterface()) {
-			return this.ensureFamixInterface(bnd, name, owner, /*isGeneric*/bnd.isGenericType() || bnd.isParameterizedType() || bnd.isRawType(), modifiers);
+			return this.ensureFamixInterface(bnd, name, owner, /*isGeneric*/bnd.isGenericType() || bnd.isParameterizedType() || bnd.isRawType() || bnd.isRecovered(), modifiers);
 		}
 
 		if (isThrowable(bnd)) {
 			return this.ensureFamixException(bnd, name, owner, /*isGeneric*/false, modifiers);
 		}
 		if (bnd.isClass()) {
-			return this.ensureFamixClass(bnd, name, (TNamedEntity) owner, /*isGeneric*/bnd.isGenericType() || bnd.isParameterizedType() || bnd.isRawType(), modifiers);
+			return this.ensureFamixClass(bnd, name, (TNamedEntity) owner, /*isGeneric*/bnd.isGenericType() || bnd.isParameterizedType() || bnd.isRawType() || bnd.isRecovered(), modifiers);
 		}
 		if(bnd.isWildcardType()) {
 			return this.ensureFamixWildcardType(bnd, name, (TParametricEntity)owner, ctxt);
