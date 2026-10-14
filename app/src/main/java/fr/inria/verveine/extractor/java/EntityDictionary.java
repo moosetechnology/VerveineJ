@@ -112,6 +112,11 @@ public class EntityDictionary {
 	 * A reverse dictionary (see {@link #keyToEntity}) to find the key of an entity.
 	 */
 	protected Map<TNamedEntity,IBinding> entityToKey;
+	/**
+	 * Associates an enum constant with the anonymous type declared in its class body.
+	 * This is extraction state only; the FAMIX metamodel has no such association.
+	 */
+	protected Map<IVariableBinding,ITypeBinding> enumConstantAnonymousTypes;
 
 	/**
 	 * Another dictionary to map a name to FAMIX Entities with this name
@@ -158,6 +163,7 @@ public class EntityDictionary {
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
 			this.nameToEntity = new Hashtable<String,Collection<TNamedEntity>>();
 			this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
+			this.enumConstantAnonymousTypes = new HashMap<>();
 			
 			if (! this.famixRepo.isEmpty()) {
 				recoverExistingRepository();
@@ -176,6 +182,7 @@ public class EntityDictionary {
 			this.entityToKey = new Hashtable<TNamedEntity,IBinding>();
 			this.nameToEntity = new Hashtable<String,Collection<TNamedEntity>>();
 			this.typeToImpVar = new Hashtable<Type,ImplicitVars>();
+			this.enumConstantAnonymousTypes = new HashMap<>();
 			
 			if (! this.famixRepo.isEmpty()) {
 				recoverExistingRepository();
@@ -280,6 +287,35 @@ public class EntityDictionary {
 		else {
 			return keyToEntity.get(key);
 		}
+	}
+
+	public void registerEnumConstantAnonymousType(IVariableBinding enumConstant, ITypeBinding anonymousType) {
+		if (enumConstant != null && anonymousType != null) {
+			enumConstantAnonymousTypes.put(enumConstant.getVariableDeclaration(), anonymousType);
+		}
+	}
+
+	public IMethodBinding getEnumConstantMethodOverride(EnumValue enumConstant, IMethodBinding calledMethod) {
+		if (calledMethod == null) {
+			return null;
+		}
+
+		IBinding enumConstantBinding = getEntityKey(enumConstant);
+		ITypeBinding anonymousType = enumConstantBinding instanceof IVariableBinding
+				? enumConstantAnonymousTypes.get(((IVariableBinding) enumConstantBinding).getVariableDeclaration())
+				: null;
+		if (anonymousType == null) {
+			return calledMethod;
+		}
+
+		// JDT resolves the enum declaration, but this receiver identifies the runtime override.
+		IMethodBinding declaredMethod = calledMethod.getMethodDeclaration();
+		for (IMethodBinding declaredInAnonymousType : anonymousType.getDeclaredMethods()) {
+			if (declaredInAnonymousType.overrides(declaredMethod)) {
+				return declaredInAnonymousType;
+			}
+		}
+		return calledMethod;
 	}
 
 	/**

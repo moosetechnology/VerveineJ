@@ -566,6 +566,22 @@ public class VerveineJTest_AdHoc extends VerveineJTestAbstract {
 	}
 
 	@Test
+	public void testInvocationOfEnumConstantOverride() {
+		parse(new String[]{"src/test/resources/ad_hoc/EnumConstantOverride.java"});
+
+		Method caller = detectFamixElement(Method.class, "callOne");
+		assertNotNull(caller);
+		assertEquals(1, caller.getOutgoingInvocations().size());
+
+		Invocation invocation = (Invocation) firstElt(caller.getOutgoingInvocations());
+		assertEquals(1, invocation.getCandidates().size());
+		Method candidate = (Method) firstElt(invocation.getCandidates());
+		assertEquals("hook", candidate.getName());
+		Class anonymousClass = detectFamixElement(Class.class, "_Anonymous(EnumConstantOverride)");
+		assertSame(anonymousClass, candidate.getParentType());
+	}
+
+	@Test
 	public void testEnumAsVariableType() {
 		parse(new String[]{"src/test/resources/ad_hoc/Card.java", "src/test/resources/ad_hoc/Planet.java"});
 
