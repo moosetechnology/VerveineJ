@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMemberValuePairBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
@@ -220,6 +221,10 @@ public class VisitorAnnotationRef extends GetVisitedEntityAbstractVisitor {
 			// attVal may contains the entire declaration of the class
 			// we want just its name
 			attFamixVal = ((ITypeBinding)attVal).getName() + ".class";
+		}
+		else if (attVal instanceof IVariableBinding) {
+			IVariableBinding variableBinding = (IVariableBinding) attVal;
+			attFamixVal = variableBinding.getDeclaringClass().getName() + "." + variableBinding.getName();
 		}
 		else if (attVal instanceof String) {
 			attFamixVal = "\"" + attVal.toString() + "\"";

@@ -304,4 +304,13 @@ public class VerveineJTest_Annotations extends VerveineJTestAbstract {
         assertEquals("{FirstInterceptorClass.class, AnotherInterceptorClass.class}", att.getValue());
     }
 
+    @Test
+    public void testAnnotationInstanceEnumValue() {
+        org.moosetechnology.model.famix.famixjavaentities.Class clss = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "AnnotatedWithEnumValue");
+        AnnotationInstance instance = (AnnotationInstance) firstElt(clss.getAnnotationInstances());
+        AnnotationInstanceAttribute attribute = (AnnotationInstanceAttribute) firstElt(instance.getAttributes());
+
+        assertEquals("Propagation.SUPPORTS", attribute.getValue());
+    }
+
 }
