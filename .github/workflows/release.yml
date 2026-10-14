@@ -36,4 +36,24 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: 'app/build/libs/*.jar'
+
+  notify-docker:
+    if: github.event.action == 'created'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Docker repository token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.DEVNEXUS_AUTOMATION_APP_ID }}
+          private-key: ${{ secrets.DEVNEXUS_AUTOMATION_PRIVATE_KEY }}
+          owner: Evref-BL
+          repositories: VerveineJ-Docker
+
+      - name: Dispatch Docker release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          VERSION: ${{ github.event.release.tag_name }}
+        run: gh api --method POST repos/Evref-BL/VerveineJ-Docker/dispatches -f event_type=verveinej-release -f "client_payload[version]=$VERSION"
       
