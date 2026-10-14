@@ -210,6 +210,21 @@ public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 		endVisitInitializer(node);
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public void endVisit(LambdaExpression node) {
+		for (VariableDeclaration parameter : (List<VariableDeclaration>) node.parameters()) {
+			IVariableBinding binding = parameter.resolveBinding();
+			if (binding != null) {
+				TTypedEntity variable = (TTypedEntity) dico.getEntityByKey(binding);
+				if ((variable != null) && (variable.getTyping() == null) && (binding.getType() != null)) {
+					dico.ensureFamixEntityTyping(binding.getType(), variable,
+							dico.referredType(binding.getType(), context.topType()));
+				}
+			}
+		}
+	}
+
 	public boolean visit(InstanceofExpression node) {
 		TType fmx = dico.referredType(node.getRightOperand(), (ContainerEntity) context.top(), true);
 		addReference( node, fmx, node.resolveTypeBinding());
