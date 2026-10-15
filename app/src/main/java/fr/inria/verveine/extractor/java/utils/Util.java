@@ -6,6 +6,7 @@ import ch.akuhn.fame.fm3.PropertyDescription;
 import ch.akuhn.fame.internal.RepositoryVisitor.UnknownElementError;
 import fr.inria.verveine.extractor.java.EntityDictionary;
 import org.eclipse.jdt.core.dom.ArrayType;
+import org.eclipse.jdt.core.dom.NameQualifiedType;
 import org.eclipse.jdt.core.dom.QualifiedType;
 import org.eclipse.jdt.core.dom.SimpleType;
 import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
@@ -41,6 +42,8 @@ public class Util {
 			return ((SimpleType) jdtType).getName().getFullyQualifiedName();
 		} else if (jdtType.isQualifiedType()) {
 			return ((QualifiedType) jdtType).getName().getIdentifier();
+		} else if (jdtType.isNameQualifiedType()) {
+			return ((NameQualifiedType) jdtType).getName().getIdentifier();
 		} else if (jdtType.isArrayType()) {
 			return jdtTypeName(((ArrayType) jdtType).getElementType());
 		} else if (jdtType.isParameterizedType()) {
