@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
 import org.moosetechnology.model.famix.famixjavaentities.TypeParameter;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
@@ -199,5 +200,23 @@ public class VerveineJTest_Exceptions extends VerveineJTestAbstract {
         //And the comments should be transferred
         assertTrue(e.hasComments());
         assertEquals(e, e.getComments().iterator().next().getCommentedEntity());
+    }
+
+    @Test
+    public void testTransformClassToExceptionKeepsTypeParameterBounds() {
+        parser = new VerveineJParser();
+        repo = parser.getFamixRepo();
+        parser.configure(new String[] {
+                "-jdkMode", "-1.7",
+                "src/test/resources/exceptions/OurRuntimeException.java",
+                "src/test/resources/exceptions/BoundedRuntimeException.java",
+                "src/test/resources/exceptions/OurRuntimeExceptionThrower.java" });
+        parser.parse();
+
+        Exception exception = detectFamixElement(Exception.class, "OurRuntimeException");
+        ParametricClass bounded = detectFamixElement(ParametricClass.class, "BoundedRuntimeException");
+        TypeParameter parameter = (TypeParameter) firstElt(bounded.getTypeParameters());
+        assertSame(exception, parameter.getUpperBound());
+        assertEquals(1, exception.numberOfOutgoingConcretizations());
     }
 }

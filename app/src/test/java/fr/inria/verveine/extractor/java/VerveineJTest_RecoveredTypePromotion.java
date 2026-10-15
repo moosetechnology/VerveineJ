@@ -10,6 +10,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.junit.Before;
 import org.junit.Test;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
+import org.moosetechnology.model.famix.famixjavaentities.Exception;
 import org.moosetechnology.model.famix.famixjavaentities.Interface;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
 import org.moosetechnology.model.famix.famixjavaentities.ParametricClass;
@@ -59,6 +60,20 @@ public class VerveineJTest_RecoveredTypePromotion extends VerveineJTestAbstract 
         assertEquals(ParametricInterface.class, promotedInterface.getClass());
         assertSame(promotedInterface, method.getParentType());
         assertEquals(1, entitiesNamed("PromotionTargetInterface").size());
+    }
+
+    @Test
+    public void testExceptionIsNotPromotedWhenGenericUseAppears() {
+        EntityDictionary dictionary = new EntityDictionary(repo);
+        ITypeBinding binding = typeStub("PromotionTargetException");
+        Exception exception = dictionary.ensureFamixException(binding, "PromotionTargetException",
+                dictionary.ensureFamixPackageDefault(), false, EntityDictionary.UNKNOWN_MODIFIERS);
+
+        Class type = dictionary.ensureFamixClass(binding, "PromotionTargetException",
+                dictionary.ensureFamixPackageDefault(), true, EntityDictionary.UNKNOWN_MODIFIERS);
+
+        assertSame(exception, type);
+        assertEquals(1, entitiesNamed("PromotionTargetException").size());
     }
 
     private ITypeBinding typeStub(String name) {
