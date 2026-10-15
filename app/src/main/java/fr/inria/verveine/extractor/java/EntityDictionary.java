@@ -1163,6 +1163,9 @@ public class EntityDictionary {
 		// ---------------- to avoid useless computations if we can
 		fmx = getEntityByKey(bnd, Class.class);
 		if (fmx != null) {
+			if (isGeneric && !(fmx instanceof ParametricClass)) {
+				return promoteFamixClass(fmx, bnd);
+			}
 			return fmx;
 		}
 
@@ -1211,6 +1214,12 @@ public class EntityDictionary {
 					break;
 				}
 			}
+		}
+		if (fmx == null && (bnd != null || owner != null)) {
+			fmx = recoveredClassStub(name, (TWithTypes) owner);
+		}
+		if (fmx != null && isGeneric && !(fmx instanceof ParametricClass)) {
+			fmx = promoteFamixClass(fmx, bnd);
 		}
 
 		// ---------------- create
@@ -1359,6 +1368,9 @@ public class EntityDictionary {
 		// ---------------- to avoid useless computations if we can
 		fmx = getEntityByKey(bnd, Interface.class);
 		if (fmx != null) {
+			if (isGeneric && !(fmx instanceof ParametricInterface)) {
+				return promoteFamixInterface(fmx, bnd);
+			}
 			return fmx;
 		}
 
@@ -1401,6 +1413,12 @@ public class EntityDictionary {
 				break;
 			}
 		}
+		if (fmx == null && (bnd != null || owner != null)) {
+			fmx = recoveredInterfaceStub(name, owner);
+		}
+		if (fmx != null && isGeneric && !(fmx instanceof ParametricInterface)) {
+			fmx = promoteFamixInterface(fmx, bnd);
+		}
 
 		// ---------------- create
 		if (fmx == null) {
@@ -1425,6 +1443,108 @@ public class EntityDictionary {
 			}
 		}
 		return fmx;
+	}
+
+	// JDT can assign distinct recovery bindings to the same unresolved type.
+	private Class recoveredClassStub(String name, TWithTypes owner) {
+		Class recovered = null;
+		for (Class candidate : getEntityByName(Class.class, name)) {
+			if (sameTypeOwner(candidate.getTypeContainer(), owner) && Boolean.TRUE.equals(candidate.getIsStub())) {
+				if (recovered != null) {
+					return null;
+				}
+				recovered = candidate;
+			}
+		}
+		return recovered;
+	}
+
+	private Interface recoveredInterfaceStub(String name, TWithTypes owner) {
+		Interface recovered = null;
+		for (Interface candidate : getEntityByName(Interface.class, name)) {
+			if (sameTypeOwner(candidate.getTypeContainer(), owner) && Boolean.TRUE.equals(candidate.getIsStub())) {
+				if (recovered != null) {
+					return null;
+				}
+				recovered = candidate;
+			}
+		}
+		return recovered;
+	}
+
+	private boolean sameTypeOwner(TWithTypes first, TWithTypes second) {
+		if (first == second) {
+			return true;
+		}
+		if (!(first instanceof TNamedEntity) || !(second instanceof TNamedEntity)
+				|| !((TNamedEntity) first).getName().equals(((TNamedEntity) second).getName())) {
+			return false;
+		}
+		if (first instanceof Type && second instanceof Type) {
+			return sameTypeOwner(((Type) first).getTypeContainer(), ((Type) second).getTypeContainer());
+		}
+		return first.getClass() == second.getClass();
+	}
+
+	private ParametricClass promoteFamixClass(Class former, ITypeBinding bnd) {
+		TWithTypes owner = former.getTypeContainer();
+		removeEntity(former);
+		former.setTypeContainer(null);
+
+		ParametricClass promoted = ensureFamixParametricClass(bnd, former.getName(), owner);
+		transferTypeAssociations(former, promoted);
+		promoted.addAttributes(new ArrayList<>(former.getAttributes()));
+		promoted.addComments(new ArrayList<>(former.getComments()));
+		promoted.addImports(new ArrayList<>(former.getImports()));
+		promoted.addIncomingImports(new ArrayList<>(former.getIncomingImports()));
+		promoted.addInterfaceImplementations(new ArrayList<>(former.getInterfaceImplementations()));
+		promoted.addOutgoingConcretizations(new ArrayList<>(former.getOutgoingConcretizations()));
+		promoted.addReceivingInvocations(new ArrayList<>(former.getReceivingInvocations()));
+		promoted.addSubInheritances(new ArrayList<>(former.getSubInheritances()));
+		promoted.addSuperInheritances(new ArrayList<>(former.getSuperInheritances()));
+		promoted.setParentPackage(former.getParentPackage());
+		promoted.setIsAbstract(former.getIsAbstract());
+		promoted.setIsClassSide(former.getIsClassSide());
+		promoted.setIsFinal(former.getIsFinal());
+		promoted.setVisibility(former.getVisibility());
+		return promoted;
+	}
+
+	private ParametricInterface promoteFamixInterface(Interface former, ITypeBinding bnd) {
+		TWithTypes owner = former.getTypeContainer();
+		removeEntity(former);
+		former.setTypeContainer(null);
+
+		ParametricInterface promoted = ensureFamixParametricInterface(bnd, former.getName(), owner);
+		transferTypeAssociations(former, promoted);
+		promoted.addAttributes(new ArrayList<>(former.getAttributes()));
+		promoted.addComments(new ArrayList<>(former.getComments()));
+		promoted.addImplementations(new ArrayList<>(former.getImplementations()));
+		promoted.addImports(new ArrayList<>(former.getImports()));
+		promoted.addIncomingImports(new ArrayList<>(former.getIncomingImports()));
+		promoted.addOutgoingConcretizations(new ArrayList<>(former.getOutgoingConcretizations()));
+		promoted.addReceivingInvocations(new ArrayList<>(former.getReceivingInvocations()));
+		promoted.addSubInheritances(new ArrayList<>(former.getSubInheritances()));
+		promoted.addSuperInheritances(new ArrayList<>(former.getSuperInheritances()));
+		promoted.setParentPackage(former.getParentPackage());
+		promoted.setIsClassSide(former.getIsClassSide());
+		promoted.setIsFinal(former.getIsFinal());
+		promoted.setVisibility(former.getVisibility());
+		return promoted;
+	}
+
+	private void transferTypeAssociations(Type former, Type promoted) {
+		promoted.addTypes(new ArrayList<>(former.getTypes()));
+		promoted.addDefinedAnnotationTypes(new ArrayList<>(former.getDefinedAnnotationTypes()));
+		promoted.addAnnotationInstances(new ArrayList<>(former.getAnnotationInstances()));
+		promoted.addIncomingReferences(new ArrayList<>(former.getIncomingReferences()));
+		promoted.addIncomingTypings(new ArrayList<>(former.getIncomingTypings()));
+		promoted.addLowerBoundedWildcards(new ArrayList<>(former.getLowerBoundedWildcards()));
+		promoted.addMethods(new ArrayList<>(former.getMethods()));
+		promoted.addUpperBoundedWildcards(new ArrayList<>(former.getUpperBoundedWildcards()));
+		promoted.setSourceAnchor(former.getSourceAnchor());
+		promoted.setNumberOfLinesOfCode(former.getNumberOfLinesOfCode());
+		promoted.setIsStub(former.getIsStub());
 	}
 
 	/**
