@@ -1163,7 +1163,8 @@ public class EntityDictionary {
 		// ---------------- to avoid useless computations if we can
 		fmx = getEntityByKey(bnd, Class.class);
 		if (fmx != null) {
-			if (isGeneric && !(fmx instanceof ParametricClass)) {
+			// Famix cannot represent a parametric exception.
+			if (isGeneric && !(fmx instanceof ParametricClass) && !(fmx instanceof Exception)) {
 				return promoteFamixClass(fmx, bnd);
 			}
 			return fmx;
@@ -1218,7 +1219,8 @@ public class EntityDictionary {
 		if (fmx == null && (bnd != null || owner != null)) {
 			fmx = recoveredClassStub(name, (TWithTypes) owner);
 		}
-		if (fmx != null && isGeneric && !(fmx instanceof ParametricClass)) {
+		// Famix cannot represent a parametric exception.
+		if (fmx != null && isGeneric && !(fmx instanceof ParametricClass) && !(fmx instanceof Exception)) {
 			fmx = promoteFamixClass(fmx, bnd);
 		}
 
@@ -1572,8 +1574,12 @@ public class EntityDictionary {
 			TWithTypes owner = fmxType.getTypeContainer();
 			fmxType.setTypeContainer(null);
 			fmxException = ensureFamixException((ITypeBinding) key, fmxType.getName(), owner, /*isGeneric*/false, UNKNOWN_MODIFIERS);
+			transferTypeAssociations((Type) fmxType, fmxException);
+			fmxException.setComments(new ArrayList<>( ((TWithComments) fmxType).getComments() ));
+			if (fmxType instanceof TTypeArgument) {
+				fmxException.addOutgoingConcretizations(new ArrayList<>( ((TTypeArgument) fmxType).getOutgoingConcretizations() ));
+			}
 
-			fmxException.addMethods( new ArrayList<>( ((TWithMethods)fmxType).getMethods() ) );
 			if (fmxType instanceof TWithAttributes) {
 				fmxException.addAttributes( new ArrayList<>( ((TWithAttributes)fmxType).getAttributes() ) );
 			}
@@ -1582,13 +1588,6 @@ public class EntityDictionary {
 				fmxException.addSuperInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSuperInheritances() ) );
 				fmxException.addSubInheritances( new ArrayList<>( ((TWithInheritances) fmxType).getSubInheritances() ) );
 			}
-			fmxException.setComments(new ArrayList<>( ((TWithComments) fmxType).getComments() ));
-			fmxException.setSourceAnchor(fmxType.getSourceAnchor());
-			fmxException.addIncomingTypings( new ArrayList<>( fmxType.getIncomingTypings() ) );
-			fmxException.addAnnotationInstances( new ArrayList<>( ((NamedEntity)fmxType).getAnnotationInstances() ) );
-			fmxException.addIncomingReferences( new ArrayList<>( fmxType.getIncomingReferences() ) );
-			fmxException.setIsStub(fmxType.getIsStub());
-			fmxException.addTypes( new ArrayList<>( ((ContainerEntity) fmxType).getTypes() ) );
 		}
 		catch( ConcurrentModificationException e) {
 			e.printStackTrace();
