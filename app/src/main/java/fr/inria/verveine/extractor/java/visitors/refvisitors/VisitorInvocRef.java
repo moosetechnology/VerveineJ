@@ -248,13 +248,17 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 		TNamedEntity receiver = getReceiver(callingExpr);
 
 		IMethodBinding bnd = node.resolveMethodBinding();
+		IMethodBinding candidateBnd = bnd;
+		if (receiver instanceof EnumValue && isDirectEnumConstant(callingExpr)) {
+			candidateBnd = dico.getEnumConstantMethodOverride((EnumValue) receiver, bnd);
+		}
 
 		String calledName = node.getName().getFullyQualifiedName();
 
 		if (bnd == null) {
-			methodInvocation(bnd, calledName, receiver, getInvokedMethodOwner(callingExpr, receiver), node.arguments());
+			methodInvocation(bnd, candidateBnd, calledName, receiver, getInvokedMethodOwner(callingExpr, receiver), node.arguments());
 		} else {
-			methodInvocation(bnd, calledName, receiver, /* owner */null, node.arguments());
+			methodInvocation(bnd, candidateBnd, calledName, receiver, /* owner */null, node.arguments());
 		}
 
 		// TODO could be TInvocation but it does not extends THassignature and we need
@@ -400,6 +404,22 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 	 */
 	private Invocation methodInvocation(IMethodBinding calledBnd, String calledName, TNamedEntity receiver,
 			TType methOwner, Collection<Expression> l_args) {
+		return methodInvocation(calledBnd, calledBnd, calledName, receiver, methOwner, l_args);
+	}
+
+	/**
+	 * Handles an invocation of a method by creating the corresponding Famix Entity.
+	 *
+	 * @param calledBnd     -- JDT binding for the method invoked
+	 * @param candidateBnd  -- binding for the method selected as the Famix invocation candidate
+	 * @param calledName    of the method invoked
+	 * @param receiver      of the call, i.e. the object to which the message is sent
+	 * @param methOwner     -- owner of the method invoked. Might be a subtype of the
+	 *                      receiver's type
+	 * @param l_args        -- list of the method's parameters
+	 */
+	private Invocation methodInvocation(IMethodBinding calledBnd, IMethodBinding candidateBnd, String calledName,
+			TNamedEntity receiver, TType methOwner, Collection<Expression> l_args) {
 		//System.err.println("methodInvocation(): " + calledName);
 
 		TMethod sender = this.context.topMethod();
@@ -407,7 +427,7 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 		Invocation invok;
 
 		// If the method is parametric, get the generic method.
-		IMethodBinding actualCalledMethodBnd = (calledBnd == null ? null : calledBnd.getMethodDeclaration());
+		IMethodBinding actualCalledMethodBnd = (candidateBnd == null ? null : candidateBnd.getMethodDeclaration());
 
 		if ((receiver != null) && (receiver.getName().equals("class")) && (actualCalledMethodBnd != null)
 				&& (actualCalledMethodBnd.getDeclaringClass() == null)) {
@@ -496,6 +516,13 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 
 		return invok;
 
+	}
+
+	private boolean isDirectEnumConstant(Expression expression) {
+		if (expression instanceof ParenthesizedExpression) {
+			return isDirectEnumConstant(((ParenthesizedExpression) expression).getExpression());
+		}
+		return expression instanceof Name || expression instanceof FieldAccess || expression instanceof SuperFieldAccess;
 	}
 
 	/**

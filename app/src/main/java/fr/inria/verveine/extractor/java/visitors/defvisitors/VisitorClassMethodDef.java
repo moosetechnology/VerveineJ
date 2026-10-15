@@ -228,6 +228,9 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 		//		System.err.println("TRACE, Visiting AnonymousClassDeclaration");
 		org.moosetechnology.model.famix.famixjavaentities.Type fmx;
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+		if (node.getParent() instanceof EnumConstantDeclaration) {
+			dico.registerEnumConstantAnonymousType(((EnumConstantDeclaration) node.getParent()).resolveVariable(), bnd);
+		}
 
 		int modifiers = (bnd != null) ? bnd.getModifiers() : EntityDictionary.UNKNOWN_MODIFIERS;
 		if (bnd.isInterface()) {
