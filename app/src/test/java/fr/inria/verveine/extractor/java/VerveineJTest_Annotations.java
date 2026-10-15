@@ -37,6 +37,15 @@ public class VerveineJTest_Annotations extends VerveineJTestAbstract {
     }
 
     @Test
+    public void testNameQualifiedTypeParameter() {
+        Method method = detectFamixElement(Method.class, "accept");
+        assertEquals(1, method.numberOfParameters());
+
+        Parameter parameter = (Parameter) firstElt(method.getParameters());
+        assertEquals("Type", parameter.getDeclaredType().getName());
+    }
+
+    @Test
     public void testClassAnnotation() {
         org.moosetechnology.model.famix.famixjavaentities.Class cl = detectFamixElement(org.moosetechnology.model.famix.famixjavaentities.Class.class, "Serializer");
         assertEquals(1, cl.getAnnotationInstances().size());
