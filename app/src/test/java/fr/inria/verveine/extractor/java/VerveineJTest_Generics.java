@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.Exception;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import org.junit.Before;
@@ -150,6 +151,31 @@ public class VerveineJTest_Generics extends VerveineJTestAbstract {
         for (TInheritance inheritance : inheritances) {
             assertEquals(ParametricInheritance.class, inheritance.getClass());
             assertEquals(2, ((ParametricInheritance) inheritance).numberOfConcretizations());
+        }
+    }
+
+    /**
+     * An inheritance must be registered, and reachable from both of its ends,
+     * before its concretizations are resolved. Resolving the concretizations of
+     * a parameterized supertype can ask for the owner of a type argument, and
+     * that owner can be the subclass itself. If the inheritance is not yet
+     * registered at that point, the re-entrant resolution does not find it and
+     * builds a second one for the same pair.
+     */
+    @Test
+    public void testNoDuplicateInheritance() {
+        Collection<String> seen = new HashSet<>();
+        for (Inheritance inheritance : entitiesOfType(Inheritance.class)) {
+            TWithInheritances sup = inheritance.getSuperclass();
+            TWithInheritances sub = inheritance.getSubclass();
+            assertNotNull(sup);
+            assertNotNull(sub);
+            assertTrue(sup.getSubInheritances().contains(inheritance));
+            assertTrue(sub.getSuperInheritances().contains(inheritance));
+
+            String pair = System.identityHashCode(sup) + "->" + System.identityHashCode(sub);
+            assertTrue("duplicate inheritance from " + ((TNamedEntity) sub).getName()
+                    + " to " + ((TNamedEntity) sup).getName(), seen.add(pair));
         }
     }
 

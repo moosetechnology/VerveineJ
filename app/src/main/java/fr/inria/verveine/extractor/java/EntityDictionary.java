@@ -512,7 +512,7 @@ public class EntityDictionary {
 
 		Inheritance inh;
 		if (supBnd != null && supBnd.isParameterizedType()) { // Needs checks and tests.
-			inh = (ParametricInheritance)buildFamixParametricAssociation(new ParametricInheritance(), supBnd.getErasure().getTypeParameters(), supBnd.getTypeArguments());
+			inh = new ParametricInheritance();
 		} else {
 			inh = new Inheritance();
 		}
@@ -521,6 +521,10 @@ public class EntityDictionary {
 		inh.setSubclass(sub);
 		chainPrevNext(prev, inh);
 		famixRepoAdd(inh);
+		if (inh instanceof ParametricInheritance) {
+			buildFamixParametricAssociation((ParametricInheritance) inh,
+					supBnd.getErasure().getTypeParameters(), supBnd.getTypeArguments());
+		}
 		return inh;
 	}
 	
