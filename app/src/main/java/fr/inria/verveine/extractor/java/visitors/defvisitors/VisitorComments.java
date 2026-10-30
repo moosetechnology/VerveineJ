@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.Comment;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ImplicitTypeDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -129,6 +130,21 @@ public class VisitorComments extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(TypeDeclaration node) {
+		assignCommentsInside(node, (TWithComments) context.topType());
+		classMemberDeclarations = false;
+		endVisitTypeDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(ImplicitTypeDeclaration node) {
+		visitTypeDeclaration(node);
+		classMemberDeclarations = true;
+
+		return super.visit(node);
+	}
+
+	@Override
+	public void endVisit(ImplicitTypeDeclaration node) {
 		assignCommentsInside(node, (TWithComments) context.topType());
 		classMemberDeclarations = false;
 		endVisitTypeDeclaration(node);

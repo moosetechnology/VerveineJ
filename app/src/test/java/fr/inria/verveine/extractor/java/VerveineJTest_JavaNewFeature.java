@@ -3,6 +3,7 @@ package fr.inria.verveine.extractor.java;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.moosetechnology.model.famix.famixjavaentities.Attribute;
 import org.moosetechnology.model.famix.famixjavaentities.Class;
 import org.moosetechnology.model.famix.famixjavaentities.Comment;
 import org.moosetechnology.model.famix.famixjavaentities.Method;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 public class VerveineJTest_JavaNewFeature extends VerveineJTestAbstract {
@@ -100,6 +102,47 @@ public class VerveineJTest_JavaNewFeature extends VerveineJTestAbstract {
         Method meth = detectFamixElement(Method.class, "printIt");
         assertNotNull(meth);
         assertEquals(1, meth.getIncomingInvocations().size());
+    }
+
+    /**
+     * A compilation unit with no type declaration implicitly declares a class,
+     * which the JLS names after the compilation unit. JDT leaves that name empty,
+     * so the extractor recovers it from the file.
+     */
+    @Test
+    public void testImplicitlyDeclaredClassIsNamedAfterItsFile() {
+        parse(new String[] { "src/test/resources/java_new_features/ImplicitClass.java" });
+
+        Class clazz = detectFamixElement(Class.class, "ImplicitClass");
+        assertNotNull(clazz);
+        assertFalse(clazz.getIsStub());
+        assertEquals(1, clazz.numberOfAttributes());
+
+        Method greet = detectFamixElement(Method.class, "greet");
+        assertNotNull(greet);
+        assertSame(clazz, greet.getParentType());
+
+        Method main = detectFamixElement(Method.class, "main");
+        assertNotNull(main);
+        assertSame(clazz, main.getParentType());
+    }
+
+    /**
+     * The members of an implicitly declared class contribute their associations
+     * like those of any other class.
+     */
+    @Test
+    public void testImplicitlyDeclaredClassMembersHaveAssociations() {
+        parse(new String[] { "src/test/resources/java_new_features/ImplicitClass.java" });
+
+        Method greet = detectFamixElement(Method.class, "greet");
+        assertNotNull(greet);
+        assertEquals(1, greet.getIncomingInvocations().size());
+
+        Attribute greeting = detectFamixElement(Attribute.class, "greeting");
+        assertNotNull(greeting);
+        // written by the field initializer, read by greet()
+        assertEquals(2, greeting.getIncomingAccesses().size());
     }
 
 }

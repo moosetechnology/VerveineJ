@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.dom.SimpleType;
 import org.moosetechnology.model.famix.famixtraits.TCanBeStub;
 import org.moosetechnology.model.famix.famixtraits.TNamedEntity;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -85,6 +86,20 @@ public class Util {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * The name of an implicitly declared class is not written in the source. The
+	 * JLS gives it the name of its compilation unit, which is also what the
+	 * compiler uses for the class file.
+	 */
+	public static String typeNameFromSourceFile(String sourceFileName) {
+		if (sourceFileName == null) {
+			return "";
+		}
+		String name = new File(sourceFileName).getName();
+		int extension = name.lastIndexOf('.');
+		return extension < 0 ? name : name.substring(0, extension);
 	}
 
 	public static String capitalizeString(String str) {

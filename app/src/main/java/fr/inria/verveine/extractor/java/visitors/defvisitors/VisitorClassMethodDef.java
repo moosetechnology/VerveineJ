@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.ImplicitTypeDeclaration;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
@@ -204,6 +205,43 @@ public class VisitorClassMethodDef extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(RecordDeclaration node) {
+		this.context.popType();
+		super.endVisit(node);
+	}
+
+	/*
+	 * A compilation unit without a type declaration implicitly declares one, whose
+	 * name JDT takes from the file. It is always a class, never generic, and
+	 * declares no supertype.
+	 */
+	@Override
+	public boolean visit(ImplicitTypeDeclaration node) {
+		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
+
+		org.moosetechnology.model.famix.famixjavaentities.Class fmx = dico.ensureFamixClass(
+				bnd,
+				/*name*/typeName(node),
+				/*owner*/context.top(),
+				/*isGeneric*/false,
+				node.getModifiers());
+
+		if (fmx != null) {
+			Util.recursivelySetIsStub(fmx, false);
+
+			this.context.pushType(fmx);
+
+			if (options.withAnchors()) {
+				dico.addSourceAnchor(fmx, node);
+			}
+
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(ImplicitTypeDeclaration node) {
 		this.context.popType();
 		super.endVisit(node);
 	}

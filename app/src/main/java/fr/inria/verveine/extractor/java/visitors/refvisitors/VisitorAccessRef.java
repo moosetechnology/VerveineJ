@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.IfStatement;
+import org.eclipse.jdt.core.dom.ImplicitTypeDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.LambdaExpression;
@@ -118,6 +119,20 @@ public class VisitorAccessRef extends GetVisitedEntityAbstractVisitor {
 
 	@Override
 	public void endVisit(TypeDeclaration node) {
+		endVisitTypeDeclaration(node);
+	}
+
+	@Override
+	public boolean visit(ImplicitTypeDeclaration node) {
+		if (visitTypeDeclaration(node) != null) {
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(ImplicitTypeDeclaration node) {
 		endVisitTypeDeclaration(node);
 	}
 
