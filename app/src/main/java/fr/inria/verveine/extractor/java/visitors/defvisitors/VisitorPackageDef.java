@@ -71,6 +71,11 @@ public class VisitorPackageDef extends ASTVisitor {
 	}
 
 	@Override
+	public boolean visit(ImplicitTypeDeclaration node) {
+		return false; // no need to visit children of the declaration
+	}
+
+	@Override
 	public boolean visit(EnumDeclaration node) {
 		return false; // no need to visit children of the declaration
 	}

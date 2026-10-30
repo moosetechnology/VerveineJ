@@ -53,6 +53,20 @@ public class VisitorTypeRefRef extends GetVisitedEntityAbstractVisitor {
 		endVisitTypeDeclaration(node);
 	}
 
+	@Override
+	public boolean visit(ImplicitTypeDeclaration node) {
+		if (visitTypeDeclaration(node) != null) {
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public void endVisit(ImplicitTypeDeclaration node) {
+		endVisitTypeDeclaration(node);
+	}
+
 	/** creation of an instance of a class (anonymous or not)<br>
 	 * <pre>ClassInstanceCreation ::=
         [ Expression . ]

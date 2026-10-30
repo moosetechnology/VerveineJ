@@ -75,6 +75,18 @@ public class VisitorInvocRef extends GetVisitedEntityAbstractVisitor {
 		endVisitTypeDeclaration(node);
 	}
 
+	public boolean visit(ImplicitTypeDeclaration node) {
+		if (visitTypeDeclaration(node) != null) {
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	public void endVisit(ImplicitTypeDeclaration node) {
+		endVisitTypeDeclaration(node);
+	}
+
 	/**
 	 * Creates an invocation to the constructor of the class
 	 *

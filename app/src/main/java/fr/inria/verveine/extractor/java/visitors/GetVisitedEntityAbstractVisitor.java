@@ -114,16 +114,28 @@ public abstract class GetVisitedEntityAbstractVisitor extends ASTVisitor {
 		ITypeBinding bnd = (ITypeBinding) StubBinding.getDeclarationBinding(node);
 		TType fmx;
 		if(bnd.isInterface()) {
-			fmx = dico.getFamixInterface(bnd, node.getName().getIdentifier(), (ContainerEntity) /*owner*/context.top());
+			fmx = dico.getFamixInterface(bnd, typeName(node), (ContainerEntity) /*owner*/context.top());
 		} else if (dico.isThrowable(bnd)) {
-			fmx = dico.getFamixException(bnd, node.getName().getIdentifier(), (TWithTypes) /*owner*/context.top());
+			fmx = dico.getFamixException(bnd, typeName(node), (TWithTypes) /*owner*/context.top());
 		} else {
-			fmx = dico.getFamixClass(bnd, node.getName().getIdentifier(), /*owner*/context.top());
+			fmx = dico.getFamixClass(bnd, typeName(node), /*owner*/context.top());
 		}
 		if (fmx != null) {
 			this.context.pushType(fmx);
 		}
 		return fmx;
+	}
+
+	/**
+	 * JDT leaves the name of an implicitly declared class empty, because it is not
+	 * written in the source.
+	 */
+	protected String typeName(AbstractTypeDeclaration node) {
+		String name = node.getName().getIdentifier();
+		if (!name.isEmpty()) {
+			return name;
+		}
+		return Util.typeNameFromSourceFile((String) node.getRoot().getProperty(EntityDictionary.SOURCE_FILENAME_PROPERTY));
 	}
 
 	protected void endVisitTypeDeclaration(AnnotationTypeDeclaration node) {

@@ -46,6 +46,27 @@ public class VisitorInheritanceRef extends GetVisitedEntityAbstractVisitor {
 		super.endVisit(node);
 	}
 
+	/**
+	 * An implicitly declared class declares no supertype, so there is nothing to
+	 * anchor; only the implicit <code>java.lang.Object</code> superclass applies.
+	 */
+	public boolean visit(ImplicitTypeDeclaration node) {
+		TWithInheritances fmx = (TWithInheritances) visitTypeDeclaration(node);
+		ITypeBinding bnd = node.resolveBinding();
+		if ((fmx != null) && (bnd != null)) {
+			ensureInheritances(bnd, fmx);
+
+			return super.visit(node);
+		} else {
+			return false;
+		}
+	}
+
+	public void endVisit(ImplicitTypeDeclaration node) {
+		endVisitTypeDeclaration(node);
+		super.endVisit(node);
+	}
+
 	public boolean visit(ClassInstanceCreation node) {
 		// used to get the name of the super type of the anonymous class
 		possiblyAnonymousClassDeclaration(node);
